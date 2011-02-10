@@ -1,6 +1,0 @@
-<area shape="rect" id="node1" href="oversim.common.ChurnGenerator.html" title="Simple Module ChurnGenerator" alt="" coords="219,6,333,34">
-<area shape="rect" id="node2" href="oversim.common.LifetimeChurn.html" title="Simple Module LifetimeChurn" alt="" coords="5,83,107,111">
-<area shape="rect" id="node4" href="oversim.common.NoChurn.html" title="Simple Module NoChurn" alt="" coords="131,83,205,111">
-<area shape="rect" id="node6" href="oversim.common.ParetoChurn.html" title="Simple Module ParetoChurn" alt="" coords="229,83,323,111">
-<area shape="rect" id="node8" href="oversim.common.RandomChurn.html" title="Simple Module RandomChurn" alt="" coords="347,83,453,111">
-<area shape="rect" id="node10" href="oversim.common.TraceChurn.html" title="Simple Module TraceChurn" alt="" coords="477,83,568,111">

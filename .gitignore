@@ -1,4 +1,5 @@
 /out
+/doc
 /src/Makefile
 /src/OverSim
 *_m.cc

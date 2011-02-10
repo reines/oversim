@@ -1,6 +1,0 @@
-<area shape="rect" id="node1" href="oversim.underlay.singlehostunderlay.SingleHostUnderlayNetwork.html" title="Network SingleHostUnderlayNetwork" alt="" coords="261,6,448,34">
-<area shape="rect" id="node2" href="oversim.underlay.singlehostunderlay.SingleHost.html" title="Compound Module SingleHost" alt="" coords="5,83,91,111">
-<area shape="rect" id="node4" href="oversim.common.GlobalObserver.html" title="Compound Module GlobalObserver" alt="" coords="115,83,227,111">
-<area shape="rect" id="node6" href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html" title="Simple Module SingleHostUnderlayConfigurator" alt="" coords="251,83,459,111">
-<area shape="rect" id="node8" href="oversim.underlay.singlehostunderlay.ZeroconfConnector.html" title="Simple Module ZeroconfConnector" alt="" coords="483,83,616,111">
-<area shape="rect" id="node10" href="oversim.common.ChurnGenerator.html" title="Simple Module ChurnGenerator" alt="" coords="640,83,755,111">

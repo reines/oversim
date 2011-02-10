@@ -1,6 +1,0 @@
-<area shape="rect" id="node1" href="oversim.overlay.pastry.PastryModules.html" title="Compound Module PastryModules" alt="" coords="256,6,365,34">
-<area shape="rect" id="node2" href="oversim.overlay.pastry.Pastry.html" title="Simple Module Pastry" alt="" coords="5,83,77,111">
-<area shape="rect" id="node4" href="oversim.overlay.pastry.PastryRoutingTable.html" title="Simple Module PastryRoutingTable" alt="" coords="101,83,237,111">
-<area shape="rect" id="node6" href="ned.IdealChannel.html" title="Channel IdealChannel" alt="" coords="261,83,360,111">
-<area shape="rect" id="node8" href="oversim.overlay.pastry.PastryLeafSet.html" title="Simple Module PastryLeafSet" alt="" coords="384,83,488,111">
-<area shape="rect" id="node10" href="oversim.overlay.pastry.PastryNeighborhoodSet.html" title="Simple Module PastryNeighborhoodSet" alt="" coords="512,83,672,111">

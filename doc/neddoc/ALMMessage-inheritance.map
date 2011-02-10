@@ -1,7 +1,0 @@
-<area shape="rect" id="node1" href="ALMMessage.html" title="Packet ALMMessage" alt="" coords="443,6,544,34">
-<area shape="rect" id="node2" href="ALMAnycastMessage.html" title="Packet ALMAnycastMessage" alt="" coords="5,83,155,111">
-<area shape="rect" id="node4" href="ALMCreateMessage.html" title="Packet ALMCreateMessage" alt="" coords="179,83,320,111">
-<area shape="rect" id="node6" href="ALMDeleteMessage.html" title="Packet ALMDeleteMessage" alt="" coords="344,83,483,111">
-<area shape="rect" id="node8" href="ALMLeaveMessage.html" title="Packet ALMLeaveMessage" alt="" coords="507,83,643,111">
-<area shape="rect" id="node10" href="ALMMulticastMessage.html" title="Packet ALMMulticastMessage" alt="" coords="667,83,821,111">
-<area shape="rect" id="node12" href="ALMSubscribeMessage.html" title="Packet ALMSubscribeMessage" alt="" coords="845,83,1005,111">

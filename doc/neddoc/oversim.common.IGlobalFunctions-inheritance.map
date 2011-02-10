@@ -1,7 +1,0 @@
-<area shape="rect" id="node1" href="oversim.common.IGlobalFunctions.html" title="Module Interface IGlobalFunctions" alt="" coords="497,6,617,34">
-<area shape="rect" id="node2" href="oversim.common.cbr.CoordBasedRoutingModules.html" title="Compound Module CoordBasedRoutingModules" alt="" coords="5,83,192,111">
-<area shape="rect" id="node4" href="oversim.applications.simplegameclient.GlobalCoordinatorModules.html" title="Compound Module GlobalCoordinatorModules" alt="" coords="216,83,389,111">
-<area shape="rect" id="node6" href="oversim.tier2.dhttestapp.GlobalDhtTestMap.html" title="Simple Module GlobalDhtTestMap" alt="" coords="413,83,544,111">
-<area shape="rect" id="node8" href="oversim.overlay.quon.GlobalQuonModules.html" title="Compound Module GlobalQuonModules" alt="" coords="568,83,707,111">
-<area shape="rect" id="node10" href="oversim.overlay.vast.GlobalVastModules.html" title="Compound Module GlobalVastModules" alt="" coords="731,83,864,111">
-<area shape="rect" id="node12" href="oversim.applications.almtest.MessageObserverModule.html" title="Compound Module MessageObserverModule" alt="" coords="888,83,1059,111">

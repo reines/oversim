@@ -1,0 +1,140 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Packet <i>VastListMessage</i></h2>
+<b>File: <a href="src-overlay-vast-Vast.msg.html">src/overlay/vast/Vast.msg</a></b><br/><p><a href="../doxy/classVastListMessage.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>JOIN_ACKNOWLEDGE, NEW_NEIGHBORS, NODE_LEAVE, BACKUP_NEIGHBORS</p>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="VastListMessage-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="VastListMessage.html" title="Packet VastListMessage" alt="" coords="5,6,128,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="VastListMessage-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="VastListMessage.html" title="Packet VastListMessage" alt="" coords="5,83,128,111">
+<area shape="rect" id="node2" href="VastMessage.html" title="Packet VastMessage" alt="" coords="16,6,117,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="VastMessage.html">VastMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Base message for all messages used by <a href="oversim.overlay.vast.Vast.html">Vast</a>
+JOIN_REQUEST, ENCLOSING_NEIGHBORS_REQUEST, PING, PONG</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Fields:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">destKey</td>
+   <td width="100">
+      <i>
+OverlayKey</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">statType</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type for stats</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">requestEnclosingNeighbors</td>
+   <td width="100">
+      <i>
+bool</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">sourceNode</td>
+   <td width="100">
+      <i>
+NodeHandle</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">neighborCount</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="local">
+   <td width="150">neighborNode</td>
+   <td width="100">
+      <i>
+NodeHandle[]</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">command</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="local">
+   <td width="150">neighborPos</td>
+   <td width="100">
+      <i>
+Vector2D[]</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">type</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">pos</td>
+   <td width="100">
+      <i>
+Vector2D</i>
+   </td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">VastListMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">VastMessage</span><span style="color: #000000; "> </span><span style="color: #808080; font-style: italic; ">// JOIN_ACKNOWLEDGE, NEW_NEIGHBORS, NODE_LEAVE, BACKUP_NEIGHBORS
+</span><span style="color: #000000; ">{
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">neighborNode</span><span style="color: #000000; ">[];
+    </span><span style="color: #000000; ">Vector2D</span><span style="color: #000000; "> </span><span style="color: #000000; ">neighborPos</span><span style="color: #000000; ">[];
+    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">requestEnclosingNeighbors</span><span style="color: #000000; "> = </span><span style="color: #008000; ">false</span><span style="color: #000000; ">;
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

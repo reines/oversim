@@ -1,0 +1,218 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Msg File <i>src/applications/scribe/ScribeMessage.msg</i></h2>
+<table class="typetable">
+   <tr>
+      <th>Name</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td>
+      <a href="ScribeTimerType.html">ScribeTimerType</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribeJoinCall.html">ScribeJoinCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribeJoinResponse.html">ScribeJoinResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribePublishCall.html">ScribePublishCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribePublishResponse.html">ScribePublishResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribeSubscriptionRefreshMessage.html">ScribeSubscriptionRefreshMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribeLeaveMessage.html">ScribeLeaveMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribeTimer.html">ScribeTimer</a>
+      <i> (message)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribeDataMessage.html">ScribeDataMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
+</span><span style="color: #000000; ">
+</span><span style="color: #808080; font-style: italic; ">//
+// @file ScribeMessage.msg
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Stephan Krause
+//
+</span><span style="color: #000000; ">
+</span><span style="color: #800000; font-weight: bold; ">cplusplus</span><span style="color: #000000; "> {{
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">CommonMessages_m</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribeTimer</span><span style="color: #000000; ">;
+
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> </span><span style="color: #008000; ">&quot;ScribeGroup.h&quot;</span><span style="color: #000000; ">
+
+</span><span style="color: #808080; font-style: italic; ">// Length definition
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">SCRIBE_WRONGROOT_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">SCRIBE_EMPTYFLAG_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+
+</span><span style="color: #808080; font-style: italic; ">// HACK: groupId field nor counted in length calculation (see message definition)
+</span><span style="color: #000000; ">#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">SCRIBE_JOINCALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">SCRIBE_JOINRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">SCRIBE_PUBLISHCALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">SCRIBE_PUBLISHRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">SCRIBE_WRONGROOT_L</span><span style="color: #000000; ">)
+
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">SCRIBE_SUBSCRIPTIONREFRESH_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">SCRIBE_LEAVE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">SCRIBE_DATA_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">SCRIBE_EMPTYFLAG_L</span><span style="color: #000000; ">)
+}}
+
+
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribeGroupPointer</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">ChildPointer</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">;
+
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">;
+
+
+
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribeTimerType</span><span style="color: #000000; "> 
+{
+
+    </span><span style="color: #000000; ">SCRIBE_HEARTBEAT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Send heartbeat to all children of a group
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">SCRIBE_SUBSCRIPTION_REFRESH</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// refresh subscriptions for all groups
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">SCRIBE_PARENT_TIMEOUT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Parent failed to send heartbeat
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">SCRIBE_CHILD_TIMEOUT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">3</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Child faild to refresh subscription
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribeJoinCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">groupId</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// HACK. The key is already included in BaseRouteMessage,
+</span><span style="color: #000000; ">                            </span><span style="color: #808080; font-style: italic; ">//   but it gets lost in handleRpc
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribeJoinResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">groupId</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// HACK. The key is already included in BaseRouteMessage,
+</span><span style="color: #000000; ">                            </span><span style="color: #808080; font-style: italic; ">//   but it gets lost in handleRpc
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribePublishCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">groupId</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// HACK. The key is already included in BaseRouteMessage,
+</span><span style="color: #000000; ">                            </span><span style="color: #808080; font-style: italic; ">//   but it gets lost in handleRpc
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribePublishResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">groupId</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// HACK. The key is already included in BaseRouteMessage,
+</span><span style="color: #000000; ">                            </span><span style="color: #808080; font-style: italic; ">//   but it gets lost in handleRpc
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">wrongRoot</span><span style="color: #000000; "> = </span><span style="color: #008000; ">false</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribeSubscriptionRefreshMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">src</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">groupId</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribeLeaveMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">src</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">groupId</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribeTimer</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">timerType</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">ScribeTimerType</span><span style="color: #000000; ">);
+        </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">child</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">group</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ScribeDataMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">groupId</span><span style="color: #000000; ">;
+        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">empty</span><span style="color: #000000; "> = </span><span style="color: #008000; ">false</span><span style="color: #000000; ">;
+}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

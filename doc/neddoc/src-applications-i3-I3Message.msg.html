@@ -1,0 +1,146 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Msg File <i>src/applications/i3/I3Message.msg</i></h2>
+<table class="typetable">
+   <tr>
+      <th>Name</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td>
+      <a href="I3MessageType.html">I3MessageType</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="I3Message.html">I3Message</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="I3InsertTriggerMessage.html">I3InsertTriggerMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="I3QueryReplyMessage.html">I3QueryReplyMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="I3RemoveTriggerMessage.html">I3RemoveTriggerMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="I3SendPacketMessage.html">I3SendPacketMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">cplusplus</span><span style="color: #000000; "> {{
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> </span><span style="color: #008000; ">&quot;I3Trigger.h&quot;</span><span style="color: #000000; ">
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> </span><span style="color: #008000; ">&quot;I3IdentifierStack.h&quot;</span><span style="color: #000000; ">
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> </span><span style="color: #008000; ">&quot;I3Identifier.h&quot;</span><span style="color: #000000; ">
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> </span><span style="color: #008000; ">&quot;I3IPAddress.h&quot;</span><span style="color: #000000; ">
+
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3TYPE_L</span><span style="color: #000000; ">    </span><span style="color: #008000; ">2</span><span style="color: #000000; ">
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3BOOL_L</span><span style="color: #000000; ">    </span><span style="color: #008000; ">1</span><span style="color: #000000; ">
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3TIME_L</span><span style="color: #000000; ">    </span><span style="color: #008000; ">32</span><span style="color: #000000; ">
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">INSERT_TRIGGER_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">I3TYPE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">I3BOOL_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getTrigger</span><span style="color: #000000; ">().</span><span style="color: #000000; ">length</span><span style="color: #000000; ">() + </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getSource</span><span style="color: #000000; ">().</span><span style="color: #000000; ">length</span><span style="color: #000000; ">())
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">QUERY_REPLY_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)  (</span><span style="color: #000000; ">I3TYPE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getSource</span><span style="color: #000000; ">().</span><span style="color: #000000; ">length</span><span style="color: #000000; ">() + </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getIdentifier</span><span style="color: #000000; ">().</span><span style="color: #000000; ">length</span><span style="color: #000000; ">() + </span><span style="color: #000000; ">I3TIME_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">REMOVE_TRIGGER_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">I3TYPE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getTrigger</span><span style="color: #000000; ">().</span><span style="color: #000000; ">length</span><span style="color: #000000; ">())
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">SEND_PACKET_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)    (</span><span style="color: #000000; ">I3TYPE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getIdentifierStack</span><span style="color: #000000; ">().</span><span style="color: #000000; ">length</span><span style="color: #000000; ">() + </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getMatchedTrigger</span><span style="color: #000000; ">().</span><span style="color: #000000; ">length</span><span style="color: #000000; ">())
+
+}}
+
+
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3Trigger</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3IdentifierStack</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3Identifier</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3IPAddress</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseAppMessage</span><span style="color: #000000; ">;
+
+
+
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3MessageType</span><span style="color: #000000; ">
+{
+
+	</span><span style="color: #000000; ">INSERT_TRIGGER</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+	</span><span style="color: #000000; ">QUERY_REPLY</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;	
+	</span><span style="color: #000000; ">REMOVE_TRIGGER</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+	</span><span style="color: #000000; ">SEND_PACKET</span><span style="color: #000000; "> = </span><span style="color: #008000; ">3</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3Message</span><span style="color: #000000; ">
+{
+		</span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">type</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">I3MessageType</span><span style="color: #000000; ">);
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3InsertTriggerMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3Message</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; font-weight: bold; ">@customize</span><span style="color: #000000; ">(</span><span style="color: #008000; ">true</span><span style="color: #000000; ">);
+		</span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">sendReply</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">I3Trigger</span><span style="color: #000000; "> </span><span style="color: #000000; ">trigger</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">I3IPAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">source</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3QueryReplyMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3Message</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; font-weight: bold; ">@customize</span><span style="color: #000000; ">(</span><span style="color: #008000; ">true</span><span style="color: #000000; ">);
+		</span><span style="color: #000000; ">I3IPAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">source</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">I3Identifier</span><span style="color: #000000; "> </span><span style="color: #000000; ">identifier</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">simtime_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">sendingTime</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3RemoveTriggerMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3Message</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; font-weight: bold; ">@customize</span><span style="color: #000000; ">(</span><span style="color: #008000; ">true</span><span style="color: #000000; ">);
+		</span><span style="color: #000000; ">I3Trigger</span><span style="color: #000000; "> </span><span style="color: #000000; ">trigger</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3SendPacketMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">I3Message</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; font-weight: bold; ">@customize</span><span style="color: #000000; ">(</span><span style="color: #008000; ">true</span><span style="color: #000000; ">);
+		</span><span style="color: #000000; ">I3IdentifierStack</span><span style="color: #000000; "> </span><span style="color: #000000; ">identifierStack</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">I3Trigger</span><span style="color: #000000; "> </span><span style="color: #000000; ">matchedTrigger</span><span style="color: #000000; ">;
+		</span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">sendReply</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">I3IPAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">source</span><span style="color: #000000; ">;
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

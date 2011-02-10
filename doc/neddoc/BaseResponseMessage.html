@@ -1,0 +1,521 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Packet <i>BaseResponseMessage</i></h2>
+<b>File: <a href="src-common-CommonMessages.msg.html">src/common/CommonMessages.msg</a></b><br/><p><a href="../doxy/classBaseResponseMessage.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>A basic Remote-Procedure-Response message</p>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="BaseResponseMessage-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="BaseResponseMessage.html" title="Packet BaseResponseMessage" alt="" coords="5,6,168,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="BaseResponseMessage-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="BaseResponseMessage.html" title="Packet BaseResponseMessage" alt="" coords="2887,83,3049,111">
+<area shape="rect" id="node4" href="BucketResponse.html" title="Packet BucketResponse" alt="" coords="5,161,128,189">
+<area shape="rect" id="node6" href="CoordsOfNodeResponse.html" title="Packet CoordsOfNodeResponse" alt="" coords="152,161,320,189">
+<area shape="rect" id="node8" href="CoordsReqResponse.html" title="Packet CoordsReqResponse" alt="" coords="344,161,491,189">
+<area shape="rect" id="node10" href="DeBruijnResponse.html" title="Packet DeBruijnResponse" alt="" coords="515,161,645,189">
+<area shape="rect" id="node12" href="DHTdumpResponse.html" title="Packet DHTdumpResponse" alt="" coords="669,161,811,189">
+<area shape="rect" id="node14" href="DHTgetCAPIResponse.html" title="Packet DHTgetCAPIResponse" alt="" coords="835,161,992,189">
+<area shape="rect" id="node16" href="DHTGetResponse.html" title="Packet DHTGetResponse" alt="" coords="1016,161,1147,189">
+<area shape="rect" id="node18" href="DHTputCAPIResponse.html" title="Packet DHTputCAPIResponse" alt="" coords="1171,161,1328,189">
+<area shape="rect" id="node20" href="DHTPutResponse.html" title="Packet DHTPutResponse" alt="" coords="1352,161,1480,189">
+<area shape="rect" id="node22" href="FailedNodeResponse.html" title="Packet FailedNodeResponse" alt="" coords="1504,161,1651,189">
+<area shape="rect" id="node24" href="FindNodeResponse.html" title="Packet FindNodeResponse" alt="" coords="1675,161,1811,189">
+<area shape="rect" id="node26" href="FixfingersResponse.html" title="Packet FixfingersResponse" alt="" coords="1835,161,1973,189">
+<area shape="rect" id="node28" href="JoinResponse.html" title="Packet JoinResponse" alt="" coords="1997,161,2101,189">
+<area shape="rect" id="node30" href="KbrTestResponse.html" title="Packet KbrTestResponse" alt="" coords="2125,161,2251,189">
+<area shape="rect" id="node32" href="LookupResponse.html" title="Packet LookupResponse" alt="" coords="2275,161,2397,189">
+<area shape="rect" id="node34" href="MyNeighborResponse.html" title="Packet MyNeighborResponse" alt="" coords="2421,161,2571,189">
+<area shape="rect" id="node36" href="NextHopResponse.html" title="Packet NextHopResponse" alt="" coords="2595,161,2728,189">
+<area shape="rect" id="node38" href="NotifyResponse.html" title="Packet NotifyResponse" alt="" coords="2752,161,2867,189">
+<area shape="rect" id="node40" href="NTreeDivideResponse.html" title="Packet NTreeDivideResponse" alt="" coords="2891,161,3045,189">
+<area shape="rect" id="node42" href="NTreeJoinResponse.html" title="Packet NTreeJoinResponse" alt="" coords="3069,161,3211,189">
+<area shape="rect" id="node44" href="NTreePingResponse.html" title="Packet NTreePingResponse" alt="" coords="3235,161,3376,189">
+<area shape="rect" id="node46" href="P2pnsRegisterResponse.html" title="Packet P2pnsRegisterResponse" alt="" coords="3400,161,3565,189">
+<area shape="rect" id="node48" href="P2pnsResolveResponse.html" title="Packet P2pnsResolveResponse" alt="" coords="3589,161,3755,189">
+<area shape="rect" id="node50" href="PingResponse.html" title="Packet PingResponse" alt="" coords="3779,161,3885,189">
+<area shape="rect" id="node52" href="PubSubAdoptChildResponse.html" title="Packet PubSubAdoptChildResponse" alt="" coords="3909,161,4099,189">
+<area shape="rect" id="node54" href="PubSubBackupResponse.html" title="Packet PubSubBackupResponse" alt="" coords="4123,161,4293,189">
+<area shape="rect" id="node56" href="PubSubHelpResponse.html" title="Packet PubSubHelpResponse" alt="" coords="4317,161,4472,189">
+<area shape="rect" id="node58" href="PubSubIntermediateResponse.html" title="Packet PubSubIntermediateResponse" alt="" coords="4496,161,4693,189">
+<area shape="rect" id="node60" href="PubSubJoinResponse.html" title="Packet PubSubJoinResponse" alt="" coords="4717,161,4867,189">
+<area shape="rect" id="node62" href="PubSubPingResponse.html" title="Packet PubSubPingResponse" alt="" coords="4891,161,5043,189">
+<area shape="rect" id="node64" href="PubSubResponsibleNodeResponse.html" title="Packet PubSubResponsibleNodeResponse" alt="" coords="5067,161,5296,189">
+<area shape="rect" id="node66" href="PubSubSubscriptionResponse.html" title="Packet PubSubSubscriptionResponse" alt="" coords="5320,161,5517,189">
+<area shape="rect" id="node68" href="PubSubTakeOverSubspaceResponse.html" title="Packet PubSubTakeOverSubspaceResponse" alt="" coords="5541,161,5784,189">
+<area shape="rect" id="node70" href="RttToNodeResponse.html" title="Packet RttToNodeResponse" alt="" coords="5808,161,5952,189">
+<area shape="rect" id="node72" href="ScribeJoinResponse.html" title="Packet ScribeJoinResponse" alt="" coords="5976,161,6117,189">
+<area shape="rect" id="node74" href="ScribePublishResponse.html" title="Packet ScribePublishResponse" alt="" coords="6141,161,6301,189">
+<area shape="rect" id="node76" href="StabilizeResponse.html" title="Packet StabilizeResponse" alt="" coords="6325,161,6456,189">
+<area shape="rect" id="node2" href="BaseRpcMessage.html" title="Packet BaseRpcMessage" alt="" coords="2904,6,3032,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="BaseRpcMessage.html">BaseRpcMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic Remote-Procedure-Call message used for calls and return values</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Known subclasses:</h3>
+<table>
+<tr>
+   <td>
+      <a href="BucketResponse.html">BucketResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>response message to a <a href="BucketCall.html">BucketCall</a> </p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="CoordsOfNodeResponse.html">CoordsOfNodeResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Ping Response with Coordinates and Layer</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="CoordsReqResponse.html">CoordsReqResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>RPC Response with Coordinates and Layer</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DeBruijnResponse.html">DeBruijnResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to answer to a <a href="DeBruijnCall.html">DeBruijnCall</a> message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTdumpResponse.html">DHTdumpResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Response to a <a href="DHTdumpCall.html">DHTdumpCall</a></p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTgetCAPIResponse.html">DHTgetCAPIResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type to respond to a DHTget request </p>
+<p><b>See also:</b> DHTget</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTGetResponse.html">DHTGetResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTputCAPIResponse.html">DHTputCAPIResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type to respond to a DHTput request </p>
+<p><b>See also:</b> DHTput</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTPutResponse.html">DHTPutResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FailedNodeResponse.html">FailedNodeResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic failed node response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FindNodeResponse.html">FindNodeResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic find node rpc call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FixfingersResponse.html">FixfingersResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to answer to a <a href="FixfingersCall.html">FixfingersCall</a> message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="JoinResponse.html">JoinResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to answer to a <a href="JoinCall.html">JoinCall</a> message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="KbrTestResponse.html">KbrTestResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic find node rpc call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="LookupResponse.html">LookupResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Internal RPC response from overlay containing lookup results</p>
+<p><b>Author:</b> Ingmar Baumgart</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="MyNeighborResponse.html">MyNeighborResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NextHopResponse.html">NextHopResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A next hop response / acknowledgement</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NotifyResponse.html">NotifyResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to answer to a <a href="NotifyCall.html">NotifyCall</a> message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NTreeDivideResponse.html">NTreeDivideResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NTreeJoinResponse.html">NTreeJoinResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NTreePingResponse.html">NTreePingResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="P2pnsRegisterResponse.html">P2pnsRegisterResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>P2PNS Register RPC Response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="P2pnsResolveResponse.html">P2pnsResolveResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>P2PNS Resolve RPC Response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PingResponse.html">PingResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic ping response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubAdoptChildResponse.html">PubSubAdoptChildResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubBackupResponse.html">PubSubBackupResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubHelpResponse.html">PubSubHelpResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubIntermediateResponse.html">PubSubIntermediateResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubJoinResponse.html">PubSubJoinResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubPingResponse.html">PubSubPingResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubResponsibleNodeResponse.html">PubSubResponsibleNodeResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubSubscriptionResponse.html">PubSubSubscriptionResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubTakeOverSubspaceResponse.html">PubSubTakeOverSubspaceResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="RttToNodeResponse.html">RttToNodeResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Ping Response with RTT to Node</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribeJoinResponse.html">ScribeJoinResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribePublishResponse.html">ScribePublishResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="StabilizeResponse.html">StabilizeResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to answer to a <a href="StabilizeCall.html">StabilizeCall</a> message</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Fields:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">srcNode</td>
+   <td width="100">
+      <i>
+NodeHandle</i>
+   </td>
+   <td>
+<p>source node</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">statType</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type for stats</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">authBlock</td>
+   <td width="100">
+      <i>
+AuthBlock[]</i>
+   </td>
+   <td>
+<p>optional authentication block containing a signature</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">nonce</td>
+   <td width="100">
+      <i>
+unsigned int</i>
+   </td>
+   <td>
+<p>nonce to match RPC responses to corresponding calls</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">callHopCount</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">type</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">ncsInfo</td>
+   <td width="100">
+      <i>
+double[]</i>
+   </td>
+   <td>
+<p>info block for network coordinate systems</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// A basic Remote-Procedure-Response message
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseRpcMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">callHopCount</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">ncsInfo</span><span style="color: #000000; ">[]; </span><span style="color: #808080; font-style: italic; ">// info block for network coordinate systems
+</span><span style="color: #000000; ">}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

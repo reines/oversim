@@ -1,0 +1,168 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Message <i>NiceHeartbeat</i></h2>
+<b>File: <a href="src-overlay-nice-NiceMessage.msg.html">src/overlay/nice/NiceMessage.msg</a></b><br/><p><a href="../doxy/classNiceHeartbeat.html" target="mainframe"><b>C++ definition</b></a></p>
+<p>(no description)</p><h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="NiceHeartbeat-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="NiceHeartbeat.html" title="Message NiceHeartbeat" alt="" coords="5,6,112,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="NiceHeartbeat-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="NiceHeartbeat.html" title="Message NiceHeartbeat" alt="" coords="27,83,133,111">
+<area shape="rect" id="node4" href="NiceLeaderHeartbeat.html" title="Message NiceLeaderHeartbeat" alt="" coords="8,161,152,189">
+<area shape="rect" id="node2" href="NiceMemberMessage.html" title="Message NiceMemberMessage" alt="" coords="5,6,155,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="NiceMemberMessage.html">NiceMemberMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Known subclasses:</h3>
+<table>
+<tr>
+   <td>
+      <a href="NiceLeaderHeartbeat.html">NiceLeaderHeartbeat</a>
+      <i> (message)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Fields:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">srcNode</td>
+   <td width="100">
+      <i>
+TransportAddress</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="local">
+   <td width="150">hb_delay</td>
+   <td width="100">
+      <i>
+double</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">statType</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type for stats</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">seqNo</td>
+   <td width="100">
+      <i>
+unsigned int</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="local">
+   <td width="150">one_hop_distance</td>
+   <td width="100">
+      <i>
+double</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">command</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">layer</td>
+   <td width="100">
+      <i>
+short</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">type</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">members</td>
+   <td width="100">
+      <i>
+TransportAddress[]</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="local">
+   <td width="150">seqRspNo</td>
+   <td width="100">
+      <i>
+unsigned int</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="local">
+   <td width="150">distances</td>
+   <td width="100">
+      <i>
+double[]</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="local">
+   <td width="150">sublayermembers</td>
+   <td width="100">
+      <i>
+unsigned int</i>
+   </td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceHeartbeat</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceMemberMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">seqNo</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">seqRspNo</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">hb_delay</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">distances</span><span style="color: #000000; ">[];
+    </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">one_hop_distance</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">sublayermembers</span><span style="color: #000000; ">;
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

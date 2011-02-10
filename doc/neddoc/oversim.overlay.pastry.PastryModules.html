@@ -1,0 +1,749 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Compound Module <i>PastryModules</i></h2>
+<b>Package:</b> oversim.overlay.pastry<br/><b>File: <a href="src-overlay-pastry-Pastry.ned.html">src/overlay/pastry/Pastry.ned</a></b><br/>
+<p>Implementation of the <a href="oversim.overlay.pastry.Pastry.html">Pastry</a> KBR overlay as described in
+"<a href="oversim.overlay.pastry.Pastry.html">Pastry</a>: Scalable, Decentralized Object Location, and 
+Routing for Large-Scale Peer-to-Peer Systems" 
+by Antony Rowstron and Peter Druschel, published in 
+Lecture Notes in Computer Science, volume 2218.</p>
+<p><b>Author:</b> Felix Palmen</p>
+<img src="oversim.overlay.pastry.PastryModules-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.overlay.pastry.Pastry.html" title="Pastry" alt="Pastry" coords="42,374,86,433">
+<area shape="rect" href="oversim.overlay.pastry.PastryRoutingTable.html" title="PastryRoutingTable" alt="PastryRoutingTable" coords="85,390,199,449">
+<area shape="rect" href="oversim.overlay.pastry.PastryLeafSet.html" title="PastryLeafSet" alt="PastryLeafSet" coords="181,374,264,433">
+<area shape="rect" href="oversim.overlay.pastry.PastryNeighborhoodSet.html" title="PastryNeighborhoodSet" alt="PastryNeighborhoodSet" coords="231,390,374,449">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.overlay.pastry.PastryModules-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.overlay.pastry.PastryModules.html" title="Compound Module PastryModules" alt="" coords="256,6,365,34">
+<area shape="rect" id="node2" href="oversim.overlay.pastry.Pastry.html" title="Simple Module Pastry" alt="" coords="5,83,77,111">
+<area shape="rect" id="node4" href="oversim.overlay.pastry.PastryRoutingTable.html" title="Simple Module PastryRoutingTable" alt="" coords="101,83,237,111">
+<area shape="rect" id="node6" href="ned.IdealChannel.html" title="Channel IdealChannel" alt="" coords="261,83,360,111">
+<area shape="rect" id="node8" href="oversim.overlay.pastry.PastryLeafSet.html" title="Simple Module PastryLeafSet" alt="" coords="384,83,488,111">
+<area shape="rect" id="node10" href="oversim.overlay.pastry.PastryNeighborhoodSet.html" title="Simple Module PastryNeighborhoodSet" alt="" coords="512,83,672,111">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.overlay.pastry.PastryModules-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.overlay.pastry.PastryModules.html" title="Compound Module PastryModules" alt="" coords="5,83,115,111">
+<area shape="rect" id="node2" href="oversim.common.IOverlay.html" title="Module Interface IOverlay" alt="" coords="24,6,96,34">
+</map>
+<h3 class="subtitle">Gates:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Direction</th>
+      <th>Size</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">udpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the UDP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">udpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the UDP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">tcpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the TCP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">tcpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the TCP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">appIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the application</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">appOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the application</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Unassigned submodule parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.localPort</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>UDP port for overlay messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.keyLength</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>overlay key length in bits</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.nodeId</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>optional nodeId as string in hexadecimal notation</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.useCommonAPIforward</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable CommonAPI forward() calls</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.drawOverlayTopology</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>draw arrow to successor node?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.hopCountMax</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum number of overlay hops</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.recNumRedundantNodes</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>numRedundantNodes for recursive routing</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.joinOnApplicationRequest</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>only join the overlay on application request</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.collectPerHopDelay</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>delay statistics for single hops</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.routeMsgAcks</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use RPCs for route messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupRedundantNodes</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of next hops in each step</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupParallelPaths</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of parallel paths</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupParallelRpcs</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes to ask in parallel</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupVerifySiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if siblings need to be authenticated with a ping</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupMajoritySiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if sibling candidates are selected by a majority decision if using parallel paths</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupMerge</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if parallel Rpc results should be merged</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupFailedNodeRpcs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>communicate failed nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupStrictParallelRpcs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>limited the number of concurrent rpcs to parameter parallelRpcs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupUseAllParallelResponses</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>merge all parallel responses from earlier steps</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupNewRpcOnEveryTimeout</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>send a new RPC immediately after an RPC timeouts</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupNewRpcOnEveryResponse</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>send a new RPC after every response, even if there was no progress</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupFinishOnFirstUnchanged</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>finish lookup, if the last pending RPC returned without progress</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupVisitOnlyOnce</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, the same node is never asked twice during a single lookup</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.lookupAcceptLateSiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, a <a href="FindNodeResponse.html">FindNodeResponse</a> with sibling flag set is always accepted, even if it is from a previous lookup step</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.routingType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default routing mode (iterative, semi-recursive,...)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.rejoinOnFailure</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>rejoin after loosing connection to the overlay?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.sendRpcResponseToLastHop</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>needed by KBR protocols for NAT support</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.recordRoute</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>record visited hops on route</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.dropFindNodeAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a findNode attack</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.isSiblingAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a isSibling attack</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.invalidNodesAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a invalidNode attack</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.dropRouteMessageAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it drops all received BaseRouteMessages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.measureAuthBlock</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, measure the overhead of signatures in rpc messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.restoreContext</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, a node rejoins with its old nodeId and malicious state</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.enableNewLeafs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable <a href="oversim.overlay.pastry.Pastry.html">Pastry</a> API call newLeafs()</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.optimizeLookup</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>whether to search the closest node
+in findCloserNode() calls</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.bitsPerDigit</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>bits per <a href="oversim.overlay.pastry.Pastry.html">Pastry</a> digit</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.numberOfLeaves</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of entries in leaf set</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.numberOfNeighbors</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of entries in neighborhoot set</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.joinTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>seconds to wait for STATE message
+from closest node</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.repairTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>how long to wait for repair messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.useRegularNextHop</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.alwaysSendUpdate</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>tables delayed (should be very small)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.readyWait</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>seconds to wait for missing state
+messages in JOIN phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.proximityNeighborSelection</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable PNS ?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.partialJoinPath</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>allow join even with missing state
+message along the routing path</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.secondStageWait</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>how long to wait before starting
+second stage of init phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.pingBeforeSecondStage</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.useDiscovery</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>join at nearest node, otherwise use bootstrapnode</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.minimalJoinState</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use smaller join state msgs (as described in the 2nd <a href="oversim.overlay.pastry.Pastry.html">Pastry</a> paper)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.sendStateAtLeafsetRepair</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use state messages for leafset repair, otherwise use leafset messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.discoveryTimeoutAmount</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>how long to wait for leafset pings in discovery stage</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.routingTableMaintenanceInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>interval for periodic routing table maintenance</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.overrideOldPastry</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>pastry configuration according to the original paper</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.pastry.Pastry.html">pastry</a>.overrideNewPastry</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>optimized pastry configuration</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Implementation of the Pastry KBR overlay as described in
+// &quot;Pastry: Scalable, Decentralized Object Location, and 
+// Routing for Large-Scale Peer-to-Peer Systems&quot; 
+// by Antony Rowstron and Peter Druschel, published in 
+// Lecture Notes in Computer Science, volume 2218.
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Felix Palmen
+//
+</span><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">PastryModules</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">like</span><span style="color: #000000; "> </span><span style="color: #000000; ">IOverlay</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">;   </span><span style="color: #808080; font-style: italic; ">// gate from the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">;   </span><span style="color: #808080; font-style: italic; ">// gate from the application
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the application
+</span><span style="color: #000000; ">
+    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">pastry</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Pastry</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=60,52;i=block/circle&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">pastryRoutingTable</span><span style="color: #000000; ">: </span><span style="color: #000000; ">PastryRoutingTable</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=140,68;i=block/table&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">pastryLeafSet</span><span style="color: #000000; ">: </span><span style="color: #000000; ">PastryLeafSet</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=220,52;i=block/table&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">pastryNeighborhoodSet</span><span style="color: #000000; ">: </span><span style="color: #000000; ">PastryNeighborhoodSet</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=300,68;i=block/table&quot;</span><span style="color: #000000; ">);
+
+        }
+    </span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">allowunconnected</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">pastry</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">pastry</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">appIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">pastry</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">appOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">pastry</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">;
+
+}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

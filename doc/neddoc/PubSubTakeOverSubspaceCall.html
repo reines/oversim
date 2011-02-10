@@ -1,0 +1,111 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Packet <i>PubSubTakeOverSubspaceCall</i></h2>
+<b>File: <a href="src-overlay-pubsubmmog-PubSubMessage.msg.html">src/overlay/pubsubmmog/PubSubMessage.msg</a></b><br/><p><a href="../doxy/classPubSubTakeOverSubspaceCall.html" target="mainframe"><b>C++ definition</b></a></p>
+<p>(no description)</p><h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="PubSubTakeOverSubspaceCall-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="PubSubTakeOverSubspaceCall.html" title="Packet PubSubTakeOverSubspaceCall" alt="" coords="5,6,211,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="PubSubTakeOverSubspaceCall-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="PubSubTakeOverSubspaceCall.html" title="Packet PubSubTakeOverSubspaceCall" alt="" coords="5,83,211,111">
+<area shape="rect" id="node2" href="BaseCallMessage.html" title="Packet BaseCallMessage" alt="" coords="44,6,172,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="BaseCallMessage.html">BaseCallMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic Remote-Procedure-Call message</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Fields:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">srcNode</td>
+   <td width="100">
+      <i>
+NodeHandle</i>
+   </td>
+   <td>
+<p>source node</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">statType</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type for stats</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">authBlock</td>
+   <td width="100">
+      <i>
+AuthBlock[]</i>
+   </td>
+   <td>
+<p>optional authentication block containing a signature</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">subspacePos</td>
+   <td width="100">
+      <i>
+Vector2D</i>
+   </td>
+   <td>
+<p>FIXME: send subspaceId as int</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">nonce</td>
+   <td width="100">
+      <i>
+unsigned int</i>
+   </td>
+   <td>
+<p>nonce to match RPC responses to corresponding calls</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">type</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">PubSubTakeOverSubspaceCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">Vector2D</span><span style="color: #000000; "> </span><span style="color: #000000; ">subspacePos</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">//FIXME: send subspaceId as int
+</span><span style="color: #000000; ">}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

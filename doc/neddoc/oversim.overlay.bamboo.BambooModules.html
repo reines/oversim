@@ -1,0 +1,673 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Compound Module <i>BambooModules</i></h2>
+<b>Package:</b> oversim.overlay.bamboo<br/><b>File: <a href="src-overlay-bamboo-Bamboo.ned.html">src/overlay/bamboo/Bamboo.ned</a></b><br/>
+<p>Implementation of the <a href="oversim.overlay.bamboo.Bamboo.html">Bamboo</a> KBR overlay as described in
+...</p>
+<p><b>Author:</b> Gerhard Petruschat</p>
+<img src="oversim.overlay.bamboo.BambooModules-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.overlay.bamboo.Bamboo.html" title="Bamboo" alt="Bamboo" coords="38,134,87,193">
+<area shape="rect" href="oversim.overlay.pastry.PastryRoutingTable.html" title="PastryRoutingTable" alt="PastryRoutingTable" coords="85,150,199,209">
+<area shape="rect" href="oversim.overlay.pastry.PastryLeafSet.html" title="PastryLeafSet" alt="PastryLeafSet" coords="181,134,264,193">
+<area shape="rect" href="oversim.overlay.pastry.PastryNeighborhoodSet.html" title="PastryNeighborhoodSet" alt="PastryNeighborhoodSet" coords="231,150,374,209">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.overlay.bamboo.BambooModules-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.overlay.bamboo.BambooModules.html" title="Compound Module BambooModules" alt="" coords="281,6,399,34">
+<area shape="rect" id="node2" href="oversim.overlay.pastry.PastryRoutingTable.html" title="Simple Module PastryRoutingTable" alt="" coords="5,83,141,111">
+<area shape="rect" id="node4" href="ned.IdealChannel.html" title="Channel IdealChannel" alt="" coords="165,83,264,111">
+<area shape="rect" id="node6" href="oversim.overlay.pastry.PastryLeafSet.html" title="Simple Module PastryLeafSet" alt="" coords="288,83,392,111">
+<area shape="rect" id="node8" href="oversim.overlay.pastry.PastryNeighborhoodSet.html" title="Simple Module PastryNeighborhoodSet" alt="" coords="416,83,576,111">
+<area shape="rect" id="node10" href="oversim.overlay.bamboo.Bamboo.html" title="Simple Module Bamboo" alt="" coords="600,83,672,111">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.overlay.bamboo.BambooModules-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.overlay.bamboo.BambooModules.html" title="Compound Module BambooModules" alt="" coords="5,83,123,111">
+<area shape="rect" id="node2" href="oversim.common.IOverlay.html" title="Module Interface IOverlay" alt="" coords="28,6,100,34">
+</map>
+<h3 class="subtitle">Gates:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Direction</th>
+      <th>Size</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">udpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the UDP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">udpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the UDP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">tcpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the TCP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">tcpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the TCP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">appIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the application</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">appOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the application</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Unassigned submodule parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.localPort</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>UDP port for overlay messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.keyLength</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>overlay key length in bits</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.nodeId</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>optional nodeId as string in hexadecimal notation</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.useCommonAPIforward</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable CommonAPI forward() calls</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.drawOverlayTopology</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>draw arrow to successor node?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.hopCountMax</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum number of overlay hops</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.recNumRedundantNodes</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>numRedundantNodes for recursive routing</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.joinOnApplicationRequest</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>only join the overlay on application request</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.collectPerHopDelay</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>delay statistics for single hops</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.routeMsgAcks</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use RPCs for route messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupRedundantNodes</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of next hops in each step</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupParallelPaths</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of parallel paths</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupParallelRpcs</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes to ask in parallel</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupVerifySiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if siblings need to be authenticated with a ping</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupMajoritySiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if sibling candidates are selected by a majority decision if using parallel paths</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupMerge</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if parallel Rpc results should be merged</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupFailedNodeRpcs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>communicate failed nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupStrictParallelRpcs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>limited the number of concurrent rpcs to parameter parallelRpcs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupUseAllParallelResponses</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>merge all parallel responses from earlier steps</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupNewRpcOnEveryTimeout</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>send a new RPC immediately after an RPC timeouts</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupNewRpcOnEveryResponse</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>send a new RPC after every response, even if there was no progress</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupFinishOnFirstUnchanged</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>finish lookup, if the last pending RPC returned without progress</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupVisitOnlyOnce</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, the same node is never asked twice during a single lookup</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.lookupAcceptLateSiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, a <a href="FindNodeResponse.html">FindNodeResponse</a> with sibling flag set is always accepted, even if it is from a previous lookup step</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.routingType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default routing mode (iterative, semi-recursive,...)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.rejoinOnFailure</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>rejoin after loosing connection to the overlay?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.sendRpcResponseToLastHop</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>needed by KBR protocols for NAT support</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.recordRoute</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>record visited hops on route</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.dropFindNodeAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a findNode attack</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.isSiblingAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a isSibling attack</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.invalidNodesAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a invalidNode attack</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.dropRouteMessageAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it drops all received BaseRouteMessages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.measureAuthBlock</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, measure the overhead of signatures in rpc messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.restoreContext</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, a node rejoins with its old nodeId and malicious state</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.enableNewLeafs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable <a href="oversim.overlay.pastry.Pastry.html">Pastry</a> API call newLeafs()</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.optimizeLookup</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>whether to search the closest node
+in findCloserNode() calls</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.bitsPerDigit</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>bits per <a href="oversim.overlay.pastry.Pastry.html">Pastry</a> digit</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.numberOfLeaves</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of entries in leaf set</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.numberOfNeighbors</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of entries in neighborhoot set</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.joinTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>seconds to wait for STATE message
+from closest node</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.repairTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>how long to wait for repair messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.useRegularNextHop</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.alwaysSendUpdate</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>tables delayed (should be very small)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.readyWait</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>seconds to wait for missing state
+messages in JOIN phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.proximityNeighborSelection</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable PNS ?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.localTuningInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>interval for periodic routing table maintenance</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.leafsetMaintenanceInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>leafset push/pull interval</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.bamboo.Bamboo.html">bamboo</a>.globalTuningInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>global tuning interval</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Implementation of the Bamboo KBR overlay as described in
+// ...
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Gerhard Petruschat
+//
+</span><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">BambooModules</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">like</span><span style="color: #000000; "> </span><span style="color: #000000; ">IOverlay</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the application
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the application
+</span><span style="color: #000000; ">
+    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">bamboo</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Bamboo</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=60,52;i=block/circle&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">pastryRoutingTable</span><span style="color: #000000; ">: </span><span style="color: #000000; ">PastryRoutingTable</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=140,68;i=block/table&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">pastryLeafSet</span><span style="color: #000000; ">: </span><span style="color: #000000; ">PastryLeafSet</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=220,52;i=block/table&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">pastryNeighborhoodSet</span><span style="color: #000000; ">: </span><span style="color: #000000; ">PastryNeighborhoodSet</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=300,68;i=block/table&quot;</span><span style="color: #000000; ">);
+
+        }
+    </span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">allowunconnected</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">bamboo</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">bamboo</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">appIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">bamboo</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">appOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">bamboo</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">;
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

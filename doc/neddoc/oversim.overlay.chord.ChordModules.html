@@ -1,0 +1,706 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Compound Module <i>ChordModules</i></h2>
+<b>Package:</b> oversim.overlay.chord<br/><b>File: <a href="src-overlay-chord-Chord.ned.html">src/overlay/chord/Chord.ned</a></b><br/>
+<p>Implementation of the <a href="oversim.overlay.chord.Chord.html">Chord</a> KBR overlay as described in
+"<a href="oversim.overlay.chord.Chord.html">Chord</a>: A Scalable Peer-to-Peer Lookup Protocol for Internet
+Applications" by I. Stoica et al. published in Transactions on Networking.</p>
+<p><b>Author:</b> Ingmar Baumgart, Markus Mauch</p>
+<img src="oversim.overlay.chord.ChordModules-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.overlay.chord.Chord.html" title="Chord" alt="Chord" coords="42,262,86,321">
+<area shape="rect" href="oversim.overlay.chord.ChordFingerTable.html" title="ChordFingerTable" alt="ChordFingerTable" coords="119,262,185,321">
+<area shape="rect" href="oversim.overlay.chord.ChordSuccessorList.html" title="ChordSuccessorList" alt="ChordSuccessorList" coords="202,262,282,321">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.overlay.chord.ChordModules-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.overlay.chord.ChordModules.html" title="Compound Module ChordModules" alt="" coords="221,6,328,34">
+<area shape="rect" id="node2" href="ned.IdealChannel.html" title="Channel IdealChannel" alt="" coords="5,83,104,111">
+<area shape="rect" id="node4" href="oversim.overlay.chord.ChordSuccessorList.html" title="Simple Module ChordSuccessorList" alt="" coords="128,83,267,111">
+<area shape="rect" id="node6" href="oversim.overlay.chord.ChordFingerTable.html" title="Simple Module ChordFingerTable" alt="" coords="291,83,416,111">
+<area shape="rect" id="node8" href="oversim.overlay.chord.Chord.html" title="Simple Module Chord" alt="" coords="440,83,512,111">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.overlay.chord.ChordModules-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.overlay.chord.ChordModules.html" title="Compound Module ChordModules" alt="" coords="5,83,112,111">
+<area shape="rect" id="node2" href="oversim.common.IOverlay.html" title="Module Interface IOverlay" alt="" coords="23,6,95,34">
+</map>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>i=block/network2</i></td>
+   <td>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Gates:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Direction</th>
+      <th>Size</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">udpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the UDP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">udpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the UDP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">tcpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the TCP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">tcpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the TCP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">appIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the application</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">appOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the application</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Unassigned submodule parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.localPort</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>UDP port for overlay messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.keyLength</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>overlay key length in bits</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.nodeId</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>optional nodeId as string in hexadecimal notation</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.useCommonAPIforward</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable CommonAPI forward() calls</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.drawOverlayTopology</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>draw arrow to successor node?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.hopCountMax</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum number of overlay hops</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.recNumRedundantNodes</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>numRedundantNodes for recursive routing</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.joinOnApplicationRequest</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>only join the overlay on application request</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.collectPerHopDelay</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>delay statistics for single hops</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.routeMsgAcks</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use RPCs for route messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupRedundantNodes</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of next hops in each step</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupParallelPaths</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of parallel paths</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupParallelRpcs</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes to ask in parallel</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupVerifySiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if siblings need to be authenticated with a ping</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupMajoritySiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if sibling candidates are selected by a majority decision if using parallel paths</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupMerge</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if parallel Rpc results should be merged</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupFailedNodeRpcs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>communicate failed nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupStrictParallelRpcs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>limited the number of concurrent rpcs to parameter parallelRpcs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupUseAllParallelResponses</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>merge all parallel responses from earlier steps</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupNewRpcOnEveryTimeout</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>send a new RPC immediately after an RPC timeouts</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupNewRpcOnEveryResponse</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>send a new RPC after every response, even if there was no progress</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupFinishOnFirstUnchanged</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>finish lookup, if the last pending RPC returned without progress</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupVisitOnlyOnce</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, the same node is never asked twice during a single lookup</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.lookupAcceptLateSiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, a <a href="FindNodeResponse.html">FindNodeResponse</a> with sibling flag set is always accepted, even if it is from a previous lookup step</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.routingType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default routing mode (iterative, semi-recursive,...)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.rejoinOnFailure</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>rejoin after loosing connection to the overlay?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.sendRpcResponseToLastHop</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>needed by KBR protocols for NAT support</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.recordRoute</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>record visited hops on route</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.dropFindNodeAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a findNode attack</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.isSiblingAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a isSibling attack</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.invalidNodesAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a invalidNode attack</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.dropRouteMessageAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it drops all received BaseRouteMessages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.measureAuthBlock</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, measure the overhead of signatures in rpc messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.restoreContext</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, a node rejoins with its old nodeId and malicious state</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.successorListSize</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>max number of successors in the SuccessorList</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.joinRetry</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>after joinRetry unsuccessful join requests, we fetch
+a need bootstrap node from the <a href="oversim.common.GlobalNodeList.html">GlobalNodeList</a></p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.stabilizeRetry</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>retries before a successor is considered failed</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.joinDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>delay between join retries (sec)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.stabilizeDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>stabilize interval (sec)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.fixfingersDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>fix_fingers interval (sec)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.aggressiveJoinMode</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use modified (faster) JOIN protocol</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.checkPredecessorDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>checkPredecessor interval (sec)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.extendedFingerTable</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use the extended finger table?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.numFingerCandidates</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of fingers when using extended finger table</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.proximityRouting</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use proximity routing</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.memorizeFailedSuccessor</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>do not use failed sucessor again and inform new successor</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.mergeOptimizationL1</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable merge optimization OPL1</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.mergeOptimizationL2</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>activate merge optimization OPL2</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.mergeOptimizationL3</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>activate merge optimization OPL3</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.overlay.chord.Chord.html">chord</a>.mergeOptimizationL4</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>activate merge optimization OPL4</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Implementation of the Chord KBR overlay as described in
+// &quot;Chord: A Scalable Peer-to-Peer Lookup Protocol for Internet
+// Applications&quot; by I. Stoica et al. published in Transactions on Networking.
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart, Markus Mauch
+//
+</span><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">ChordModules</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">like</span><span style="color: #000000; "> </span><span style="color: #000000; ">IOverlay</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=block/network2&quot;</span><span style="color: #000000; ">);
+
+    </span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">;   </span><span style="color: #808080; font-style: italic; ">// gate from the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">;   </span><span style="color: #808080; font-style: italic; ">// gate from the application
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the application
+</span><span style="color: #000000; ">
+    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">chord</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Chord</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=60,60&quot;</span><span style="color: #000000; ">);
+
+        }
+        </span><span style="color: #000000; ">fingerTable</span><span style="color: #000000; ">: </span><span style="color: #000000; ">ChordFingerTable</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=150,60&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">successorList</span><span style="color: #000000; ">: </span><span style="color: #000000; ">ChordSuccessorList</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=240,60&quot;</span><span style="color: #000000; ">);
+
+        }
+    </span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">allowunconnected</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">chord</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">chord</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">appIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">chord</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">appOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">chord</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">;
+}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

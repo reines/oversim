@@ -1,0 +1,2355 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Network <i>InetUnderlayNetwork6</i></h2>
+<b>Package:</b> oversim.underlay.inetunderlay<br/><b>File: <a href="src-underlay-inetunderlay-InetUnderlay6.ned.html">src/underlay/inetunderlay/InetUnderlay6.ned</a></b><br/>
+<p>The InetUnderlay ned-file </p>
+<p><b>See also:</b> <a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">InetUnderlayConfigurator</a></p>
+<img src="oversim.underlay.inetunderlay.InetUnderlayNetwork6-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html" title="InetOverlayHost6" alt="InetOverlayHost6" coords="27,93,138,166">
+<area shape="rect" href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html" title="InetUnderlayConfigurator" alt="InetUnderlayConfigurator" coords="8,182,137,241">
+<area shape="rect" href="oversim.underlay.inetunderlay.ipv6.Router6.html" title="Router6" alt="Router6" coords="44,223,279,278">
+<area shape="rect" href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html" title="AccessRouter6" alt="AccessRouter6" coords="188,96,385,151">
+<area shape="rect" href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html" title="OverlayAccessRouter6" alt="OverlayAccessRouter6" coords="209,116,494,177">
+<area shape="rect" href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html" title="OverlayRouter6" alt="OverlayRouter6" coords="192,295,513,356">
+<area shape="rect" href="oversim.common.ChurnGenerator.html" title="ChurnGenerator" alt="ChurnGenerator" coords="15,262,129,321">
+<area shape="rect" href="oversim.common.GlobalObserver.html" title="GlobalObserver" alt="GlobalObserver" coords="27,72,117,131">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.inetunderlay.InetUnderlayNetwork6-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.underlay.inetunderlay.InetUnderlayNetwork6.html" title="Network InetUnderlayNetwork6" alt="" coords="504,6,656,34">
+<area shape="rect" id="node2" href="oversim.common.GlobalObserver.html" title="Compound Module GlobalObserver" alt="" coords="5,83,117,111">
+<area shape="rect" id="node4" href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html" title="Compound Module AccessRouter6" alt="" coords="141,83,253,111">
+<area shape="rect" id="node6" href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html" title="Compound Module OverlayAccessRouter6" alt="" coords="277,83,435,111">
+<area shape="rect" id="node8" href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html" title="Compound Module InetOverlayHost6" alt="" coords="459,83,581,111">
+<area shape="rect" id="node10" href="oversim.underlay.inetunderlay.ipv6.Router6.html" title="Compound Module Router6" alt="" coords="605,83,677,111">
+<area shape="rect" id="node12" href="oversim.common.ChurnGenerator.html" title="Simple Module ChurnGenerator" alt="" coords="701,83,816,111">
+<area shape="rect" id="node14" href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html" title="Compound Module OverlayRouter6" alt="" coords="840,83,952,111">
+<area shape="rect" id="node16" href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html" title="Simple Module InetUnderlayConfigurator" alt="" coords="976,83,1141,111">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.inetunderlay.InetUnderlayNetwork6-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.underlay.inetunderlay.InetUnderlayNetwork6.html" title="Network InetUnderlayNetwork6" alt="" coords="5,6,157,34">
+</map>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">overlayType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the overlay used in the simulation (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">tier1Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the application on top of the overlay used in the simulation (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">tier2Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the module type on top of tier 1 (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">tier3Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the module type on top of tier 2 (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">backboneRouterNum</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of backbone routers in the network</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">accessRouterNum</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of access routers in the network</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">overlayBackboneRouterNum</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of backbone routers in the network that participate the overlay</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">overlayAccessRouterNum</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of access routers in the network that participate the overlay</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">outRouterNum</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>set to 1 if you want to use a <a href="oversim.underlay.inetunderlay.TunOutRouter.html">TunOutRouter</a> as connection to a real network</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">connectivity</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>degree of connectivity of backbone routers (1 = every backbone router is connected to all the others)</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">isNetwork</td>
+   <td width="100"><i></i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Unassigned submodule parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv6.RoutingTable6.html">routingTable6</a>.routingTableFile</td>
+   <td width="100">
+      <i>xml</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.advertisedWindow</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">14*this.mss</td>
+   <td>
+<p>in bytes, corresponds with the maximal receiver buffer capacity (Note: normally, NIC queues should be at least this size)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.delayedAcksEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>delayed ACK algorithm (RFC 1122) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.nagleEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>Nagle's algorithm (RFC 896) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.limitedTransmitEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Limited Transmit algorithm (RFC 3042) enabled/disabled (can be used for TCPReno/TCPTahoe/TCPNewReno/TCPNoCongestionControl)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.increasedIWEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Increased Initial Window (RFC 3390) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.sackSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Selective Acknowledgment (RFC 2018, 2883, 3517) support (header option) (SACK will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.windowScalingSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Window Scale (RFC 1323) support (header option) (WS will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.timestampSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Timestamps (RFC 1323) support (header option) (TS will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.mss</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">536</td>
+   <td>
+<p>Maximum Segment Size (RFC 793) (header option)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.tcpAlgorithmClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPReno"</td>
+   <td>
+<p>TCPReno/TCPTahoe/TCPNewReno/TCPNoCongestionControl/DumbTCP</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.sendQueueClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPVirtualDataSendQueue"</td>
+   <td>
+<p>TCPVirtualDataSendQueue/TCPMsgBasedSendQueue</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.receiveQueueClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPVirtualDataRcvQueue"</td>
+   <td>
+<p>TCPVirtualDataRcvQueue/TCPMsgBasedRcvQueue</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.recordStats</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>recording of seqNum etc. into output vectors enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.nodes.ipv6.NetworkLayer6.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv6.IPv6.html">ipv6</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.enableNeighborCache</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use neighbor cache for reducing ping traffic?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rttExpirationTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>expiration of the validity of the measured rtts</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.maxSize</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum size of the cache</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rttHistory</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.timeoutAccuracyLimit</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryTypeI</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryTypeQ</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.doDiscovery</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.ncsType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.ncsSendBackOwnCoords</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpDimensions</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>gnp settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpCoordCalcRuns</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpLandmarkTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.npsMaxLayer</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>nps settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiShowPosition</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>vivaldi settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiErrorConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiCoordConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiDimConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiEnableHeightVector</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.svivaldiLossConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>svivaldi settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.svivaldiLossResetLimit</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.simpleNcsDelayFaultType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>simpleNcs settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.mergeOverlayPartitions</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, detect and merge overlay partitions</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.maintainList</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maintain a list of bootstrap candidates and check them periodically</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">overlayTerminal</a>.<a href="oversim.common.CryptoModule.html">cryptoModule</a>.keyFile</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the name of the file containing the public key pair used to sign messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">underlayConfigurator</a>.terminalTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of terminal types</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">underlayConfigurator</a>.churnGeneratorTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>a list of churn generators to be used</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">underlayConfigurator</a>.transitionTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time to wait before measuring after init phase is finished</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">underlayConfigurator</a>.measurementTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>duration of the simulation after init and transition phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">underlayConfigurator</a>.gracefulLeaveDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time between prekill and removal from overlay</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">underlayConfigurator</a>.gracefulLeaveProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability of gracefull leave</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">underlayConfigurator</a>.startIPv4</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>IP configuration starts with this IP</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">underlayConfigurator</a>.startIPv6</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">underlayConfigurator</a>.gatewayIP</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>IP of the gateway (if an outRouter is used)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.Router6.html">backboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv6.RoutingTable6.html">routingTable6</a>.routingTableFile</td>
+   <td width="100">
+      <i>xml</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.Router6.html">backboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.nodes.ipv6.NetworkLayer6.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv6.IPv6.html">ipv6</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.Router6.html">backboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.Router6.html">backboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.Router6.html">backboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.Router6.html">backboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.Router6.html">backboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.Router6.html">backboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html">accessRouter</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv6.RoutingTable6.html">routingTable6</a>.routingTableFile</td>
+   <td width="100">
+      <i>xml</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html">accessRouter</a>.<a href="oversim.underlay.inetunderlay.AccessNet.html">accessNet</a>.channelTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of (tx) channel types (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html">accessRouter</a>.<a href="oversim.underlay.inetunderlay.AccessNet.html">accessNet</a>.channelTypesRx</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of (rx) channel types (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html">accessRouter</a>.<a href="../../../inet/doc/neddoc/inet.nodes.ipv6.NetworkLayer6.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv6.IPv6.html">ipv6</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html">accessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html">accessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html">accessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html">accessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html">accessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.AccessRouter6.html">accessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv6.RoutingTable6.html">routingTable6</a>.routingTableFile</td>
+   <td width="100">
+      <i>xml</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.underlay.inetunderlay.AccessNet.html">accessNet</a>.channelTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of (tx) channel types (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.underlay.inetunderlay.AccessNet.html">accessNet</a>.channelTypesRx</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of (rx) channel types (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.advertisedWindow</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">14*this.mss</td>
+   <td>
+<p>in bytes, corresponds with the maximal receiver buffer capacity (Note: normally, NIC queues should be at least this size)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.delayedAcksEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>delayed ACK algorithm (RFC 1122) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.nagleEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>Nagle's algorithm (RFC 896) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.limitedTransmitEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Limited Transmit algorithm (RFC 3042) enabled/disabled (can be used for TCPReno/TCPTahoe/TCPNewReno/TCPNoCongestionControl)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.increasedIWEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Increased Initial Window (RFC 3390) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.sackSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Selective Acknowledgment (RFC 2018, 2883, 3517) support (header option) (SACK will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.windowScalingSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Window Scale (RFC 1323) support (header option) (WS will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.timestampSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Timestamps (RFC 1323) support (header option) (TS will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.mss</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">536</td>
+   <td>
+<p>Maximum Segment Size (RFC 793) (header option)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.tcpAlgorithmClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPReno"</td>
+   <td>
+<p>TCPReno/TCPTahoe/TCPNewReno/TCPNoCongestionControl/DumbTCP</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.sendQueueClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPVirtualDataSendQueue"</td>
+   <td>
+<p>TCPVirtualDataSendQueue/TCPMsgBasedSendQueue</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.receiveQueueClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPVirtualDataRcvQueue"</td>
+   <td>
+<p>TCPVirtualDataRcvQueue/TCPMsgBasedRcvQueue</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.recordStats</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>recording of seqNum etc. into output vectors enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.nodes.ipv6.NetworkLayer6.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv6.IPv6.html">ipv6</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.enableNeighborCache</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use neighbor cache for reducing ping traffic?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rttExpirationTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>expiration of the validity of the measured rtts</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.maxSize</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum size of the cache</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rttHistory</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.timeoutAccuracyLimit</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryTypeI</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryTypeQ</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.doDiscovery</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.ncsType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.ncsSendBackOwnCoords</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpDimensions</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>gnp settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpCoordCalcRuns</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpLandmarkTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.npsMaxLayer</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>nps settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiShowPosition</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>vivaldi settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiErrorConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiCoordConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiDimConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiEnableHeightVector</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.svivaldiLossConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>svivaldi settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.svivaldiLossResetLimit</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.simpleNcsDelayFaultType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>simpleNcs settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.mergeOverlayPartitions</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, detect and merge overlay partitions</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.maintainList</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maintain a list of bootstrap candidates and check them periodically</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">overlayAccessRouter</a>.<a href="oversim.common.CryptoModule.html">cryptoModule</a>.keyFile</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the name of the file containing the public key pair used to sign messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv6.RoutingTable6.html">routingTable6</a>.routingTableFile</td>
+   <td width="100">
+      <i>xml</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.advertisedWindow</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">14*this.mss</td>
+   <td>
+<p>in bytes, corresponds with the maximal receiver buffer capacity (Note: normally, NIC queues should be at least this size)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.delayedAcksEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>delayed ACK algorithm (RFC 1122) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.nagleEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>Nagle's algorithm (RFC 896) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.limitedTransmitEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Limited Transmit algorithm (RFC 3042) enabled/disabled (can be used for TCPReno/TCPTahoe/TCPNewReno/TCPNoCongestionControl)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.increasedIWEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Increased Initial Window (RFC 3390) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.sackSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Selective Acknowledgment (RFC 2018, 2883, 3517) support (header option) (SACK will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.windowScalingSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Window Scale (RFC 1323) support (header option) (WS will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.timestampSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Timestamps (RFC 1323) support (header option) (TS will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.mss</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">536</td>
+   <td>
+<p>Maximum Segment Size (RFC 793) (header option)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.tcpAlgorithmClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPReno"</td>
+   <td>
+<p>TCPReno/TCPTahoe/TCPNewReno/TCPNoCongestionControl/DumbTCP</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.sendQueueClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPVirtualDataSendQueue"</td>
+   <td>
+<p>TCPVirtualDataSendQueue/TCPMsgBasedSendQueue</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.receiveQueueClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPVirtualDataRcvQueue"</td>
+   <td>
+<p>TCPVirtualDataRcvQueue/TCPMsgBasedRcvQueue</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">tcp</a>.recordStats</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>recording of seqNum etc. into output vectors enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.nodes.ipv6.NetworkLayer6.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv6.IPv6.html">ipv6</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.enableNeighborCache</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use neighbor cache for reducing ping traffic?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rttExpirationTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>expiration of the validity of the measured rtts</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.maxSize</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum size of the cache</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rttHistory</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.timeoutAccuracyLimit</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryTypeI</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryTypeQ</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.doDiscovery</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.ncsType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.ncsSendBackOwnCoords</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpDimensions</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>gnp settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpCoordCalcRuns</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpLandmarkTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.npsMaxLayer</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>nps settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiShowPosition</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>vivaldi settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiErrorConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiCoordConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiDimConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiEnableHeightVector</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.svivaldiLossConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>svivaldi settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.svivaldiLossResetLimit</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.simpleNcsDelayFaultType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>simpleNcs settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.mergeOverlayPartitions</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, detect and merge overlay partitions</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.maintainList</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maintain a list of bootstrap candidates and check them periodically</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">overlayBackboneRouter</a>.<a href="oversim.common.CryptoModule.html">cryptoModule</a>.keyFile</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the name of the file containing the public key pair used to sign messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.targetOverlayTerminalNum</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes after init phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.initPhaseCreationInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>node creation interval in init phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.noChurnThreshold</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if the lifetimeMean of a specific
+churn generator exceeds this,
+<a href="oversim.common.NoChurn.html">NoChurn</a> is used instead</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.channelTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>used (tx) access technologies (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.channelTypesRx</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>used (rx) access technologies (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability for a node to be malicious on creation</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChange</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>dynamically change number of malicious nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStartTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>simTime at which nodes begin to become malicious</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeRate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes to change to malicious compared to all nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time between two node changes to malicious</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStartValue</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>minimum amount of malicious nodes in the peerSet</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStopValue</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum amount of malicious nodes in the peerSet</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maxNumberOfKeys</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum number of overlay keys the bootstrap oracle handles</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.keyProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability of keys to be owned by nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.printStateToStdOut</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>print overlay ready messages to std::cout</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.topologyAdaptation</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>turn on topologyAdaptation (for demonstrator)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalTraceManager.html">globalTraceManager</a>.traceFile</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>file name of the trace file</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.outputMinMax</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable output of minimum and maximum for scalars</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.outputStdDev</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable output of standard deviation for scalars</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.measureNetwInitPhase</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>fetch statistics in init phase?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.globalStatTimerInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>interval length of periodic statistic timer</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// The InetUnderlay ned-file </span><span style="color: #000080; ">@see</span><span style="color: #808080; font-style: italic; "> InetUnderlayConfigurator
+//
+</span><span style="color: #800000; font-weight: bold; ">network</span><span style="color: #000000; "> </span><span style="color: #000000; ">InetUnderlayNetwork6</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayType</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the overlay used in the simulation (for overlayBackboneRouters)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier1Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the application on top of the overlay used in the simulation (for overlayBackboneRouters)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier2Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the module type on top of tier 1 (for overlayBackboneRouters)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier3Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the module type on top of tier 2 (for overlayBackboneRouters)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// number of backbone routers in the network
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">accessRouterNum</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// number of access routers in the network
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// number of backbone routers in the network that participate the overlay
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayAccessRouterNum</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// number of access routers in the network that participate the overlay
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">outRouterNum</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// set to 1 if you want to use a TunOutRouter as connection to a real network
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">connectivity</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// degree of connectivity of backbone routers (1 = every backbone router is connected to all the others)
+</span><span style="color: #000000; ">    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">overlayTerminal</span><span style="color: #000000; ">[</span><span style="color: #008000; ">0</span><span style="color: #000000; ">]: </span><span style="color: #000000; ">InetOverlayHost6</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@dynamic</span><span style="color: #000000; ">;
+        }
+        </span><span style="color: #000000; ">underlayConfigurator</span><span style="color: #000000; ">: </span><span style="color: #000000; ">InetUnderlayConfigurator</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; ">useIPv6Addresses</span><span style="color: #000000; "> = </span><span style="color: #008000; ">true</span><span style="color: #000000; ">;
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=70,160&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">]: </span><span style="color: #000000; ">Router6</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=device/server2&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #808080; font-style: italic; ">//outRouter[min(1, outRouterNum)]: TunOutRouter6;
+</span><span style="color: #000000; ">        </span><span style="color: #000000; ">accessRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">accessRouterNum</span><span style="color: #000000; ">]: </span><span style="color: #000000; ">AccessRouter6</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=device/server2,gray,30&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">overlayAccessRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">overlayAccessRouterNum</span><span style="color: #000000; ">]: </span><span style="color: #000000; ">OverlayAccessRouter6</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; ">overlayType</span><span style="color: #000000; "> = </span><span style="color: #000000; ">overlayType</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the overlay used in the simulation
+</span><span style="color: #000000; ">                </span><span style="color: #000000; ">tier1Type</span><span style="color: #000000; "> = </span><span style="color: #000000; ">tier1Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the application on top off the overly used in the simulation
+</span><span style="color: #000000; ">                </span><span style="color: #000000; ">tier2Type</span><span style="color: #000000; "> = </span><span style="color: #000000; ">tier2Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// tier 2 module to use
+</span><span style="color: #000000; ">                </span><span style="color: #000000; ">tier3Type</span><span style="color: #000000; "> = </span><span style="color: #000000; ">tier3Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// tier 3 module to use
+</span><span style="color: #000000; ">                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=device/server2,gray,30;i2=block/circle_s&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">]: </span><span style="color: #000000; ">OverlayRouter6</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; ">overlayType</span><span style="color: #000000; "> = </span><span style="color: #000000; ">overlayType</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the overlay used in the simulation
+</span><span style="color: #000000; ">                </span><span style="color: #000000; ">tier1Type</span><span style="color: #000000; "> = </span><span style="color: #000000; ">tier1Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the application on top off the overly used in the simulation
+</span><span style="color: #000000; ">                </span><span style="color: #000000; ">tier2Type</span><span style="color: #000000; "> = </span><span style="color: #000000; ">tier2Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// tier 2 module to use
+</span><span style="color: #000000; ">                </span><span style="color: #000000; ">tier3Type</span><span style="color: #000000; "> = </span><span style="color: #000000; ">tier3Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// tier 3 module to use
+</span><span style="color: #000000; ">                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=device/server2;i2=block/circle_s&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">churnGenerator</span><span style="color: #000000; ">[</span><span style="color: #008000; ">0</span><span style="color: #000000; ">]: </span><span style="color: #000000; ">ChurnGenerator</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=70,240,column&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">globalObserver</span><span style="color: #000000; ">: </span><span style="color: #000000; ">GlobalObserver</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=block/control;p=70,50&quot;</span><span style="color: #000000; ">);
+        }
+
+    </span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">allowunconnected</span><span style="color: #000000; ">:
+
+        </span><span style="color: #808080; font-style: italic; ">//
+</span><span style="color: #000000; ">        </span><span style="color: #808080; font-style: italic; ">// BACKBONE ROUTER
+</span><span style="color: #000000; ">        </span><span style="color: #808080; font-style: italic; ">//
+</span><span style="color: #000000; ">        </span><span style="color: #808080; font-style: italic; ">// connect outRouter to a backboneRouter
+//        backboneRouter[0].pppg$o++ --&gt; inet_fiberline --&gt; outRouter[0].pppg$i++ if outRouterNum&gt;0;
+//        backboneRouter[0].pppg$i++ &lt;-- inet_fiberline &lt;-- outRouter[0].pppg$o++ if outRouterNum&gt;0;
+</span><span style="color: #000000; ">
+        </span><span style="color: #808080; font-style: italic; ">// connect backboneRouters with other backboneRouters
+</span><span style="color: #000000; ">        </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">j</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">j</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">&lt;</span><span style="color: #000000; ">j</span><span style="color: #000000; ">&amp;&amp;</span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">connectivity</span><span style="color: #000000; ">;
+            </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">j</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">&lt;</span><span style="color: #000000; ">j</span><span style="color: #000000; ">&amp;&amp;</span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">connectivity</span><span style="color: #000000; ">;
+        }
+
+        </span><span style="color: #808080; font-style: italic; ">// connect backboneRouters with overlayBackboneRouters
+</span><span style="color: #000000; ">        </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">j</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">j</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">&lt;=</span><span style="color: #000000; ">j</span><span style="color: #000000; ">&amp;&amp;</span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">connectivity</span><span style="color: #000000; ">;
+            </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">j</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">&lt;=</span><span style="color: #000000; ">j</span><span style="color: #000000; ">&amp;&amp;</span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">connectivity</span><span style="color: #000000; ">;
+        }
+
+        </span><span style="color: #808080; font-style: italic; ">// connect overlayBackboneRouters with backboneRouters
+</span><span style="color: #000000; ">        </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">j</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">j</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">&lt;</span><span style="color: #000000; ">j</span><span style="color: #000000; ">&amp;&amp;</span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">connectivity</span><span style="color: #000000; ">;
+            </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">j</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">&lt;</span><span style="color: #000000; ">j</span><span style="color: #000000; ">&amp;&amp;</span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">connectivity</span><span style="color: #000000; ">;
+        }
+
+        </span><span style="color: #808080; font-style: italic; ">// connect overlayBackboneRouters with other overlayBackboneRouters
+</span><span style="color: #000000; ">        </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">j</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">j</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">&lt;</span><span style="color: #000000; ">j</span><span style="color: #000000; ">&amp;&amp;</span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">connectivity</span><span style="color: #000000; ">;
+            </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">j</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">&lt;</span><span style="color: #000000; ">j</span><span style="color: #000000; ">&amp;&amp;</span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">connectivity</span><span style="color: #000000; ">;
+        }
+
+        </span><span style="color: #808080; font-style: italic; ">//
+</span><span style="color: #000000; ">        </span><span style="color: #808080; font-style: italic; ">// ACCESS ROUTER
+</span><span style="color: #000000; ">        </span><span style="color: #808080; font-style: italic; ">//
+</span><span style="color: #000000; ">        </span><span style="color: #808080; font-style: italic; ">// connect accessRouters with backboneRouters
+</span><span style="color: #000000; ">        </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">accessRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; ">accessRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">intuniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">)].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">)&gt;</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">/(</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">+</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">);
+            </span><span style="color: #000000; ">accessRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">intuniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&gt;</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">/(</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">+</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">);
+        }
+
+        </span><span style="color: #808080; font-style: italic; ">// connect accessRouters with overlayBackboneRouters
+</span><span style="color: #000000; ">        </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">accessRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; ">accessRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">intuniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">)].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">/(</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">+</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">);
+            </span><span style="color: #000000; ">accessRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">intuniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">/(</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">+</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">);
+        }
+
+        </span><span style="color: #808080; font-style: italic; ">// connect overlayAccessRouters with backboneRouters
+</span><span style="color: #000000; ">        </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">overlayAccessRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; ">overlayAccessRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">intuniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">)].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">)&gt;</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">/(</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">+</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">);
+            </span><span style="color: #000000; ">overlayAccessRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">backboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">intuniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&gt;</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">/(</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">+</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">);
+        }
+
+        </span><span style="color: #808080; font-style: italic; ">// connect overlayAccessRouters with overlayBackboneRouters
+</span><span style="color: #000000; ">        </span><span style="color: #800000; font-weight: bold; ">for</span><span style="color: #000000; "> </span><span style="color: #000000; ">i</span><span style="color: #000000; ">=</span><span style="color: #008000; ">0</span><span style="color: #000000; ">..</span><span style="color: #000000; ">overlayAccessRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; ">overlayAccessRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">intuniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">)].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">/(</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">+</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">);
+            </span><span style="color: #000000; ">overlayAccessRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">i</span><span style="color: #000000; ">].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">i</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet_fiberline</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayBackboneRouter</span><span style="color: #000000; ">[</span><span style="color: #000000; ">intuniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">-</span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)].</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">$</span><span style="color: #000000; ">o</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">uniform2</span><span style="color: #000000; ">(</span><span style="color: #008000; ">0</span><span style="color: #000000; ">, </span><span style="color: #008000; ">1</span><span style="color: #000000; ">, </span><span style="color: #000000; ">i</span><span style="color: #000000; ">, </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)&lt;=</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">/(</span><span style="color: #000000; ">overlayBackboneRouterNum</span><span style="color: #000000; ">+</span><span style="color: #000000; ">backboneRouterNum</span><span style="color: #000000; ">);
+        }
+
+}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

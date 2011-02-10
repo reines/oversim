@@ -1,0 +1,163 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Packet <i>P2pnsRegisterCall</i></h2>
+<b>File: <a href="src-common-CommonMessages.msg.html">src/common/CommonMessages.msg</a></b><br/><p><a href="../doxy/classP2pnsRegisterCall.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>P2PNS Register RPC Call</p>
+<p><b>Author:</b> Ingmar Baumgart</p>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="P2pnsRegisterCall-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="P2pnsRegisterCall.html" title="Packet P2pnsRegisterCall" alt="" coords="5,6,136,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="P2pnsRegisterCall-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="P2pnsRegisterCall.html" title="Packet P2pnsRegisterCall" alt="" coords="5,83,136,111">
+<area shape="rect" id="node2" href="BaseCallMessage.html" title="Packet BaseCallMessage" alt="" coords="7,6,135,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="BaseCallMessage.html">BaseCallMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic Remote-Procedure-Call message</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Fields:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">srcNode</td>
+   <td width="100">
+      <i>
+NodeHandle</i>
+   </td>
+   <td>
+<p>source node</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">id</td>
+   <td width="100">
+      <i>
+uint32_t</i>
+   </td>
+   <td>
+<p>the id of the stored data item</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">statType</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type for stats</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">authBlock</td>
+   <td width="100">
+      <i>
+AuthBlock[]</i>
+   </td>
+   <td>
+<p>optional authentication block containing a signature</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">nonce</td>
+   <td width="100">
+      <i>
+unsigned int</i>
+   </td>
+   <td>
+<p>nonce to match RPC responses to corresponding calls</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">address</td>
+   <td width="100">
+      <i>
+BinaryValue</i>
+   </td>
+   <td>
+<p>the current address of the name</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">p2pName</td>
+   <td width="100">
+      <i>
+BinaryValue</i>
+   </td>
+   <td>
+<p>the name to register</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">type</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">ttl</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>time to life</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">kind</td>
+   <td width="100">
+      <i>
+uint32_t</i>
+   </td>
+   <td>
+<p>the kind of the stored data item</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// P2PNS Register RPC Call
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">P2pnsRegisterCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">p2pName</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the name to register
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">kind</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the kind of the stored data item
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">id</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// the id of the stored data item
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">address</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the current address of the name
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">ttl</span><span style="color: #000000; ">;             </span><span style="color: #808080; font-style: italic; ">// time to life
+</span><span style="color: #000000; ">}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

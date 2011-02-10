@@ -1,0 +1,76 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Packet <i>P2pnsTunnelMessage</i></h2>
+<b>File: <a href="src-tier2-p2pns-P2pnsMessage.msg.html">src/tier2/p2pns/P2pnsMessage.msg</a></b><br/><p><a href="../doxy/classP2pnsTunnelMessage.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>Message to TUNNEL application IPv6 packets to destination nodeId </p>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="P2pnsTunnelMessage-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="P2pnsTunnelMessage.html" title="Packet P2pnsTunnelMessage" alt="" coords="5,6,155,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="P2pnsTunnelMessage-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="P2pnsTunnelMessage.html" title="Packet P2pnsTunnelMessage" alt="" coords="5,83,155,111">
+<area shape="rect" id="node2" href="OverSimMessage.html" title="Packet OverSimMessage" alt="" coords="17,6,143,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="OverSimMessage.html">OverSimMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Fields:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">srcId</td>
+   <td width="100">
+      <i>
+OverlayKey</i>
+   </td>
+   <td>
+<p>the id of the originator</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">payload</td>
+   <td width="100">
+      <i>
+BinaryValue</i>
+   </td>
+   <td>
+<p>the IPv6 message which is tunneled</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Message to TUNNEL application IPv6 packets to destination nodeId 
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">P2pnsTunnelMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">OverSimMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcId</span><span style="color: #000000; ">;   </span><span style="color: #808080; font-style: italic; ">// the id of the originator
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">payload</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the IPv6 message which is tunneled
+</span><span style="color: #000000; ">}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

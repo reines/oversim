@@ -1,0 +1,122 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Simple Module <i>GlobalCoordinator</i></h2>
+<b>Package:</b> oversim.applications.simplegameclient<br/><b>File: <a href="src-applications-simplegameclient-GlobalCoordinator.ned.html">src/applications/simplegameclient/GlobalCoordinator.ned</a></b><br/><p><a href="../doxy/classGlobalCoordinator.html" target="mainframe"><b>C++ definition</b></a></p>
+<p>(no description)</p><img src="oversim.applications.simplegameclient.GlobalCoordinator-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.applications.simplegameclient.GlobalCoordinator.html" title="GlobalCoordinator" alt="GlobalCoordinator" coords="0,0,151,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.applications.simplegameclient.GlobalCoordinator-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.applications.simplegameclient.GlobalCoordinator.html" title="Simple Module GlobalCoordinator" alt="" coords="209,83,335,111">
+<area shape="rect" id="node2" href="oversim.applications.simplegameclient.GlobalCoordinatorModules.html" title="Compound Module GlobalCoordinatorModules" alt="" coords="5,6,179,34">
+<area shape="rect" id="node4" href="oversim.overlay.quon.GlobalQuonModules.html" title="Compound Module GlobalQuonModules" alt="" coords="203,6,341,34">
+<area shape="rect" id="node6" href="oversim.overlay.vast.GlobalVastModules.html" title="Compound Module GlobalVastModules" alt="" coords="365,6,499,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.applications.simplegameclient.GlobalCoordinator-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.applications.simplegameclient.GlobalCoordinator.html" title="Simple Module GlobalCoordinator" alt="" coords="5,6,131,34">
+</map>
+<h3 class="subtitle">Used in compound modules:</h3>
+<p>If a module type shows up more than once, that means it has been defined in more than one NED file.</p>
+<table>
+<tr>
+   <td>
+      <a href="oversim.applications.simplegameclient.GlobalCoordinatorModules.html">GlobalCoordinatorModules</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.overlay.quon.GlobalQuonModules.html">GlobalQuonModules</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.overlay.vast.GlobalVastModules.html">GlobalVastModules</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">seed</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>seed for scenery generation</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">Hotspots</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>For hotspotRoaming, definition of the hotspots</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">HotspotStayTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>For hotspotRoaming, how long to stay in a hotspot</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>i=block/app</i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">simple</span><span style="color: #000000; "> </span><span style="color: #000000; ">GlobalCoordinator</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">seed</span><span style="color: #000000; ">;      </span><span style="color: #808080; font-style: italic; ">// seed for scenery generation
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">Hotspots</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// For hotspotRoaming, definition of the hotspots
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">HotspotStayTime</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// For hotspotRoaming, how long to stay in a hotspot
+</span><span style="color: #000000; ">        </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=block/app&quot;</span><span style="color: #000000; ">);
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

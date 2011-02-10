@@ -1,0 +1,821 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Compound Module <i>SimpleOverlayHost</i></h2>
+<b>Package:</b> oversim.underlay.simpleunderlay<br/><b>File: <a href="src-underlay-simpleunderlay-SimpleOverlayHost.ned.html">src/underlay/simpleunderlay/SimpleOverlayHost.ned</a></b><br/>
+<p>Host in the simple network that participates in the overlay</p>
+<p><b>Author:</b> Stephan Krause, Bernhard Heep, Ingmar Baumgart</p>
+<img src="oversim.underlay.simpleunderlay.SimpleOverlayHost-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.common.ITier.html" title="ITier" alt="ITier" coords="46,91,90,150">
+<area shape="rect" href="oversim.common.ITier.html" title="ITier" alt="ITier" coords="161,124,205,183">
+<area shape="rect" href="oversim.common.ITier.html" title="ITier" alt="ITier" coords="268,169,312,228">
+<area shape="rect" href="oversim.common.IOverlay.html" title="IOverlay" alt="IOverlay" coords="363,227,408,286">
+<area shape="rect" href="oversim.underlay.simpleunderlay.SimpleUDP.html" title="SimpleUDP" alt="SimpleUDP" coords="364,339,408,398">
+<area shape="rect" href="oversim.underlay.simpleunderlay.SimpleTCP.html" title="SimpleTCP" alt="SimpleTCP" coords="268,339,312,398">
+<area shape="rect" href="oversim.common.CryptoModule.html" title="CryptoModule" alt="CryptoModule" coords="25,188,107,247">
+<area shape="rect" href="../../../inet/doc/neddoc/inet.base.NotificationBoard.html" title="NotificationBoard" alt="NotificationBoard" coords="15,266,118,325">
+<area shape="rect" href="../../../inet/doc/neddoc/inet.networklayer.common.InterfaceTable.html" title="InterfaceTable" alt="InterfaceTable" coords="25,339,108,398">
+<area shape="rect" href="oversim.common.NeighborCache.html" title="NeighborCache" alt="NeighborCache" coords="136,339,227,398">
+<area shape="rect" href="oversim.common.BootstrapList.html" title="BootstrapList" alt="BootstrapList" coords="142,266,221,325">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.simpleunderlay.SimpleOverlayHost-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.underlay.simpleunderlay.SimpleOverlayHost.html" title="Compound Module SimpleOverlayHost" alt="" coords="556,83,689,111">
+<area shape="rect" id="node2" href="oversim.common.BootstrapList.html" title="Simple Module BootstrapList" alt="" coords="5,161,104,189">
+<area shape="rect" id="node4" href="ned.IdealChannel.html" title="Channel IdealChannel" alt="" coords="128,161,227,189">
+<area shape="rect" id="node6" href="../../../inet/doc/neddoc/inet.networklayer.common.InterfaceTable.html" title="Simple Module InterfaceTable" alt="" coords="251,161,355,189">
+<area shape="rect" id="node8" href="oversim.underlay.simpleunderlay.SimpleUDP.html" title="Simple Module SimpleUDP" alt="" coords="379,161,469,189">
+<area shape="rect" id="node10" href="../../../inet/doc/neddoc/inet.base.NotificationBoard.html" title="Simple Module NotificationBoard" alt="" coords="493,161,616,189">
+<area shape="rect" id="node12" href="oversim.common.CryptoModule.html" title="Simple Module CryptoModule" alt="" coords="640,161,741,189">
+<area shape="rect" id="node14" href="oversim.underlay.simpleunderlay.SimpleTCP.html" title="Simple Module SimpleTCP" alt="" coords="765,161,853,189">
+<area shape="rect" id="node16" href="oversim.common.IOverlay.html" title="Module Interface IOverlay" alt="" coords="877,161,949,189">
+<area shape="rect" id="node18" href="oversim.common.ITier.html" title="Module Interface ITier" alt="" coords="973,161,1045,189">
+<area shape="rect" id="node20" href="oversim.common.NeighborCache.html" title="Simple Module NeighborCache" alt="" coords="1069,161,1181,189">
+<area shape="rect" id="node22" href="oversim.underlay.simpleunderlay.SimpleUnderlayNetwork.html" title="Network SimpleUnderlayNetwork" alt="" coords="541,6,704,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.simpleunderlay.SimpleOverlayHost-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.underlay.simpleunderlay.SimpleOverlayHost.html" title="Compound Module SimpleOverlayHost" alt="" coords="5,6,139,34">
+</map>
+<h3 class="subtitle">Networks:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.underlay.simpleunderlay.SimpleUnderlayNetwork.html">SimpleUnderlayNetwork</a>
+      <i> (network)</i>
+   </td>
+   <td>
+
+<p>The SimpleUnderlay ned-file </p>
+<p><b>See also:</b> <a href="oversim.underlay.simpleunderlay.SimpleUnderlayConfigurator.html">SimpleUnderlayConfigurator</a></p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">overlayType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>overlay protocol compound module to use</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">tier1Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>tier 1 application to use</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">tier2Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>tier 2 module to use</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">tier3Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>tier 3 module to use</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">numTiers</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of tiers</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>bgb=433,386;i=device/wifilaptop_l;i2=block/circle_s</i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Gates:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Direction</th>
+      <th>Size</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">overlayNeighborArrowIn [ ]</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>incoming gate for visualizing overlay neighborship with connection arrows</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">overlayNeighborArrowOut [ ]</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>incoming gate for visualizing overlay neighborship with connection arrows</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Unassigned submodule parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleUDP.html">udp</a>.constantDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>constant delay between two peers</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleUDP.html">udp</a>.useCoordinateBasedDelay</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>delay should be calculated from 
+euklidean distance between two peers</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleUDP.html">udp</a>.delayFaultType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>augment coordinate based delays with a realistic error,
+according to "Network Coordinates in the Wild", Figure 7
+possible values: empty, "live_all", "live_planetlab", "simulation"</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleUDP.html">udp</a>.jitter</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>average amount of jitter in %</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.advertisedWindow</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">14*this.mss</td>
+   <td>
+<p>in bytes, corresponds with the maximal receiver buffer capacity (Note: normally, NIC queues should be at least this size)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.delayedAcksEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>delayed ACK algorithm (RFC 1122) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.nagleEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>Nagle's algorithm (RFC 896) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.limitedTransmitEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Limited Transmit algorithm (RFC 3042) enabled/disabled (can be used for TCPReno/TCPTahoe/TCPNewReno/TCPNoCongestionControl)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.increasedIWEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Increased Initial Window (RFC 3390) enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.sackSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Selective Acknowledgment (RFC 2018, 2883, 3517) support (header option) (SACK will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.windowScalingSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Window Scale (RFC 1323) support (header option) (WS will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.timestampSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Timestamps (RFC 1323) support (header option) (TS will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.mss</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">536</td>
+   <td>
+<p>Maximum Segment Size (RFC 793) (header option)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.tcpAlgorithmClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPReno"</td>
+   <td>
+<p>TCPReno/TCPTahoe/TCPNewReno/TCPNoCongestionControl/DumbTCP</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.sendQueueClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPVirtualDataSendQueue"</td>
+   <td>
+<p>TCPVirtualDataSendQueue/TCPMsgBasedSendQueue</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.receiveQueueClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPVirtualDataRcvQueue"</td>
+   <td>
+<p>TCPVirtualDataRcvQueue/TCPMsgBasedRcvQueue</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.recordStats</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>recording of seqNum etc. into output vectors enabled/disabled</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.constantDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>constant delay between two peers</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.useCoordinateBasedDelay</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>delay should be calculated from 
+euklidean distance between two peers</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.delayFaultType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>augment coordinate based delays with a realistic error,
+according to "Network Coordinates in the Wild", Figure 7
+possible values: empty, "live_all", "live_planetlab", "simulation"</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.simpleunderlay.SimpleTCP.html">tcp</a>.jitter</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>average amount of jitter in %</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.CryptoModule.html">cryptoModule</a>.keyFile</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the name of the file containing the public key pair used to sign messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.enableNeighborCache</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use neighbor cache for reducing ping traffic?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.rttExpirationTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>expiration of the validity of the measured rtts</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.maxSize</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum size of the cache</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.rttHistory</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.timeoutAccuracyLimit</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryTypeI</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryTypeQ</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.doDiscovery</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.ncsType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.ncsSendBackOwnCoords</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpDimensions</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>gnp settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpCoordCalcRuns</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpLandmarkTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.npsMaxLayer</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>nps settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiShowPosition</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>vivaldi settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiErrorConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiCoordConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiDimConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiEnableHeightVector</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.svivaldiLossConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>svivaldi settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.svivaldiLossResetLimit</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.NeighborCache.html">neighborCache</a>.simpleNcsDelayFaultType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>simpleNcs settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.BootstrapList.html">bootstrapList</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.BootstrapList.html">bootstrapList</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.BootstrapList.html">bootstrapList</a>.mergeOverlayPartitions</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, detect and merge overlay partitions</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.BootstrapList.html">bootstrapList</a>.maintainList</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maintain a list of bootstrap candidates and check them periodically</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Host in the simple network that participates in the overlay
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Stephan Krause, Bernhard Heep, Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">SimpleOverlayHost</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayType</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// overlay protocol compound module to use
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier1Type</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// tier 1 application to use
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier2Type</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// tier 2 module to use
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier3Type</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// tier 3 module to use
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// number of tiers
+</span><span style="color: #000000; ">
+        </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;bgb=433,386;i=device/wifilaptop_l;i2=block/circle_s&quot;</span><span style="color: #000000; ">);
+    </span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayNeighborArrowIn</span><span style="color: #000000; ">[]; </span><span style="color: #808080; font-style: italic; ">// incoming gate for visualizing overlay neighborship with connection arrows
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayNeighborArrowOut</span><span style="color: #000000; ">[]; </span><span style="color: #808080; font-style: italic; ">// incoming gate for visualizing overlay neighborship with connection arrows
+</span><span style="color: #000000; ">
+    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">tier3</span><span style="color: #000000; ">: &lt;</span><span style="color: #000000; ">tier3Type</span><span style="color: #000000; ">&gt; </span><span style="color: #800000; font-weight: bold; ">like</span><span style="color: #000000; "> </span><span style="color: #000000; ">ITier</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=64,57;i=block/segm&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">tier2</span><span style="color: #000000; ">: &lt;</span><span style="color: #000000; ">tier2Type</span><span style="color: #000000; ">&gt; </span><span style="color: #800000; font-weight: bold; ">like</span><span style="color: #000000; "> </span><span style="color: #000000; ">ITier</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=179,90;i=block/segm&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">tier1</span><span style="color: #000000; ">: &lt;</span><span style="color: #000000; ">tier1Type</span><span style="color: #000000; ">&gt; </span><span style="color: #800000; font-weight: bold; ">like</span><span style="color: #000000; "> </span><span style="color: #000000; ">ITier</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=286,135;i=block/segm&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">overlay</span><span style="color: #000000; ">: &lt;</span><span style="color: #000000; ">overlayType</span><span style="color: #000000; ">&gt; </span><span style="color: #800000; font-weight: bold; ">like</span><span style="color: #000000; "> </span><span style="color: #000000; ">IOverlay</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=382,193;i=block/network2&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">: </span><span style="color: #000000; ">SimpleUDP</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=382,305&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">tcp</span><span style="color: #000000; ">: </span><span style="color: #000000; ">SimpleTCP</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=286,305&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">cryptoModule</span><span style="color: #000000; ">: </span><span style="color: #000000; ">CryptoModule</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=64,154&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">notificationBoard</span><span style="color: #000000; ">: </span><span style="color: #000000; ">NotificationBoard</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=64,232&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">interfaceTable</span><span style="color: #000000; ">: </span><span style="color: #000000; ">InterfaceTable</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=64,305&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">neighborCache</span><span style="color: #000000; ">: </span><span style="color: #000000; ">NeighborCache</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=179,305&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">bootstrapList</span><span style="color: #000000; ">: </span><span style="color: #000000; ">BootstrapList</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=179,232&quot;</span><span style="color: #000000; ">);
+        }
+    </span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">allowunconnected</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">tier1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">to_lowerTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tier1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">from_lowerTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tier1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tier1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tcp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+
+        </span><span style="color: #000000; ">tier2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">to_lowerTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">from_upperTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tier2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">from_lowerTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">to_upperTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tier2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tier2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tcp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+
+        </span><span style="color: #000000; ">tier3</span><span style="color: #000000; ">.</span><span style="color: #000000; ">to_lowerTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">from_upperTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tier3</span><span style="color: #000000; ">.</span><span style="color: #000000; ">from_lowerTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">to_upperTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tier3</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier3</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tier3</span><span style="color: #000000; ">.</span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">tcp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier3</span><span style="color: #000000; ">.</span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">if</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; "> &gt; </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+
+        </span><span style="color: #000000; ">overlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">++;
+        </span><span style="color: #000000; ">overlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">++;
+
+        </span><span style="color: #000000; ">overlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">++;
+        </span><span style="color: #000000; ">overlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">++;
+
+        </span><span style="color: #000000; ">bootstrapList</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">++;
+        </span><span style="color: #000000; ">bootstrapList</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">udp</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">++;
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

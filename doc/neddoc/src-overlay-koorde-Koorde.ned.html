@@ -1,0 +1,137 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">NED File <i>src/overlay/koorde/Koorde.ned</i></h2>
+<table class="typetable">
+   <tr>
+      <th>Name</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td>
+      <a href="oversim.overlay.koorde.Koorde.html">Koorde</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>The main module of the <a href="oversim.overlay.koorde.Koorde.html">Koorde</a> implementation</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.overlay.koorde.KoordeModules.html">KoordeModules</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Implementation of the <a href="oversim.overlay.koorde.Koorde.html">Koorde</a> <a href="oversim.applications.dht.DHT.html">DHT</a> overlay as described in
+"<a href="oversim.overlay.koorde.Koorde.html">Koorde</a>: A simple degree-optimal distributed hash table"
+by M. Frans Kaashoek and David R. Karger,. published in
+Proceedings of the 2nd International Workshop on
+Peer-to-Peer Systems (IPTPS '03).</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
+</span><span style="color: #000000; ">
+</span><span style="color: #800000; font-weight: bold; ">package</span><span style="color: #000000; "> </span><span style="color: #000000; ">oversim</span><span style="color: #000000; ">.</span><span style="color: #000000; ">overlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">koorde</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">import</span><span style="color: #000000; "> </span><span style="color: #000000; ">oversim</span><span style="color: #000000; ">.</span><span style="color: #000000; ">common</span><span style="color: #000000; ">.</span><span style="color: #000000; ">BaseOverlay</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">import</span><span style="color: #000000; "> </span><span style="color: #000000; ">oversim</span><span style="color: #000000; ">.</span><span style="color: #000000; ">common</span><span style="color: #000000; ">.</span><span style="color: #000000; ">IOverlay</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">import</span><span style="color: #000000; "> </span><span style="color: #000000; ">oversim</span><span style="color: #000000; ">.</span><span style="color: #000000; ">overlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">chord</span><span style="color: #000000; ">.</span><span style="color: #000000; ">ChordSuccessorList</span><span style="color: #000000; ">;
+
+
+</span><span style="color: #000000; font-weight: bold; ">@namespace</span><span style="color: #000000; ">(</span><span style="color: #000000; ">oversim</span><span style="color: #000000; ">);
+
+</span><span style="color: #808080; font-style: italic; ">//
+// The main module of the Koorde implementation
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Jochen Schenk, Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">simple</span><span style="color: #000000; "> </span><span style="color: #000000; ">Koorde</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlay</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; font-weight: bold; ">@class</span><span style="color: #000000; ">(</span><span style="color: #000000; ">Koorde</span><span style="color: #000000; ">);
+        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">stabilizeDelay</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// number of seconds between two stabilize algo calls
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">stabilizeRetry</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// retries before neighbor considered failed
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">joinRetry</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// number of join retries
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">joinDelay</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// time interval between two join tries
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">volatile</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">successorListSize</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// maximal number of nodes in successor list
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">deBruijnListSize</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// maximal number of nodes in de Bruijn list
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">shiftingBits</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// number of bits concurrently shifted
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">deBruijnDelay</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// number of seconds between two de Bruijn algo calls
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">fixfingersDelay</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// relic from Chord
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">checkPredecessorDelay</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// checkPredecessor interval (sec)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">aggressiveJoinMode</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// use modified (faster) JOIN protocol
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">extendedFingerTable</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// use the extended finger table?
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">numFingerCandidates</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// relic from Chord
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">proximityRouting</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// use proximity routing
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">useOtherLookup</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// flag which is indicating that the optimization other lookup is enabled
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">useSucList</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// flag which is indicating that the optimization using the successorlist is enabled
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">setupDeBruijnBeforeJoin</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// if true, first setup the de bruijn node using the bootstrap node and than join the ring
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">setupDeBruijnAtJoin</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// if true, join the ring and setup the de bruijn node using the bootstrap node in parallel
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">mergeOptimizationL1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// enable merge optimization OPL1
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">mergeOptimizationL2</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// activate merge optimization OPL2
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">mergeOptimizationL3</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// activate merge optimization OPL3
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">mergeOptimizationL4</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// activate merge optimization OPL4
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">memorizeFailedSuccessor</span><span style="color: #000000; ">;
+
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Implementation of the Koorde DHT overlay as described in
+// &quot;Koorde: A simple degree-optimal distributed hash table&quot;
+// by M. Frans Kaashoek and David R. Karger,. published in
+// Proceedings of the 2nd International Workshop on
+// Peer-to-Peer Systems (IPTPS '03).
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Jochen Schenk, Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">KoordeModules</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">like</span><span style="color: #000000; "> </span><span style="color: #000000; ">IOverlay</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// gate from the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// gate to the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// gate from the application
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// gate to the application
+</span><span style="color: #000000; ">
+    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">koorde</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Koorde</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=60,60;i=block/circle&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">successorList</span><span style="color: #000000; ">: </span><span style="color: #000000; ">ChordSuccessorList</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=136,60;i=block/table&quot;</span><span style="color: #000000; ">);
+        }
+    </span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">allowunconnected</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">koorde</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">koorde</span><span style="color: #000000; ">.</span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">appIn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">koorde</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">appOut</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">koorde</span><span style="color: #000000; ">.</span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">;
+
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

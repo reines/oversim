@@ -1,0 +1,85 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Msg File <i>src/common/Nps.msg</i></h2>
+<table class="typetable">
+   <tr>
+      <th>Name</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td>
+      <a href="CoordsReqCall.html">CoordsReqCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>RPC Call asking for Coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="CoordsReqResponse.html">CoordsReqResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>RPC Response with Coordinates and Layer</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/.
+// 
+</span><span style="color: #000000; ">
+</span><span style="color: #808080; font-style: italic; ">//
+// TODO generated message class
+//
+</span><span style="color: #000000; ">
+</span><span style="color: #800000; font-weight: bold; ">cplusplus</span><span style="color: #000000; "> {{
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">CommonMessages_m</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">NPSLAYER_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">COORDSREQCALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">COORDSREQRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">NPSLAYER_L</span><span style="color: #000000; ">)
+}}
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">;
+</span><span style="color: #808080; font-style: italic; ">//
+// RPC Call asking for Coordinates
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">CoordsReqCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// RPC Response with Coordinates and Layer
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">CoordsReqResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #808080; font-style: italic; ">//    double coordinates[];
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">char</span><span style="color: #000000; "> </span><span style="color: #000000; ">layer</span><span style="color: #000000; ">;
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

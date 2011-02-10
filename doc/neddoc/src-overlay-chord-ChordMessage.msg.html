@@ -1,0 +1,342 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Msg File <i>src/overlay/chord/ChordMessage.msg</i></h2>
+<table class="typetable">
+   <tr>
+      <th>Name</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td>
+      <a href="ChordCommand.html">ChordCommand</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ChordMessage.html">ChordMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Base message for all messages used by <a href="oversim.overlay.chord.Chord.html">Chord</a></p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NewSuccessorHintMessage.html">NewSuccessorHintMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to inform about a new successor node</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NotifyCall.html">NotifyCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to inform about existing predecessors</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NotifyResponse.html">NotifyResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to answer to a <a href="NotifyCall.html">NotifyCall</a> message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="JoinCall.html">JoinCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to join a chord overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="JoinResponse.html">JoinResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to answer to a <a href="JoinCall.html">JoinCall</a> message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="StabilizeCall.html">StabilizeCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used for the  stabilization protocol as mentioned in 
+"<a href="oversim.overlay.chord.Chord.html">Chord</a>: A Scalable Peer-to-Peer Lookup Protocol for Internet Applications"</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="StabilizeResponse.html">StabilizeResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to answer to a <a href="StabilizeCall.html">StabilizeCall</a> message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FixfingersCall.html">FixfingersCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to verify our <a href="oversim.overlay.chord.ChordFingerTable.html">ChordFingerTable</a></p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FixfingersResponse.html">FixfingersResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to answer to a <a href="FixfingersCall.html">FixfingersCall</a> message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="KoordeFindNodeExtMessage.html">KoordeFindNodeExtMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to find nodes in the <a href="oversim.overlay.koorde.Koorde.html">Koorde</a> overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DeBruijnCall.html">DeBruijnCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DeBruijnResponse.html">DeBruijnResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to answer to a <a href="DeBruijnCall.html">DeBruijnCall</a> message</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
+</span><span style="color: #000000; ">
+</span><span style="color: #808080; font-style: italic; ">//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart, Markus Mauch
+//
+</span><span style="color: #000000; ">
+</span><span style="color: #800000; font-weight: bold; ">cplusplus</span><span style="color: #000000; "> {{
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">IPvXAddress</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">CommonMessages_m</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+
+</span><span style="color: #808080; font-style: italic; ">// constants for message length in bit
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">CHORDCOMMAND_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">SUCNUM_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">FINGER_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">STEP_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">PRENODESET_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NEWSUCCESSORHINT_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASEOVERLAY_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">CHORDCOMMAND_L</span><span style="color: #000000; "> + \
+                                 </span><span style="color: #008000; ">2</span><span style="color: #000000; ">*</span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NOTIFYCALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NOTIFYRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">SUCNUM_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> +\
+			      (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getSucNodeArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; ">) +\
+                  </span><span style="color: #000000; ">PRENODESET_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">JOINCALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">JOINRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">SUCNUM_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> +\
+                             (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getSucNodeArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">STABILIZECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">STABILIZERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">FIXFINGERSCALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">FINGER_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">FIXFINGERSRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">FINGER_L</span><span style="color: #000000; "> + \
+                                   </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">SUCNUM_L</span><span style="color: #000000; "> + \
+                                   (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getSucNodeArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">DEBRUIJNCALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">DEBRUIJNRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">SUCNUM_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> + \
+				 (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getSucNodeArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; ">)) 
+
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">KOORDEFINDNODEEXTMESSAGE_L</span><span style="color: #000000; "> (</span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">STEP_L</span><span style="color: #000000; ">)
+
+}}
+</span><span style="color: #808080; font-style: italic; ">//todo add more Koorde message lengths
+</span><span style="color: #000000; ">
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">IPvXAddress</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseRpcMessage</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">ChordCommand</span><span style="color: #000000; ">
+{
+
+    </span><span style="color: #000000; ">NEWSUCCESSORHINT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Base message for all messages used by Chord
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ChordMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">command</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">ChordCommand</span><span style="color: #000000; ">);    </span><span style="color: #808080; font-style: italic; ">// message type (NEWSUCCESSORHINT, ...)
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used to inform about a new successor node
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">NewSuccessorHintMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ChordMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcNode</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// nodehandle of the message originator
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">preNode</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the predecessor of the message originator
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used to inform about existing predecessors
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">NotifyCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">failed</span><span style="color: #000000; "> = </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; ">::</span><span style="color: #000000; ">UNSPECIFIED_NODE</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used to answer to a NotifyCall message
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">NotifyResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">sucNum</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// number of entries in the successor list
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">sucNode</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// successor list of the message originator
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">preNode</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// in aggressiveJoinMode: predecessor hint
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">preNodeSet</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// indicates if the dest node has been set as new predecessor (for merging)
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used to join a chord overlay
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">JoinCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used to answer to a JoinCall message
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">JoinResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">sucNum</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// number of entries in the successor list
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">sucNode</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// successor list of the message originator
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">preNode</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// in aggressiveJoinMode: predecessor hint
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used for the  stabilization protocol as mentioned in 
+// &quot;Chord: A Scalable Peer-to-Peer Lookup Protocol for Internet Applications&quot;
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">StabilizeCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used to answer to a StabilizeCall message
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">StabilizeResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">preNode</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the predecessor of the message originator
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used to verify our ChordFingerTable
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">FixfingersCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">finger</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the number of the finger to update
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used to answer to a FixfingersCall message
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">FixfingersResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">finger</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the number of the finger to update
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">sucNode</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// the successor of the message originator
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">// ----------- Koorde -------------------
+</span><span style="color: #000000; ">
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used to find nodes in the Koorde overlay
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">KoordeFindNodeExtMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">routeKey</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the OverlayKey of the next hop node
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">step</span><span style="color: #000000; ">;             </span><span style="color: #808080; font-style: italic; ">// the de bruijn routing step
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">DeBruijnCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">destKey</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the OverlayKey of the destination node
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message used to answer to a DeBruijnCall message
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">DeBruijnResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">dBNode</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">sucNum</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// number of entries in the successor list
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">sucNode</span><span style="color: #000000; ">[];   </span><span style="color: #808080; font-style: italic; ">// successor list of the message originator
+</span><span style="color: #000000; ">}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

@@ -1,0 +1,368 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Simple Module <i>SimpleTCP</i></h2>
+<b>Package:</b> oversim.underlay.simpleunderlay<br/><b>File: <a href="src-underlay-simpleunderlay-SimpleTCP.ned.html">src/underlay/simpleunderlay/SimpleTCP.ned</a></b><br/><p><a href="../doxy/classSimpleTCP.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>UDP protocol implementation, for IPv4 and IPv6.</p>
+<p>The UDP protocol header is represented by the class UDPPacket.</p>
+<p><b>Communication with clients (applications)</b></p>
+<p>The module can (should) be connected to several applications.
+For sending an UDP packet, the application should attach an UDPControlInfo
+object to the payload, and send it to UDP.
+UDP will also attach an UDPControlInfo object to any payload
+message in sends up to the application.</p>
+<p>For receiving UDP packets, the connected applications should first
+"bind" to the given UDP port. This can be done by sending an
+arbitrary message with message kind UDP_C_BIND and an UDPControlInfo
+attached with srcPort filled in.</p>
+<p>If there is only one app which doesn't bind to any port, it will
+receive all packets.</p>
+<p><b>Communication with other nodes</b></p>
+<p>The <a href="oversim.underlay.simpleunderlay.SimpleUDP.html">SimpleUDP</a> model sends packets directly to the destination</p>
+<p><b>See also:</b> SimpleUDPPacket, UDPControlInfo, GlobalRoutingHashMap</p>
+<img src="oversim.underlay.simpleunderlay.SimpleTCP-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.underlay.simpleunderlay.SimpleTCP.html" title="SimpleTCP" alt="SimpleTCP" coords="0,0,106,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.simpleunderlay.SimpleTCP-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.underlay.simpleunderlay.SimpleTCP.html" title="Simple Module SimpleTCP" alt="" coords="128,83,216,111">
+<area shape="rect" id="node2" href="oversim.underlay.simpleunderlay.SimpleMultiOverlayHost.html" title="Compound Module SimpleMultiOverlayHost" alt="" coords="5,6,168,34">
+<area shape="rect" id="node4" href="oversim.underlay.simpleunderlay.SimpleOverlayHost.html" title="Compound Module SimpleOverlayHost" alt="" coords="192,6,325,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.simpleunderlay.SimpleTCP-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.underlay.simpleunderlay.SimpleTCP.html" title="Simple Module SimpleTCP" alt="" coords="5,83,93,111">
+<area shape="rect" id="node2" href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html" title="Simple Module TCP" alt="" coords="13,6,85,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="../../../inet/doc/neddoc/inet.transport.tcp.TCP.html">TCP</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>TCP protocol implementation.
+This implementation supports:</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Used in compound modules:</h3>
+<p>If a module type shows up more than once, that means it has been defined in more than one NED file.</p>
+<table>
+<tr>
+   <td>
+      <a href="oversim.underlay.simpleunderlay.SimpleMultiOverlayHost.html">SimpleMultiOverlayHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host in the simple network that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.simpleunderlay.SimpleOverlayHost.html">SimpleOverlayHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host in the simple network that participates in the overlay</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">advertisedWindow</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">14*this.mss</td>
+   <td>
+<p>in bytes, corresponds with the maximal receiver buffer capacity (Note: normally, NIC queues should be at least this size)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">delayedAcksEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>delayed ACK algorithm (RFC 1122) enabled/disabled</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">nagleEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>Nagle's algorithm (RFC 896) enabled/disabled</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">limitedTransmitEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Limited Transmit algorithm (RFC 3042) enabled/disabled (can be used for TCPReno/TCPTahoe/TCPNewReno/TCPNoCongestionControl)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">increasedIWEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Increased Initial Window (RFC 3390) enabled/disabled</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">sackSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Selective Acknowledgment (RFC 2018, 2883, 3517) support (header option) (SACK will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">windowScalingSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Window Scale (RFC 1323) support (header option) (WS will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">timestampSupport</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>Timestamps (RFC 1323) support (header option) (TS will be enabled for a connection if both endpoints support it)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">mss</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">536</td>
+   <td>
+<p>Maximum Segment Size (RFC 793) (header option)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">tcpAlgorithmClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPReno"</td>
+   <td>
+<p>TCPReno/TCPTahoe/TCPNewReno/TCPNoCongestionControl/DumbTCP</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">sendQueueClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPVirtualDataSendQueue"</td>
+   <td>
+<p>TCPVirtualDataSendQueue/TCPMsgBasedSendQueue</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">receiveQueueClass</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"TCPVirtualDataRcvQueue"</td>
+   <td>
+<p>TCPVirtualDataRcvQueue/TCPMsgBasedRcvQueue</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">recordStats</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>recording of seqNum etc. into output vectors enabled/disabled</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">constantDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>constant delay between two peers</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">useCoordinateBasedDelay</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>delay should be calculated from 
+euklidean distance between two peers</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">delayFaultType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>augment coordinate based delays with a realistic error,
+according to "Network Coordinates in the Wild", Figure 7
+possible values: empty, "live_all", "live_planetlab", "simulation"</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">jitter</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>average amount of jitter in %</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>i=block/wheelbarrow</i></td>
+   <td></td>
+</tr>
+<tr>
+   <td width="150">class</td>
+   <td width="100"><i>SimpleTCP</i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Gates:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Direction</th>
+      <th>Size</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">appIn [ ]</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">ipIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">ipv6In</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">appOut [ ]</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">ipOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">ipv6Out</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// UDP protocol implementation, for IPv4 and IPv6.
+//
+// The \UDP protocol header is represented by the class UDPPacket.
+//
+// </span><span style="color: #800000; ">&lt;b&gt;</span><span style="color: #808080; font-style: italic; ">Communication with clients (applications)</span><span style="color: #800000; ">&lt;/b&gt;</span><span style="color: #808080; font-style: italic; ">
+//
+// The module can (should) be connected to several applications.
+// For sending an \UDP packet, the application should attach an UDPControlInfo
+// object to the payload, and send it to UDP.
+// UDP will also attach an UDPControlInfo object to any payload
+// message in sends up to the application.
+//
+// For receiving \UDP packets, the connected applications should first
+// &quot;bind&quot; to the given \UDP port. This can be done by sending an
+// arbitrary message with message kind UDP_C_BIND and an UDPControlInfo
+// attached with srcPort filled in.
+//
+// If there is only one app which doesn't bind to any port, it will
+// receive all packets.
+//
+// </span><span style="color: #800000; ">&lt;b&gt;</span><span style="color: #808080; font-style: italic; ">Communication with other nodes</span><span style="color: #800000; ">&lt;/b&gt;</span><span style="color: #808080; font-style: italic; ">
+//
+// The SimpleUDP model sends packets directly to the destination
+//
+// </span><span style="color: #000080; ">@see</span><span style="color: #808080; font-style: italic; "> SimpleUDPPacket, UDPControlInfo, GlobalRoutingHashMap
+//
+</span><span style="color: #800000; font-weight: bold; ">simple</span><span style="color: #000000; "> </span><span style="color: #000000; ">SimpleTCP</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">TCP</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; font-weight: bold; ">@class</span><span style="color: #000000; ">(</span><span style="color: #000000; ">SimpleTCP</span><span style="color: #000000; ">);
+        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">constantDelay</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">);  </span><span style="color: #808080; font-style: italic; ">// constant delay between two peers
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">useCoordinateBasedDelay</span><span style="color: #000000; ">;   </span><span style="color: #808080; font-style: italic; ">// delay should be calculated from 
+</span><span style="color: #000000; ">                                        </span><span style="color: #808080; font-style: italic; ">// euklidean distance between two peers
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">delayFaultType</span><span style="color: #000000; ">;          </span><span style="color: #808080; font-style: italic; ">// augment coordinate based delays with a realistic error,
+</span><span style="color: #000000; ">                                        </span><span style="color: #808080; font-style: italic; ">// according to &quot;Network Coordinates in the Wild&quot;, Figure 7
+</span><span style="color: #000000; ">                                        </span><span style="color: #808080; font-style: italic; ">// possible values: empty, &quot;live_all&quot;, &quot;live_planetlab&quot;, &quot;simulation&quot;
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">jitter</span><span style="color: #000000; ">;                  </span><span style="color: #808080; font-style: italic; ">// average amount of jitter in %
+</span><span style="color: #000000; ">        </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=block/wheelbarrow&quot;</span><span style="color: #000000; ">);
+    </span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+}
+
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

@@ -1,0 +1,7 @@
+/out
+/src/Makefile
+/src/OverSim
+*_m.cc
+*_m.h
+.tkenvrc
+/simulations/results

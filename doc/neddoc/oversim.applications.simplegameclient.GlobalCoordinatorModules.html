@@ -1,0 +1,99 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Compound Module <i>GlobalCoordinatorModules</i></h2>
+<b>Package:</b> oversim.applications.simplegameclient<br/><b>File: <a href="src-applications-simplegameclient-GlobalCoordinator.ned.html">src/applications/simplegameclient/GlobalCoordinator.ned</a></b><br/><p>(no description)</p><img src="oversim.applications.simplegameclient.GlobalCoordinatorModules-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.applications.simplegameclient.GlobalCoordinator.html" title="GlobalCoordinator" alt="GlobalCoordinator" coords="215,458,284,513">
+<area shape="rect" href="oversim.applications.simplegameclient.ConnectivityProbeApp.html" title="ConnectivityProbeApp" alt="ConnectivityProbeApp" coords="52,216,92,271">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.applications.simplegameclient.GlobalCoordinatorModules-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.applications.simplegameclient.GlobalCoordinatorModules.html" title="Compound Module GlobalCoordinatorModules" alt="" coords="76,6,249,34">
+<area shape="rect" id="node2" href="oversim.applications.simplegameclient.ConnectivityProbeApp.html" title="Simple Module ConnectivityProbeApp" alt="" coords="5,83,157,111">
+<area shape="rect" id="node4" href="oversim.applications.simplegameclient.GlobalCoordinator.html" title="Simple Module GlobalCoordinator" alt="" coords="181,83,307,111">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.applications.simplegameclient.GlobalCoordinatorModules-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.applications.simplegameclient.GlobalCoordinatorModules.html" title="Compound Module GlobalCoordinatorModules" alt="" coords="5,83,179,111">
+<area shape="rect" id="node2" href="oversim.common.IGlobalFunctions.html" title="Module Interface IGlobalFunctions" alt="" coords="32,6,152,34">
+</map>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">connectivityProbeIntervall</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>interval after which to check connectivity</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Unassigned submodule parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.GlobalCoordinator.html">coordinator</a>.seed</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>seed for scenery generation</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.GlobalCoordinator.html">coordinator</a>.Hotspots</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>For hotspotRoaming, definition of the hotspots</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.GlobalCoordinator.html">coordinator</a>.HotspotStayTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>For hotspotRoaming, how long to stay in a hotspot</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">GlobalCoordinatorModules</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">like</span><span style="color: #000000; "> </span><span style="color: #000000; ">IGlobalFunctions</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">connectivityProbeIntervall</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">);    </span><span style="color: #808080; font-style: italic; ">// interval after which to check connectivity
+</span><span style="color: #000000; ">    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">coordinator</span><span style="color: #000000; ">: </span><span style="color: #000000; ">GlobalCoordinator</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">probe</span><span style="color: #000000; ">: </span><span style="color: #000000; ">ConnectivityProbeApp</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; ">connectivityProbeIntervall</span><span style="color: #000000; "> = </span><span style="color: #000000; ">connectivityProbeIntervall</span><span style="color: #000000; ">;
+        }
+}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

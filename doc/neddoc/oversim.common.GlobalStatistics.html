@@ -1,0 +1,104 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Simple Module <i>GlobalStatistics</i></h2>
+<b>Package:</b> oversim.common<br/><b>File: <a href="src-common-GlobalStatistics.ned.html">src/common/GlobalStatistics.ned</a></b><br/><p><a href="../doxy/classGlobalStatistics.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>Module to record global statistics</p>
+<img src="oversim.common.GlobalStatistics-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.common.GlobalStatistics.html" title="GlobalStatistics" alt="GlobalStatistics" coords="0,0,136,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.GlobalStatistics-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.common.GlobalStatistics.html" title="Simple Module GlobalStatistics" alt="" coords="5,83,120,111">
+<area shape="rect" id="node2" href="oversim.common.GlobalObserver.html" title="Compound Module GlobalObserver" alt="" coords="7,6,119,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.GlobalStatistics-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.common.GlobalStatistics.html" title="Simple Module GlobalStatistics" alt="" coords="5,6,120,34">
+</map>
+<h3 class="subtitle">Used in compound modules:</h3>
+<p>If a module type shows up more than once, that means it has been defined in more than one NED file.</p>
+<table>
+<tr>
+   <td>
+      <a href="oversim.common.GlobalObserver.html">GlobalObserver</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>global module that contains the globalNodeList and the globalStatistics module</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">outputMinMax</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable output of minimum and maximum for scalars</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">outputStdDev</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable output of standard deviation for scalars</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">measureNetwInitPhase</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>fetch statistics in init phase?</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">globalStatTimerInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>interval length of periodic statistic timer</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Module to record global statistics
+//
+</span><span style="color: #800000; font-weight: bold; ">simple</span><span style="color: #000000; "> </span><span style="color: #000000; ">GlobalStatistics</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">outputMinMax</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// enable output of minimum and maximum for scalars
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">outputStdDev</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// enable output of standard deviation for scalars
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">measureNetwInitPhase</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// fetch statistics in init phase?
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">globalStatTimerInterval</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">);    </span><span style="color: #808080; font-style: italic; ">// interval length of periodic statistic timer
+</span><span style="color: #000000; ">}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

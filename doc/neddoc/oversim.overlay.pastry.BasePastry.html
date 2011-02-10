@@ -1,0 +1,674 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Simple Module <i>BasePastry</i></h2>
+<b>Package:</b> oversim.overlay.pastry<br/><b>File: <a href="src-overlay-pastry-Pastry.ned.html">src/overlay/pastry/Pastry.ned</a></b><br/><p><a href="../doxy/classBaseOverlay.html" target="mainframe"><b>C++ definition</b></a></p>
+<p>(no description)</p><img src="oversim.overlay.pastry.BasePastry-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.overlay.pastry.BasePastry.html" title="BasePastry" alt="BasePastry" coords="0,0,108,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.overlay.pastry.BasePastry-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.overlay.pastry.BasePastry.html" title="Simple Module BasePastry" alt="" coords="5,6,96,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.overlay.pastry.BasePastry-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.overlay.pastry.BasePastry.html" title="Simple Module BasePastry" alt="" coords="44,83,135,111">
+<area shape="rect" id="node4" href="oversim.overlay.bamboo.Bamboo.html" title="Simple Module Bamboo" alt="" coords="5,161,77,189">
+<area shape="rect" id="node6" href="oversim.overlay.pastry.Pastry.html" title="Simple Module Pastry" alt="" coords="101,161,173,189">
+<area shape="rect" id="node2" href="oversim.common.BaseOverlay.html" title="Simple Module BaseOverlay" alt="" coords="41,6,137,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.common.BaseOverlay.html">BaseOverlay</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Base class for overlay implementations</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Known subclasses:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.overlay.bamboo.Bamboo.html">Bamboo</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>The main module of the <a href="oversim.overlay.bamboo.Bamboo.html">Bamboo</a> implementation</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.overlay.pastry.Pastry.html">Pastry</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>The main module of the <a href="oversim.overlay.pastry.Pastry.html">Pastry</a> implementation</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">localPort</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>UDP port for overlay messages</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">keyLength</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>overlay key length in bits</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">nodeId</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>optional nodeId as string in hexadecimal notation</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">useCommonAPIforward</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable CommonAPI forward() calls</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">drawOverlayTopology</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>draw arrow to successor node?</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">hopCountMax</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum number of overlay hops</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">recNumRedundantNodes</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>numRedundantNodes for recursive routing</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">joinOnApplicationRequest</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>only join the overlay on application request</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">collectPerHopDelay</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>delay statistics for single hops</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">routeMsgAcks</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use RPCs for route messages</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupRedundantNodes</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of next hops in each step</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupParallelPaths</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of parallel paths</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupParallelRpcs</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes to ask in parallel</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupVerifySiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if siblings need to be authenticated with a ping</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupMajoritySiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if sibling candidates are selected by a majority decision if using parallel paths</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupMerge</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>true, if parallel Rpc results should be merged</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupFailedNodeRpcs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>communicate failed nodes</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupStrictParallelRpcs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>limited the number of concurrent rpcs to parameter parallelRpcs</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupUseAllParallelResponses</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>merge all parallel responses from earlier steps</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupNewRpcOnEveryTimeout</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>send a new RPC immediately after an RPC timeouts</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupNewRpcOnEveryResponse</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>send a new RPC after every response, even if there was no progress</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupFinishOnFirstUnchanged</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>finish lookup, if the last pending RPC returned without progress</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupVisitOnlyOnce</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, the same node is never asked twice during a single lookup</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">lookupAcceptLateSiblings</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, a <a href="FindNodeResponse.html">FindNodeResponse</a> with sibling flag set is always accepted, even if it is from a previous lookup step</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">routingType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default routing mode (iterative, semi-recursive,...)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">rejoinOnFailure</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>rejoin after loosing connection to the overlay?</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">sendRpcResponseToLastHop</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>needed by KBR protocols for NAT support</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">recordRoute</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>record visited hops on route</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">dropFindNodeAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a findNode attack</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">isSiblingAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a isSibling attack</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">invalidNodesAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it tries a invalidNode attack</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">dropRouteMessageAttack</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if node is malicious, it drops all received BaseRouteMessages</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">measureAuthBlock</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, measure the overhead of signatures in rpc messages</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">restoreContext</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, a node rejoins with its old nodeId and malicious state</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">enableNewLeafs</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable <a href="oversim.overlay.pastry.Pastry.html">Pastry</a> API call newLeafs()</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">optimizeLookup</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>whether to search the closest node
+in findCloserNode() calls</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">bitsPerDigit</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>bits per <a href="oversim.overlay.pastry.Pastry.html">Pastry</a> digit</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">numberOfLeaves</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of entries in leaf set</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">numberOfNeighbors</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of entries in neighborhoot set</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">joinTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>seconds to wait for STATE message
+from closest node</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">repairTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>how long to wait for repair messages</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">useRegularNextHop</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr class="local">
+   <td width="150">alwaysSendUpdate</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>tables delayed (should be very small)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">readyWait</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>seconds to wait for missing state
+messages in JOIN phase</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">proximityNeighborSelection</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable PNS ?</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">class</td>
+   <td width="100"><i>BaseOverlay</i></td>
+   <td></td>
+</tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>i=block/circle</i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Gates:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Direction</th>
+      <th>Size</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">udpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the UDP layer</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">udpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the UDP layer</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">tcpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the TCP layer</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">tcpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the TCP layer</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">appIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the application</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">appOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the application</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">direct_in</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate for sendDirect</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">simple</span><span style="color: #000000; "> </span><span style="color: #000000; ">BasePastry</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlay</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+
+        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">enableNewLeafs</span><span style="color: #000000; ">;          </span><span style="color: #808080; font-style: italic; ">// enable Pastry API call newLeafs()
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">optimizeLookup</span><span style="color: #000000; ">;          </span><span style="color: #808080; font-style: italic; ">// whether to search the closest node
+</span><span style="color: #000000; ">                                      </span><span style="color: #808080; font-style: italic; ">// in findCloserNode() calls
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">bitsPerDigit</span><span style="color: #000000; ">;             </span><span style="color: #808080; font-style: italic; ">// bits per Pastry digit
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">numberOfLeaves</span><span style="color: #000000; ">;           </span><span style="color: #808080; font-style: italic; ">// number of entries in leaf set
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">numberOfNeighbors</span><span style="color: #000000; ">;        </span><span style="color: #808080; font-style: italic; ">// number of entries in neighborhoot set
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">joinTimeout</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">);  </span><span style="color: #808080; font-style: italic; ">// seconds to wait for STATE message
+</span><span style="color: #000000; ">                                      </span><span style="color: #808080; font-style: italic; ">// from closest node
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">repairTimeout</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">);</span><span style="color: #808080; font-style: italic; ">// how long to wait for repair messages
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">useRegularNextHop</span><span style="color: #000000; ">;
+        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">alwaysSendUpdate</span><span style="color: #000000; ">;
+                                      </span><span style="color: #808080; font-style: italic; ">// tables delayed (should be very small)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">readyWait</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">);    </span><span style="color: #808080; font-style: italic; ">// seconds to wait for missing state
+</span><span style="color: #000000; ">                                      </span><span style="color: #808080; font-style: italic; ">// messages in JOIN phase
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">proximityNeighborSelection</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// enable PNS ?
+</span><span style="color: #000000; ">}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

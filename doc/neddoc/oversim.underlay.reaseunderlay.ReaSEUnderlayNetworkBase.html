@@ -1,0 +1,485 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Compound Module <i>ReaSEUnderlayNetworkBase</i></h2>
+<b>Package:</b> oversim.underlay.reaseunderlay<br/><b>File: <a href="src-underlay-reaseunderlay-ReaSEUnderlay.ned.html">src/underlay/reaseunderlay/ReaSEUnderlay.ned</a></b><br/>
+<p>The InetUnderlay ned-file </p>
+<p><b>See also:</b> <a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">ReaSEUnderlayConfigurator</a></p>
+<img src="oversim.underlay.reaseunderlay.ReaSEUnderlayNetworkBase-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html" title="ReaSEUnderlayConfigurator" alt="ReaSEUnderlayConfigurator" coords="8,159,137,218">
+<area shape="rect" href="oversim.common.GlobalObserver.html" title="GlobalObserver" alt="GlobalObserver" coords="27,72,117,131">
+<area shape="rect" href="oversim.common.ChurnGenerator.html" title="ChurnGenerator" alt="ChurnGenerator" coords="15,246,129,305">
+<area shape="rect" href="oversim.underlay.reaseunderlay.ConnectReaSE.html" title="ConnectReaSE" alt="ConnectReaSE" coords="16,331,128,390">
+<area shape="rect" href="oversim.underlay.reaseunderlay.RUNetworkConfigurator.html" title="RUNetworkConfigurator" alt="RUNetworkConfigurator" coords="1,408,144,467">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.reaseunderlay.ReaSEUnderlayNetworkBase-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.underlay.reaseunderlay.ReaSEUnderlayNetworkBase.html" title="Compound Module ReaSEUnderlayNetworkBase" alt="" coords="287,6,481,34">
+<area shape="rect" id="node2" href="oversim.underlay.reaseunderlay.RUNetworkConfigurator.html" title="Simple Module RUNetworkConfigurator" alt="" coords="5,83,168,111">
+<area shape="rect" id="node4" href="oversim.common.GlobalObserver.html" title="Compound Module GlobalObserver" alt="" coords="192,83,304,111">
+<area shape="rect" id="node6" href="oversim.underlay.reaseunderlay.ConnectReaSE.html" title="Simple Module ConnectReaSE" alt="" coords="328,83,440,111">
+<area shape="rect" id="node8" href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html" title="Simple Module ReaSEUnderlayConfigurator" alt="" coords="464,83,651,111">
+<area shape="rect" id="node10" href="oversim.common.ChurnGenerator.html" title="Simple Module ChurnGenerator" alt="" coords="675,83,789,111">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.reaseunderlay.ReaSEUnderlayNetworkBase-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.underlay.reaseunderlay.ReaSEUnderlayNetworkBase.html" title="Compound Module ReaSEUnderlayNetworkBase" alt="" coords="5,6,200,34">
+<area shape="rect" id="node2" href="oversim.underlay.reaseunderlay.topologies.topology_tiny_oversim.Internet.html" title="Compound Module Internet" alt="" coords="67,83,139,111">
+</map>
+<h3 class="subtitle">Known subclasses:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.Internet.html">Internet</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_tiny_oversim.Internet.html">Internet</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">overlayType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the overlay used in the simulation (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">tier1Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the application on top of the overlay used in the simulation (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">tier2Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the module type on top of tier 1 (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">tier3Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the module type on top of tier 2 (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>bgl=49;bgb=631,441</i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Unassigned submodule parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.terminalTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of terminal types</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.churnGeneratorTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>a list of churn generators to be used</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.transitionTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time to wait before measuring after init phase is finished</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.measurementTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>duration of the simulation after init and transition phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.gracefulLeaveDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time between prekill and removal from overlay</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.gracefulLeaveProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability of gracefull leave</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability for a node to be malicious on creation</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChange</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>dynamically change number of malicious nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStartTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>simTime at which nodes begin to become malicious</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeRate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes to change to malicious compared to all nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time between two node changes to malicious</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStartValue</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>minimum amount of malicious nodes in the peerSet</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStopValue</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum amount of malicious nodes in the peerSet</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maxNumberOfKeys</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum number of overlay keys the bootstrap oracle handles</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.keyProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability of keys to be owned by nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.printStateToStdOut</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>print overlay ready messages to std::cout</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.topologyAdaptation</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>turn on topologyAdaptation (for demonstrator)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalTraceManager.html">globalTraceManager</a>.traceFile</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>file name of the trace file</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.outputMinMax</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable output of minimum and maximum for scalars</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.outputStdDev</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable output of standard deviation for scalars</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.measureNetwInitPhase</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>fetch statistics in init phase?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.globalStatTimerInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>interval length of periodic statistic timer</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.targetOverlayTerminalNum</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes after init phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.initPhaseCreationInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>node creation interval in init phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.noChurnThreshold</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if the lifetimeMean of a specific
+churn generator exceeds this,
+<a href="oversim.common.NoChurn.html">NoChurn</a> is used instead</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.channelTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>used (tx) access technologies (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.channelTypesRx</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>used (rx) access technologies (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ConnectReaSE.html">TerminalConnector</a>.channelTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of (tx) channel types (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ConnectReaSE.html">TerminalConnector</a>.channelTypesRx</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of (rx) channel types (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ConnectReaSE.html">TerminalConnector</a>.channelDiversity</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0</td>
+   <td>
+<p>percentage a channel delay can differ from the channel type value</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// The InetUnderlay ned-file </span><span style="color: #000080; ">@see</span><span style="color: #808080; font-style: italic; "> ReaSEUnderlayConfigurator
+//
+</span><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">ReaSEUnderlayNetworkBase</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">overlayType</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the overlay used in the simulation (for overlayBackboneRouters)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier1Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the application on top of the overlay used in the simulation (for overlayBackboneRouters)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier2Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the module type on top of tier 1 (for overlayBackboneRouters)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">tier3Type</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the module type on top of tier 2 (for overlayBackboneRouters)
+</span><span style="color: #000000; ">        </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;bgl=49;bgb=631,441&quot;</span><span style="color: #000000; ">);
+    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">underlayConfigurator</span><span style="color: #000000; ">: </span><span style="color: #000000; ">ReaSEUnderlayConfigurator</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=70,137&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">globalObserver</span><span style="color: #000000; ">: </span><span style="color: #000000; ">GlobalObserver</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=block/control;p=70,50&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">churnGenerator</span><span style="color: #000000; ">[</span><span style="color: #008000; ">0</span><span style="color: #000000; ">]: </span><span style="color: #000000; ">ChurnGenerator</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=70,224,column&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">TerminalConnector</span><span style="color: #000000; ">: </span><span style="color: #000000; ">ConnectReaSE</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=70,309&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">RUNetworkConfigurator</span><span style="color: #000000; ">: </span><span style="color: #000000; ">RUNetworkConfigurator</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=70,386&quot;</span><span style="color: #000000; ">);
+        }
+    </span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; ">:
+
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

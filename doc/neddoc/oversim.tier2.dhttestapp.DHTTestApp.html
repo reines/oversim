@@ -1,0 +1,273 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Simple Module <i>DHTTestApp</i></h2>
+<b>Package:</b> oversim.tier2.dhttestapp<br/><b>File: <a href="src-tier2-dhttestapp-DHTTestApp.ned.html">src/tier2/dhttestapp/DHTTestApp.ned</a></b><br/><p><a href="../doxy/classBaseApp.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>Simple module of the <a href="oversim.applications.dht.DHT.html">DHT</a> test application</p>
+<p><b>Author:</b> Gregoire Menuel, Ingmar Baumgart</p>
+<img src="oversim.tier2.dhttestapp.DHTTestApp-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.tier2.dhttestapp.DHTTestApp.html" title="DHTTestApp" alt="DHTTestApp" coords="0,0,116,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.tier2.dhttestapp.DHTTestApp-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.tier2.dhttestapp.DHTTestApp.html" title="Simple Module DHTTestApp" alt="" coords="29,83,128,111">
+<area shape="rect" id="node2" href="oversim.tier2.dhttestapp.DHTTestAppModules.html" title="Compound Module DHTTestAppModules" alt="" coords="5,6,152,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.tier2.dhttestapp.DHTTestApp-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.tier2.dhttestapp.DHTTestApp.html" title="Simple Module DHTTestApp" alt="" coords="5,83,104,111">
+<area shape="rect" id="node2" href="oversim.common.BaseApp.html" title="Simple Module BaseApp" alt="" coords="17,6,92,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.common.BaseApp.html">BaseApp</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Base class for application implementations</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Used in compound modules:</h3>
+<p>If a module type shows up more than once, that means it has been defined in more than one NED file.</p>
+<table>
+<tr>
+   <td>
+      <a href="oversim.tier2.dhttestapp.DHTTestAppModules.html">DHTTestAppModules</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Compound module for a simple <a href="oversim.applications.dht.DHT.html">DHT</a> test application</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">testInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time interval for <a href="oversim.applications.dht.DHT.html">DHT</a> operations (put/get/modify)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">testTtl</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>TTL for stored test records</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">activeNetwInitPhase</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>send messages when network is in init phase?</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">p2pnsTraffic</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>model p2pns application traffic</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">class</td>
+   <td width="100"><i>DHTTestApp</i></td>
+   <td></td>
+</tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>i=block/app</i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Gates:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Direction</th>
+      <th>Size</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">udpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the UDP layer</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">from_lowerTier</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the lower tier</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">from_upperTier</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the upper tier</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">direct_in</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate for sendDirect</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">trace_in</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate for trace file commands</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">tcpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the TCP layer</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">tcpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the TCP layer</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">udpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the UDP layer</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">to_lowerTier</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the lower tier</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">to_upperTier</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the upper tier</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Simple module of the DHT test application
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Gregoire Menuel, Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">simple</span><span style="color: #000000; "> </span><span style="color: #000000; ">DHTTestApp</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseApp</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; font-weight: bold; ">@class</span><span style="color: #000000; ">(</span><span style="color: #000000; ">DHTTestApp</span><span style="color: #000000; ">);
+        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">testInterval</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">);    </span><span style="color: #808080; font-style: italic; ">// time interval for DHT operations (put/get/modify)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">testTtl</span><span style="color: #000000; ">;      </span><span style="color: #808080; font-style: italic; ">// TTL for stored test records
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">activeNetwInitPhase</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// send messages when network is in init phase?
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">p2pnsTraffic</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// model p2pns application traffic
+</span><span style="color: #000000; ">}
+
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

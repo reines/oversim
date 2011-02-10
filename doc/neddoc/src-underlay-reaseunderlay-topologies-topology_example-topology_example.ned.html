@@ -1,0 +1,355 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">NED File <i>src/underlay/reaseunderlay/topologies/topology_example/topology_example.ned</i></h2>
+<table class="typetable">
+   <tr>
+      <th>Name</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.host2edge.html">host2edge</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.edge2host.html">edge2host</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.edge2gateway.html">edge2gateway</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.gateway2core.html">gateway2core</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.core2core.html">core2core</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.stub2stub.html">stub2stub</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.stub2transit.html">stub2transit</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.transit2transit.html">transit2transit</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.Internet.html">Internet</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.ReaSEUnderlayNetwork.html">ReaSEUnderlayNetwork</a>
+      <i> (network)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">TAS0</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">SAS1</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">SAS2</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">package</span><span style="color: #000000; "> </span><span style="color: #000000; ">oversim</span><span style="color: #000000; ">.</span><span style="color: #000000; ">underlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">reaseunderlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">topologies</span><span style="color: #000000; ">.</span><span style="color: #000000; ">topology_example</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">import</span><span style="color: #000000; "> </span><span style="color: #000000; ">inet</span><span style="color: #000000; ">.</span><span style="color: #000000; ">nodes</span><span style="color: #000000; ">.</span><span style="color: #000000; ">inet</span><span style="color: #000000; ">.</span><span style="color: #000000; ">Router</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">channel</span><span style="color: #000000; "> </span><span style="color: #000000; ">host2edge</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ned</span><span style="color: #000000; ">.</span><span style="color: #000000; ">DatarateChannel</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">delay</span><span style="color: #000000; "> = </span><span style="color: #008000; ">5</span><span style="color: #000000; ">ms</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">datarate</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">.</span><span style="color: #008000; ">128</span><span style="color: #000000; ">Mbps</span><span style="color: #000000; ">;
+}
+</span><span style="color: #800000; font-weight: bold; ">channel</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2host</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ned</span><span style="color: #000000; ">.</span><span style="color: #000000; ">DatarateChannel</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">delay</span><span style="color: #000000; "> = </span><span style="color: #008000; ">5</span><span style="color: #000000; ">ms</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">datarate</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">.</span><span style="color: #008000; ">768</span><span style="color: #000000; ">Mbps</span><span style="color: #000000; ">;
+}
+</span><span style="color: #800000; font-weight: bold; ">channel</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ned</span><span style="color: #000000; ">.</span><span style="color: #000000; ">DatarateChannel</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">delay</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">ms</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">datarate</span><span style="color: #000000; "> = </span><span style="color: #008000; ">155</span><span style="color: #000000; ">.</span><span style="color: #008000; ">0</span><span style="color: #000000; ">Mbps</span><span style="color: #000000; ">;
+}
+</span><span style="color: #800000; font-weight: bold; ">channel</span><span style="color: #000000; "> </span><span style="color: #000000; ">gateway2core</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ned</span><span style="color: #000000; ">.</span><span style="color: #000000; ">DatarateChannel</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">delay</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">ms</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">datarate</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1000</span><span style="color: #000000; ">.</span><span style="color: #008000; ">0</span><span style="color: #000000; ">Mbps</span><span style="color: #000000; ">;
+}
+</span><span style="color: #800000; font-weight: bold; ">channel</span><span style="color: #000000; "> </span><span style="color: #000000; ">core2core</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ned</span><span style="color: #000000; ">.</span><span style="color: #000000; ">DatarateChannel</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">delay</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">ms</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">datarate</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2500</span><span style="color: #000000; ">.</span><span style="color: #008000; ">0</span><span style="color: #000000; ">Mbps</span><span style="color: #000000; ">;
+}
+</span><span style="color: #800000; font-weight: bold; ">channel</span><span style="color: #000000; "> </span><span style="color: #000000; ">stub2stub</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ned</span><span style="color: #000000; ">.</span><span style="color: #000000; ">DatarateChannel</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">delay</span><span style="color: #000000; "> = </span><span style="color: #008000; ">20</span><span style="color: #000000; ">ms</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">datarate</span><span style="color: #000000; "> = </span><span style="color: #008000; ">5000</span><span style="color: #000000; ">.</span><span style="color: #008000; ">0</span><span style="color: #000000; ">Mbps</span><span style="color: #000000; ">;
+}
+</span><span style="color: #800000; font-weight: bold; ">channel</span><span style="color: #000000; "> </span><span style="color: #000000; ">stub2transit</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ned</span><span style="color: #000000; ">.</span><span style="color: #000000; ">DatarateChannel</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">delay</span><span style="color: #000000; "> = </span><span style="color: #008000; ">20</span><span style="color: #000000; ">ms</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">datarate</span><span style="color: #000000; "> = </span><span style="color: #008000; ">5000</span><span style="color: #000000; ">.</span><span style="color: #008000; ">0</span><span style="color: #000000; ">Mbps</span><span style="color: #000000; ">;
+}
+</span><span style="color: #800000; font-weight: bold; ">channel</span><span style="color: #000000; "> </span><span style="color: #000000; ">transit2transit</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ned</span><span style="color: #000000; ">.</span><span style="color: #000000; ">DatarateChannel</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">delay</span><span style="color: #000000; "> = </span><span style="color: #008000; ">50</span><span style="color: #000000; ">ms</span><span style="color: #000000; ">;
+		</span><span style="color: #000000; ">datarate</span><span style="color: #000000; "> = </span><span style="color: #008000; ">10000</span><span style="color: #000000; ">.</span><span style="color: #008000; ">0</span><span style="color: #000000; ">Mbps</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">Internet</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">oversim</span><span style="color: #000000; ">.</span><span style="color: #000000; ">underlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">reaseunderlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">ReaSEUnderlayNetworkBase</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; font-weight: bold; ">@Internet</span><span style="color: #000000; ">();
+	</span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">tas0</span><span style="color: #000000; ">: </span><span style="color: #000000; ">TAS0</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@AS</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=misc/globe_s&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">sas1</span><span style="color: #000000; ">: </span><span style="color: #000000; ">SAS1</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@AS</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=misc/cloud_s&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">sas2</span><span style="color: #000000; ">: </span><span style="color: #000000; ">SAS2</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@AS</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=misc/cloud_s&quot;</span><span style="color: #000000; ">);
+		}
+
+	</span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">tas0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">stub2transit</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">sas1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">tas0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">stub2transit</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">sas2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+
+}
+
+</span><span style="color: #800000; font-weight: bold; ">network</span><span style="color: #000000; "> </span><span style="color: #000000; ">ReaSEUnderlayNetwork</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">Internet</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+}
+
+</span><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">TAS0</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+		</span><span style="color: #000080; font-weight: bold; ">inout</span><span style="color: #000000; "> </span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">[];
+	</span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">core0</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@CoreRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/switch&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@GatewayRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router2&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">edge2</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@EdgeRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">edge3</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@EdgeRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">edge4</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@EdgeRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router&quot;</span><span style="color: #000000; ">);
+		}
+
+	</span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">core0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">core0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+
+		</span><span style="color: #000000; ">core0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">gateway2core</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge3</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge4</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">SAS1</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+		</span><span style="color: #000080; font-weight: bold; ">inout</span><span style="color: #000000; "> </span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">[];
+	</span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">core0</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@CoreRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/switch&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@GatewayRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router2&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">edge2</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@EdgeRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">edge3</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@EdgeRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">edge4</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@EdgeRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router&quot;</span><span style="color: #000000; ">);
+		}
+
+	</span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">core0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+
+		</span><span style="color: #000000; ">core0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">gateway2core</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge3</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge4</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">SAS2</span><span style="color: #000000; ">
+{
+	</span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+		</span><span style="color: #000080; font-weight: bold; ">inout</span><span style="color: #000000; "> </span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">[];
+	</span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">core0</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@CoreRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/switch&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@GatewayRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router2&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">edge2</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@EdgeRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">edge3</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@EdgeRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router&quot;</span><span style="color: #000000; ">);
+		}
+		</span><span style="color: #000000; ">edge4</span><span style="color: #000000; ">: </span><span style="color: #000000; ">Router</span><span style="color: #000000; "> {
+			</span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+				</span><span style="color: #000000; font-weight: bold; ">@RL</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@EdgeRouter</span><span style="color: #000000; ">();
+				</span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=abstract/router&quot;</span><span style="color: #000000; ">);
+		}
+
+	</span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; ">:
+		</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">core0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+
+		</span><span style="color: #000000; ">core0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">gateway2core</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge3</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+		</span><span style="color: #000000; ">gw1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge4</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

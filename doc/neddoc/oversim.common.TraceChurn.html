@@ -1,0 +1,147 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Simple Module <i>TraceChurn</i></h2>
+<b>Package:</b> oversim.common<br/><b>File: <a href="src-common-TraceChurn.ned.html">src/common/TraceChurn.ned</a></b><br/><p><a href="../doxy/classTraceChurn.html" target="mainframe"><b>C++ definition</b></a></p>
+<p>(no description)</p><img src="oversim.common.TraceChurn-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.common.TraceChurn.html" title="TraceChurn" alt="TraceChurn" coords="0,0,112,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.TraceChurn-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.common.TraceChurn.html" title="Simple Module TraceChurn" alt="" coords="5,6,96,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.TraceChurn-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.common.TraceChurn.html" title="Simple Module TraceChurn" alt="" coords="17,83,108,111">
+<area shape="rect" id="node2" href="oversim.common.ChurnGenerator.html" title="Simple Module ChurnGenerator" alt="" coords="5,6,120,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.common.ChurnGenerator.html">ChurnGenerator</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p><a href="oversim.common.ChurnGenerator.html">ChurnGenerator</a> base module</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">targetOverlayTerminalNum</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes after init phase</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">initPhaseCreationInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>node creation interval in init phase</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">noChurnThreshold</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if the lifetimeMean of a specific
+churn generator exceeds this,
+<a href="oversim.common.NoChurn.html">NoChurn</a> is used instead</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">channelTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>used (tx) access technologies (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">channelTypesRx</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>used (rx) access technologies (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">traceFile</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>file name of the trace file</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">numTiers</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of tiers used</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>i=block/timer</i></td>
+   <td></td>
+</tr>
+<tr>
+   <td width="150">class</td>
+   <td width="100"><i>TraceChurn</i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">simple</span><span style="color: #000000; "> </span><span style="color: #000000; ">TraceChurn</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ChurnGenerator</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; font-weight: bold; ">@class</span><span style="color: #000000; ">(</span><span style="color: #000000; ">TraceChurn</span><span style="color: #000000; ">);
+        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">traceFile</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// file name of the trace file
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">numTiers</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// number of tiers used
+</span><span style="color: #000000; ">}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

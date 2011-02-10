@@ -1,0 +1,205 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Module Interface <i>ITier</i></h2>
+<b>Package:</b> oversim.common<br/><b>File: <a href="src-common-ITier.ned.html">src/common/ITier.ned</a></b><br/>
+<p>Interface for tier compound modules</p>
+<p><b>Author:</b> Ingmar Baumgart, Bernhard Heep, Stephan Krause</p>
+<img src="oversim.common.ITier-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.common.ITier.html" title="ITier" alt="ITier" coords="0,0,186,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.ITier-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.common.ITier.html" title="Module Interface ITier" alt="" coords="732,83,804,111">
+<area shape="rect" id="node2" href="oversim.underlay.inetunderlay.InetOverlayHost.html" title="Compound Module InetOverlayHost" alt="" coords="5,6,123,34">
+<area shape="rect" id="node4" href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html" title="Compound Module InetOverlayHost6" alt="" coords="147,6,269,34">
+<area shape="rect" id="node6" href="oversim.underlay.inetunderlay.OverlayAccessRouter.html" title="Compound Module OverlayAccessRouter" alt="" coords="293,6,443,34">
+<area shape="rect" id="node8" href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html" title="Compound Module OverlayAccessRouter6" alt="" coords="467,6,624,34">
+<area shape="rect" id="node10" href="oversim.underlay.inetunderlay.OverlayRouter.html" title="Compound Module OverlayRouter" alt="" coords="648,6,755,34">
+<area shape="rect" id="node12" href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html" title="Compound Module OverlayRouter6" alt="" coords="779,6,891,34">
+<area shape="rect" id="node14" href="oversim.underlay.reaseunderlay.ReaSEOverlayHost.html" title="Compound Module ReaSEOverlayHost" alt="" coords="915,6,1051,34">
+<area shape="rect" id="node16" href="oversim.underlay.simpleunderlay.SimpleMultiOverlayHost.html" title="Compound Module SimpleMultiOverlayHost" alt="" coords="1075,6,1237,34">
+<area shape="rect" id="node18" href="oversim.underlay.simpleunderlay.SimpleOverlayHost.html" title="Compound Module SimpleOverlayHost" alt="" coords="1261,6,1395,34">
+<area shape="rect" id="node20" href="oversim.underlay.singlehostunderlay.SingleHost.html" title="Compound Module SingleHost" alt="" coords="1419,6,1504,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.ITier-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.common.ITier.html" title="Module Interface ITier" alt="" coords="1719,6,1791,34">
+<area shape="rect" id="node2" href="oversim.applications.almtest.ALMTestModule.html" title="Compound Module ALMTestModule" alt="" coords="5,83,123,111">
+<area shape="rect" id="node4" href="oversim.common.cbr.CBRDHTModules.html" title="Compound Module CBRDHTModules" alt="" coords="147,83,275,111">
+<area shape="rect" id="node6" href="oversim.applications.dht.DHTModules.html" title="Compound Module DHTModules" alt="" coords="299,83,397,111">
+<area shape="rect" id="node8" href="oversim.tier2.dhttestapp.DHTTestAppModules.html" title="Compound Module DHTTestAppModules" alt="" coords="421,83,568,111">
+<area shape="rect" id="node10" href="oversim.applications.giasearchapp.GIASearchAppModules.html" title="Compound Module GIASearchAppModules" alt="" coords="592,83,749,111">
+<area shape="rect" id="node12" href="oversim.applications.i3.i3Apps.I3Anycast.html" title="Simple Module I3Anycast" alt="" coords="773,83,853,111">
+<area shape="rect" id="node14" href="oversim.applications.i3.i3Apps.I3Composite.html" title="Simple Module I3Composite" alt="" coords="877,83,973,111">
+<area shape="rect" id="node16" href="oversim.applications.i3.i3Apps.I3HostMobility.html" title="Simple Module I3HostMobility" alt="" coords="997,83,1104,111">
+<area shape="rect" id="node18" href="oversim.applications.i3.i3Apps.I3LatencyStretch.html" title="Simple Module I3LatencyStretch" alt="" coords="1128,83,1248,111">
+<area shape="rect" id="node20" href="oversim.applications.i3.i3Apps.I3Multicast.html" title="Simple Module I3Multicast" alt="" coords="1272,83,1357,111">
+<area shape="rect" id="node22" href="oversim.applications.i3.i3Apps.I3SessionClient.html" title="Simple Module I3SessionClient" alt="" coords="1381,83,1496,111">
+<area shape="rect" id="node24" href="oversim.applications.i3.i3Apps.I3SessionClientStarter.html" title="Simple Module I3SessionClientStarter" alt="" coords="1520,83,1672,111">
+<area shape="rect" id="node26" href="oversim.applications.i3.i3Apps.I3SessionServer.html" title="Simple Module I3SessionServer" alt="" coords="1696,83,1813,111">
+<area shape="rect" id="node28" href="oversim.applications.i3.i3Apps.I3TRTClient.html" title="Simple Module I3TRTClient" alt="" coords="1837,83,1931,111">
+<area shape="rect" id="node30" href="oversim.applications.kbrtestapp.KBRTestAppModules.html" title="Compound Module KBRTestAppModules" alt="" coords="1955,83,2101,111">
+<area shape="rect" id="node32" href="oversim.common.cbr.LandmarkModules.html" title="Compound Module LandmarkModules" alt="" coords="2125,83,2253,111">
+<area shape="rect" id="node34" href="oversim.applications.scribe.MulticastScribe.html" title="Compound Module MulticastScribe" alt="" coords="2277,83,2389,111">
+<area shape="rect" id="node36" href="oversim.applications.myapplication.MyApplicationModules.html" title="Compound Module MyApplicationModules" alt="" coords="2413,83,2565,111">
+<area shape="rect" id="node38" href="oversim.applications.i3.OverlayI3.html" title="Compound Module OverlayI3" alt="" coords="2589,83,2667,111">
+<area shape="rect" id="node40" href="oversim.tier2.p2pns.P2pnsModules.html" title="Compound Module P2pnsModules" alt="" coords="2691,83,2797,111">
+<area shape="rect" id="node42" href="oversim.tier2.simmud.SimMudModules.html" title="Compound Module SimMudModules" alt="" coords="2821,83,2939,111">
+<area shape="rect" id="node44" href="oversim.applications.simplegameclient.SimpleGameClientModules.html" title="Compound Module SimpleGameClientModules" alt="" coords="2963,83,3141,111">
+<area shape="rect" id="node46" href="oversim.applications.tcpexampleapp.TCPExampleAppModules.html" title="Compound Module TCPExampleAppModules" alt="" coords="3165,83,3336,111">
+<area shape="rect" id="node48" href="oversim.common.TierDummy.html" title="Simple Module TierDummy" alt="" coords="3360,83,3451,111">
+<area shape="rect" id="node50" href="oversim.tier3.xmlrpcinterface.XmlRpcInterfaceModules.html" title="Compound Module XmlRpcInterfaceModules" alt="" coords="3475,83,3643,111">
+</map>
+<h3 class="subtitle">Used in compound modules:</h3>
+<p>If a module type shows up more than once, that means it has been defined in more than one NED file.</p>
+<table>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.InetOverlayHost.html">InetOverlayHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">InetOverlayHost6</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.OverlayAccessRouter.html">OverlayAccessRouter</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Access router that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">OverlayAccessRouter6</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Access router that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.OverlayRouter.html">OverlayRouter</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p><a href="oversim.underlay.inetunderlay.Router.html">Router</a> in the overlay network</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">OverlayRouter6</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p><a href="oversim.underlay.inetunderlay.Router.html">Router</a> in the overlay network</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.ReaSEOverlayHost.html">ReaSEOverlayHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.simpleunderlay.SimpleMultiOverlayHost.html">SimpleMultiOverlayHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host in the simple network that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.simpleunderlay.SimpleOverlayHost.html">SimpleOverlayHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host in the simple network that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.singlehostunderlay.SingleHost.html">SingleHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>simulates a single host to connect it to a real network</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>i=block/segm</i></td>
+   <td>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Interface for tier compound modules
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart, Bernhard Heep, Stephan Krause
+//
+</span><span style="color: #800000; font-weight: bold; ">moduleinterface</span><span style="color: #000000; "> </span><span style="color: #000000; ">ITier</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=block/segm&quot;</span><span style="color: #000000; ">);
+
+    </span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">from_lowerTier</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the lower tier
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">from_upperTier</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the upper tier
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">to_lowerTier</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the lower tier
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">to_upperTier</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the upper tier
+</span><span style="color: #000000; ">
+}
+
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

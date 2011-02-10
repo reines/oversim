@@ -1,0 +1,1275 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Msg File <i>src/common/CommonMessages.msg</i></h2>
+<table class="typetable">
+   <tr>
+      <th>Name</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td>
+      <a href="BaseOverlayMessageType.html">BaseOverlayMessageType</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="CompType.html">CompType</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="RoutingType.html">RoutingType</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="TransportType.html">TransportType</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="CommonAPIMessageType.html">CommonAPIMessageType</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="StatType.html">StatType</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="AuthBlock.html">AuthBlock</a>
+      <i> (class)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="BaseOverlayMessage.html">BaseOverlayMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Base class for all messages handled by overlay modules</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="BaseRouteMessage.html">BaseRouteMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="BaseAppDataMessage.html">BaseAppDataMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="BaseRpcMessage.html">BaseRpcMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic Remote-Procedure-Call message used for calls and return values</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="BaseCallMessage.html">BaseCallMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic Remote-Procedure-Call message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="BaseResponseMessage.html">BaseResponseMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic Remote-Procedure-Response message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="RpcTimeoutMessage.html">RpcTimeoutMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>The RPC Timeout self-message</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FindNodeCall.html">FindNodeCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic find node rpc response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FindNodeResponse.html">FindNodeResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic find node rpc call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FailedNodeCall.html">FailedNodeCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic failed node notification</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FailedNodeResponse.html">FailedNodeResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic failed node response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PingCall.html">PingCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic ping rpc call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PingResponse.html">PingResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic ping response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="CompReadyMessage.html">CompReadyMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Notification that a component finished its init phase</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="BootstrapLookupMessage.html">BootstrapLookupMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Internal message for the <a href="oversim.common.BootstrapList.html">BootstrapList</a> lookup listener</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NextHopCall.html">NextHopCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A next hop rpc call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NextHopResponse.html">NextHopResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A next hop response / acknowledgement</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="CommonAPIMessage.html">CommonAPIMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Base class for all common API message types</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="KBRroute.html">KBRroute</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type for KBR route calls</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="KBRforward.html">KBRforward</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type for KBR forward calls</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="KBRdeliver.html">KBRdeliver</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type for information sent from the overlay to the application</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="KBRupdate.html">KBRupdate</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type to inform overlay nodes about new or left nodes</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DhtDumpEntry.html">DhtDumpEntry</a>
+      <i> (class)</i>
+   </td>
+   <td>
+
+<p>Data type for <a href="oversim.applications.dht.DHT.html">DHT</a> CAPI messages</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTputCAPICall.html">DHTputCAPICall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type to store value at the keys root</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTgetCAPICall.html">DHTgetCAPICall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type to order the value corresponding to the OverlayKey key from the node responsible of key</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTputCAPIResponse.html">DHTputCAPIResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type to respond to a DHTput request </p>
+<p><b>See also:</b> DHTput</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTgetCAPIResponse.html">DHTgetCAPIResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type to respond to a DHTget request </p>
+<p><b>See also:</b> DHTget</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTdumpCall.html">DHTdumpCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Request to dump all local <a href="oversim.applications.dht.DHT.html">DHT</a> records</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTdumpResponse.html">DHTdumpResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Response to a <a href="DHTdumpCall.html">DHTdumpCall</a></p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="LookupCall.html">LookupCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Internal RPC to ask overlay to start a lookup</p>
+<p><b>Author:</b> Ingmar Baumgart</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="LookupResponse.html">LookupResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Internal RPC response from overlay containing lookup results</p>
+<p><b>Author:</b> Ingmar Baumgart</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="P2pnsRegisterCall.html">P2pnsRegisterCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>P2PNS Register RPC Call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="P2pnsRegisterResponse.html">P2pnsRegisterResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>P2PNS Register RPC Response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="P2pnsResolveCall.html">P2pnsResolveCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>P2PNS Resolve RPC Call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="P2pnsResolveResponse.html">P2pnsResolveResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>P2PNS Resolve RPC Response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="OverlayCtrlInfo.html">OverlayCtrlInfo</a>
+      <i> (class)</i>
+   </td>
+   <td>
+
+<p>Control info for internal handling BaseOverlaMessages.</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ALMMessage.html">ALMMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Base message for ALM communication</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ALMCreateMessage.html">ALMCreateMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Create a multicast group</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ALMDeleteMessage.html">ALMDeleteMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Delete a multicast group</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ALMSubscribeMessage.html">ALMSubscribeMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Subscribe to a multicast group</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ALMLeaveMessage.html">ALMLeaveMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Leave a multicast group</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ALMMulticastMessage.html">ALMMulticastMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Send a multicast message to all group members</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ALMAnycastMessage.html">ALMAnycastMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Send a message to a (random) member in the group</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GameAPIMessageCommand.html">GameAPIMessageCommand</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+
+<p>Base classes for all overlay / gameclient communication</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GameAPIMessage.html">GameAPIMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>MOVEMENT_REQUEST</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GameAPIListMessage.html">GameAPIListMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>NEIGHBOR_UPDATE</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GameAPIPositionMessage.html">GameAPIPositionMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>MOVEMENT_INDICATION</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GameAPIResizeAOIMessage.html">GameAPIResizeAOIMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GameAPIChatMessage.html">GameAPIChatMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GameAPISnowMessage.html">GameAPISnowMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GameAPIFrozenMessage.html">GameAPIFrozenMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
+</span><span style="color: #000000; ">
+</span><span style="color: #800000; font-weight: bold; ">cplusplus</span><span style="color: #000000; "> {{
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">IPvXAddress</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">Vector2D</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">OverSimMessage</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; "> </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; ">::</span><span style="color: #000000; ">getLength</span><span style="color: #000000; ">()
+
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">TYPE_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">IPADDR_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">32</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">UDPPORT_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">16</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">HOPCOUNT_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">16</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">NONCE_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">32</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">COMP_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">16</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">NUMSIBLINGS_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">NUMREDNODES_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">EXHAUSTIVEFLAG_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">NEIGHBORSFLAG_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">RESPONSEFLAG_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">TRYAGAINFLAG_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">TIER_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">ARRAYSIZE_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">ROUTINGTYPE_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">SIGNATURE_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">40</span><span style="color: #000000; ">*</span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">CERT_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">40</span><span style="color: #000000; ">*</span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">PUBKEY_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">20</span><span style="color: #000000; ">*</span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">NCSINFO_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">32</span><span style="color: #000000; ">;
+
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> (</span><span style="color: #000000; ">IPADDR_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">UDPPORT_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; ">)
+</span><span style="color: #808080; font-style: italic; ">// TODO: TRANSPORTADDRESS_L doesn't contain NAT type at the moment, since this
+// is work in progress and currently not used
+</span><span style="color: #000000; ">#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">TRANSPORTADDRESS_L</span><span style="color: #000000; "> (</span><span style="color: #000000; ">IPADDR_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">UDPPORT_L</span><span style="color: #000000; ">)
+
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">AUTHBLOCK_L</span><span style="color: #000000; "> (</span><span style="color: #000000; ">overlay</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getMeasureAuthBlock</span><span style="color: #000000; ">() ? (</span><span style="color: #000000; ">SIGNATURE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">CERT_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">PUBKEY_L</span><span style="color: #000000; ">) : </span><span style="color: #008000; ">0</span><span style="color: #000000; ">)
+
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">BASEOVERLAY_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">TYPE_L</span><span style="color: #000000; ">
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">BASEROUTE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASEOVERLAY_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; "> + \
+                          </span><span style="color: #000000; ">HOPCOUNT_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">ROUTINGTYPE_L</span><span style="color: #000000; "> +\
+                          </span><span style="color: #000000; ">ARRAYSIZE_L</span><span style="color: #000000; "> + (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getVisitedHopsArraySize</span><span style="color: #000000; ">() *\
+                          </span><span style="color: #000000; ">TRANSPORTADDRESS_L</span><span style="color: #000000; ">) +\
+                          </span><span style="color: #000000; ">ARRAYSIZE_L</span><span style="color: #000000; "> + (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getNextHopsArraySize</span><span style="color: #000000; ">() *\
+                          </span><span style="color: #000000; ">TRANSPORTADDRESS_L</span><span style="color: #000000; ">) +\
+                          </span><span style="color: #000000; ">ARRAYSIZE_L</span><span style="color: #000000; "> + (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getHintsArraySize</span><span style="color: #000000; ">() *\
+                          </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">BASEAPPDATA_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASEOVERLAY_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #008000; ">2</span><span style="color: #000000; ">*</span><span style="color: #000000; ">COMP_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">BASERPC_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASEOVERLAY_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">NONCE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> + \
+	                </span><span style="color: #000000; ">TIER_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">BASERPC_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)
+</span><span style="color: #808080; font-style: italic; ">//TODO add field for call hop count ?
+</span><span style="color: #000000; ">#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASERPC_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">AUTHBLOCK_L</span><span style="color: #000000; "> + \
+                             ((</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getNcsInfoArraySize</span><span style="color: #000000; ">()) ? \
+                              (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getNcsInfoArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">NCSINFO_L</span><span style="color: #000000; "> + </span><span style="color: #008000; ">8</span><span style="color: #000000; ">) : \
+                              </span><span style="color: #008000; ">0</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">FINDNODECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">NUMSIBLINGS_L</span><span style="color: #000000; "> + \
+                             </span><span style="color: #000000; ">NUMREDNODES_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">EXHAUSTIVEFLAG_L</span><span style="color: #000000; ">)
+</span><span style="color: #808080; font-style: italic; ">//TODO add field for closestNodesArraySize
+</span><span style="color: #000000; ">#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">FINDNODERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">NEIGHBORSFLAG_L</span><span style="color: #000000; "> + \
+                  (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getClosestNodesArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">FAILEDNODECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">IPADDR_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">UDPPORT_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">FAILEDNODERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">TRYAGAINFLAG_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">PINGCALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">PINGRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">BOOTSTRAPPINGCALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">BOOTSTRAPPINGRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NEXTHOPCALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">BASECALL_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NEXTHOPRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) </span><span style="color: #000000; ">BASERESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">)
+}}
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">OverSimMessage</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseRpcMessage</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">IPvXAddress</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">Vector2D</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">CompType</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessageType</span><span style="color: #000000; ">
+{
+
+    </span><span style="color: #000000; ">OVERLAYSIGNALING</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">RPC</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">APPDATA</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">OVERLAYROUTE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">3</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">CompType</span><span style="color: #000000; ">
+{
+
+    </span><span style="color: #000000; ">INVALID_COMP</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">OVERLAY_COMP</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">TIER1_COMP</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">TIER2_COMP</span><span style="color: #000000; "> = </span><span style="color: #008000; ">3</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">TIER3_COMP</span><span style="color: #000000; "> = </span><span style="color: #008000; ">4</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">BOOTSTRAPLIST_COMP</span><span style="color: #000000; "> = </span><span style="color: #008000; ">5</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">NEIGHBORCACHE_COMP</span><span style="color: #000000; "> = </span><span style="color: #008000; ">6</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">RoutingType</span><span style="color: #000000; ">
+{
+
+    </span><span style="color: #000000; ">NO_OVERLAY_ROUTING</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">DEFAULT_ROUTING</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">ITERATIVE_ROUTING</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">EXHAUSTIVE_ITERATIVE_ROUTING</span><span style="color: #000000; "> = </span><span style="color: #008000; ">3</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">SEMI_RECURSIVE_ROUTING</span><span style="color: #000000; "> = </span><span style="color: #008000; ">4</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">FULL_RECURSIVE_ROUTING</span><span style="color: #000000; "> = </span><span style="color: #008000; ">5</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">RECURSIVE_SOURCE_ROUTING</span><span style="color: #000000; "> = </span><span style="color: #008000; ">6</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">PROX_AWARE_ITERATIVE_ROUTING</span><span style="color: #000000; "> = </span><span style="color: #008000; ">7</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">TransportType</span><span style="color: #000000; ">
+{
+
+    </span><span style="color: #000000; ">INVALID_TRANSPORT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">INTERNAL_TRANSPORT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">UDP_TRANSPORT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">ROUTE_TRANSPORT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">3</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">CommonAPIMessageType</span><span style="color: #000000; ">
+{
+
+    </span><span style="color: #000000; ">COMMON_API_UNDEFINED</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">KBR_ROUTE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">KBR_DELIVER</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">KBR_FORWARD</span><span style="color: #000000; "> = </span><span style="color: #008000; ">3</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">KBR_FORWARD_RESPONSE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">4</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">KBR_UPDATE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">5</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">StatType</span><span style="color: #000000; ">
+{
+
+    </span><span style="color: #000000; ">MAINTENANCE_STAT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">APP_DATA_STAT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">APP_LOOKUP_STAT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+
+}
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">AuthBlock</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">signature</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">pubKey</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">cert</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Base class for all messages handled by overlay modules
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Bernhard Heep
+// </span><span style="color: #000080; ">@see</span><span style="color: #808080; font-style: italic; "> ChordMessage
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">OverSimMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">type</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">BaseOverlayMessageType</span><span style="color: #000000; ">) = </span><span style="color: #000000; ">OVERLAYSIGNALING</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// message type
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">statType</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">StatType</span><span style="color: #000000; ">) = </span><span style="color: #000000; ">MAINTENANCE_STAT</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// message type for stats
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseRouteMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">destKey</span><span style="color: #000000; ">;             </span><span style="color: #808080; font-style: italic; ">// destination key
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcNode</span><span style="color: #000000; ">;             </span><span style="color: #808080; font-style: italic; ">// source node
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">routingType</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">RoutingType</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// routing type
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">hopCount</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;               </span><span style="color: #808080; font-style: italic; ">// hop count, increased by BaseOverlay
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">visitedHops</span><span style="color: #000000; ">[]; </span><span style="color: #808080; font-style: italic; ">// hops for source routing
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">nextHops</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// hops for source routing
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">hints</span><span style="color: #000000; ">[];             </span><span style="color: #808080; font-style: italic; ">// hints for next hop (optional)
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">simtime_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">hopStamp</span><span style="color: #000000; ">;             </span><span style="color: #808080; font-style: italic; ">// timestamp of processing at last hop
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">simtime_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">hopDelay</span><span style="color: #000000; ">[];           </span><span style="color: #808080; font-style: italic; ">// vector of single-hop latency (for stats)
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseAppDataMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">destComp</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">CompType</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// destination component
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcComp</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">CompType</span><span style="color: #000000; ">);  </span><span style="color: #808080; font-style: italic; ">// source component
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A basic Remote-Procedure-Call message used for calls and return values
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseRpcMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">nonce</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// nonce to match RPC responses to corresponding calls
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcNode</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// source node
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">AuthBlock</span><span style="color: #000000; "> </span><span style="color: #000000; ">authBlock</span><span style="color: #000000; ">[] </span><span style="color: #000000; font-weight: bold; ">@sizetype</span><span style="color: #000000; ">(</span><span style="color: #000000; ">uint8_t</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// optional authentication block containing a signature
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A basic Remote-Procedure-Call message
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseRpcMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A basic Remote-Procedure-Response message
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseRpcMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">callHopCount</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">ncsInfo</span><span style="color: #000000; ">[]; </span><span style="color: #808080; font-style: italic; ">// info block for network coordinate systems
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// The RPC Timeout self-message
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">RpcTimeoutMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseRpcMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A basic find node rpc response
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">FindNodeCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">lookupKey</span><span style="color: #000000; ">;   </span><span style="color: #808080; font-style: italic; ">// request nextHops for this key
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">numRedundantNodes</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// number of redundant nodes to return
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">numSiblings</span><span style="color: #000000; ">;        </span><span style="color: #808080; font-style: italic; ">// number of siblings to return
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">exhaustiveIterative</span><span style="color: #000000; "> = </span><span style="color: #008000; ">false</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// for exhaustive-iterative always request numRedudantNode, even if node is a sibling
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A basic find node rpc call
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">FindNodeResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #808080; font-style: italic; ">// the closestNodes[] vector contains all sibling for the lookup key
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">siblings</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">closestNodes</span><span style="color: #000000; ">[];  </span><span style="color: #808080; font-style: italic; ">// vector of known next hops to the lookup key
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A basic failed node notification
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">FailedNodeCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">failedNode</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A basic failed node response
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">FailedNodeResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">tryAgain</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A basic ping rpc call
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">PingCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A basic ping response
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">PingResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Notification that a component finished its init phase
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">CompReadyMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">ready</span><span style="color: #000000; ">;              </span><span style="color: #808080; font-style: italic; ">// true, if the component is ready
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">comp</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">CompType</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// the component, which is ready 
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Internal message for the BootstrapList lookup listener
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">BootstrapLookupMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A next hop rpc call
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">NextHopCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A next hop response / acknowledgement
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">NextHopResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+}
+
+
+
+</span><span style="color: #808080; font-style: italic; ">// -------------------------------------------------------------
+// Common API messages (internal messages)
+// -------------------------------------------------------------
+</span><span style="color: #000000; ">
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Base class for all common API message types
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Bernhard Heep
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">CommonAPIMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">type</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">CommonAPIMessageType</span><span style="color: #000000; ">) = </span><span style="color: #000000; ">COMMON_API_UNDEFINED</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// message type
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message type for KBR route calls
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Bernhard Heep
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">KBRroute</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">CommonAPIMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">destKey</span><span style="color: #000000; ">;                </span><span style="color: #808080; font-style: italic; ">// the destination key
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">destComp</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">CompType</span><span style="color: #000000; ">);       </span><span style="color: #808080; font-style: italic; ">// destination component
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcComp</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">CompType</span><span style="color: #000000; ">);        </span><span style="color: #808080; font-style: italic; ">// source component
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">sourceRoute</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// source route or hint
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">routingType</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">RoutingType</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// routing type
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message type for KBR forward calls
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Bernhard Heep
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">KBRforward</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">CommonAPIMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">destKey</span><span style="color: #000000; ">;     </span><span style="color: #808080; font-style: italic; ">// the destination key
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">nextHopNode</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the proposed/changed next hop node
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message type for information sent from the overlay to the application
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Bernhard Heep
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">KBRdeliver</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">CommonAPIMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">destKey</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// destination overlay key
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message type to inform overlay nodes about new or left nodes
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Bernhard Heep
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">KBRupdate</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">CommonAPIMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">node</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the node that has joined or left the overlay
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">joined</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// true if node has joined, false if node has left
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Data type for DHT CAPI messages
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">DhtDumpEntry</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">key</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">kind</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">id</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">value</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">ttl</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">ownerNode</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">is_modifiable</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">responsible</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message type to store value at the keys root
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">DHTputCAPICall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">key</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// overlayKey that corresponds with value
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">kind</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the kind of the stored data item
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">id</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the id to identify multiple date items with same key and kind 
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">value</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// value that has to be stored on keys root
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">ttl</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// time to life
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">isModifiable</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// true, if the data item may be overwritten by other nodes
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message type to order the value corresponding to the OverlayKey key from the node responsible of key
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">DHTgetCAPICall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">key</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// corresponding OverlayKey to the requested value
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">kind</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the kind of the stored data item
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">id</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the id to identify multiple date items with same key and kind 
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message type to respond to a DHTput request </span><span style="color: #000080; ">@see</span><span style="color: #808080; font-style: italic; "> DHTput
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">DHTputCAPIResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">isSuccess</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Message type to respond to a DHTget request </span><span style="color: #000080; ">@see</span><span style="color: #808080; font-style: italic; "> DHTget
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">DHTgetCAPIResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">DhtDumpEntry</span><span style="color: #000000; "> </span><span style="color: #000000; ">result</span><span style="color: #000000; ">[]; 
+    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">isSuccess</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Request to dump all local DHT records
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">DHTdumpCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Response to a DHTdumpCall
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">DHTdumpResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">DhtDumpEntry</span><span style="color: #000000; "> </span><span style="color: #000000; ">record</span><span style="color: #000000; ">[]; </span><span style="color: #808080; font-style: italic; ">// array of local dht entries
+</span><span style="color: #000000; ">}
+
+
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Internal RPC to ask overlay to start a lookup
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">LookupCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">key</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">numSiblings</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">routingType</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">RoutingType</span><span style="color: #000000; ">) = </span><span style="color: #000000; ">DEFAULT_ROUTING</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Internal RPC response from overlay containing lookup results
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">LookupResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">key</span><span style="color: #000000; ">;        </span><span style="color: #808080; font-style: italic; ">// the lookup key
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">hopCount</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;      </span><span style="color: #808080; font-style: italic; ">// the accumulated hop count for this lookup
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">isValid</span><span style="color: #000000; ">;          </span><span style="color: #808080; font-style: italic; ">// true if this lookup finished successfully
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">siblings</span><span style="color: #000000; ">[]; </span><span style="color: #808080; font-style: italic; ">// the siblings for the key (closest nodes=
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// P2PNS Register RPC Call
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">P2pnsRegisterCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">p2pName</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the name to register
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">kind</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the kind of the stored data item
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">id</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// the id of the stored data item
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">address</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the current address of the name
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">ttl</span><span style="color: #000000; ">;             </span><span style="color: #808080; font-style: italic; ">// time to life
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// P2PNS Register RPC Response
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">P2pnsRegisterResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">p2pName</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// the name to register
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">address</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// the current address of the name
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">isSuccess</span><span style="color: #000000; ">;       </span><span style="color: #808080; font-style: italic; ">// true, if the name was successfully registered
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// P2PNS Resolve RPC Call
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">P2pnsResolveCall</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">p2pName</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// the name to resolve
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">kind</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the kind of the name
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">id</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// the id of the name 
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// P2PNS Resolve RPC Response
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">P2pnsResolveResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">p2pName</span><span style="color: #000000; ">;  </span><span style="color: #808080; font-style: italic; ">// the name to resolve
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">address</span><span style="color: #000000; ">[];  </span><span style="color: #808080; font-style: italic; ">// the current address of the name
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">kind</span><span style="color: #000000; ">[];
+    </span><span style="color: #000000; ">uint32_t</span><span style="color: #000000; "> </span><span style="color: #000000; ">id</span><span style="color: #000000; ">[];
+    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">isSuccess</span><span style="color: #000000; ">;       </span><span style="color: #808080; font-style: italic; ">// true, if the name was successfully resolved
+</span><span style="color: #000000; ">}
+
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Control info for internal handling BaseOverlaMessages.
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Bernhard Heep
+//
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">OverlayCtrlInfo</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">lastHop</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// last hop node
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcNode</span><span style="color: #000000; ">;          </span><span style="color: #808080; font-style: italic; ">// the message's source node IP/port/nodeID
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcRoute</span><span style="color: #000000; ">;         </span><span style="color: #808080; font-style: italic; ">// like srcNode, but contains the source route to the destination (if available) 
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">hopCount</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;            </span><span style="color: #808080; font-style: italic; ">// hop count
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">visitedHops</span><span style="color: #000000; ">[];     </span><span style="color: #808080; font-style: italic; ">// hops on route
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcComp</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">CompType</span><span style="color: #000000; ">);  </span><span style="color: #808080; font-style: italic; ">// source component
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">destComp</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">CompType</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// destination component
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">transportType</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">TransportType</span><span style="color: #000000; ">) = </span><span style="color: #000000; ">INVALID_TRANSPORT</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// transport type of the received message
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">routingType</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">RoutingType</span><span style="color: #000000; ">);
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Base message for ALM communication
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Stephan Krause
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">groupId</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Create a multicast group
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Stephan Krause
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMCreateMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Delete a multicast group
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Stephan Krause
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMDeleteMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Subscribe to a multicast group
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Stephan Krause
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMSubscribeMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Leave a multicast group
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Stephan Krause
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMLeaveMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Send a multicast message to all group members
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Stephan Krause
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMMulticastMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Send a message to a (random) member in the group
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Stephan Krause
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMAnycastMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ALMMessage</span><span style="color: #000000; ">
+{
+}
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Base classes for all overlay / gameclient communication
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Helge Backhaus
+//
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIMessageCommand</span><span style="color: #000000; ">
+{
+
+    </span><span style="color: #000000; ">MOVEMENT_INDICATION</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">MOVEMENT_REQUEST</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">NEIGHBOR_UPDATE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">RESIZE_AOI</span><span style="color: #000000; "> = </span><span style="color: #008000; ">3</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">GAMEEVENT_CHAT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">4</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">GAMEEVENT_SNOW</span><span style="color: #000000; "> = </span><span style="color: #008000; ">5</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">GAMEEVENT_FROZEN</span><span style="color: #000000; "> = </span><span style="color: #008000; ">6</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; "> </span><span style="color: #808080; font-style: italic; ">// MOVEMENT_REQUEST
+</span><span style="color: #000000; ">{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">command</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">GameAPIMessageCommand</span><span style="color: #000000; ">);
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIListMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIMessage</span><span style="color: #000000; "> </span><span style="color: #808080; font-style: italic; ">// NEIGHBOR_UPDATE
+</span><span style="color: #000000; ">{
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">removeNeighbor</span><span style="color: #000000; ">[];
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">addNeighbor</span><span style="color: #000000; ">[];
+    </span><span style="color: #000000; ">Vector2D</span><span style="color: #000000; "> </span><span style="color: #000000; ">neighborPosition</span><span style="color: #000000; ">[];
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIPositionMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIMessage</span><span style="color: #000000; "> </span><span style="color: #808080; font-style: italic; ">// MOVEMENT_INDICATION
+</span><span style="color: #000000; ">{
+    </span><span style="color: #000000; ">Vector2D</span><span style="color: #000000; "> </span><span style="color: #000000; ">position</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIResizeAOIMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">AOIsize</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIChatMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">src</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPISnowMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">src</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">Vector2D</span><span style="color: #000000; "> </span><span style="color: #000000; ">start</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">Vector2D</span><span style="color: #000000; "> </span><span style="color: #000000; ">end</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">timeSec</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">timeUsec</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIFrozenMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GameAPIMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">src</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">thrower</span><span style="color: #000000; ">;	
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">timeSec</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">timeUsec</span><span style="color: #000000; ">;
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

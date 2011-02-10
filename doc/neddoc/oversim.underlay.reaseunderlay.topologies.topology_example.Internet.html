@@ -1,0 +1,2020 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Compound Module <i>Internet</i></h2>
+<b>Package:</b> oversim.underlay.reaseunderlay.topologies.topology_example<br/><b>File: <a href="src-underlay-reaseunderlay-topologies-topology_example-topology_example.ned.html">src/underlay/reaseunderlay/topologies/topology_example/topology_example.ned</a></b><br/><p>(no description)</p><img src="oversim.underlay.reaseunderlay.topologies.topology_example.Internet-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html" title="ReaSEUnderlayConfigurator" alt="ReaSEUnderlayConfigurator" coords="8,639,137,698">
+<area shape="rect" href="oversim.common.GlobalObserver.html" title="GlobalObserver" alt="GlobalObserver" coords="27,552,117,611">
+<area shape="rect" href="oversim.common.ChurnGenerator.html" title="ChurnGenerator" alt="ChurnGenerator" coords="15,726,129,785">
+<area shape="rect" href="oversim.underlay.reaseunderlay.ConnectReaSE.html" title="ConnectReaSE" alt="ConnectReaSE" coords="16,811,128,870">
+<area shape="rect" href="oversim.underlay.reaseunderlay.RUNetworkConfigurator.html" title="RUNetworkConfigurator" alt="RUNetworkConfigurator" coords="1,888,144,947">
+<area shape="rect" href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html" title="TAS0" alt="TAS0" coords="290,576,316,615">
+<area shape="rect" href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html" title="SAS1" alt="SAS1" coords="448,582,475,616">
+<area shape="rect" href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html" title="SAS2" alt="SAS2" coords="133,576,160,610">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.reaseunderlay.topologies.topology_example.Internet-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.underlay.reaseunderlay.topologies.topology_example.Internet.html" title="Compound Module Internet" alt="" coords="163,6,235,34">
+<area shape="rect" id="node2" href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html" title="Compound Module SAS2" alt="" coords="5,83,77,111">
+<area shape="rect" id="node4" href="oversim.underlay.reaseunderlay.topologies.topology_example.stub2transit.html" title="Channel stub2transit" alt="" coords="101,83,192,111">
+<area shape="rect" id="node6" href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html" title="Compound Module SAS1" alt="" coords="216,83,288,111">
+<area shape="rect" id="node8" href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html" title="Compound Module TAS0" alt="" coords="312,83,384,111">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.reaseunderlay.topologies.topology_example.Internet-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.underlay.reaseunderlay.topologies.topology_example.Internet.html" title="Compound Module Internet" alt="" coords="67,83,139,111">
+<area shape="rect" id="node4" href="oversim.underlay.reaseunderlay.topologies.topology_example.ReaSEUnderlayNetwork.html" title="Network ReaSEUnderlayNetwork" alt="" coords="20,161,185,189">
+<area shape="rect" id="node2" href="oversim.underlay.reaseunderlay.ReaSEUnderlayNetworkBase.html" title="Compound Module ReaSEUnderlayNetworkBase" alt="" coords="5,6,200,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.ReaSEUnderlayNetworkBase.html">ReaSEUnderlayNetworkBase</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>The InetUnderlay ned-file </p>
+<p><b>See also:</b> <a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">ReaSEUnderlayConfigurator</a></p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Known subclasses:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.ReaSEUnderlayNetwork.html">ReaSEUnderlayNetwork</a>
+      <i> (network)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">overlayType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the overlay used in the simulation (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">tier1Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the application on top of the overlay used in the simulation (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">tier2Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the module type on top of tier 1 (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">tier3Type</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the module type on top of tier 2 (for overlayBackboneRouters)</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>bgl=49;bgb=631,441</i></td>
+   <td></td>
+</tr>
+<tr>
+   <td width="150">Internet</td>
+   <td width="100"><i></i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Unassigned submodule parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.terminalTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of terminal types</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.churnGeneratorTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>a list of churn generators to be used</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.transitionTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time to wait before measuring after init phase is finished</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.measurementTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>duration of the simulation after init and transition phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.gracefulLeaveDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time between prekill and removal from overlay</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">underlayConfigurator</a>.gracefulLeaveProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability of gracefull leave</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability for a node to be malicious on creation</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChange</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>dynamically change number of malicious nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStartTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>simTime at which nodes begin to become malicious</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeRate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes to change to malicious compared to all nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time between two node changes to malicious</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStartValue</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>minimum amount of malicious nodes in the peerSet</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStopValue</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum amount of malicious nodes in the peerSet</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maxNumberOfKeys</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum number of overlay keys the bootstrap oracle handles</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.keyProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability of keys to be owned by nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.printStateToStdOut</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>print overlay ready messages to std::cout</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.topologyAdaptation</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>turn on topologyAdaptation (for demonstrator)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalTraceManager.html">globalTraceManager</a>.traceFile</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>file name of the trace file</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.outputMinMax</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable output of minimum and maximum for scalars</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.outputStdDev</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable output of standard deviation for scalars</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.measureNetwInitPhase</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>fetch statistics in init phase?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.globalStatTimerInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>interval length of periodic statistic timer</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.targetOverlayTerminalNum</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes after init phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.initPhaseCreationInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>node creation interval in init phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.noChurnThreshold</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if the lifetimeMean of a specific
+churn generator exceeds this,
+<a href="oversim.common.NoChurn.html">NoChurn</a> is used instead</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.channelTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>used (tx) access technologies (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.channelTypesRx</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>used (rx) access technologies (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ConnectReaSE.html">TerminalConnector</a>.channelTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of (tx) channel types (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ConnectReaSE.html">TerminalConnector</a>.channelTypesRx</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of (rx) channel types (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.ConnectReaSE.html">TerminalConnector</a>.channelDiversity</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0</td>
+   <td>
+<p>percentage a channel delay can differ from the channel type value</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">tas0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">sas1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">core0</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">gw1</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge2</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge3</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPPInterface.html">ppp</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ppp.PPP.html">ppp</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">4470</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.promiscuous</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>
+<p>if true, all packets are received, otherwise only the
+ones with matching destination MAC address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.address</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120">"auto"</td>
+   <td>
+<p>MAC address as hex string (12 hex digits), or
+"auto". "auto" values will be replaced by
+a generated MAC address in init stage 0.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.txrate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">100Mbps</td>
+   <td>
+<p>maximum data rate supported by this station (bit/s);
+actually chosen speed may be lower due to auto-
+configuration. 0 means fully auto-configured.</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.duplexEnabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">true</td>
+   <td>
+<p>whether duplex mode can be enabled or not; whether
+MAC will actually use duplex mode depends on the result
+of the auto-configuration process (duplex is only
+possible with DTE-to-DTE connection).</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">sas2</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.Router.html">edge4</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EthernetInterface.html">eth</a>.<a href="../../../inet/doc/neddoc/inet.linklayer.ethernet.EtherMAC.html">mac</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">1500</td>
+   <td>   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">Internet</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">oversim</span><span style="color: #000000; ">.</span><span style="color: #000000; ">underlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">reaseunderlay</span><span style="color: #000000; ">.</span><span style="color: #000000; ">ReaSEUnderlayNetworkBase</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; font-weight: bold; ">@Internet</span><span style="color: #000000; ">();
+    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">tas0</span><span style="color: #000000; ">: </span><span style="color: #000000; ">TAS0</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@AS</span><span style="color: #000000; ">();
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=misc/globe_s&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">sas1</span><span style="color: #000000; ">: </span><span style="color: #000000; ">SAS1</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@AS</span><span style="color: #000000; ">();
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=misc/cloud_s&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">sas2</span><span style="color: #000000; ">: </span><span style="color: #000000; ">SAS2</span><span style="color: #000000; "> {
+            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+                </span><span style="color: #000000; font-weight: bold; ">@AS</span><span style="color: #000000; ">();
+                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=misc/cloud_s&quot;</span><span style="color: #000000; ">);
+        }
+
+    </span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">tas0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">stub2transit</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">sas1</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+        </span><span style="color: #000000; ">tas0</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++ </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">stub2transit</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">sas2</span><span style="color: #000000; ">.</span><span style="color: #000000; ">pppg</span><span style="color: #000000; ">++;
+
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

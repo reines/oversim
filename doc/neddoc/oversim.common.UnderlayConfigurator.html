@@ -1,0 +1,172 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Simple Module <i>UnderlayConfigurator</i></h2>
+<b>Package:</b> oversim.common<br/><b>File: <a href="src-common-UnderlayConfigurator.ned.html">src/common/UnderlayConfigurator.ned</a></b><br/><p><a href="../doxy/classUnderlayConfigurator.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p><a href="oversim.common.UnderlayConfigurator.html">UnderlayConfigurator</a> base module</p>
+<img src="oversim.common.UnderlayConfigurator-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.common.UnderlayConfigurator.html" title="UnderlayConfigurator" alt="UnderlayConfigurator" coords="0,0,174,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.UnderlayConfigurator-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.common.UnderlayConfigurator.html" title="Simple Module UnderlayConfigurator" alt="" coords="5,6,149,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.UnderlayConfigurator-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.common.UnderlayConfigurator.html" title="Simple Module UnderlayConfigurator" alt="" coords="320,6,464,34">
+<area shape="rect" id="node2" href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html" title="Simple Module InetUnderlayConfigurator" alt="" coords="5,83,171,111">
+<area shape="rect" id="node4" href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html" title="Simple Module ReaSEUnderlayConfigurator" alt="" coords="195,83,381,111">
+<area shape="rect" id="node6" href="oversim.underlay.simpleunderlay.SimpleUnderlayConfigurator.html" title="Simple Module SimpleUnderlayConfigurator" alt="" coords="405,83,589,111">
+<area shape="rect" id="node8" href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html" title="Simple Module SingleHostUnderlayConfigurator" alt="" coords="613,83,821,111">
+</map>
+<h3 class="subtitle">Known subclasses:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.InetUnderlayConfigurator.html">InetUnderlayConfigurator</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Configurator of the IPv4Underlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.ReaSEUnderlayConfigurator.html">ReaSEUnderlayConfigurator</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Configurator of the ReaSEUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.simpleunderlay.SimpleUnderlayConfigurator.html">SimpleUnderlayConfigurator</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Configurator of the SimpleUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">SingleHostUnderlayConfigurator</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Configurator of the SingleHostUnderlay</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">terminalTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of terminal types</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">churnGeneratorTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>a list of churn generators to be used</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">transitionTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time to wait before measuring after init phase is finished</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">measurementTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>duration of the simulation after init and transition phase</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">gracefulLeaveDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time between prekill and removal from overlay</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">gracefulLeaveProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability of gracefull leave</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>i=block/cogwheel</i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// UnderlayConfigurator base module
+//
+</span><span style="color: #800000; font-weight: bold; ">simple</span><span style="color: #000000; "> </span><span style="color: #000000; ">UnderlayConfigurator</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">terminalTypes</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// list of terminal types
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">churnGeneratorTypes</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// a list of churn generators to be used
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">transitionTime</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// time to wait before measuring after init phase is finished
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">measurementTime</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// duration of the simulation after init and transition phase
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">gracefulLeaveDelay</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// time between prekill and removal from overlay
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">gracefulLeaveProbability</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// probability of gracefull leave        
+</span><span style="color: #000000; ">        </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=block/cogwheel&quot;</span><span style="color: #000000; ">);
+}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

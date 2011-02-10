@@ -1,0 +1,197 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Msg File <i>src/overlay/nice/NiceMessage.msg</i></h2>
+<table class="typetable">
+   <tr>
+      <th>Name</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td>
+      <a href="NICECommand.html">NICECommand</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NiceMessage.html">NiceMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NiceMemberMessage.html">NiceMemberMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NiceClusterMerge.html">NiceClusterMerge</a>
+      <i> (message)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NiceHeartbeat.html">NiceHeartbeat</a>
+      <i> (message)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NiceLeaderHeartbeat.html">NiceLeaderHeartbeat</a>
+      <i> (message)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NiceMulticastMessage.html">NiceMulticastMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Copyright (C) 2009 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
+</span><span style="color: #000000; ">
+</span><span style="color: #808080; font-style: italic; ">//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Christian Huebsch
+//
+</span><span style="color: #000000; ">
+</span><span style="color: #800000; font-weight: bold; ">cplusplus</span><span style="color: #000000; "> {{
+
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">CommonMessages_m</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+	
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">TRANSPORTADDRESS_L</span><span style="color: #000000; "> (</span><span style="color: #000000; ">IPADDR_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">UDPPORT_L</span><span style="color: #000000; ">)
+
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">NICECOMMAND_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">LAYER_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">16</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">INT_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">32</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">SIMTIME_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">32</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">BOOL_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">DOUBLE_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">64</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">SHORT_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">16</span><span style="color: #000000; ">;
+	
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NICEMESSAGE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASEOVERLAY_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">NICECOMMAND_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">TRANSPORTADDRESS_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">LAYER_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NICEMEMBERMESSAGE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">NICEMESSAGE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getMembersArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">TRANSPORTADDRESS_L</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NICECLUSTERMERGE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">NICEMEMBERMESSAGE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">TRANSPORTADDRESS_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NICEHEARTBEAT_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">NICEMEMBERMESSAGE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getDistancesArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">SIMTIME_L</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">INT_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">INT_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">SIMTIME_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">INT_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NICELEADERHEARTBEAT_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">NICEHEARTBEAT_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">TRANSPORTADDRESS_L</span><span style="color: #000000; "> + (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getSupercluster_membersArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">TRANSPORTADDRESS_L</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">INT_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">NICEMULTICAST_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">NICEMESSAGE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">TRANSPORTADDRESS_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">DOUBLE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">INT_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">INT_L</span><span style="color: #000000; ">)
+
+}}
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">;
+
+</span><span style="color: #808080; font-style: italic; ">//class noncobject McpoHost;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; ">;
+
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">NICECommand</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">NICE_QUERY</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Querying Memberships in Clusters
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_QUERY_RESPONSE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Responding to a Query
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_JOIN_CLUSTER</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Join Cluster in specific layer
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_HEARTBEAT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">3</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Periodic Heartbeat message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_LEADERHEARTBEAT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">4</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Periodic Heartbeat message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_LEADERTRANSFER</span><span style="color: #000000; "> = </span><span style="color: #008000; ">5</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Leader Transfer 
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_JOINEVAL</span><span style="color: #000000; "> = </span><span style="color: #008000; ">6</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Distance evaluation when joining
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_JOINEVAL_RESPONSE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">7</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Response to JoinEval
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_REMOVE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Removes node from cluster
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_PING_PROBE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">9</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Removes node from cluster
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_PING_PROBE_RESPONSE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">10</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Removes node from cluster
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_CLUSTER_MERGE_REQUEST</span><span style="color: #000000; "> = </span><span style="color: #008000; ">11</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Requesting Cluster Merge
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_PEER_TEMPORARY</span><span style="color: #000000; "> = </span><span style="color: #008000; ">12</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Temporary peer while joining
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_PEER_TEMPORARY_RELEASE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">13</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Temporary peering release
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_POLL_RP</span><span style="color: #000000; "> = </span><span style="color: #008000; ">14</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Poll existing RP
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_POLL_RP_RESPONSE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">15</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Respond to RP Poll
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_FORCE_MERGE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">16</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Force Merge to SourceNode
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">NICE_MULTICAST</span><span style="color: #000000; "> = </span><span style="color: #008000; ">17</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// Multicast data
+</span><span style="color: #000000; ">}
+
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">command</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">NICECommand</span><span style="color: #000000; ">);
+    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcNode</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">short</span><span style="color: #000000; "> </span><span style="color: #000000; ">layer</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceMemberMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">members</span><span style="color: #000000; ">[];
+}
+
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceClusterMerge</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceMemberMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">newClusterLeader</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceHeartbeat</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceMemberMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">seqNo</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">seqRspNo</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">hb_delay</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">distances</span><span style="color: #000000; ">[];
+    </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">one_hop_distance</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">sublayermembers</span><span style="color: #000000; ">;
+}
+
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceLeaderHeartbeat</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceHeartbeat</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">supercluster_leader</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">supercluster_members</span><span style="color: #000000; ">[];
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">k</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">sc_tolerance</span><span style="color: #000000; ">;
+}
+
+
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceMulticastMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">NiceMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">TransportAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">lastHop</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">sendTime</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">seqNo</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">unsigned</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">hopCount</span><span style="color: #000000; ">;
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

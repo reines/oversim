@@ -1,0 +1,192 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Message <i>SearchMessage</i></h2>
+<b>File: <a href="src-overlay-gia-GiaMessage.msg.html">src/overlay/gia/GiaMessage.msg</a></b><br/><p><a href="../doxy/classSearchMessage.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>Search message </p>
+<p><b>Author:</b> Robert Palmer</p>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="SearchMessage-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="SearchMessage.html" title="Message SearchMessage" alt="" coords="5,6,120,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="SearchMessage-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="SearchMessage.html" title="Message SearchMessage" alt="" coords="5,83,120,111">
+<area shape="rect" id="node2" href="GiaIDMessage.html" title="Message GiaIDMessage" alt="" coords="8,6,117,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="GiaIDMessage.html">GiaIDMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+
+<p>A <a href="GiaMessage.html">GiaMessage</a> extended by an unique ID-Field</p>
+<p><b>Author:</b> Robert Palmer</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Fields:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">destKey</td>
+   <td width="100">
+      <i>
+OverlayKey</i>
+   </td>
+   <td>
+<p>destination key, may be undefined</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">searchKey</td>
+   <td width="100">
+      <i>
+OverlayKey</i>
+   </td>
+   <td>
+<p>searched key</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">reversePath</td>
+   <td width="100">
+      <i>
+OverlayKey[]</i>
+   </td>
+   <td>
+<p>vector containing all nodes which this search message passes</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">type</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">srcNode</td>
+   <td width="100">
+      <i>
+NodeHandle</i>
+   </td>
+   <td>
+<p>source node</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">foundNode</td>
+   <td width="100">
+      <i>
+OverlayKey[]</i>
+   </td>
+   <td>
+<p>vector containing all nodes which contain the searched key</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">hopCount</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>hop count, increased by <a href="oversim.common.BaseOverlay.html">BaseOverlay</a></p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">srcDegree</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>neighbor count of source node</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">statType</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type for stats</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">maxResponses</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>maximum responses to this search message</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">ID</td>
+   <td width="100">
+      <i>
+OverlayKey</i>
+   </td>
+   <td>
+<p>unique message id</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">command</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>COMMAND-Field</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">srcCapacity</td>
+   <td width="100">
+      <i>
+double</i>
+   </td>
+   <td>
+<p>capacity of source node</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Search message 
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Robert Palmer
+//
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">SearchMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaIDMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">searchKey</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// searched key
+</span><span style="color: #000000; ">    </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">maxResponses</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// maximum responses to this search message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">reversePath</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// vector containing all nodes which this search message passes
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">foundNode</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// vector containing all nodes which contain the searched key
+</span><span style="color: #000000; ">}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

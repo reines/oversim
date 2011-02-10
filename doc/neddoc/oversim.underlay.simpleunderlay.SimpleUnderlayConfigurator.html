@@ -1,0 +1,215 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Simple Module <i>SimpleUnderlayConfigurator</i></h2>
+<b>Package:</b> oversim.underlay.simpleunderlay<br/><b>File: <a href="src-underlay-simpleunderlay-SimpleUnderlayConfigurator.ned.html">src/underlay/simpleunderlay/SimpleUnderlayConfigurator.ned</a></b><br/><p><a href="../doxy/classSimpleUnderlayConfigurator.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>Configurator of the SimpleUnderlay</p>
+<p>Sets up a SimpleNetwork, adds overlay nodes to the network in init phase
+periodically with the interval set by "initPhaseCreationInterval",
+adds/removes/migrates overlay nodes after init phase according to given
+churn model.</p>
+<img src="oversim.underlay.simpleunderlay.SimpleUnderlayConfigurator-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.underlay.simpleunderlay.SimpleUnderlayConfigurator.html" title="SimpleUnderlayConfigurator" alt="SimpleUnderlayConfigurator" coords="0,0,215,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.simpleunderlay.SimpleUnderlayConfigurator-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.underlay.simpleunderlay.SimpleUnderlayConfigurator.html" title="Simple Module SimpleUnderlayConfigurator" alt="" coords="5,83,189,111">
+<area shape="rect" id="node2" href="oversim.underlay.simpleunderlay.SimpleUnderlayNetwork.html" title="Network SimpleUnderlayNetwork" alt="" coords="16,6,179,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.simpleunderlay.SimpleUnderlayConfigurator-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.underlay.simpleunderlay.SimpleUnderlayConfigurator.html" title="Simple Module SimpleUnderlayConfigurator" alt="" coords="5,83,189,111">
+<area shape="rect" id="node2" href="oversim.common.UnderlayConfigurator.html" title="Simple Module UnderlayConfigurator" alt="" coords="25,6,169,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.common.UnderlayConfigurator.html">UnderlayConfigurator</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p><a href="oversim.common.UnderlayConfigurator.html">UnderlayConfigurator</a> base module</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Networks:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.underlay.simpleunderlay.SimpleUnderlayNetwork.html">SimpleUnderlayNetwork</a>
+      <i> (network)</i>
+   </td>
+   <td>
+
+<p>The SimpleUnderlay ned-file </p>
+<p><b>See also:</b> <a href="oversim.underlay.simpleunderlay.SimpleUnderlayConfigurator.html">SimpleUnderlayConfigurator</a></p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">terminalTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of terminal types</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">churnGeneratorTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>a list of churn generators to be used</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">transitionTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time to wait before measuring after init phase is finished</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">measurementTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>duration of the simulation after init and transition phase</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">gracefulLeaveDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time between prekill and removal from overlay</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">gracefulLeaveProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability of gracefull leave</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">fieldSize</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum x/y-coordinate for nodes</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">nodeCoordinateSource</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>name of xml-file with coordinates of nodes</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">sendQueueLength</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>send-queue length in bytes (0 = infinite)</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">fixedNodePositions</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>put nodes on fixed coordiantes in playground</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">useIPv6Addresses</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>i=block/cogwheel</i></td>
+   <td></td>
+</tr>
+<tr>
+   <td width="150">class</td>
+   <td width="100"><i>SimpleUnderlayConfigurator</i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Configurator of the SimpleUnderlay
+//
+// Sets up a SimpleNetwork, adds overlay nodes to the network in init phase
+// periodically with the interval set by &quot;initPhaseCreationInterval&quot;,
+// adds/removes/migrates overlay nodes after init phase according to given
+// churn model.
+//
+</span><span style="color: #800000; font-weight: bold; ">simple</span><span style="color: #000000; "> </span><span style="color: #000000; ">SimpleUnderlayConfigurator</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">UnderlayConfigurator</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; font-weight: bold; ">@class</span><span style="color: #000000; ">(</span><span style="color: #000000; ">SimpleUnderlayConfigurator</span><span style="color: #000000; ">);
+        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">fieldSize</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// maximum x/y-coordinate for nodes
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">string</span><span style="color: #000000; "> </span><span style="color: #000000; ">nodeCoordinateSource</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// name of xml-file with coordinates of nodes
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">sendQueueLength</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">B</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// send-queue length in bytes (0 = infinite)
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">fixedNodePositions</span><span style="color: #000000; ">; </span><span style="color: #808080; font-style: italic; ">// put nodes on fixed coordiantes in playground
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">useIPv6Addresses</span><span style="color: #000000; ">;
+}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

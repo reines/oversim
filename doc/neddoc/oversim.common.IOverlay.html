@@ -1,0 +1,191 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Module Interface <i>IOverlay</i></h2>
+<b>Package:</b> oversim.common<br/><b>File: <a href="src-common-IOverlay.ned.html">src/common/IOverlay.ned</a></b><br/>
+<p>Interface for overlay compound modules</p>
+<p><b>Author:</b> Ingmar Baumgart, Bernhard Heep, Stephan Krause</p>
+<img src="oversim.common.IOverlay-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.common.IOverlay.html" title="IOverlay" alt="IOverlay" coords="0,0,209,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.IOverlay-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.common.IOverlay.html" title="Module Interface IOverlay" alt="" coords="732,83,804,111">
+<area shape="rect" id="node2" href="oversim.underlay.inetunderlay.InetOverlayHost.html" title="Compound Module InetOverlayHost" alt="" coords="5,6,123,34">
+<area shape="rect" id="node4" href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html" title="Compound Module InetOverlayHost6" alt="" coords="147,6,269,34">
+<area shape="rect" id="node6" href="oversim.underlay.inetunderlay.OverlayAccessRouter.html" title="Compound Module OverlayAccessRouter" alt="" coords="293,6,443,34">
+<area shape="rect" id="node8" href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html" title="Compound Module OverlayAccessRouter6" alt="" coords="467,6,624,34">
+<area shape="rect" id="node10" href="oversim.underlay.inetunderlay.OverlayRouter.html" title="Compound Module OverlayRouter" alt="" coords="648,6,755,34">
+<area shape="rect" id="node12" href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html" title="Compound Module OverlayRouter6" alt="" coords="779,6,891,34">
+<area shape="rect" id="node14" href="oversim.underlay.reaseunderlay.ReaSEOverlayHost.html" title="Compound Module ReaSEOverlayHost" alt="" coords="915,6,1051,34">
+<area shape="rect" id="node16" href="oversim.underlay.simpleunderlay.SimpleMultiOverlayHost.html" title="Compound Module SimpleMultiOverlayHost" alt="" coords="1075,6,1237,34">
+<area shape="rect" id="node18" href="oversim.underlay.simpleunderlay.SimpleOverlayHost.html" title="Compound Module SimpleOverlayHost" alt="" coords="1261,6,1395,34">
+<area shape="rect" id="node20" href="oversim.underlay.singlehostunderlay.SingleHost.html" title="Compound Module SingleHost" alt="" coords="1419,6,1504,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.IOverlay-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.common.IOverlay.html" title="Module Interface IOverlay" alt="" coords="984,6,1056,34">
+<area shape="rect" id="node2" href="oversim.overlay.bamboo.BambooModules.html" title="Compound Module BambooModules" alt="" coords="5,83,123,111">
+<area shape="rect" id="node4" href="oversim.overlay.broose.BrooseModules.html" title="Compound Module BrooseModules" alt="" coords="147,83,259,111">
+<area shape="rect" id="node6" href="oversim.overlay.chord.ChordModules.html" title="Compound Module ChordModules" alt="" coords="283,83,389,111">
+<area shape="rect" id="node8" href="oversim.overlay.gia.GiaModules.html" title="Compound Module GiaModules" alt="" coords="413,83,504,111">
+<area shape="rect" id="node10" href="oversim.overlay.kademlia.KademliaModules.html" title="Compound Module KademliaModules" alt="" coords="528,83,653,111">
+<area shape="rect" id="node12" href="oversim.overlay.koorde.KoordeModules.html" title="Compound Module KoordeModules" alt="" coords="677,83,789,111">
+<area shape="rect" id="node14" href="oversim.overlay.myoverlay.MyOverlayModules.html" title="Compound Module MyOverlayModules" alt="" coords="813,83,947,111">
+<area shape="rect" id="node16" href="oversim.overlay.nice.NiceModules.html" title="Compound Module NiceModules" alt="" coords="971,83,1069,111">
+<area shape="rect" id="node18" href="oversim.overlay.ntree.NTreeModules.html" title="Compound Module NTreeModules" alt="" coords="1093,83,1200,111">
+<area shape="rect" id="node20" href="oversim.applications.i3.OverlayDummyModules.html" title="Compound Module OverlayDummyModules" alt="" coords="1224,83,1387,111">
+<area shape="rect" id="node22" href="oversim.overlay.pubsubmmog.OverlayPubSubLobby.html" title="Compound Module OverlayPubSubLobby" alt="" coords="1411,83,1557,111">
+<area shape="rect" id="node24" href="oversim.overlay.pubsubmmog.OverlayPubSubMMOG.html" title="Compound Module OverlayPubSubMMOG" alt="" coords="1581,83,1736,111">
+<area shape="rect" id="node26" href="oversim.overlay.quon.OverlayQuon.html" title="Compound Module OverlayQuon" alt="" coords="1760,83,1859,111">
+<area shape="rect" id="node28" href="oversim.overlay.vast.OverlayVast.html" title="Compound Module OverlayVast" alt="" coords="1883,83,1976,111">
+<area shape="rect" id="node30" href="oversim.overlay.pastry.PastryModules.html" title="Compound Module PastryModules" alt="" coords="2000,83,2109,111">
+</map>
+<h3 class="subtitle">Used in compound modules:</h3>
+<p>If a module type shows up more than once, that means it has been defined in more than one NED file.</p>
+<table>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.InetOverlayHost.html">InetOverlayHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.ipv6.InetOverlayHost6.html">InetOverlayHost6</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.OverlayAccessRouter.html">OverlayAccessRouter</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Access router that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.ipv6.OverlayAccessRouter6.html">OverlayAccessRouter6</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Access router that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.OverlayRouter.html">OverlayRouter</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p><a href="oversim.underlay.inetunderlay.Router.html">Router</a> in the overlay network</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.inetunderlay.ipv6.OverlayRouter6.html">OverlayRouter6</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p><a href="oversim.underlay.inetunderlay.Router.html">Router</a> in the overlay network</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.ReaSEOverlayHost.html">ReaSEOverlayHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.simpleunderlay.SimpleMultiOverlayHost.html">SimpleMultiOverlayHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host in the simple network that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.simpleunderlay.SimpleOverlayHost.html">SimpleOverlayHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Host in the simple network that participates in the overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.singlehostunderlay.SingleHost.html">SingleHost</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>simulates a single host to connect it to a real network</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">display</td>
+   <td width="100"><i>i=block/network2</i></td>
+   <td>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Interface for overlay compound modules
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Ingmar Baumgart, Bernhard Heep, Stephan Krause
+//
+</span><span style="color: #800000; font-weight: bold; ">moduleinterface</span><span style="color: #000000; "> </span><span style="color: #000000; ">IOverlay</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=block/network2&quot;</span><span style="color: #000000; ">);
+
+    </span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">appIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the application
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate from the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">appOut</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// gate to the application
+</span><span style="color: #000000; ">}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

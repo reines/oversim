@@ -1,0 +1,234 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Channel <i>edge2gateway</i></h2>
+<b>Package:</b> oversim.underlay.reaseunderlay.topologies.topology_example<br/><b>File: <a href="src-underlay-reaseunderlay-topologies-topology_example-topology_example.ned.html">src/underlay/reaseunderlay/topologies/topology_example/topology_example.ned</a></b><br/><p>(no description)</p><img src="oversim.underlay.reaseunderlay.topologies.topology_example.edge2gateway-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.underlay.reaseunderlay.topologies.topology_example.edge2gateway.html" title="edge2gateway" alt="edge2gateway" coords="0,120,195,160">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.reaseunderlay.topologies.topology_example.edge2gateway-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.underlay.reaseunderlay.topologies.topology_example.edge2gateway.html" title="Channel edge2gateway" alt="" coords="84,83,191,111">
+<area shape="rect" id="node2" href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html" title="Compound Module SAS1" alt="" coords="5,6,77,34">
+<area shape="rect" id="node4" href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html" title="Compound Module SAS2" alt="" coords="101,6,173,34">
+<area shape="rect" id="node6" href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html" title="Compound Module TAS0" alt="" coords="197,6,269,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.reaseunderlay.topologies.topology_example.edge2gateway-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.underlay.reaseunderlay.topologies.topology_example.edge2gateway.html" title="Channel edge2gateway" alt="" coords="12,83,119,111">
+<area shape="rect" id="node2" href="ned.DatarateChannel.html" title="Channel DatarateChannel" alt="" coords="5,6,125,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="ned.DatarateChannel.html">DatarateChannel</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Used in compound modules:</h3>
+<p>If a module type shows up more than once, that means it has been defined in more than one NED file.</p>
+<table>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS1.html">SAS1</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.SAS2.html">SAS2</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.underlay.reaseunderlay.topologies.topology_example.TAS0.html">TAS0</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">disabled</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120">false</td>
+   <td>   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">delay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1ms</td>
+   <td>
+<p>propagation delay</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">datarate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">155.0Mbps</td>
+   <td>
+<p>bits per second; 0=infinite</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">ber</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0</td>
+   <td>
+<p>bit error rate (BER)</p>
+   </td>
+</tr>
+<tr class="inherited">
+   <td width="150">per</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0</td>
+   <td>
+<p>packet error rate (PER)</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">class</td>
+   <td width="100"><i>cDatarateChannel</i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Signals:</h3>
+<table class="signaltable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Unit</th>
+   </tr>
+<tr class="local">
+   <td width="100">messageDiscarded</td>
+   <td width="100"><i>
+cMessage   </i></td>
+   <td width="30"></td>
+</tr>
+<tr class="local">
+   <td width="100">messageSent</td>
+   <td width="100"><i>
+cMessage   </i></td>
+   <td width="30"></td>
+</tr>
+<tr class="local">
+   <td width="100">channelBusy</td>
+   <td width="100"><i>
+int   </i></td>
+   <td width="30"></td>
+</tr>
+</table>
+<h3 class="subtitle">Statistics:</h3>
+<table class="statistictable">
+   <tr>
+      <th>Name</th>
+      <th>Title</th>
+      <th>Source</th>
+      <th>Record</th>
+      <th>Unit</th>
+      <th>Interpolation Mode</th>
+   </tr>
+<tr class="local">
+   <td width="100">utilization</td>
+   <td width="200"></td>
+   <td width="100">timeavg(channelBusy)</td>
+   <td width="160">last?</td>
+   <td width="30"></td>
+   <td width="120"></td>
+</tr>
+<tr class="local">
+   <td width="100">packetsDiscarded</td>
+   <td width="200"></td>
+   <td width="100">constant1(messageDiscarded)</td>
+   <td width="160">count?</td>
+   <td width="30"></td>
+   <td width="120">none</td>
+</tr>
+<tr class="local">
+   <td width="100">packetBytes</td>
+   <td width="200"></td>
+   <td width="100">packetBytes(messageSent)</td>
+   <td width="160">sum?</td>
+   <td width="30">B</td>
+   <td width="120">none</td>
+</tr>
+<tr class="local">
+   <td width="100">packets</td>
+   <td width="200"></td>
+   <td width="100">constant1(messageSent)</td>
+   <td width="160">count?</td>
+   <td width="30"></td>
+   <td width="120">none</td>
+</tr>
+<tr class="local">
+   <td width="100">busy</td>
+   <td width="200"></td>
+   <td width="100">channelBusy</td>
+   <td width="160">vector?</td>
+   <td width="30"></td>
+   <td width="120">sample-hold</td>
+</tr>
+<tr class="local">
+   <td width="100">throughput</td>
+   <td width="200"></td>
+   <td width="100">sumPerDuration(packetBits(messageSent))</td>
+   <td width="160">last?</td>
+   <td width="30">bps</td>
+   <td width="120"></td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">channel</span><span style="color: #000000; "> </span><span style="color: #000000; ">edge2gateway</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">ned</span><span style="color: #000000; ">.</span><span style="color: #000000; ">DatarateChannel</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">delay</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">ms</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">datarate</span><span style="color: #000000; "> = </span><span style="color: #008000; ">155</span><span style="color: #000000; ">.</span><span style="color: #008000; ">0</span><span style="color: #000000; ">Mbps</span><span style="color: #000000; ">;
+}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

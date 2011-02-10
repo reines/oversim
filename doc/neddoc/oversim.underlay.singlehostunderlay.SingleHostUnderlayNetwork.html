@@ -1,0 +1,864 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Network <i>SingleHostUnderlayNetwork</i></h2>
+<b>Package:</b> oversim.underlay.singlehostunderlay<br/><b>File: <a href="src-underlay-singlehostunderlay-SingleHostUnderlay.ned.html">src/underlay/singlehostunderlay/SingleHostUnderlay.ned</a></b><br/>
+<p>The SingleHostUnderlay ned-file </p>
+<p><b>See also:</b> <a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">SingleHostUnderlayConfigurator</a></p>
+<img src="oversim.underlay.singlehostunderlay.SingleHostUnderlayNetwork-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html" title="SingleHostUnderlayConfigurator" alt="SingleHostUnderlayConfigurator" coords="8,152,137,211">
+<area shape="rect" href="oversim.common.ChurnGenerator.html" title="ChurnGenerator" alt="ChurnGenerator" coords="15,232,129,291">
+<area shape="rect" href="oversim.underlay.singlehostunderlay.SingleHost.html" title="SingleHost" alt="SingleHost" coords="147,144,258,217">
+<area shape="rect" href="oversim.underlay.singlehostunderlay.ZeroconfConnector.html" title="ZeroconfConnector" alt="ZeroconfConnector" coords="146,72,259,131">
+<area shape="rect" href="oversim.common.GlobalObserver.html" title="GlobalObserver" alt="GlobalObserver" coords="27,72,117,131">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.singlehostunderlay.SingleHostUnderlayNetwork-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.underlay.singlehostunderlay.SingleHostUnderlayNetwork.html" title="Network SingleHostUnderlayNetwork" alt="" coords="261,6,448,34">
+<area shape="rect" id="node2" href="oversim.underlay.singlehostunderlay.SingleHost.html" title="Compound Module SingleHost" alt="" coords="5,83,91,111">
+<area shape="rect" id="node4" href="oversim.common.GlobalObserver.html" title="Compound Module GlobalObserver" alt="" coords="115,83,227,111">
+<area shape="rect" id="node6" href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html" title="Simple Module SingleHostUnderlayConfigurator" alt="" coords="251,83,459,111">
+<area shape="rect" id="node8" href="oversim.underlay.singlehostunderlay.ZeroconfConnector.html" title="Simple Module ZeroconfConnector" alt="" coords="483,83,616,111">
+<area shape="rect" id="node10" href="oversim.common.ChurnGenerator.html" title="Simple Module ChurnGenerator" alt="" coords="640,83,755,111">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.underlay.singlehostunderlay.SingleHostUnderlayNetwork-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.underlay.singlehostunderlay.SingleHostUnderlayNetwork.html" title="Network SingleHostUnderlayNetwork" alt="" coords="5,6,192,34">
+</map>
+<h3 class="subtitle">Properties:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td width="150">isNetwork</td>
+   <td width="100"><i></i></td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Unassigned submodule parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.terminalTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>list of terminal types</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.churnGeneratorTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>a list of churn generators to be used</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.transitionTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time to wait before measuring after init phase is finished</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.measurementTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>duration of the simulation after init and transition phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.gracefulLeaveDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time between prekill and removal from overlay</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.gracefulLeaveProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability of gracefull leave</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.nodeIP</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>IP of the node</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.nodeInterface</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>interface name</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.stunServer</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>name of a STUN server (optional)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.bootstrapIP</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>IP of an overlay node for bootstrapping</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHostUnderlayConfigurator.html">underlayConfigurator</a>.bootstrapPort</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>Port of the bootstrap node</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.targetOverlayTerminalNum</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes after init phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.initPhaseCreationInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>node creation interval in init phase</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.noChurnThreshold</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if the lifetimeMean of a specific
+churn generator exceeds this,
+<a href="oversim.common.NoChurn.html">NoChurn</a> is used instead</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.channelTypes</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>used (tx) access technologies (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.ChurnGenerator.html">churnGenerator</a>.channelTypesRx</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>used (rx) access technologies (from common/channels.ned)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.ipv4.IP.html">ip</a>.procDelay</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">0s</td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">1s</td>
+   <td>
+<p>number seconds ARP waits between retries to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.retryCount</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120">3</td>
+   <td>
+<p>number of times ARP will attempt to resolve an IP address</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="../../../inet/doc/neddoc/inet.nodes.inet.NetworkLayer.html">networkLayer</a>.<a href="../../../inet/doc/neddoc/inet.networklayer.arp.ARP.html">arp</a>.cacheTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120">120s</td>
+   <td>
+<p>number seconds unused entries in the cache will time out</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.underlay.singlehostunderlay.RealworldDevice.html">outDev</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum transmission unit of the underlaying network</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.enableNeighborCache</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>use neighbor cache for reducing ping traffic?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rttExpirationTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>expiration of the validity of the measured rtts</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.maxSize</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum size of the cache</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.rttHistory</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.timeoutAccuracyLimit</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryTypeI</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.defaultQueryTypeQ</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.doDiscovery</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.ncsType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.ncsSendBackOwnCoords</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpDimensions</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>gnp settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpCoordCalcRuns</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.gnpLandmarkTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.npsMaxLayer</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>nps settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiShowPosition</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>vivaldi settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiErrorConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiCoordConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiDimConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.vivaldiEnableHeightVector</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.svivaldiLossConst</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>svivaldi settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.svivaldiLossResetLimit</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.NeighborCache.html">neighborCache</a>.simpleNcsDelayFaultType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>simpleNcs settings</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.mergeOverlayPartitions</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, detect and merge overlay partitions</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.BootstrapList.html">bootstrapList</a>.maintainList</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maintain a list of bootstrap candidates and check them periodically</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.SingleHost.html">overlayTerminal</a>.<a href="oversim.common.CryptoModule.html">cryptoModule</a>.keyFile</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>the name of the file containing the public key pair used to sign messages</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.ZeroconfConnector.html">zeroconfConnector</a>.enableZeroconf</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, get bootstrap nodes via Zeroconf</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.ZeroconfConnector.html">zeroconfConnector</a>.serviceType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>Zeroconf service type</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.ZeroconfConnector.html">zeroconfConnector</a>.serviceName</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>Zeroconf service name</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.ZeroconfConnector.html">zeroconfConnector</a>.overlayType</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>Zeroconf overlay type</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.underlay.singlehostunderlay.ZeroconfConnector.html">zeroconfConnector</a>.overlayName</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>Zeroconf overlay name</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability for a node to be malicious on creation</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChange</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>dynamically change number of malicious nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStartTime</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>simTime at which nodes begin to become malicious</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeRate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>number of nodes to change to malicious compared to all nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>time between two node changes to malicious</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStartValue</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>minimum amount of malicious nodes in the peerSet</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maliciousNodeChangeStopValue</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum amount of malicious nodes in the peerSet</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.maxNumberOfKeys</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum number of overlay keys the bootstrap oracle handles</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalNodeList.html">globalNodeList</a>.keyProbability</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>probability of keys to be owned by nodes</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.printStateToStdOut</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>print overlay ready messages to std::cout</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalParameters.html">globalParameters</a>.topologyAdaptation</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>turn on topologyAdaptation (for demonstrator)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalTraceManager.html">globalTraceManager</a>.traceFile</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>file name of the trace file</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.outputMinMax</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable output of minimum and maximum for scalars</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.outputStdDev</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable output of standard deviation for scalars</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.measureNetwInitPhase</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>fetch statistics in init phase?</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.common.GlobalObserver.html">globalObserver</a>.<a href="oversim.common.GlobalStatistics.html">globalStatistics</a>.globalStatTimerInterval</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>interval length of periodic statistic timer</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// The SingleHostUnderlay ned-file </span><span style="color: #000080; ">@see</span><span style="color: #808080; font-style: italic; "> SingleHostUnderlayConfigurator
+//
+</span><span style="color: #800000; font-weight: bold; ">network</span><span style="color: #000000; "> </span><span style="color: #000000; ">SingleHostUnderlayNetwork</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">underlayConfigurator</span><span style="color: #000000; ">: </span><span style="color: #000000; ">SingleHostUnderlayConfigurator</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=70,130&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">churnGenerator</span><span style="color: #000000; ">[</span><span style="color: #008000; ">0</span><span style="color: #000000; ">]: </span><span style="color: #000000; ">ChurnGenerator</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=70,210,column&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">overlayTerminal</span><span style="color: #000000; ">[</span><span style="color: #008000; ">1</span><span style="color: #000000; ">]: </span><span style="color: #000000; ">SingleHost</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=200,130&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">zeroconfConnector</span><span style="color: #000000; ">: </span><span style="color: #000000; ">ZeroconfConnector</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=200,50&quot;</span><span style="color: #000000; ">);
+        }
+        </span><span style="color: #000000; ">globalObserver</span><span style="color: #000000; ">: </span><span style="color: #000000; ">GlobalObserver</span><span style="color: #000000; "> {
+            </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=70,50&quot;</span><span style="color: #000000; ">);
+        }
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

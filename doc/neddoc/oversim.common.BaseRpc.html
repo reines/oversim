@@ -1,0 +1,121 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Simple Module <i>BaseRpc</i></h2>
+<b>Package:</b> oversim.common<br/><b>File: <a href="src-common-BaseRpc.ned.html">src/common/BaseRpc.ned</a></b><br/><p><a href="../doxy/classBaseRpc.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>Base module for simple RPC communication</p>
+<p><b>Author:</b> Sebastien Mies, Ingmar Baumgart, Bernhard Heep, Gregoire Menuel</p>
+<img src="oversim.common.BaseRpc-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.common.BaseRpc.html" title="BaseRpc" alt="BaseRpc" coords="0,0,95,40">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.BaseRpc-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.common.BaseRpc.html" title="Simple Module BaseRpc" alt="" coords="5,6,80,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.common.BaseRpc-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.common.BaseRpc.html" title="Simple Module BaseRpc" alt="" coords="60,6,135,34">
+<area shape="rect" id="node2" href="oversim.common.BaseApp.html" title="Simple Module BaseApp" alt="" coords="5,83,80,111">
+<area shape="rect" id="node4" href="oversim.common.BaseOverlay.html" title="Simple Module BaseOverlay" alt="" coords="104,83,200,111">
+</map>
+<h3 class="subtitle">Known subclasses:</h3>
+<table>
+<tr>
+   <td>
+      <a href="oversim.common.BaseApp.html">BaseApp</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Base class for application implementations</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.BaseOverlay.html">BaseOverlay</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Base class for overlay implementations</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr class="local">
+   <td width="150">rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// Base module for simple RPC communication
+//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Sebastien Mies, Ingmar Baumgart, Bernhard Heep, Gregoire Menuel
+//
+</span><span style="color: #800000; font-weight: bold; ">simple</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseRpc</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">rpcUdpTimeout</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// default timeout value for direct RPCs
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">rpcKeyTimeout</span><span style="color: #000000; "> </span><span style="color: #000000; font-weight: bold; ">@unit</span><span style="color: #000000; ">(</span><span style="color: #000000; ">s</span><span style="color: #000000; ">); </span><span style="color: #808080; font-style: italic; ">// default timeout value for routed RPCs
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">optimizeTimeouts</span><span style="color: #000000; ">;        </span><span style="color: #808080; font-style: italic; ">// calculate timeouts from measured RTTs
+</span><span style="color: #000000; ">                                       </span><span style="color: #808080; font-style: italic; ">// and network coordinates
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">rpcExponentialBackoff</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// if true, doubles the timeout for
+</span><span style="color: #000000; ">                                       </span><span style="color: #808080; font-style: italic; ">// every retransmission
+</span><span style="color: #000000; ">}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

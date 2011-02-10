@@ -1,0 +1,254 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Compound Module <i>SimpleGameClientModules</i></h2>
+<b>Package:</b> oversim.applications.simplegameclient<br/><b>File: <a href="src-applications-simplegameclient-SimpleGameClient.ned.html">src/applications/simplegameclient/SimpleGameClient.ned</a></b><br/><p>(no description)</p><img src="oversim.applications.simplegameclient.SimpleGameClientModules-type.png" ismap="yes" usemap="#type-diagram"/><map name="type-diagram">
+<area shape="rect" href="oversim.applications.simplegameclient.SimpleGameClient.html" title="SimpleGameClient" alt="SimpleGameClient" coords="18,156,126,211">
+</map>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.applications.simplegameclient.SimpleGameClientModules-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="oversim.applications.simplegameclient.SimpleGameClientModules.html" title="Compound Module SimpleGameClientModules" alt="" coords="35,6,213,34">
+<area shape="rect" id="node2" href="ned.IdealChannel.html" title="Channel IdealChannel" alt="" coords="5,83,104,111">
+<area shape="rect" id="node4" href="oversim.applications.simplegameclient.SimpleGameClient.html" title="Simple Module SimpleGameClient" alt="" coords="128,83,259,111">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-ned-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="oversim.applications.simplegameclient.SimpleGameClientModules-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="oversim.applications.simplegameclient.SimpleGameClientModules.html" title="Compound Module SimpleGameClientModules" alt="" coords="5,83,184,111">
+<area shape="rect" id="node2" href="oversim.common.ITier.html" title="Module Interface ITier" alt="" coords="59,6,131,34">
+</map>
+<h3 class="subtitle">Gates:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Direction</th>
+      <th>Size</th>
+      <th>Description</th>
+   </tr>
+<tr class="local">
+   <td width="150">udpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the UDP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">from_lowerTier</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the lower tier</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">from_upperTier</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the upper tier</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">trace_in</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate for trace file commands</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">tcpIn</xsl:if></td>
+   <td width="100"><i>input</i></td>
+   <td width="50"></td>   <td>
+<p>gate from the TCP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">tcpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the TCP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">udpOut</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the UDP layer</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">to_lowerTier</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the lower tier</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">to_upperTier</xsl:if></td>
+   <td width="100"><i>output</i></td>
+   <td width="50"></td>   <td>
+<p>gate to the upper tier</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Unassigned submodule parameters:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default value</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.rpcUdpTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for direct RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.rpcKeyTimeout</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>default timeout value for routed RPCs</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.optimizeTimeouts</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>calculate timeouts from measured RTTs
+and network coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.rpcExponentialBackoff</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>if true, doubles the timeout for
+every retransmission</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.debugOutput</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>enable debug output</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.movementRate</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>movement updates per second</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.areaDimension</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>movement range from [0.0, 0.0] to [areaDimension, areaDimension]</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.useScenery</td>
+   <td width="100">
+      <i>bool</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>generate scenery for simulated area
+(very slow for large areas, should be false except when used with realworld/simplecraft)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.movementSpeed</td>
+   <td width="100">
+      <i>double</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>movement speed in m/s</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.movementGenerator</td>
+   <td width="100">
+      <i>string</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>responsible for different movement models
+(randomRoaming, groupRoaming, greatGathering, realWorldRoaming)</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.groupSize</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>clients per group</p>
+   </td>
+</tr>
+<tr>
+   <td><a href="oversim.applications.simplegameclient.SimpleGameClient.html">simpleGameClient</a>.mtu</td>
+   <td width="100">
+      <i>int</i>
+   </td>
+   <td width="120"></td>
+   <td>
+<p>maximum transmission unit</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">SimpleGameClientModules</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">like</span><span style="color: #000000; "> </span><span style="color: #000000; ">ITier</span><span style="color: #000000; ">
+{
+    </span><span style="color: #800000; font-weight: bold; ">gates</span><span style="color: #000000; ">:
+        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpIn</span><span style="color: #000000; ">;               </span><span style="color: #808080; font-style: italic; ">// gate from the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">from_lowerTier</span><span style="color: #000000; ">;         </span><span style="color: #808080; font-style: italic; ">// gate from the lower tier
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">from_upperTier</span><span style="color: #000000; ">;         </span><span style="color: #808080; font-style: italic; ">// gate from the upper tier
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">trace_in</span><span style="color: #000000; ">;               </span><span style="color: #808080; font-style: italic; ">// gate for trace file commands
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">input</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpIn</span><span style="color: #000000; ">;                  </span><span style="color: #808080; font-style: italic; ">// gate from the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">tcpOut</span><span style="color: #000000; ">;                </span><span style="color: #808080; font-style: italic; ">// gate to the TCP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">udpOut</span><span style="color: #000000; ">;                </span><span style="color: #808080; font-style: italic; ">// gate to the UDP layer
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">to_lowerTier</span><span style="color: #000000; ">;          </span><span style="color: #808080; font-style: italic; ">// gate to the lower tier
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">output</span><span style="color: #000000; "> </span><span style="color: #000000; ">to_upperTier</span><span style="color: #000000; ">;          </span><span style="color: #808080; font-style: italic; ">// gate to the upper tier
+</span><span style="color: #000000; ">
+    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">simpleGameClient</span><span style="color: #000000; ">: </span><span style="color: #000000; ">SimpleGameClient</span><span style="color: #000000; ">;
+    </span><span style="color: #800000; font-weight: bold; ">connections</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">allowunconnected</span><span style="color: #000000; ">:
+        </span><span style="color: #000000; ">from_lowerTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">simpleGameClient</span><span style="color: #000000; ">.</span><span style="color: #000000; ">from_lowerTier</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">to_lowerTier</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">&lt;--</span><span style="color: #000000; "> </span><span style="color: #000000; ">simpleGameClient</span><span style="color: #000000; ">.</span><span style="color: #000000; ">to_lowerTier</span><span style="color: #000000; ">;
+        </span><span style="color: #000000; ">trace_in</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">--&gt;</span><span style="color: #000000; "> </span><span style="color: #000000; ">simpleGameClient</span><span style="color: #000000; ">.</span><span style="color: #000000; ">trace_in</span><span style="color: #000000; ">;
+}
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

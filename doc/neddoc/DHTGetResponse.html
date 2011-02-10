@@ -1,0 +1,169 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Packet <i>DHTGetResponse</i></h2>
+<b>File: <a href="src-applications-dht-DHTMessage.msg.html">src/applications/dht/DHTMessage.msg</a></b><br/><p><a href="../doxy/classDHTGetResponse.html" target="mainframe"><b>C++ definition</b></a></p>
+<p>(no description)</p><h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="DHTGetResponse-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="DHTGetResponse.html" title="Packet DHTGetResponse" alt="" coords="5,6,136,34">
+<area shape="rect" id="node2" href="DhtDumpEntry.html" title="Class DhtDumpEntry" alt="" coords="16,83,125,111">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="DHTGetResponse-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="DHTGetResponse.html" title="Packet DHTGetResponse" alt="" coords="21,83,152,111">
+<area shape="rect" id="node4" href="CBRDHTGetResponse.html" title="Packet CBRDHTGetResponse" alt="" coords="8,161,165,189">
+<area shape="rect" id="node2" href="BaseResponseMessage.html" title="Packet BaseResponseMessage" alt="" coords="5,6,168,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="BaseResponseMessage.html">BaseResponseMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic Remote-Procedure-Response message</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Known subclasses:</h3>
+<table>
+<tr>
+   <td>
+      <a href="CBRDHTGetResponse.html">CBRDHTGetResponse</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Fields:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">srcNode</td>
+   <td width="100">
+      <i>
+NodeHandle</i>
+   </td>
+   <td>
+<p>source node</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">result</td>
+   <td width="100">
+      <i>
+DhtDumpEntry[]</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">statType</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type for stats</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">authBlock</td>
+   <td width="100">
+      <i>
+AuthBlock[]</i>
+   </td>
+   <td>
+<p>optional authentication block containing a signature</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">nonce</td>
+   <td width="100">
+      <i>
+unsigned int</i>
+   </td>
+   <td>
+<p>nonce to match RPC responses to corresponding calls</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">hashValue</td>
+   <td width="100">
+      <i>
+BinaryValue</i>
+   </td>
+   <td>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">callHopCount</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">type</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">isHash</td>
+   <td width="100">
+      <i>
+bool</i>
+   </td>
+   <td></td>
+</tr>
+<tr class="inherited">
+   <td width="150">ncsInfo</td>
+   <td width="100">
+      <i>
+double[]</i>
+   </td>
+   <td>
+<p>info block for network coordinate systems</p>
+</td>
+</tr>
+<tr class="local">
+   <td width="150">key</td>
+   <td width="100">
+      <i>
+OverlayKey</i>
+   </td>
+   <td></td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">DHTGetResponse</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseResponseMessage</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">key</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">BinaryValue</span><span style="color: #000000; "> </span><span style="color: #000000; ">hashValue</span><span style="color: #000000; ">;
+    </span><span style="color: #000080; font-weight: bold; ">bool</span><span style="color: #000000; "> </span><span style="color: #000000; ">isHash</span><span style="color: #000000; ">;
+    </span><span style="color: #000000; ">DhtDumpEntry</span><span style="color: #000000; "> </span><span style="color: #000000; ">result</span><span style="color: #000000; ">[];
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

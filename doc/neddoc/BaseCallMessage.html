@@ -1,0 +1,499 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Packet <i>BaseCallMessage</i></h2>
+<b>File: <a href="src-common-CommonMessages.msg.html">src/common/CommonMessages.msg</a></b><br/><p><a href="../doxy/classBaseCallMessage.html" target="mainframe"><b>C++ definition</b></a></p>
+
+<p>A basic Remote-Procedure-Call message</p>
+<h3 class="subtitle">Usage diagram:</h3>
+<p>The following diagram shows usage relationships between types.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-usage-diagram.html">here</a> to see the full picture.</p>
+<img src="BaseCallMessage-usage.png" ismap="yes" usemap="#usage-diagram"/><map name="usage-diagram"><area shape="rect" id="node1" href="BaseCallMessage.html" title="Packet BaseCallMessage" alt="" coords="5,6,133,34">
+</map>
+<h3 class="subtitle">Inheritance diagram:</h3>
+<p>The following diagram shows inheritance relationships for this type.
+Unresolved types are missing from the diagram.
+Click <a href="full-msg-inheritance-diagram.html">here</a> to see the full picture.</p>
+<img src="BaseCallMessage-inheritance.png" ismap="yes" usemap="#inheritance-diagram"/><map name="inheritance-diagram"><area shape="rect" id="node1" href="BaseCallMessage.html" title="Packet BaseCallMessage" alt="" coords="2237,83,2365,111">
+<area shape="rect" id="node4" href="BucketCall.html" title="Packet BucketCall" alt="" coords="5,161,91,189">
+<area shape="rect" id="node6" href="CoordsOfNodeCall.html" title="Packet CoordsOfNodeCall" alt="" coords="115,161,245,189">
+<area shape="rect" id="node8" href="CoordsReqCall.html" title="Packet CoordsReqCall" alt="" coords="269,161,379,189">
+<area shape="rect" id="node10" href="DeBruijnCall.html" title="Packet DeBruijnCall" alt="" coords="403,161,496,189">
+<area shape="rect" id="node12" href="DHTdumpCall.html" title="Packet DHTdumpCall" alt="" coords="520,161,624,189">
+<area shape="rect" id="node14" href="DHTGetCall.html" title="Packet DHTGetCall" alt="" coords="648,161,741,189">
+<area shape="rect" id="node16" href="DHTgetCAPICall.html" title="Packet DHTgetCAPICall" alt="" coords="765,161,888,189">
+<area shape="rect" id="node18" href="DHTPutCall.html" title="Packet DHTPutCall" alt="" coords="912,161,1005,189">
+<area shape="rect" id="node20" href="DHTputCAPICall.html" title="Packet DHTputCAPICall" alt="" coords="1029,161,1152,189">
+<area shape="rect" id="node22" href="FailedNodeCall.html" title="Packet FailedNodeCall" alt="" coords="1176,161,1285,189">
+<area shape="rect" id="node24" href="FindNodeCall.html" title="Packet FindNodeCall" alt="" coords="1309,161,1411,189">
+<area shape="rect" id="node26" href="FixfingersCall.html" title="Packet FixfingersCall" alt="" coords="1435,161,1536,189">
+<area shape="rect" id="node28" href="JoinCall.html" title="Packet JoinCall" alt="" coords="1560,161,1632,189">
+<area shape="rect" id="node30" href="KbrTestCall.html" title="Packet KbrTestCall" alt="" coords="1656,161,1747,189">
+<area shape="rect" id="node32" href="LookupCall.html" title="Packet LookupCall" alt="" coords="1771,161,1856,189">
+<area shape="rect" id="node34" href="MyNeighborCall.html" title="Packet MyNeighborCall" alt="" coords="1880,161,1995,189">
+<area shape="rect" id="node36" href="NextHopCall.html" title="Packet NextHopCall" alt="" coords="2019,161,2115,189">
+<area shape="rect" id="node38" href="NotifyCall.html" title="Packet NotifyCall" alt="" coords="2139,161,2219,189">
+<area shape="rect" id="node40" href="NTreeDivideCall.html" title="Packet NTreeDivideCall" alt="" coords="2243,161,2360,189">
+<area shape="rect" id="node42" href="NTreeJoinCall.html" title="Packet NTreeJoinCall" alt="" coords="2384,161,2488,189">
+<area shape="rect" id="node44" href="NTreePingCall.html" title="Packet NTreePingCall" alt="" coords="2512,161,2619,189">
+<area shape="rect" id="node46" href="P2pnsRegisterCall.html" title="Packet P2pnsRegisterCall" alt="" coords="2643,161,2773,189">
+<area shape="rect" id="node48" href="P2pnsResolveCall.html" title="Packet P2pnsResolveCall" alt="" coords="2797,161,2928,189">
+<area shape="rect" id="node50" href="PingCall.html" title="Packet PingCall" alt="" coords="2952,161,3024,189">
+<area shape="rect" id="node52" href="PubSubAdoptChildCall.html" title="Packet PubSubAdoptChildCall" alt="" coords="3048,161,3203,189">
+<area shape="rect" id="node54" href="PubSubBackupCall.html" title="Packet PubSubBackupCall" alt="" coords="3227,161,3360,189">
+<area shape="rect" id="node56" href="PubSubHelpCall.html" title="Packet PubSubHelpCall" alt="" coords="3384,161,3501,189">
+<area shape="rect" id="node58" href="PubSubIntermediateCall.html" title="Packet PubSubIntermediateCall" alt="" coords="3525,161,3688,189">
+<area shape="rect" id="node60" href="PubSubJoinCall.html" title="Packet PubSubJoinCall" alt="" coords="3712,161,3827,189">
+<area shape="rect" id="node62" href="PubSubPingCall.html" title="Packet PubSubPingCall" alt="" coords="3851,161,3968,189">
+<area shape="rect" id="node64" href="PubSubResponsibleNodeCall.html" title="Packet PubSubResponsibleNodeCall" alt="" coords="3992,161,4187,189">
+<area shape="rect" id="node66" href="PubSubSubscriptionCall.html" title="Packet PubSubSubscriptionCall" alt="" coords="4211,161,4373,189">
+<area shape="rect" id="node68" href="PubSubTakeOverSubspaceCall.html" title="Packet PubSubTakeOverSubspaceCall" alt="" coords="4397,161,4603,189">
+<area shape="rect" id="node70" href="RttToNodeCall.html" title="Packet RttToNodeCall" alt="" coords="4627,161,4736,189">
+<area shape="rect" id="node72" href="ScribeJoinCall.html" title="Packet ScribeJoinCall" alt="" coords="4760,161,4867,189">
+<area shape="rect" id="node74" href="ScribePublishCall.html" title="Packet ScribePublishCall" alt="" coords="4891,161,5016,189">
+<area shape="rect" id="node76" href="StabilizeCall.html" title="Packet StabilizeCall" alt="" coords="5040,161,5133,189">
+<area shape="rect" id="node2" href="BaseRpcMessage.html" title="Packet BaseRpcMessage" alt="" coords="2237,6,2365,34">
+</map>
+<h3 class="subtitle">Extends:</h3>
+<table>
+<tr>
+   <td>
+      <a href="BaseRpcMessage.html">BaseRpcMessage</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic Remote-Procedure-Call message used for calls and return values</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Known subclasses:</h3>
+<table>
+<tr>
+   <td>
+      <a href="BucketCall.html">BucketCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>requests a bucket from the destination node</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="CoordsOfNodeCall.html">CoordsOfNodeCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Ping RPC Call asking for Coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="CoordsReqCall.html">CoordsReqCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>RPC Call asking for Coordinates</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DeBruijnCall.html">DeBruijnCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTdumpCall.html">DHTdumpCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Request to dump all local <a href="oversim.applications.dht.DHT.html">DHT</a> records</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTGetCall.html">DHTGetCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTgetCAPICall.html">DHTgetCAPICall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type to order the value corresponding to the OverlayKey key from the node responsible of key</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTPutCall.html">DHTPutCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="DHTputCAPICall.html">DHTputCAPICall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message type to store value at the keys root</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FailedNodeCall.html">FailedNodeCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic failed node notification</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FindNodeCall.html">FindNodeCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic find node rpc response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="FixfingersCall.html">FixfingersCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to verify our <a href="oversim.overlay.chord.ChordFingerTable.html">ChordFingerTable</a></p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="JoinCall.html">JoinCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to join a chord overlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="KbrTestCall.html">KbrTestCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic find node rpc response</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="LookupCall.html">LookupCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Internal RPC to ask overlay to start a lookup</p>
+<p><b>Author:</b> Ingmar Baumgart</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="MyNeighborCall.html">MyNeighborCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NextHopCall.html">NextHopCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A next hop rpc call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NotifyCall.html">NotifyCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used to inform about existing predecessors</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NTreeDivideCall.html">NTreeDivideCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NTreeJoinCall.html">NTreeJoinCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="NTreePingCall.html">NTreePingCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="P2pnsRegisterCall.html">P2pnsRegisterCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>P2PNS Register RPC Call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="P2pnsResolveCall.html">P2pnsResolveCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>P2PNS Resolve RPC Call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PingCall.html">PingCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>A basic ping rpc call</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubAdoptChildCall.html">PubSubAdoptChildCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubBackupCall.html">PubSubBackupCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubHelpCall.html">PubSubHelpCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubIntermediateCall.html">PubSubIntermediateCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubJoinCall.html">PubSubJoinCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubPingCall.html">PubSubPingCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubResponsibleNodeCall.html">PubSubResponsibleNodeCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubSubscriptionCall.html">PubSubSubscriptionCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="PubSubTakeOverSubspaceCall.html">PubSubTakeOverSubspaceCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="RttToNodeCall.html">RttToNodeCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Ping RPC Call asking for RTT to Node</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribeJoinCall.html">ScribeJoinCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="ScribePublishCall.html">ScribePublishCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="StabilizeCall.html">StabilizeCall</a>
+      <i> (packet)</i>
+   </td>
+   <td>
+
+<p>Message used for the  stabilization protocol as mentioned in 
+"<a href="oversim.overlay.chord.Chord.html">Chord</a>: A Scalable Peer-to-Peer Lookup Protocol for Internet Applications"</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Fields:</h3>
+<table class="paramtable">
+   <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+   </tr>
+<tr class="inherited">
+   <td width="150">srcNode</td>
+   <td width="100">
+      <i>
+NodeHandle</i>
+   </td>
+   <td>
+<p>source node</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">statType</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type for stats</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">authBlock</td>
+   <td width="100">
+      <i>
+AuthBlock[]</i>
+   </td>
+   <td>
+<p>optional authentication block containing a signature</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">nonce</td>
+   <td width="100">
+      <i>
+unsigned int</i>
+   </td>
+   <td>
+<p>nonce to match RPC responses to corresponding calls</p>
+</td>
+</tr>
+<tr class="inherited">
+   <td width="150">type</td>
+   <td width="100">
+      <i>
+int</i>
+   </td>
+   <td>
+<p>message type</p>
+</td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// A basic Remote-Procedure-Call message
+//
+</span><span style="color: #800000; font-weight: bold; ">packet</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseCallMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseRpcMessage</span><span style="color: #000000; ">
+{
+}
+
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

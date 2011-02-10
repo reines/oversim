@@ -1,0 +1,377 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2>Package oversim.common</h2>
+<table class="typetable">
+   <tr>
+      <th>Name</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td>
+      <a href="oversim.common.BaseApp.html">BaseApp</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Base class for application implementations</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.BaseOverlay.html">BaseOverlay</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Base class for overlay implementations</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.BaseRpc.html">BaseRpc</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Base module for simple RPC communication</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.BootstrapList.html">BootstrapList</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>The <a href="oversim.common.BootstrapList.html">BootstrapList</a> module maintains a list of bootstrap node
+candidates received from various sources (<a href="oversim.common.GlobalNodeList.html">GlobalNodeList</a> for
+simulations and Zeroconf for SingleHostUnderlay). This list is also
+used to detect overlay partitions and triggers the merging process.</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.ChurnGenerator.html">ChurnGenerator</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p><a href="oversim.common.ChurnGenerator.html">ChurnGenerator</a> base module</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.CryptoModule.html">CryptoModule</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>The <a href="oversim.common.CryptoModule.html">CryptoModule</a> contains several methods used for message authentication. It is also used as a container for
+crypographic keys.</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.FinisherModule.html">FinisherModule</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Dummy module which is created and destroyed at last to call
+<a href="oversim.common.GlobalStatistics.html">GlobalStatistics</a>::finalizeStatistics()</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.GenericPacketParser.html">GenericPacketParser</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>A message parser using the cMemCommBuffer to serialize cmessages</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.GlobalFunctions.html">GlobalFunctions</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.GlobalNodeList.html">GlobalNodeList</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Global module that supports bootstrap process and key distribution</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.GlobalObserver.html">GlobalObserver</a>
+      <i> (compound&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>global module that contains the globalNodeList and the globalStatistics module</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.GlobalParameters.html">GlobalParameters</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Module for storing global simulation parameters</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.GlobalStatistics.html">GlobalStatistics</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Module to record global statistics</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.GlobalTraceManager.html">GlobalTraceManager</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.IGlobalFunctions.html">IGlobalFunctions</a>
+      <i> (module&nbsp;interface)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.inet_dialup_56k.html">inet_dialup_56k</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+
+<p>56k modem channel for InetUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.inet_dsl.html">inet_dsl</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+
+<p>DSL channel for InetUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.inet_dsl_lossy.html">inet_dsl_lossy</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+
+<p>DSL channel with packet loss for InetUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.inet_ethernetline.html">inet_ethernetline</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+
+<p>Ethernet channel for InetUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.inet_ethernetline_lossy.html">inet_ethernetline_lossy</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+
+<p>Ethernet channel with packet loss for InetUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.inet_fiberline.html">inet_fiberline</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+
+<p>Fiberline channel for InetUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.IOverlay.html">IOverlay</a>
+      <i> (module&nbsp;interface)</i>
+   </td>
+   <td>
+
+<p>Interface for overlay compound modules</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.IPacketParser.html">IPacketParser</a>
+      <i> (module&nbsp;interface)</i>
+   </td>
+   <td>
+
+<p>Module that performs parsing of the payload of packets that are send to or received by the tun device</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.ITier.html">ITier</a>
+      <i> (module&nbsp;interface)</i>
+   </td>
+   <td>
+
+<p>Interface for tier compound modules</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.LifetimeChurn.html">LifetimeChurn</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.NeighborCache.html">NeighborCache</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Module for collecting neighborhood information (rtt, coordinates, ...)</p>
+<p><b>Author:</b> Bernhard Heep</p>
+<p><b>Author:</b> Antonio Zea</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.NoChurn.html">NoChurn</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>No churn generating class (only bootstraps a networks)</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.ParetoChurn.html">ParetoChurn</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Lifetime churn based on shifted pareto distribution</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.RandomChurn.html">RandomChurn</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>Random churn generating module</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.simple_dsl.html">simple_dsl</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+
+<p>DSL channel for SimpleUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.simple_dsl_lossy.html">simple_dsl_lossy</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+
+<p>DSL channel with packet loss for SimpleUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.simple_ethernetline.html">simple_ethernetline</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+
+<p>Ethernet channel for SimpleUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.simple_ethernetline_lossy.html">simple_ethernetline_lossy</a>
+      <i> (channel)</i>
+   </td>
+   <td>
+
+<p>Ethernet channel with packet loss for SimpleUnderlay</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.TierDummy.html">TierDummy</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p>A dummy module for Tier1-3 modules</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.TraceChurn.html">TraceChurn</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="oversim.common.UnderlayConfigurator.html">UnderlayConfigurator</a>
+      <i> (simple&nbsp;module)</i>
+   </td>
+   <td>
+
+<p><a href="oversim.common.UnderlayConfigurator.html">UnderlayConfigurator</a> base module</p>
+   </td>
+</tr>
+</table>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

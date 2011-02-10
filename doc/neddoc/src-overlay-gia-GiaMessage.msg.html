@@ -1,0 +1,271 @@
+<html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="style.css" />
+   </head>
+   <body onload="">
+<h2 class="comptitle">Msg File <i>src/overlay/gia/GiaMessage.msg</i></h2>
+<table class="typetable">
+   <tr>
+      <th>Name</th>
+      <th>Description</th>
+   </tr>
+<tr>
+   <td>
+      <a href="GIACommand.html">GIACommand</a>
+      <i> (enum)</i>
+   </td>
+   <td>
+
+<p>Some constants for Command-Field</p>
+<p><b>Author:</b> Robert Palmer</p>
+<p><b>TODO:</b> change names in enum</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GiaMessage.html">GiaMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+
+<p>Main GIA-Message definition</p>
+<p><b>Author:</b> Robert Palmer</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GiaNeighborMessage.html">GiaNeighborMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+<i>(no description)</i>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="TokenMessage.html">TokenMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+
+<p>Used for sending a token to a destination node</p>
+<p><b>Author:</b> Robert Palmer</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GiaIDMessage.html">GiaIDMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+
+<p>A <a href="GiaMessage.html">GiaMessage</a> extended by an unique ID-Field</p>
+<p><b>Author:</b> Robert Palmer</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="GiaRouteMessage.html">GiaRouteMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+
+<p>Send a route message to a destination node</p>
+<p><b>Author:</b> Robert Palmer</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="KeyListMessage.html">KeyListMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+
+<p>Send a keylist to a neighbor node</p>
+<p><b>Author:</b> Robert Palmer</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="SearchMessage.html">SearchMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+
+<p>Search message </p>
+<p><b>Author:</b> Robert Palmer</p>
+   </td>
+</tr>
+<tr>
+   <td>
+      <a href="SearchResponseMessage.html">SearchResponseMessage</a>
+      <i> (message)</i>
+   </td>
+   <td>
+
+<p>Search response message </p>
+<p><b>Author:</b> Robert Palmer</p>
+   </td>
+</tr>
+</table>
+<h3 class="subtitle">Source code:</h3>
+<pre class="src"><span style="color: #808080; font-style: italic; ">//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
+</span><span style="color: #000000; ">
+</span><span style="color: #808080; font-style: italic; ">//
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Robert Palmer, Bernhard Heep
+//
+</span><span style="color: #800000; font-weight: bold; ">cplusplus</span><span style="color: #000000; "> {{
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">IPvXAddress</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">GiaNode</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+#</span><span style="color: #000000; ">include</span><span style="color: #000000; "> &lt;</span><span style="color: #000000; ">CommonMessages_m</span><span style="color: #000000; ">.</span><span style="color: #000000; ">h</span><span style="color: #000000; ">&gt;
+
+</span><span style="color: #808080; font-style: italic; ">// constants for message length in bit
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">GIACOMMAND_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">CAPACITY_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">32</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">DEGREE_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">16</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">TOKENNR_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">16</span><span style="color: #000000; ">;
+</span><span style="color: #000000; ">static</span><span style="color: #000000; "> </span><span style="color: #000000; ">const</span><span style="color: #000000; "> </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">MAXRESPONSES_L</span><span style="color: #000000; "> = </span><span style="color: #008000; ">16</span><span style="color: #000000; ">;
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">GIANODE_L</span><span style="color: #000000; "> (</span><span style="color: #000000; ">CAPACITY_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">DEGREE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> + </span><span style="color: #008000; ">2</span><span style="color: #000000; "> * </span><span style="color: #000000; ">TOKENNR_L</span><span style="color: #000000; ">)
+
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">GIA_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">BASEOVERLAY_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">NODEHANDLE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">HOPCOUNT_L</span><span style="color: #000000; "> + \
+	            </span><span style="color: #000000; ">GIACOMMAND_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">CAPACITY_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">DEGREE_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">GIANEIGHBOR_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">GIA_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getNeighborsArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">GIANODE_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">TOKEN_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">GIA_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #008000; ">2</span><span style="color: #000000; "> * </span><span style="color: #000000; ">TOKENNR_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">GIAID_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">GIA_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">GIAROUTE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">GIAID_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">IPADDR_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">UDPPORT_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">KEYLIST_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">GIA_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + (</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getKeysArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; ">))
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">SEARCH_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">GIAID_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">MAXRESPONSES_L</span><span style="color: #000000; "> + \
+	               </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getReversePathArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; "> + \
+		       </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getFoundNodeArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; ">)
+#</span><span style="color: #000000; ">define</span><span style="color: #000000; "> </span><span style="color: #000000; ">SEARCHRESPONSE_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) (</span><span style="color: #000000; ">GIAID_L</span><span style="color: #000000; ">(</span><span style="color: #000000; ">msg</span><span style="color: #000000; ">) + </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">msg</span><span style="color: #000000; ">-&gt;</span><span style="color: #000000; ">getReversePathArraySize</span><span style="color: #000000; ">() * </span><span style="color: #000000; ">KEY_L</span><span style="color: #000000; "> + \
+	                       </span><span style="color: #000000; ">GIANODE_L</span><span style="color: #000000; "> + </span><span style="color: #000000; ">HOPCOUNT_L</span><span style="color: #000000; ">)
+}};
+
+
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">IPvXAddress</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaNode</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">noncobject</span><span style="color: #000000; "> </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; ">;
+</span><span style="color: #800000; font-weight: bold; ">class</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">;
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Some constants for Command-Field
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Robert Palmer
+// </span><span style="color: #000080; ">@todo</span><span style="color: #808080; font-style: italic; "> change names in enum
+//
+</span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; "> </span><span style="color: #000000; ">GIACommand</span><span style="color: #000000; ">
+{
+    </span><span style="color: #000000; ">JOIN_REQUEST</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// JOIN_REQUEST-Message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">JOIN_RESPONSE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">1</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// JOIN_RESPONSE-Message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">JOIN_ACK</span><span style="color: #000000; "> = </span><span style="color: #008000; ">2</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// JOIN_ACK-Message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">JOIN_DENY</span><span style="color: #000000; "> = </span><span style="color: #008000; ">3</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// JOIN_DENY-Message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">DISCONNECT</span><span style="color: #000000; "> = </span><span style="color: #008000; ">4</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// DISCONNECT-Message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">ROUTE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">5</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// ROUTE-Message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">SEARCH</span><span style="color: #000000; "> = </span><span style="color: #008000; ">6</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// SEARCH-Message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">ANSWER</span><span style="color: #000000; "> = </span><span style="color: #008000; ">7</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// ANSWER-Message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">UPDATE</span><span style="color: #000000; "> = </span><span style="color: #008000; ">8</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// UPDATE-Message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">TOKEN</span><span style="color: #000000; "> = </span><span style="color: #008000; ">9</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// TOKEN-Message
+</span><span style="color: #000000; ">    </span><span style="color: #000000; ">KEYLIST</span><span style="color: #000000; ">= </span><span style="color: #008000; ">10</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// KEYLIST-Message
+</span><span style="color: #000000; ">};
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Main GIA-Message definition
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Robert Palmer
+//
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">BaseOverlayMessage</span><span style="color: #000000; ">
+{
+       </span><span style="color: #000000; ">NodeHandle</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcNode</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// source node
+</span><span style="color: #000000; ">       </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">hopCount</span><span style="color: #000000; "> = </span><span style="color: #008000; ">0</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// hop count, increased by BaseOverlay
+</span><span style="color: #000000; ">       </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">command</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">enum</span><span style="color: #000000; ">(</span><span style="color: #000000; ">GIACommand</span><span style="color: #000000; ">);    </span><span style="color: #808080; font-style: italic; ">// COMMAND-Field
+</span><span style="color: #000000; ">       </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcCapacity</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// capacity of source node
+</span><span style="color: #000000; ">       </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcDegree</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// neighbor count of source node
+</span><span style="color: #000000; ">};
+
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaNeighborMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">GiaNode</span><span style="color: #000000; "> </span><span style="color: #000000; ">neighbors</span><span style="color: #000000; ">[];
+};
+ 
+</span><span style="color: #808080; font-style: italic; ">//
+// Used for sending a token to a destination node
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Robert Palmer
+//
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">TokenMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaMessage</span><span style="color: #000000; ">
+{
+       </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">srcTokenNr</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// how many tokens received from destination node
+</span><span style="color: #000000; ">       </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">dstTokenNr</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// how many tokens sent to destination node
+</span><span style="color: #000000; ">};
+
+</span><span style="color: #808080; font-style: italic; ">//
+// A GiaMessage extended by an unique ID-Field
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Robert Palmer
+//
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaIDMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">destKey</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// destination key, may be undefined
+</span><span style="color: #000000; ">        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">ID</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// unique message id
+</span><span style="color: #000000; ">};
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Send a route message to a destination node
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Robert Palmer
+//
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaRouteMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaIDMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">originatorKey</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// unique key (id) of the originator of this route message
+</span><span style="color: #000000; ">        </span><span style="color: #000000; ">IPvXAddress</span><span style="color: #000000; "> </span><span style="color: #000000; ">originatorIP</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// IP of the originator of this route message
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">originatorPort</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// UDP-Port of the originator of this route message
+</span><span style="color: #000000; ">};
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Send a keylist to a neighbor node
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Robert Palmer
+//
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">KeyListMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaMessage</span><span style="color: #000000; ">
+{
+       </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">keys</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// vector of search keys
+</span><span style="color: #000000; ">};
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Search message 
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Robert Palmer
+//
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">SearchMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaIDMessage</span><span style="color: #000000; ">
+{
+        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">searchKey</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// searched key
+</span><span style="color: #000000; ">        </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">maxResponses</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// maximum responses to this search message
+</span><span style="color: #000000; ">        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">reversePath</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// vector containing all nodes which this search message passes
+</span><span style="color: #000000; ">        </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">foundNode</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// vector containing all nodes which contain the searched key
+</span><span style="color: #000000; ">};
+
+</span><span style="color: #808080; font-style: italic; ">//
+// Search response message 
+// </span><span style="color: #000080; ">@author</span><span style="color: #808080; font-style: italic; "> Robert Palmer
+//
+</span><span style="color: #800000; font-weight: bold; ">message</span><span style="color: #000000; "> </span><span style="color: #000000; ">SearchResponseMessage</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">GiaIDMessage</span><span style="color: #000000; ">
+{
+       </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">searchKey</span><span style="color: #000000; ">;	    </span><span style="color: #808080; font-style: italic; ">// searched key
+</span><span style="color: #000000; ">       </span><span style="color: #000000; ">OverlayKey</span><span style="color: #000000; "> </span><span style="color: #000000; ">reversePath</span><span style="color: #000000; ">[];    </span><span style="color: #808080; font-style: italic; ">// vector containing all remaining nodes which the search message passed
+</span><span style="color: #000000; ">       </span><span style="color: #000000; ">GiaNode</span><span style="color: #000000; "> </span><span style="color: #000000; ">foundNode</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// this node contains the searched key
+</span><span style="color: #000000; ">       </span><span style="color: #000080; font-weight: bold; ">int</span><span style="color: #000000; "> </span><span style="color: #000000; ">searchHopCount</span><span style="color: #000000; ">;    </span><span style="color: #808080; font-style: italic; ">// how many hops from foundNode to the originator of the search message were necessary
+</span><span style="color: #000000; ">};
+</span></pre>
+   <hr><p class="footer"><a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top"><img src="by-sa.png"></a> This documentation is released under the <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_top">Creative Commons license</a></p>
+   </body>
+</html>

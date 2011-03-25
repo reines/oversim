@@ -121,6 +121,7 @@ protected:
     uint32_t finishedPaths;             /**< number of finished paths */
     uint32_t successfulPaths;           /**< number of successful paths */
     uint32_t accumulatedHops;           /**< total number of hops (for all paths) */
+    uint32_t minHops;                   /**< min number of hops (for successful paths) */
     bool finished;                  /**< true, if lookup is finished */
     bool success;                   /**< true, if lookup was successful */
     bool running;                   /**< true, if lookup is running */
@@ -277,6 +278,7 @@ public://methods
     void abortLookup();
 
     uint32_t getAccumulatedHops() const;
+    uint32_t getMinHops() const;
 };
 
 /**

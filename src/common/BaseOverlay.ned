@@ -38,6 +38,7 @@ simple BaseOverlay extends BaseRpc
         int recNumRedundantNodes; // numRedundantNodes for recursive routing
         bool joinOnApplicationRequest; // only join the overlay on application request
         bool collectPerHopDelay; // delay statistics for single hops
+        bool countAccumulatedHops; // count accumulated or minimum hops for a path
         bool routeMsgAcks; // use RPCs for route messages
         int lookupRedundantNodes; // number of next hops in each step
         int lookupParallelPaths; // number of parallel paths

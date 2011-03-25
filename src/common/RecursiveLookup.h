@@ -90,6 +90,7 @@ public:
      * @return The accumulated number of hops.
      */
     virtual uint32_t getAccumulatedHops() const;
+    virtual uint32_t getMinHops() const;
 
     void handleRpcTimeout(BaseCallMessage* msg,
                           const TransportAddress& dest,

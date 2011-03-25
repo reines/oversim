@@ -192,6 +192,7 @@ protected://fields: overlay attributes
     RoutingType defaultRoutingType;
     bool useCommonAPIforward;   /**< forward messages to applications? */
     bool collectPerHopDelay;    /**< collect delay for single hops */
+    bool countAccumulatedHops;  /**< count accumulated or minimum hops for a path */
     bool routeMsgAcks;          /**< send ACK when receiving route message */
     uint32_t recNumRedundantNodes;  /**< numRedundantNodes for recursive routing */
     bool recordRoute;   /**< record visited hops on route */
@@ -289,6 +290,7 @@ public://methods: getters and setters
 
     const simtime_t& getCreationTime() { return creationTime; };
 
+    bool isCountAccumulatedHops() { return countAccumulatedHops; };
 
     //------------------------------------------------------------------------
     //--- UDP functions copied from the INET framework .----------------------

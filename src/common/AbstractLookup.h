@@ -83,6 +83,7 @@ public:
      * @return The accumulated number of hops.
      */
     virtual uint32_t getAccumulatedHops() const = 0;
+    virtual uint32_t getMinHops() const = 0;
 
 };
 

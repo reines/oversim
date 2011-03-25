@@ -100,6 +100,7 @@ void BaseOverlay::initialize(int stage)
         // fetch some parameters
         debugOutput = par("debugOutput");
         collectPerHopDelay = par("collectPerHopDelay");
+        countAccumulatedHops = par("countAccumulatedHops");
         localPort = par("localPort");
         hopCountMax = par("hopCountMax");
         drawOverlayTopology = par("drawOverlayTopology");
@@ -1247,7 +1248,7 @@ public:
                           "but empty array." << endl;
                 } else {
                     routeMsg->setHopCount(routeMsg->getHopCount()
-                                          + lookup->getAccumulatedHops());
+                                          + (overlay->isCountAccumulatedHops() ? lookup->getAccumulatedHops() : lookup->getMinHops()));
 
                     for (uint32_t i=0; i<lookup->getResult().size(); i++) {
                         overlay->sendRouteMessage(lookup->getResult()[i],
@@ -1272,7 +1273,7 @@ public:
             LookupCall* call = static_cast<LookupCall*>(msg);
             LookupResponse* response = new LookupResponse();
             response->setKey(call->getKey());
-            response->setHopCount(lookup->getAccumulatedHops());
+            response->setHopCount(overlay->isCountAccumulatedHops() ? lookup->getAccumulatedHops() : lookup->getMinHops());
             if (lookup->isValid()) {
                 response->setIsValid(true);
                 response->setSiblingsArraySize(lookup->getResult().size());

@@ -92,6 +92,12 @@ uint32_t RecursiveLookup::getAccumulatedHops() const
     return 0; //TODO hopCount in findNodeCall/Response ?
 }
 
+uint32_t RecursiveLookup::getMinHops() const
+{
+    //throw new cRuntimeError("RecursiveLookup is asked for min # hops!");
+    return 0; //TODO hopCount in findNodeCall/Response ?
+}
+
 void RecursiveLookup::handleRpcTimeout(BaseCallMessage* msg,
                                        const TransportAddress& dest,
                                        cPolymorphic* context, int rpcId,

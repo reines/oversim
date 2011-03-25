@@ -22,6 +22,7 @@
  */
 
 #include <iostream>
+#include <limits>
 #include <assert.h>
 
 #include <UnderlayConfigurator.h>
@@ -134,6 +135,7 @@ void IterativeLookup::start()
     successfulPaths = 0;
     finishedPaths   = 0;
     accumulatedHops = 0;
+    minHops = numeric_limits<int>::max();
 
     // init flags
     finished = false;
@@ -547,6 +549,8 @@ void IterativeLookup::handleRpcResponse(BaseResponseMessage* msg,
 
                 // count total number of hops
                 accumulatedHops += info.path->hops;
+                if (info.path->hops < minHops)
+                    minHops = info.path->hops;
 
                 if (info.path->success)
                     successfulPaths++;
@@ -623,6 +627,8 @@ void IterativeLookup::handleRpcTimeout(BaseCallMessage* msg,
 
             // count total number of hops
             accumulatedHops += info.path->hops;
+            if (info.path->hops < minHops)
+                minHops = info.path->hops;
 
             if (info.path->success)
                 successfulPaths++;
@@ -714,6 +720,15 @@ bool IterativeLookup::isValid() const
 uint32_t IterativeLookup::getAccumulatedHops() const
 {
     return accumulatedHops;
+}
+
+uint32_t IterativeLookup::getMinHops() const
+{
+    // if minHops hasn't been changed then we took 0
+    if (minHops == numeric_limits<int>::max())
+        return 0;
+
+    return minHops;
 }
 
 IterativePathLookup::IterativePathLookup(IterativeLookup* lookup)

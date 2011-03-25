@@ -261,6 +261,24 @@ OverlayKey& OverlayKey::operator-=( const OverlayKey& rhs )
     return *this;
 }
 
+// mul assign operator
+OverlayKey& OverlayKey::operator*=( const OverlayKey& rhs )
+{
+    mpn_mul_n((mp_limb_t*)key, (mp_limb_t*)key, (mp_limb_t*)rhs.key, aSize);
+    trim();
+    isUnspec = false;
+    return *this;
+}
+
+// div assign operator
+OverlayKey& OverlayKey::operator/=( const OverlayKey& rhs )
+{
+    mpn_divrem_1((mp_limb_t*)key, 0, (mp_limb_t*)key, aSize, *(mp_limb_t*)rhs.key);
+    trim();
+    isUnspec = false;
+    return *this;
+}
+
 // add operator
 OverlayKey OverlayKey::operator+(const OverlayKey& rhs) const
 {
@@ -275,6 +293,22 @@ OverlayKey OverlayKey::operator-(const OverlayKey& rhs) const
     OverlayKey result = *this;
     result -= rhs;
     return result;
+}
+
+// mul operator
+OverlayKey OverlayKey::operator*(const OverlayKey& rhs) const
+{
+	OverlayKey result = *this;
+	result *= rhs;
+	return result;
+}
+
+// div operator
+OverlayKey OverlayKey::operator/(const OverlayKey& rhs) const
+{
+	OverlayKey result = *this;
+	result /= rhs;
+	return result;
 }
 
 // compare operators
@@ -690,6 +724,8 @@ void OverlayKey::test()
     OverlayKey key = 123456789;
     cout << "    key=" << key << endl;
     cout << "    key += 987654321 = " << (key+=987654321) << endl;
+    cout << "    key *= 2 = " << (key*=2) << endl;
+    cout << "    key /= 2 = " << (key/=2) << endl;
     cout << "    prefix++  : " << (++key) << endl;
     cout << "    postfix++ : " << (key++) << endl;
     cout << "    key=" << key << endl;

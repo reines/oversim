@@ -221,7 +221,10 @@ void DHTTestApp::handleGetResponse(DHTgetCAPIResponse* msg,
             //cout << "DHTTestApp: wrong value" << endl;
             //cout << "value: " << msg->getResult(0).getValue() << endl;
             return;
-        } else {
+        } else if (msg->getResultArraySize() == 0) {
+			RECORD_STATS(numGetError++);
+			// received a response with no value
+		} else {
             RECORD_STATS(numGetSuccess++);
             //cout << "DHTTestApp: success (2)" << endl;
             return;

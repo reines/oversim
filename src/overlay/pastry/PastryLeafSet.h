@@ -192,6 +192,9 @@ class PastryLeafSet : public PastryStateObject
      */
     PastryNewLeafsMessage* getNewLeafsMessage(void);
 
+    std::vector<NodeHandle>::iterator begin();
+    std::vector<NodeHandle>::iterator end();
+
   private:
     uint32_t numberOfLeaves;
     simtime_t repairTimeout;

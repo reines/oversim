@@ -77,4 +77,3 @@ module DHTModules like ITier
         to_upperTier <-- dht.to_upperTier;
 
 }
-

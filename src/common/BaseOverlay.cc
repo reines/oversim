@@ -2056,3 +2056,16 @@ bool BaseOverlay::isInSimpleMultiOverlayHost()
     return isVector() || getParentModule()->isVector();
 }
 
+bool BaseOverlay::forwardAndForget(BroadcastRequestCall* call)
+{
+    Enter_Method_Silent();
+
+    return false;
+}
+
+std::list<const BroadcastInfo*> BaseOverlay::forwardBroadcast(BroadcastRequestCall* call)
+{
+    Enter_Method_Silent();
+
+    throw cRuntimeError("forwardBroadcast(): Not implemented!");
+}

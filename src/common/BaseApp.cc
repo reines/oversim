@@ -430,6 +430,11 @@ void BaseApp::handleReadyMessage(CompReadyMessage* msg)
     delete msg;
 }
 
+void BaseApp::handleTimerEvent(cMessage* msg)
+{
+    delete msg;
+}
+
 void BaseApp::handleTraceMessage(cMessage* msg)
 {
     throw cRuntimeError("This application cannot handle trace data. "

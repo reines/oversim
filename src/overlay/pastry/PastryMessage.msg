@@ -33,6 +33,7 @@ static const int PASTRYREQUESTTYPE_L = 0;
 static const int LASTHOPFLAG_L = 8;
 static const int TIMESTAMP_L = 32;
 static const int PASTRYFINDNODEEXTDATA_L = NODEHANDLE_L + HOPCOUNT_L;
+static const int LIMIT_L = 8;
 
 #define PASTRY_L(msg) (BASEOVERLAY_L(msg) + PASTRYTYPE_L)
 #define PASTRYJOIN_L(msg) (PASTRY_L(msg) + TRANSPORTADDRESS_L + HOPCOUNT_L)
@@ -49,6 +50,8 @@ static const int PASTRYFINDNODEEXTDATA_L = NODEHANDLE_L + HOPCOUNT_L;
 #define PASTRYRTREQ_L(msg) (PASTRY_L(msg) + TRANSPORTADDRESS_L)
 #define PASTRYRTABLE_L(msg) (PASTRY_L(msg) + TRANSPORTADDRESS_L \
         + NODEHANDLE_L * msg->getRoutingTableArraySize() + ARRAYSIZE_L)
+
+#define PASTRYBROADCASTINFO_L(msg) (LIMIT_L + 1 + (2 * KEY_L))
 }}
 
 
@@ -61,6 +64,7 @@ class BaseOverlayMessage;
 class BaseCallMessage;
 class BaseResponseMessage;
 class BaseAppDataMessage;
+class BroadcastInfo;
 
 
 enum PastryMsgType
@@ -176,3 +180,10 @@ packet PastryRequestMessage extends PastryMessage
 }
 
 
+packet PastryBroadcastInfo
+{
+    int limit;
+    bool midpoint = false;
+    OverlayKey domainStart = OverlayKey::UNSPECIFIED_KEY;
+    OverlayKey domainEnd = OverlayKey::UNSPECIFIED_KEY;
+}

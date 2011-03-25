@@ -183,7 +183,17 @@ class PastryRoutingTable : public PastryStateObject
      */
     virtual void dumpToVector(std::vector<TransportAddress>& affected) const;
 
+    /**
+     * returns routing table entry at specified position
+     *
+     * @param row the number of the row
+     * @param col the number of the column
+     */
+    const PastryExtendedNode& nodeAt(uint32_t row, uint32_t col) const;
+
     uint32_t nodesPerRow; //TODO getter/setter + private
+
+    OverlayKey getPrefix(int row, int col);
 
   private:
     double repairTimeout;
@@ -205,14 +215,6 @@ class PastryRoutingTable : public PastryStateObject
      * @return a pastry digit
      */
     uint32_t digitAt(uint32_t n, const OverlayKey& key) const;
-
-    /**
-     * returns routing table entry at specified position
-     *
-     * @param row the number of the row
-     * @param col the number of the column
-     */
-    const PastryExtendedNode& nodeAt(uint32_t row, uint32_t col) const;
 
     /**
      * helper function, updates a PRTTrackRepair structure to point to the next

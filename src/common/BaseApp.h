@@ -274,7 +274,7 @@ protected:
      * should be overwritten in derived application if needed
      * @param msg self-message
      */
-    //virtual void handleTimerEvent(cMessage* msg);
+    virtual void handleTimerEvent(cMessage* msg);
 
     /**
      * method to handle non-commonAPI messages from the overlay

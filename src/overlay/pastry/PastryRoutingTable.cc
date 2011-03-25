@@ -31,6 +31,18 @@ uint32_t PastryRoutingTable::digitAt(uint32_t n,
     return key.getBitRange(OverlayKey::getLength() - ++n * bitsPerDigit, bitsPerDigit);
 }
 
+OverlayKey PastryRoutingTable::getPrefix(int row, int col)
+{
+    col = col % nodesPerRow;
+
+    // Get the first row digits
+    OverlayKey prefix = owner.getKey().getBitRange(OverlayKey::getLength() - (row * bitsPerDigit), row * bitsPerDigit);
+    // Stick col on the end
+    prefix = (prefix << bitsPerDigit) + col;
+    // Shift everything up
+    return prefix << OverlayKey::getLength() - ((row + 1) * bitsPerDigit);
+}
+
 void PastryRoutingTable::earlyInit(void)
 {
     WATCH_VECTOR(rows);

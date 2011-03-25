@@ -46,6 +46,8 @@ static const int SIGNATURE_L = 40*8;
 static const int CERT_L = 40*8;
 static const int PUBKEY_L = 20*8;
 static const int NCSINFO_L = 32;
+static const int REQUESTID_L = 8;
+static const int TTL_L = 8;
 
 #define NODEHANDLE_L (IPADDR_L + UDPPORT_L + KEY_L)
 // TODO: TRANSPORTADDRESS_L doesn't contain NAT type at the moment, since this
@@ -85,6 +87,9 @@ static const int NCSINFO_L = 32;
 #define BOOTSTRAPPINGRESPONSE_L(msg) BASERESPONSE_L(msg)
 #define NEXTHOPCALL_L(msg) BASECALL_L(msg)
 #define NEXTHOPRESPONSE_L(msg) BASERESPONSE_L(msg)
+#define BROADCASTREQUESTCALL_L(msg) (BASECALL_L(msg) + (msg->getQuery().size()) + NODEHANDLE_L + REQUESTID_L + TTL_L)
+#define BROADCASTREQUESTRESPONSE_L(msg) (BASERESPONSE_L(msg) + REQUESTID_L + 1)
+#define BROADCASTRESPONSECALL_L(msg) (BASECALL_L(msg) + (msg->getResultsArraySize() * KEY_L) + REQUESTID_L)
 }}
 
 class OverSimMessage;
@@ -685,3 +690,31 @@ packet GameAPIFrozenMessage extends GameAPIMessage
     int timeUsec;
 }
 
+//
+// Message used to initiate a broadcast
+//
+packet BroadcastRequestCall extends BaseCallMessage
+{
+    NodeHandle origin;
+    BinaryValue query;
+    int requestID;
+    int TTL;
+}
+
+//
+// Message used to answer a BroadcastRequest message
+//
+packet BroadcastRequestResponse extends BaseResponseMessage
+{
+    int requestID;
+    bool valid;
+}
+
+//
+// Message used to send reply to a broadcast
+//
+packet BroadcastResponseCall extends BaseCallMessage
+{
+    int requestID;
+    OverlayKey results[];
+}

@@ -69,11 +69,6 @@ void DHT::initializeApp(int stage)
     invalidDataAttack = par("invalidDataAttack");
     maintenanceAttack = par("maintenanceAttack");
 
-    if ((int)numReplica > overlay->getMaxNumSiblings()) {
-        opp_error("DHT::initialize(): numReplica bigger than what this "
-                  "overlay can handle (%d)", overlay->getMaxNumSiblings());
-    }
-
     maintenanceMessages = 0;
     normalMessages = 0;
     numBytesMaintenance = 0;
@@ -83,6 +78,17 @@ void DHT::initializeApp(int stage)
     WATCH(numBytesNormal);
     WATCH(numBytesMaintenance);
     WATCH_MAP(pendingRpcs);
+
+    initializeDHT();
+
+    if ((int)numReplica > overlay->getMaxNumSiblings()) {
+        opp_error("DHT::initialize(): numReplica bigger than what this "
+                  "overlay can handle (%d)", overlay->getMaxNumSiblings());
+    }
+}
+
+void DHT::initializeDHT()
+{
 }
 
 void DHT::handleTimerEvent(cMessage* msg)
@@ -312,7 +318,10 @@ void DHT::handlePutRequest(DHTPutCall* dhtMsg)
             timerMsg->setKey(dhtMsg->getKey());
             timerMsg->setKind(dhtMsg->getKind());
             timerMsg->setId(dhtMsg->getId());
-            scheduleAt(simTime() + dhtMsg->getTtl(), timerMsg);
+
+            // Only schedule a removal if the TTL > 0
+            if (dhtMsg->getTtl() > 0)
+                scheduleAt(simTime() + dhtMsg->getTtl(), timerMsg);
 
             entry = dataStorage->addData(dhtMsg->getKey(), dhtMsg->getKind(),
                                  dhtMsg->getId(), dhtMsg->getValue(), timerMsg,
@@ -397,7 +406,11 @@ void DHT::handlePutRequest(DHTPutCall* dhtMsg)
         timerMsg->setKey(dhtMsg->getKey());
         timerMsg->setKind(dhtMsg->getKind());
         timerMsg->setId(dhtMsg->getId());
-        scheduleAt(simTime() + dhtMsg->getTtl(), timerMsg);
+
+        // Only schedule a removal if the TTL > 0
+        if (dhtMsg->getTtl() > 0)
+            scheduleAt(simTime() + dhtMsg->getTtl(), timerMsg);
+
         // storage data item in local data storage
         dataStorage->addData(dhtMsg->getKey(), dhtMsg->getKind(),
         		             dhtMsg->getId(), dhtMsg->getValue(), timerMsg,
@@ -485,31 +498,40 @@ void DHT::handleGetRequest(DHTGetCall* dhtMsg)
 
 void DHT::handlePutCAPIRequest(DHTputCAPICall* capiPutMsg)
 {
+    sendPutLookupCall(capiPutMsg, capiPutMsg->getNonce());
+}
+
+void DHT::sendPutLookupCall(DHTputCAPICall* capiPutMsg, int rpcId)
+{
     // asks the replica list
     LookupCall* lookupCall = new LookupCall();
     lookupCall->setKey(capiPutMsg->getKey());
     lookupCall->setNumSiblings(numReplica);
-    sendInternalRpcCall(OVERLAY_COMP, lookupCall, NULL, -1, 0,
-                        capiPutMsg->getNonce());
+    sendInternalRpcCall(OVERLAY_COMP, lookupCall, NULL, -1, 0, rpcId);
 
     PendingRpcsEntry entry;
     entry.putCallMsg = capiPutMsg;
     entry.state = LOOKUP_STARTED;
-    pendingRpcs.insert(make_pair(capiPutMsg->getNonce(), entry));
+    pendingRpcs.insert(make_pair(rpcId, entry));
 }
 
 void DHT::handleGetCAPIRequest(DHTgetCAPICall* capiGetMsg)
 {
+    sendGetLookupCall(capiGetMsg, capiGetMsg->getNonce());
+}
+
+void DHT::sendGetLookupCall(DHTgetCAPICall* capiGetMsg, int rpcId)
+{
+    // asks the replica list
     LookupCall* lookupCall = new LookupCall();
     lookupCall->setKey(capiGetMsg->getKey());
     lookupCall->setNumSiblings(numReplica);
-    sendInternalRpcCall(OVERLAY_COMP, lookupCall, NULL, -1, 0,
-                        capiGetMsg->getNonce());
+    sendInternalRpcCall(OVERLAY_COMP, lookupCall, NULL, -1, 0, rpcId);
 
     PendingRpcsEntry entry;
     entry.getCallMsg = capiGetMsg;
     entry.state = LOOKUP_STARTED;
-    pendingRpcs.insert(make_pair(capiGetMsg->getNonce(), entry));
+    pendingRpcs.insert(make_pair(rpcId, entry));
 }
 
 void DHT::handleDumpDhtRequest(DHTdumpCall* call)
@@ -841,6 +863,9 @@ void DHT::handleLookupResponse(LookupResponse* lookupMsg, int rpcId)
             return;
         }
 
+        RECORD_STATS(globalStatistics->recordOutVector(
+                "DHT: Successfuly PUT Hop Count", lookupMsg->getHopCount()));
+
         if ((it->second.putCallMsg->getId() == 0) &&
                 (it->second.putCallMsg->getValue().size() > 0)) {
             // pick a random id before replication of the data item
@@ -900,6 +925,9 @@ void DHT::handleLookupResponse(LookupResponse* lookupMsg, int rpcId)
             pendingRpcs.erase(rpcId);
             return;
         }
+
+        RECORD_STATS(globalStatistics->recordOutVector(
+                "DHT: Successfuly GET Hop Count", lookupMsg->getHopCount()));
 
         it->second.numSent = 0;
 

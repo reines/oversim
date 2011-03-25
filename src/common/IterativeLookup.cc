@@ -214,7 +214,7 @@ void IterativeLookup::start()
     for (int i = 0; i < config.parallelPaths; i++) {
 
         // create state
-        IterativePathLookup* pathLookup = new IterativePathLookup(this);
+        IterativePathLookup* pathLookup = createPathLookup();
         paths.push_back(pathLookup);
 
         // populate next hops
@@ -712,6 +712,11 @@ const NodeVector& IterativeLookup::getResult() const
     return siblings;
 }
 
+const OverlayKey& IterativeLookup::getKey() const
+{
+    return key;
+}
+
 bool IterativeLookup::isValid() const
 {
     return success && finished;
@@ -879,7 +884,7 @@ void IterativePathLookup::handleResponse(FindNodeResponse* msg)
     // extract find node extension object
     cPacket* findNodeExt = NULL;
     if (msg->hasObject("findNodeExt")) {
-        findNodeExt = (cPacket*)msg->removeObject("findNodeExt");
+        findNodeExt = (cPacket*)msg->getObject("findNodeExt");
     }
 
     // If config.newRpcOnEveryResponse is true, send a new RPC
@@ -890,8 +895,6 @@ void IterativePathLookup::handleResponse(FindNodeResponse* msg)
 
     // send next rpcs
     sendRpc(min(numNewRpcs, lookup->config.parallelRpcs), findNodeExt);
-
-    delete findNodeExt;
 }
 
 void IterativePathLookup::sendNewRpcAfterTimeout(cPacket* findNodeExt)
@@ -939,14 +942,13 @@ void IterativePathLookup::handleTimeout(BaseCallMessage* msg,
     cPacket* findNodeExt = NULL;
     if (msg && msg->hasObject("findNodeExt")) {
         findNodeExt = static_cast<cPacket*>(
-                msg->removeObject("findNodeExt"));
+                msg->getObject("findNodeExt"));
     }
 
     if (simTime() > (lookup->startTime + LOOKUP_TIMEOUT)) {
         EV << "[IterativePathLookup::handleTimeout()]\n"
            << "    Iterative lookup path timed out!"
            << endl;
-        delete findNodeExt;
         finished = true;
         success = false;
         return;
@@ -954,7 +956,6 @@ void IterativePathLookup::handleTimeout(BaseCallMessage* msg,
 
     if (oldPos == oldNextHops.end() || (!lookup->config.failedNodeRpcs)) {
         sendNewRpcAfterTimeout(findNodeExt);
-        delete findNodeExt;
     } else {
         if (oldPos->second.isUnspecified()) {
             // TODO: handleFailedNode should always be called for local
@@ -976,16 +977,18 @@ void IterativePathLookup::handleTimeout(BaseCallMessage* msg,
             }
 
             sendNewRpcAfterTimeout(findNodeExt);
-            delete findNodeExt;
 
         } else {
             FailedNodeCall* call = new FailedNodeCall("FailedNodeCall");
             call->setFailedNode(dest);
             call->setBitLength(FAILEDNODECALL_L(call));
+
+            // duplicate extension object
             if (findNodeExt) {
-                call->addObject(findNodeExt);
+                call->addObject(static_cast<cObject*>(findNodeExt->dup()));
                 call->addBitLength(findNodeExt->getBitLength());
             }
+
             lookup->overlay->countFailedNodeCall(call);
             lookup->overlay->sendUdpRpcCall(oldPos->second, call, NULL,
                                             -1, 0, -1, lookup);
@@ -1068,14 +1071,11 @@ void IterativePathLookup::sendRpc(int num, cPacket* findNodeExt)
     }
 
     // send rpc messages
-    LookupVector::iterator it = nextHops.begin();
-    int i = 0;
-    for (LookupVector::iterator it = nextHops.begin();
-         ((num > 0) && (i < lookup->config.redundantNodes)
-          && (it != nextHops.end())); it++, i++)  {
-
-        // ignore nodes to which we've already sent an RPC
-        if (it->alreadyUsed || lookup->getDead(it->handle)) continue;
+    LookupEntry* it;
+    for (int i = 0; num > 0 && i < lookup->config.redundantNodes; i++) {
+        it = getNextEntry();
+        if (it == NULL)
+           break;
 
         // check if node has already been visited? no ->
         // TODO: doesn't work with Broose
@@ -1090,9 +1090,6 @@ void IterativePathLookup::sendRpc(int num, cPacket* findNodeExt)
             //cout << "Sending RPC to " << it->handle
             //     << " ( " << num << " more )"
             //     << " thisNode = " << lookup->overlay->getThisNode().getKey() << endl;
-
-            // mark node as already used
-            it->alreadyUsed = true;
         } else {
             //EV << "[IterativePathLookup::sendRpc()]\n"
             //   << "    Last next hop ("
@@ -1110,6 +1107,9 @@ void IterativePathLookup::sendRpc(int num, cPacket* findNodeExt)
 //                 it != nextHops.end(); it++)
 //                std::cout << it->first << std::endl;
         }
+
+        // mark node as already used
+        it->alreadyUsed = true;
     }
 
     // no rpc sent, no pending rpcs?
@@ -1138,6 +1138,18 @@ void IterativePathLookup::sendRpc(int num, cPacket* findNodeExt)
         finished = true;
     }
     //cout << endl;
+}
+
+LookupEntry* IterativePathLookup::getNextEntry()
+{
+    for (LookupVector::iterator it = nextHops.begin();it != nextHops.end();it++) {
+        if (it->alreadyUsed || lookup->getDead(it->handle))
+            continue;
+
+        return &(*it);
+    }
+
+    return NULL;
 }
 
 int IterativePathLookup::add(const NodeHandle& handle, const NodeHandle& source)

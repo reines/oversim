@@ -1303,3 +1303,88 @@ void Pastry::processState(void)
         endProcessingState();
     }
 }
+
+bool Pastry::forwardAndForget(BroadcastRequestCall* call)
+{
+	Enter_Method_Silent();
+
+    // If theres no encapsulated message then it can't be a midpoint request so process it normally
+    if (!call->hasObject("BroadcastInfo"))
+        return false;
+
+    PastryBroadcastInfo* info = (PastryBroadcastInfo*) call->getObject("BroadcastInfo");
+    // If it isn't a midpoint request then process it normally
+    if (!info->getMidpoint())
+        return false;
+
+    OverlayKey start = info->getDomainStart();
+    OverlayKey end = info->getDomainEnd();
+
+    // If it is directed to us then process it normally
+    if (thisNode.getKey().isBetweenL(start, end))
+        return false;
+
+    for (std::vector<NodeHandle>::iterator it = leafSet->begin();it != leafSet->end();it++) {
+        if ((*it).isUnspecified())
+            continue;
+
+        // It belongs to a leaf node so send them it, we no longer care about it
+        if ((*it).getKey().isBetweenL(start, end)) {
+            // TODO: Send to TIER_2 (do we need to pass back to the broadcast app again?)
+
+            return true;
+        }
+    }
+
+    // It is a midpoint but isn't for us and we cannot forward it on, let it slip through (will be caught as a duplicate)
+    return false;
+}
+
+std::list<const BroadcastInfo*> Pastry::forwardBroadcast(BroadcastRequestCall* call)
+{
+    Enter_Method_Silent();
+
+    const NodeHandle* finger;
+    std::list<const BroadcastInfo*> requests;
+    int limit = 0;
+    PastryBroadcastInfo* limitInfo;
+    OverlayKey midpoint;
+
+    if (call->hasObject("BroadcastInfo")) {
+        PastryBroadcastInfo* info = (PastryBroadcastInfo*) call->getObject("BroadcastInfo");
+        limit = info->getLimit();
+    }
+
+    for (int row = limit;row < routingTable->getLastRow();row++) {
+        for (uint col = 0;col < routingTable->nodesPerRow;col++) {
+            finger = &(routingTable->nodeAt(row, col).node);
+            // If the entry is ourself then do nothing
+            if (!finger->isUnspecified() && *finger == thisNode)
+                continue;
+
+            // If there is no entry
+            // TODO: but the domain lies within the leaf set do nothing
+            if (finger->isUnspecified())
+                continue;
+
+            limitInfo = new PastryBroadcastInfo("BroadcastInfo");
+            limitInfo->setLimit(row + 1);
+
+            midpoint = OverlayKey::UNSPECIFIED_KEY;
+            if (finger->isUnspecified()) {
+//                limitInfo->setMidpoint(true);
+//                limitInfo->setDomainStart(routingTable->getPrefix(row, col));
+//                limitInfo->setDomainEnd(routingTable->getPrefix(row, col + 1));
+//
+//                // TODO: Fix
+                midpoint = routingTable->getPrefix(row, col);
+            }
+
+            limitInfo->setBitLength(PASTRYBROADCASTINFO_L(limitInfo));
+
+            requests.push_back(new BroadcastInfo(*finger, midpoint, limitInfo));
+        }
+    }
+
+    return requests;
+}

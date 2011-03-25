@@ -27,6 +27,7 @@
 #include <map>
 
 #include <omnetpp.h>
+#include <BinaryValue.h>
 
 class OverlayKey;
 
@@ -41,6 +42,29 @@ class OverlayKey;
     } while(false)
 
 
+struct SearchStatEntry
+{
+    BinaryValue query;
+    int expected;
+    int actual;
+    int duplicated;
+    int extra;
+    int expired;
+    bool success;
+
+    SearchStatEntry()
+    {
+        query = BinaryValue::UNSPECIFIED_VALUE;
+        expected = 0;
+        actual = 0;
+        duplicated = 0;
+        extra = 0;
+        expired = 0;
+        success = false;
+    }
+};
+
+typedef std::map<uint32_t, SearchStatEntry> SearchStat;
 
 /**
  * Module to record global statistics
@@ -56,6 +80,7 @@ public:
     double deliveredKBRTestAppMessages; //!< total number of messages delivered by KBRTestApp
     int testCount;
     cOutVector currentDeliveryVector; //!< statistical output vector for current delivery ratio
+    SearchStat bcastSearch;
 
     /**
      * Destructor

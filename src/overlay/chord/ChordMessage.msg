@@ -54,6 +54,7 @@ static const int PRENODESET_L = 1;
 
 #define KOORDEFINDNODEEXTMESSAGE_L (KEY_L + STEP_L)
 
+#define COORDBROADCASTINFO_L(msg) (KEY_L)
 }}
 //todo add more Koorde message lengths
 
@@ -65,6 +66,7 @@ class BaseOverlayMessage;
 class BaseRpcMessage;
 class BaseCallMessage;
 class BaseResponseMessage;
+class BroadcastInfo;
 
 enum ChordCommand
 {
@@ -184,3 +186,7 @@ packet DeBruijnResponse extends BaseResponseMessage
     NodeHandle sucNode[];   // successor list of the message originator
 }
 
+packet CoordBroadcastInfo
+{
+    OverlayKey limit;
+}

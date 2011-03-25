@@ -36,6 +36,7 @@
 #include <IterativeLookupConfiguration.h>
 #include <RecursiveLookup.h>
 #include <InitStages.h>
+#include <BroadcastInfo.h>
 
 class GlobalNodeList;
 class UnderlayConfigurator;
@@ -810,6 +811,9 @@ public:
     bool providesKbr() { return kbr; };
 
     virtual uint8_t getBitsPerDigit() { return 1; };
+
+    virtual bool forwardAndForget(BroadcastRequestCall* call);
+    virtual std::list<const BroadcastInfo*> forwardBroadcast(BroadcastRequestCall* call);
 
     bool getMeasureAuthBlock() { return measureAuthBlock; }
 

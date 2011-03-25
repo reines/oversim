@@ -78,6 +78,8 @@ public:
     void proxCallback(const TransportAddress &node, int rpcId,
                       cPolymorphic *contextPointer, Prox prox);
 
+    std::list<const BroadcastInfo*> forwardBroadcast(BroadcastRequestCall* call);
+
 protected:
     int joinRetry; /**< */
     int stabilizeRetry; /**< // retries before neighbor considered failed */

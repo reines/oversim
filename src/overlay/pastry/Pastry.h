@@ -71,6 +71,9 @@ class Pastry : public BasePastry
                               cPolymorphic* context, int rpcId,
                               simtime_t rtt);
 
+    bool forwardAndForget(BroadcastRequestCall* call);
+    std::list<const BroadcastInfo*> forwardBroadcast(BroadcastRequestCall* call);
+
   protected:
 
     virtual void purgeVectors(void);

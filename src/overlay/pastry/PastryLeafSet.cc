@@ -603,3 +603,13 @@ PastryNewLeafsMessage* PastryLeafSet::getNewLeafsMessage(void)
     msg->setBitLength(PASTRYNEWLEAFS_L(msg));
     return msg;
 }
+
+std::vector<NodeHandle>::iterator PastryLeafSet::begin()
+{
+    return leaves.begin();
+}
+
+std::vector<NodeHandle>::iterator PastryLeafSet::end()
+{
+    return leaves.end();
+}

@@ -1407,4 +1407,41 @@ OverlayKey Chord::distance(const OverlayKey& x,
     return KeyUniRingMetric().distance(x, y);
 }
 
+std::list<const BroadcastInfo*> Chord::forwardBroadcast(BroadcastRequestCall* call)
+{
+    Enter_Method_Silent();
+
+    OverlayKey limit = thisNode.getKey();
+    if (call->hasObject("BroadcastInfo")) {
+        CoordBroadcastInfo* info = (CoordBroadcastInfo*) call->getObject("BroadcastInfo");
+        limit = info->getLimit();
+    }
+
+    const NodeHandle* lastFinger = &thisNode;
+    const NodeHandle* finger;
+    std::list<const BroadcastInfo*> requests;
+    CoordBroadcastInfo* limitInfo;
+
+    for (int i = fingerTable->getSize() - 1; i >= -1; i--) {
+        // First check the finger table, then look at our successor
+        finger = &(i < 0 ? successorList->getSuccessor(-1 - i) : fingerTable->getFinger(i));
+        if (finger == lastFinger)
+            continue;
+
+        if (finger->getKey().isBetween(thisNode.getKey(), limit)) {
+            limitInfo = new CoordBroadcastInfo("BroadcastInfo");
+            limitInfo->setLimit(limit);
+            limitInfo->setBitLength(COORDBROADCASTINFO_L(limitInfo));
+
+            requests.push_back(new BroadcastInfo(*finger, OverlayKey::UNSPECIFIED_KEY, limitInfo));
+
+            limit = finger->getKey();
+        }
+
+        lastFinger = finger;
+    }
+
+    return requests;
+}
+
 }; //namespace

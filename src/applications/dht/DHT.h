@@ -47,7 +47,7 @@ public:
     DHT();
     virtual ~DHT();
 
-private:
+protected:
     enum PendingRpcsStates {
         INIT = 0,
         LOOKUP_STARTED = 1,
@@ -87,6 +87,7 @@ private:
                                             const PendingRpcsEntry& entry);
 
     void initializeApp(int stage);
+    virtual void initializeDHT();
     void finishApp();
     void handleTimerEvent(cMessage* msg);
 
@@ -100,8 +101,10 @@ private:
     void handleGetRequest(DHTGetCall* dhtMsg);
     void handlePutResponse(DHTPutResponse* dhtMsg, int rpcId);
     void handleGetResponse(DHTGetResponse* dhtMsg, int rpcId);
-    void handlePutCAPIRequest(DHTputCAPICall* capiPutMsg);
-    void handleGetCAPIRequest(DHTgetCAPICall* capiPutMsg);
+    virtual void handlePutCAPIRequest(DHTputCAPICall* capiPutMsg);
+    void sendPutLookupCall(DHTputCAPICall* capiPutMsg, int rpcId);
+    virtual void handleGetCAPIRequest(DHTgetCAPICall* capiPutMsg);
+    void sendGetLookupCall(DHTgetCAPICall* capiGetMsg, int rpcId);
     void handleDumpDhtRequest(DHTdumpCall* call);
     void update(const NodeHandle& node, bool joined);
     void handleLookupResponse(LookupResponse* lookupMsg, int rpcId);

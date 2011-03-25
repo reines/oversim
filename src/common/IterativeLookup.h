@@ -157,29 +157,12 @@ protected://fields
 
 protected://methods
     /**
-     * adds a node to the siblings NodeVector
-     *
-     * @param handle NodeHandle of the node to add
-     * @param assured true, if this node was already authenticated
-     * @return true if operation was succesful, false otherwise
-     */
-    bool addSibling(const NodeHandle& handle, bool assured = false);
-
-    /**
      * adds/deletes visited nodes to/from the visited TransportAddress::Set
      *
      * @param addr TransportAddress of the node to add
      * @param visitedFlag if true node is added, else node is erased
      */
     void setVisited(const TransportAddress& addr, bool visitedFlag = true);
-
-    /**
-     * indicates if the specified node has been visited before
-     *
-     * @param addr TransportAddress of the node
-     * @return false if addr is not in visited, true otherwise
-     */
-    bool getVisited( const TransportAddress& addr);
 
     /**
      * marks a node as already pinged for authentication
@@ -202,6 +185,24 @@ protected://methods
      * @param addr TransportAddress of the node to add
      */
     void setDead(const TransportAddress& addr);
+
+public:
+    /**
+     * adds a node to the siblings NodeVector
+     *
+     * @param handle NodeHandle of the node to add
+     * @param assured true, if this node was already authenticated
+     * @return true if operation was succesful, false otherwise
+     */
+    bool addSibling(const NodeHandle& handle, bool assured = false);
+
+    /**
+     * indicates if the specified node has been visited before
+     *
+     * @param addr TransportAddress of the node
+     * @return false if addr is not in visited, true otherwise
+     */
+    bool getVisited( const TransportAddress& addr);
 
     /**
      * check if a node seems to be dead
@@ -272,6 +273,7 @@ public://methods
                 LookupListener* listener = NULL);
 
     const NodeVector& getResult() const;
+    const OverlayKey& getKey() const;
 
     bool isValid() const;
     void abortLookup();
@@ -303,8 +305,8 @@ protected://fields: state
 
 protected://methods: rpc handling
     bool accepts(int rpcId);
-    void handleResponse(FindNodeResponse* msg);
-    void handleTimeout(BaseCallMessage* msg, const TransportAddress& dest,
+    virtual void handleResponse(FindNodeResponse* msg);
+    virtual void handleTimeout(BaseCallMessage* msg, const TransportAddress& dest,
                        int rpcId);
     void handleFailedNodeResponse(const NodeHandle& src,
                                   cPacket* findNodeExt, bool retry);
@@ -317,6 +319,8 @@ private:
 protected:
     IterativePathLookup(IterativeLookup* lookup);
     virtual ~IterativePathLookup();
+
+    virtual LookupEntry* getNextEntry();
 
     /**
      * Adds a NodeHandle to next hops

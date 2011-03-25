@@ -1123,35 +1123,4 @@ void EpiChord::handleRpcFindNodeResponse(FindNodeResponse* response)
 		fingerCache->updateFinger(response->getClosestNodes(i), false, now - findNodeExt->getLastUpdates(i));
 }
 
-std::list<const BroadcastInfo*> EpiChord::forwardBroadcast(BroadcastRequestCall* call)
-{
-	Enter_Method_Silent();
-
-	OverlayKey limit = thisNode.getKey();
-	if (call->hasObject("BroadcastInfo")) {
-		EpiCoordBroadcastInfo* info = (EpiCoordBroadcastInfo*) call->getObject("BroadcastInfo");
-		limit = info->getLimit();
-	}
-
-	const NodeHandle* finger;
-	std::list<const BroadcastInfo*> requests;
-	EpiCoordBroadcastInfo* limitInfo;
-
-	for (int i = fingerCache->getSize() - 1; i >= 0; i--) {
-		finger = &(fingerCache->getNode(i).nodeHandle);
-
-		if (finger->getKey().isBetween(thisNode.getKey(), limit)) {
-			limitInfo = new EpiCoordBroadcastInfo("BroadcastInfo");
-			limitInfo->setLimit(limit);
-			limitInfo->setBitLength(EPICOORD_BROADCASTINFO_L(limitInfo));
-
-			requests.push_back(new BroadcastInfo(*finger, OverlayKey::UNSPECIFIED_KEY, limitInfo));
-
-			limit = finger->getKey();
-		}
-	}
-
-	return requests;
-}
-
 }; //namespace

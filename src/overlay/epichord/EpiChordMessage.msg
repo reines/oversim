@@ -26,20 +26,21 @@ cplusplus {{
 #include <CommonMessages_m.h>
 
 static const int EPICHORDCOMMAND_L = 8;
-static const int NODETYPE_L = 8;
+static const int EPICHORDNODETYPE_L = 8;
+static const int EPICHORDTTL_L = 8;
 
 #define EPICHORD_JOINCALL_L(msg) BASECALL_L(msg)
-#define EPICHORD_JOINRESPONSE_L(msg) (BASERESPONSE_L(msg) + (msg->getSucNodeArraySize() * NODEHANDLE_L) + (msg->getPreNodeArraySize() * NODEHANDLE_L) + (msg->getCacheNodeArraySize() * NODEHANDLE_L) + (msg->getCacheLastUpdateArraySize() * TTL_L))
+#define EPICHORD_JOINRESPONSE_L(msg) (BASERESPONSE_L(msg) + (msg->getSucNodeArraySize() * NODEHANDLE_L) + (msg->getPreNodeArraySize() * NODEHANDLE_L) + (msg->getCacheNodeArraySize() * NODEHANDLE_L) + (msg->getCacheLastUpdateArraySize() * EPICHORDTTL_L))
 #define EPICHORD_JOINACKCALL_L(msg) BASECALL_L(msg)
 #define EPICHORD_JOINACKRESPONSE_L(msg) BASERESPONSE_L(msg)
 
 #define EPICHORD_FALSENEGWARNINGCALL_L(msg) (BASECALL_L(msg) + NODEHANDLE_L + (msg->getDeadNodeArraySize() * NODEHANDLE_L))
 #define EPICHORD_FALSENEGWARNINGRESPONSE_L(msg) BASERESPONSE_L(msg)
 
-#define EPICHORD_STABILIZECALL_L(msg) (BASECALL_L(msg) + (msg->getAdditionsArraySize() * NODEHANDLE_L) + (msg->getRemovalsArraySize()) + NODETYPE_L)
-#define EPICHORD_STABILIZERESPONSE_L(msg) (BASERESPONSE_L(msg) + (msg->getPredecessorsArraySize() * NODEHANDLE_L) + (msg->getSuccessorsArraySize() * NODEHANDLE_L) + NODETYPE_L)
+#define EPICHORD_STABILIZECALL_L(msg) (BASECALL_L(msg) + (msg->getAdditionsArraySize() * NODEHANDLE_L) + (msg->getRemovalsArraySize()) + EPICHORDNODETYPE_L)
+#define EPICHORD_STABILIZERESPONSE_L(msg) (BASERESPONSE_L(msg) + (msg->getPredecessorsArraySize() * NODEHANDLE_L) + (msg->getSuccessorsArraySize() * NODEHANDLE_L) + EPICHORDNODETYPE_L)
 
-#define EPICHORD_FINDNODEEXTMESSAGE_L(msg) ((msg->getLastUpdatesArraySize() * TTL_L) + (msg->getAlreadyVisitedNodeArraySize() * NODEHANDLE_L) + (msg->getAlreadyVisitedLastUpdateArraySize() * TTL_L))
+#define EPICHORD_FINDNODEEXTMESSAGE_L(msg) ((msg->getLastUpdatesArraySize() * EPICHORDTTL_L) + (msg->getAlreadyVisitedNodeArraySize() * NODEHANDLE_L) + (msg->getAlreadyVisitedLastUpdateArraySize() * EPICHORDTTL_L))
 #define EPICOORD_BROADCASTINFO_L(msg) (KEY_L)
 }}
 

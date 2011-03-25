@@ -67,8 +67,6 @@ public:
 	 */
 	virtual void updateTooltip();
 
-	std::list<const BroadcastInfo*> forwardBroadcast(BroadcastRequestCall* call);
-
 protected:
 	int successorListSize;
 	double nodesPerSlice;

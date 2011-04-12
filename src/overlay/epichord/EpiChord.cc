@@ -170,7 +170,7 @@ void EpiChord::finishOverlay()
 
 	// Estimated node lifetime
 	if (stabilizeEstimation)
-		globalStatistics->addStdDev("EpiChord: Node lifetime estimate", SIMTIME_DBL(fingerCache->estimateNodeLifetime()));
+		globalStatistics->addStdDev("EpiChord: Estimated node lifetime", SIMTIME_DBL(fingerCache->estimateNodeLifetime()));
 }
 
 OverlayKey EpiChord::distance(const OverlayKey& x, const OverlayKey& y, bool useAlternative) const

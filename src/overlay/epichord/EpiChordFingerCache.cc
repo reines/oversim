@@ -208,6 +208,16 @@ uint32_t EpiChordFingerCache::getSize()
 	return liveCache.size();
 }
 
+uint32_t EpiChordFingerCache::countLive()
+{
+	return liveCache.size();
+}
+
+uint32_t EpiChordFingerCache::countDead()
+{
+	return deadCache.size();
+}
+
 void EpiChordFingerCache::findBestHops(OverlayKey key, NodeVector* nodes, std::vector<simtime_t>* lastUpdates, std::set<NodeHandle>* exclude, int numRedundantNodes)
 {
 	key -= thisNode.getKey() + OverlayKey::ONE;

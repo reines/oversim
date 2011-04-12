@@ -161,6 +161,8 @@ protected:
 	// see BaseOverlay.h
 	int getMaxNumRedundantNodes();
 
+	double calculateGamma();
+
 	// see BaseOverlay.h
 	virtual bool handleRpcCall(BaseCallMessage* msg);
 

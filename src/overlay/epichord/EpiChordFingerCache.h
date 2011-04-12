@@ -90,6 +90,8 @@ public:
 	uint32_t countSlice(OverlayKey startOffset, OverlayKey endOffset);
 
 	virtual uint32_t getSize();
+	virtual uint32_t countLive();
+	virtual uint32_t countDead();
 
 	virtual int getSuccessfulUpdates() { return successfulUpdates; }
 

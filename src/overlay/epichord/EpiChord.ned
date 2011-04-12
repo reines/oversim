@@ -94,7 +94,6 @@ module EpiChordModules like IOverlay
         epichord: EpiChord {
             parameters:
                 @display("p=60,60");
-
         }
         fingerCache: EpiChordFingerCache {
             parameters:
@@ -103,12 +102,10 @@ module EpiChordModules like IOverlay
         successorList: EpiChordNodeList {
             parameters:
                 @display("p=240,60");
-
         }
         predecessorList: EpiChordNodeList {
             parameters:
                 @display("p=240,60");
-
         }
     connections allowunconnected:
         udpIn --> epichord.udpIn;

@@ -163,8 +163,12 @@ void EpiChord::finishOverlay()
 	globalStatistics->addStdDev("EpiChord: Sent STABILIZE Bytes/s", stabilizeBytesSent / time);
 	globalStatistics->addStdDev("EpiChord: Finger updates success/s", fingerCache->getSuccessfulUpdates() / time);
 
-	globalStatistics->addStdDev("EpiChord: Finger cache size", fingerCache->getSize());
+	globalStatistics->addStdDev("EpiChord: Cache live nodes", fingerCache->countLive());
+	globalStatistics->addStdDev("EpiChord: Cache dead nodes", fingerCache->countDead());
+	// Probability that a node is dead
+	globalStatistics->addStdDev("EpiChord: Estimated gamma", this->calculateGamma());
 
+	// Estimated node lifetime
 	if (stabilizeEstimation)
 		globalStatistics->addStdDev("EpiChord: Node lifetime estimate", SIMTIME_DBL(fingerCache->estimateNodeLifetime()));
 }
@@ -454,11 +458,7 @@ void EpiChord::handleFixFingersTimerExpired(cMessage* msg)
 
 void EpiChord::handleCheckSlice(OverlayKey start, OverlayKey end)
 {
-	double gamma = 0.0; // ratio of lookup failures
-
-	// Make sure we don't divide by 0!
-	if (nodeProbes > 0)
-		gamma = nodeTimeouts / nodeProbes;
+	double gamma = this->calculateGamma();
 
 	int numNodes = fingerCache->countSlice(start, end);
 	int requiredNodes = (int) ceil(nodesPerSlice / (1.0 - gamma));
@@ -532,7 +532,7 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 		lastUpdates->push_back(now);
 
 		// Check numSiblings isn't too high
-		if (numSiblings > predecessorList->getSize())
+		if ((uint32_t) numSiblings > predecessorList->getSize())
 			numSiblings = predecessorList->getSize();
 
 		// inform of siblings
@@ -701,6 +701,17 @@ int EpiChord::getMaxNumRedundantNodes()
 	return iterativeLookupConfig.redundantNodes;
 }
 
+double EpiChord::calculateGamma()
+{
+	double gamma = 0.0; // ratio of lookup failures
+
+	// Make sure we don't divide by 0!
+	if (nodeProbes > 0)
+		gamma = nodeTimeouts / nodeProbes;
+
+	return gamma;
+}
+
 bool EpiChord::handleRpcCall(BaseCallMessage* msg)
 {
 	if (state != READY) {
@@ -821,7 +832,7 @@ void EpiChord::sendFalseNegWarning(NodeHandle bestPredecessor, NodeHandle bestSu
 	warning->setBestPredecessor(bestPredecessor);
 
 	warning->setDeadNodeArraySize(deadNodes->size());
-	for (int i = 0;i < deadNodes->size();i++)
+	for (uint i = 0;i < deadNodes->size();i++)
 		warning->setDeadNode(i, (*deadNodes)[i]);
 
 	warning->setBitLength(EPICHORD_FALSENEGWARNINGCALL_L(warning));
@@ -872,24 +883,24 @@ void EpiChord::handleRpcJoinResponse(EpiChordJoinResponse* joinResponse)
 	simtime_t now = simTime();
 
 	// determine the number of successor nodes to add
-	int sucNum = successorListSize;
+	uint sucNum = successorListSize;
 	if (joinResponse->getSucNodeArraySize() < sucNum)
 		sucNum = joinResponse->getSucNodeArraySize();
 
 	// add successor getNode(s)
-	for (int k = 0; k < sucNum; k++)
+	for (uint k = 0; k < sucNum; k++)
 		successorList->addNode(joinResponse->getSucNode(k));
 
 	// the sender of this message is our new successor
 	successorList->addNode(joinResponse->getSrcNode());
 
 	// determine the number of predecessor nodes to add
-	int preNum = successorListSize;
+	uint preNum = successorListSize;
 	if (joinResponse->getPreNodeArraySize() < preNum)
 		preNum = joinResponse->getPreNodeArraySize();
 
 	// add predecessor getNode(s)
-	for (int k = 0; k < preNum; k++)
+	for (uint k = 0; k < preNum; k++)
 		predecessorList->addNode(joinResponse->getPreNode(k));
 
 	// if we don't have any predecessors, the requestor is also our new predecessor

@@ -75,8 +75,10 @@ protected:
 	double stabilizeDelay;
 	bool stabilizeEstimation;
 	double stabilizeEstimateMuliplier;
-	double fixfingersDelay;
-	double fixfingersTTL;
+	double cacheFlushDelay;
+	int cacheCheckMultiplier;
+	int cacheCheckCounter;
+	double cacheTTL;
 	double nodeProbes;
 	double nodeTimeouts;
 	double cacheUpdateDelta;
@@ -86,7 +88,7 @@ protected:
 	// timer messages
 	cMessage* join_timer;
 	cMessage* stabilize_timer;
-	cMessage* fixfingers_timer;
+	cMessage* cache_timer;
 
 	// statistics
 	int joinCount;
@@ -140,8 +142,9 @@ protected:
 	 *
 	 * @param msg the timer self-message
 	 */
-	virtual void handleFixFingersTimerExpired(cMessage* msg);
-	virtual void handleCheckSlice(OverlayKey start, OverlayKey end);
+	virtual void handleCacheFlushTimerExpired(cMessage* msg);
+	virtual void checkCacheInvariant();
+	virtual void checkCacheSlice(OverlayKey start, OverlayKey end);
 
 	// see BaseOverlay.h
 	NodeVector* findNode(const OverlayKey& key, int numRedundantNodes, int numSiblings, BaseOverlayMessage* msg);
@@ -160,6 +163,8 @@ protected:
 
 	// see BaseOverlay.h
 	int getMaxNumRedundantNodes();
+
+	double calculateGamma();
 
 	// see BaseOverlay.h
 	virtual bool handleRpcCall(BaseCallMessage* msg);

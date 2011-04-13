@@ -81,6 +81,9 @@ public:
 	virtual void updateFinger(const NodeHandle& node, bool direct, simtime_t lastUpdate = simTime()) { updateFinger(node, direct, lastUpdate, ttl); }
 	virtual void updateFinger(const NodeHandle& node, bool direct, simtime_t lastUpdate, double ttl);
 
+	virtual void setFingerTTL(const NodeHandle& node) { setFingerTTL(node, ttl); }
+	virtual void setFingerTTL(const NodeHandle& node, double ttl);
+
 	bool handleFailedNode(const TransportAddress& failed);
 
 	void removeOldFingers();
@@ -90,6 +93,8 @@ public:
 	uint32_t countSlice(OverlayKey startOffset, OverlayKey endOffset);
 
 	virtual uint32_t getSize();
+	virtual uint32_t countLive();
+	virtual uint32_t countDead();
 
 	virtual int getSuccessfulUpdates() { return successfulUpdates; }
 

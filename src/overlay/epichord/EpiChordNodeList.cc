@@ -53,13 +53,12 @@ void EpiChordNodeList::handleMessage(cMessage* msg)
 	throw new cRuntimeError("this module doesn't handle messages, it runs only in initialize()");
 }
 
-void EpiChordNodeList::initializeList(uint32_t size, NodeHandle owner, EpiChordFingerCache* cache, double cacheTTL, EpiChord *overlay, bool forwards)
+void EpiChordNodeList::initializeList(uint32_t size, NodeHandle owner, EpiChordFingerCache* cache, EpiChord *overlay, bool forwards)
 {
 	nodeMap.clear();
 	nodeListSize = size;
 	thisNode = owner;
 	this->cache = cache;
-	this->cacheTTL = cacheTTL;
 	this->overlay = overlay;
 	this->forwards = forwards;
 
@@ -139,7 +138,7 @@ void EpiChordNodeList::addNode(NodeHandle node, bool resize)
 	else
 		it->second.newEntry = true;
 
-	cache->updateFinger(node, true, simTime(), cacheTTL);
+	cache->updateFinger(node, true, simTime(), 0);
 
 	if ((resize == true) && (nodeMap.size() > (uint32_t)nodeListSize)) {
 		it = nodeMap.end();
@@ -150,6 +149,7 @@ void EpiChordNodeList::addNode(NodeHandle node, bool resize)
 			changed = false;
 
 		overlay->callUpdate(it->second.nodeHandle, false);
+		cache->setFingerTTL(it->second.nodeHandle);
 		nodeMap.erase(it);
 	}
 
@@ -194,6 +194,7 @@ void EpiChordNodeList::removeOldNodes()
 	for (it = nodeMap.begin(); it != nodeMap.end();) {
 		if (it->second.newEntry == false) {
 			overlay->callUpdate(it->second.nodeHandle, false);
+			cache->setFingerTTL(it->second.nodeHandle);
 			nodeMap.erase(it++);
 		}
 		else {
@@ -205,8 +206,10 @@ void EpiChordNodeList::removeOldNodes()
 	it = nodeMap.end();
 	it--;
 
-	while (nodeMap.size() > nodeListSize)
+	while (nodeMap.size() > nodeListSize) {
+		cache->setFingerTTL(it->second.nodeHandle);
 		nodeMap.erase(it--);
+	}
 
 	if (getSize() == 0)
 		addNode(thisNode);

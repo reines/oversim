@@ -127,6 +127,21 @@ void EpiChordFingerCache::updateFinger(const NodeHandle& node, bool direct, simt
 	liveCache[sum] = entry;
 }
 
+void EpiChordFingerCache::setFingerTTL(const NodeHandle& node, double ttl)
+{
+	// Trying to update an unspecified node (happens if we receive a local findNode call)
+	if (node.isUnspecified() || node.getKey().isUnspecified())
+		return;
+
+	OverlayKey sum = node.getKey() - (thisNode.getKey() + OverlayKey::ONE);
+
+	CacheMap::iterator it = liveCache.find(sum);
+	if (it == liveCache.end())
+		return;
+
+	it->second.ttl = ttl;
+}
+
 bool EpiChordFingerCache::handleFailedNode(const TransportAddress& failed)
 {
 	assert(failed != thisNode);
@@ -206,6 +221,16 @@ uint32_t EpiChordFingerCache::countSlice(OverlayKey start, OverlayKey end)
 uint32_t EpiChordFingerCache::getSize()
 {
 	return liveCache.size();
+}
+
+uint32_t EpiChordFingerCache::countLive()
+{
+	return liveCache.size();
+}
+
+uint32_t EpiChordFingerCache::countDead()
+{
+	return deadCache.size();
 }
 
 void EpiChordFingerCache::findBestHops(OverlayKey key, NodeVector* nodes, std::vector<simtime_t>* lastUpdates, std::set<NodeHandle>* exclude, int numRedundantNodes)

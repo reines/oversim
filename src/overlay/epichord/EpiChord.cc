@@ -44,7 +44,7 @@ EpiChord::~EpiChord()
 	// destroy self timer messages
 	cancelAndDelete(join_timer);
 	cancelAndDelete(stabilize_timer);
-	cancelAndDelete(fixfingers_timer);
+	cancelAndDelete(cache_timer);
 }
 
 void EpiChord::initializeOverlay(int stage)
@@ -71,8 +71,9 @@ void EpiChord::initializeOverlay(int stage)
 	stabilizeDelay = par("stabilizeDelay");
 	stabilizeEstimation = par("stabilizeEstimation");
 	stabilizeEstimateMuliplier = par("stabilizeEstimateMuliplier");
-	fixfingersDelay = par("fixfingersDelay");
-	fixfingersTTL = par("fixfingersTTL");
+	cacheFlushDelay = par("cacheFlushDelay");
+	cacheCheckMultiplier = par("cacheCheckMultiplier");
+	cacheTTL = par("cacheTTL");
 	cacheUpdateDelta = par("cacheUpdateDelta");
 	activePropagation = par("activePropagation");
 	sendFalseNegWarnings = par("sendFalseNegWarnings");
@@ -85,6 +86,7 @@ void EpiChord::initializeOverlay(int stage)
 
 	nodeProbes = 0;
 	nodeTimeouts = 0;
+	cacheCheckCounter = 0;
 
 	// find friend modules
 	findFriendModules();
@@ -97,7 +99,7 @@ void EpiChord::initializeOverlay(int stage)
 	// self-messages
 	join_timer = new cMessage("join_timer");
 	stabilize_timer = new cMessage("stabilize_timer");
-	fixfingers_timer = new cMessage("fixfingers_timer");
+	cache_timer = new cMessage("cache_timer");
 }
 
 void EpiChord::handleTimerEvent(cMessage* msg)
@@ -108,9 +110,9 @@ void EpiChord::handleTimerEvent(cMessage* msg)
 	// catch STABILIZE timer
 	else if (msg == stabilize_timer)
 		handleStabilizeTimerExpired(msg);
-	// catch FIX FINGERS timer
-	else if (msg == fixfingers_timer)
-		handleFixFingersTimerExpired(msg);
+	// catch CACHE FLUSH timer
+	else if (msg == cache_timer)
+		handleCacheFlushTimerExpired(msg);
 	else
 		error("EpiChord::handleTimerEvent(): received self message of unknown type!");
 }
@@ -208,13 +210,13 @@ void EpiChord::findFriendModules()
 void EpiChord::initializeFriendModules()
 {
 	// initialize finger cache
-	fingerCache->initializeCache(thisNode, this, fixfingersTTL);
+	fingerCache->initializeCache(thisNode, this, cacheTTL);
 
 	// initialize successor list
-	successorList->initializeList(successorListSize, thisNode, fingerCache, fixfingersTTL * 2, this, true);
+	successorList->initializeList(successorListSize, thisNode, fingerCache, this, true);
 
 	// initialize predecessor list
-	predecessorList->initializeList(successorListSize, thisNode, fingerCache, fixfingersTTL * 2, this, false);
+	predecessorList->initializeList(successorListSize, thisNode, fingerCache, this, false);
 }
 
 void EpiChord::changeState(int toState)
@@ -288,8 +290,8 @@ void EpiChord::changeState(int toState)
 		scheduleAt(simTime() + stabilizeDelay, stabilize_timer);
 
 		// initiate finger repair protocol
-		cancelEvent(fixfingers_timer);
-		scheduleAt(simTime() + fixfingersDelay, fixfingers_timer);
+		cancelEvent(cache_timer);
+		scheduleAt(simTime() + cacheFlushDelay, cache_timer);
 
 		// debug message
 		if (debugOutput) {
@@ -404,7 +406,7 @@ void EpiChord::handleStabilizeTimerExpired(cMessage* msg)
 	scheduleAt(simTime() + avgLifetime, msg);
 }
 
-void EpiChord::handleFixFingersTimerExpired(cMessage* msg)
+void EpiChord::handleCacheFlushTimerExpired(cMessage* msg)
 {
 	if (state != READY)
 		return;
@@ -412,51 +414,61 @@ void EpiChord::handleFixFingersTimerExpired(cMessage* msg)
 	// Remove expired entries from the finger cache
 	fingerCache->removeOldFingers();
 
-	if (predecessorList->isFull() && successorList->isFull()) {
-		// Set the offset
-		int offset = 1;
-
-		// Set the limits
-		OverlayKey farLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
-		OverlayKey nearLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
-
-		// Check successor list
-		OverlayKey lastSuccessor = successorList->getNode(successorList->getSize() - 1).getKey();
-		while (lastSuccessor.isBetween(thisNode.getKey(), nearLimit)) {
-			handleCheckSlice(nearLimit, farLimit);
-
-			// Calculate the limits of the next slice
-			farLimit = nearLimit;
-			nearLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
-		}
-
-		// Reset the offset
-		offset = 1;
-
-		// Reset the limits
-		farLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
-		nearLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
-
-		// Check predecessor list
-		OverlayKey lastPredecessor = predecessorList->getNode(predecessorList->getSize() - 1).getKey();
-		while (lastPredecessor.isBetween(nearLimit, thisNode.getKey())) {
-			handleCheckSlice(farLimit, nearLimit);
-
-			// Calculate the limits of the next slice
-			farLimit = nearLimit;
-			nearLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
-		}
+	// Check we have enough remaining cache entries
+	if (++cacheCheckCounter > cacheCheckMultiplier) {
+		this->checkCacheInvariant();
+		cacheCheckCounter = 0;
 	}
 
 	nodeProbes *= cacheUpdateDelta;
 	nodeTimeouts *= cacheUpdateDelta;
 
-	// schedule next finger repair process
-	cancelEvent(fixfingers_timer);
-	scheduleAt(simTime() + fixfingersDelay, msg);
+	// schedule next cache flush process
+	cancelEvent(cache_timer);
+	scheduleAt(simTime() + cacheFlushDelay, msg);
 }
 
-void EpiChord::handleCheckSlice(OverlayKey start, OverlayKey end)
+void EpiChord::checkCacheInvariant()
+{
+	if (state != READY || !predecessorList->isFull() || !successorList->isFull())
+		return;
+
+	// Set the offset
+	int offset = 1;
+
+	// Set the limits
+	OverlayKey farLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
+	OverlayKey nearLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
+
+	// Check successor list
+	OverlayKey lastSuccessor = successorList->getNode(successorList->getSize() - 1).getKey();
+	while (lastSuccessor.isBetween(thisNode.getKey(), nearLimit)) {
+		checkCacheSlice(nearLimit, farLimit);
+
+		// Calculate the limits of the next slice
+		farLimit = nearLimit;
+		nearLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
+	}
+
+	// Reset the offset
+	offset = 1;
+
+	// Reset the limits
+	farLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
+	nearLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
+
+	// Check predecessor list
+	OverlayKey lastPredecessor = predecessorList->getNode(predecessorList->getSize() - 1).getKey();
+	while (lastPredecessor.isBetween(nearLimit, thisNode.getKey())) {
+		checkCacheSlice(farLimit, nearLimit);
+
+		// Calculate the limits of the next slice
+		farLimit = nearLimit;
+		nearLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
+	}
+}
+
+void EpiChord::checkCacheSlice(OverlayKey start, OverlayKey end)
 {
 	double gamma = this->calculateGamma();
 
@@ -808,7 +820,7 @@ bool EpiChord::handleFailedNode(const TransportAddress& failed)
 	// lost our last successor - cancel periodic stabilize tasks and wait for rejoin
 	if (successorList->isEmpty() || predecessorList->isEmpty()) {
 		cancelEvent(stabilize_timer);
-		cancelEvent(fixfingers_timer);
+		cancelEvent(cache_timer);
 
 		return false;
 	}

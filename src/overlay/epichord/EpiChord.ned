@@ -42,8 +42,9 @@ simple EpiChord extends BaseOverlay
         bool stabilizeEstimation; // should we estimate the stabilize interval or use stabilizeDelay?
         double stabilizeEstimateMuliplier;
         double stabilizeDelay @unit(s); // delay between stabilization attempts (sec)
-        double fixfingersDelay @unit(s); // delay between finger cache checks (sec)
-        double fixfingersTTL @unit(s); // how long fingers should stay in the cache for (sec)
+        double cacheFlushDelay @unit(s); // delay between finger cache flushes (sec)
+        int cacheCheckMultiplier; // how many cache flushes to perform before checking the invariant
+        double cacheTTL @unit(s); // how long nodes should stay in the cache for (sec)
         double cacheUpdateDelta; // weighting to apply to old cache freshness ratios
         bool activePropagation; // should we call stabilization routines as soon as our neighbour lists are changed?
         bool sendFalseNegWarnings; // should we send warnings to fix false negatives?

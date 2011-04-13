@@ -75,7 +75,7 @@ class EpiChordNodeList : public cSimpleModule
 	 * @param overlay pointer to the main chord module
 	 * @param forwards the direction in which to access nodes
 	 */
-	virtual void initializeList(uint32_t size, NodeHandle owner, EpiChordFingerCache* cache, double cacheTTL, EpiChord* overlay, bool forwards);
+	virtual void initializeList(uint32_t size, NodeHandle owner, EpiChordFingerCache* cache, EpiChord* overlay, bool forwards);
 
 	/**
 	 * Returns number of neighbors in the node list
@@ -143,7 +143,6 @@ class EpiChordNodeList : public cSimpleModule
 
 	uint32_t nodeListSize; /**< maximum size of the node list */
 	bool forwards;
-	double cacheTTL;
 
 	EpiChordFingerCache* cache; /**< pointer to EpiChords finger cache module */
 	EpiChord* overlay; /**< pointer to the main EpiChord module */

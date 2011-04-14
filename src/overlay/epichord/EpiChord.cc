@@ -77,6 +77,7 @@ void EpiChord::initializeOverlay(int stage)
 	cacheUpdateDelta = par("cacheUpdateDelta");
 	activePropagation = par("activePropagation");
 	sendFalseNegWarnings = par("sendFalseNegWarnings");
+	sendAlreadyVisited = par("sendAlreadyVisited");
 
 	// statistics
 	joinCount = 0;
@@ -518,18 +519,20 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 	std::set<NodeHandle>* exclude = new std::set<NodeHandle>();
 
 	if (msg != NULL) {
-		assert(findNodeExt->getAlreadyVisitedNodeArraySize() == findNodeExt->getAlreadyVisitedLastUpdateArraySize());
-
 		// Add the origin node to the finger cache
 		source = ((FindNodeCall*) msg)->getSrcNode();
 		fingerCache->updateFinger(source, true);
 
-		int numAlreadyVisited = findNodeExt->getAlreadyVisitedNodeArraySize();
-		for (int i = 0;i < numAlreadyVisited;i++) {
-			NodeHandle node = findNodeExt->getAlreadyVisitedNode(i);
+		if (sendAlreadyVisited) {
+			assert(findNodeExt->getAlreadyVisitedNodeArraySize() == findNodeExt->getAlreadyVisitedLastUpdateArraySize());
 
-			fingerCache->updateFinger(node, false, now - findNodeExt->getAlreadyVisitedLastUpdate(i));
-			exclude->insert(node);
+			int numAlreadyVisited = findNodeExt->getAlreadyVisitedNodeArraySize();
+			for (int i = 0;i < numAlreadyVisited;i++) {
+				NodeHandle node = findNodeExt->getAlreadyVisitedNode(i);
+
+				fingerCache->updateFinger(node, false, now - findNodeExt->getAlreadyVisitedLastUpdate(i));
+				exclude->insert(node);
+			}
 		}
 	}
 
@@ -585,19 +588,22 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 
 	if (msg != NULL) {
 		int numVisited = nextHop->size();
-		int numAlreadyVisited = findNodeExt->getAlreadyVisitedNodeArraySize();
-
 		findNodeExt->setLastUpdatesArraySize(numVisited);
-
-		findNodeExt->setAlreadyVisitedNodeArraySize(numAlreadyVisited + numVisited);
-		findNodeExt->setAlreadyVisitedLastUpdateArraySize(numAlreadyVisited + numVisited);
 
 		for (int i = 0;i < numVisited;i++) {
 			simtime_t offset = now - (*lastUpdates)[i];
 			findNodeExt->setLastUpdates(i, offset);
+		}
 
-			findNodeExt->setAlreadyVisitedNode(i + numAlreadyVisited, (*nextHop)[i]);
-			findNodeExt->setAlreadyVisitedLastUpdate(i + numAlreadyVisited, offset);
+		if (sendAlreadyVisited) {
+			int numAlreadyVisited = findNodeExt->getAlreadyVisitedNodeArraySize();
+			findNodeExt->setAlreadyVisitedNodeArraySize(numAlreadyVisited + numVisited);
+			findNodeExt->setAlreadyVisitedLastUpdateArraySize(numAlreadyVisited + numVisited);
+
+			for (int i = 0;i < numVisited;i++) {
+				findNodeExt->setAlreadyVisitedNode(i + numAlreadyVisited, (*nextHop)[i]);
+				findNodeExt->setAlreadyVisitedLastUpdate(i + numAlreadyVisited, findNodeExt->getLastUpdates(i));
+			}
 		}
 
 		findNodeExt->setBitLength(EPICHORD_FINDNODEEXTMESSAGE_L(findNodeExt));

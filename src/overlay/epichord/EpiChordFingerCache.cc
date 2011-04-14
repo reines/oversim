@@ -23,6 +23,7 @@
 
 #include <cassert>
 
+#include <GlobalNodeListAccess.h>
 #include "hashWatch.h"
 
 #include "EpiChordFingerCache.h"
@@ -44,6 +45,8 @@ void EpiChordFingerCache::initialize(int stage)
 	// are registered, address auto-assignment takes place etc.
 	if(stage != MIN_STAGE_OVERLAY)
 		return;
+
+	globalNodeList = GlobalNodeListAccess().get();
 
 	WATCH_MAP(liveCache);
 }
@@ -228,9 +231,51 @@ uint32_t EpiChordFingerCache::countLive()
 	return liveCache.size();
 }
 
+uint32_t EpiChordFingerCache::countRealLive()
+{
+	uint32_t count = 0;
+
+	// Check all supposedly alive nodes
+	for (CacheMap::iterator it = liveCache.begin();it != liveCache.end();it++) {
+		PeerInfo* info = globalNodeList->getPeerInfo(it->second.nodeHandle);
+		if (info != NULL)
+			count++;
+	}
+
+	// Check all supposedly dead nodes
+	for (DeadMap::iterator it = deadCache.begin();it != deadCache.end();it++) {
+		PeerInfo* info = globalNodeList->getPeerInfo(it->second.nodeHandle);
+		if (info != NULL)
+			count++;
+	}
+
+	return count;
+}
+
 uint32_t EpiChordFingerCache::countDead()
 {
 	return deadCache.size();
+}
+
+uint32_t EpiChordFingerCache::countRealDead()
+{
+	uint32_t count = 0;
+
+	// Check all supposedly alive nodes
+	for (CacheMap::iterator it = liveCache.begin();it != liveCache.end();it++) {
+		PeerInfo* info = globalNodeList->getPeerInfo(it->second.nodeHandle);
+		if (info == NULL)
+			count++;
+	}
+
+	// Check all supposedly dead nodes
+	for (DeadMap::iterator it = deadCache.begin();it != deadCache.end();it++) {
+		PeerInfo* info = globalNodeList->getPeerInfo(it->second.nodeHandle);
+		if (info == NULL)
+			count++;
+	}
+
+	return count;
 }
 
 void EpiChordFingerCache::findBestHops(OverlayKey key, NodeVector* nodes, std::vector<simtime_t>* lastUpdates, std::set<NodeHandle>* exclude, int numRedundantNodes)

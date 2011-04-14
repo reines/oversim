@@ -27,6 +27,7 @@
 #include <map>
 
 #include <omnetpp.h>
+#include <GlobalNodeList.h>
 #include <NodeVector.h>
 #include <InitStages.h>
 
@@ -95,7 +96,9 @@ public:
 
 	virtual uint32_t getSize();
 	virtual uint32_t countLive();
+	virtual uint32_t countRealLive();
 	virtual uint32_t countDead();
+	virtual uint32_t countRealDead();
 
 	virtual int getSuccessfulUpdates() { return successfulUpdates; }
 
@@ -112,6 +115,7 @@ protected:
 	EpiChord* overlay;
 	double ttl;
 	int successfulUpdates;
+	GlobalNodeList* globalNodeList;
 };
 
 }; // namespace

@@ -167,9 +167,9 @@ void EpiChord::finishOverlay()
 	globalStatistics->addStdDev("EpiChord: Finger updates success/s", fingerCache->getSuccessfulUpdates() / time);
 
 	globalStatistics->addStdDev("EpiChord: Cache live nodes", fingerCache->countLive());
+	globalStatistics->addStdDev("EpiChord: Cache live nodes (real)", fingerCache->countRealLive());
 	globalStatistics->addStdDev("EpiChord: Cache dead nodes", fingerCache->countDead());
-	// Probability that a node is dead
-	globalStatistics->addStdDev("EpiChord: Estimated gamma", this->calculateGamma());
+	globalStatistics->addStdDev("EpiChord: Cache dead nodes (real)", fingerCache->countRealDead());
 
 	// Estimated node lifetime
 	if (stabilizeEstimation)

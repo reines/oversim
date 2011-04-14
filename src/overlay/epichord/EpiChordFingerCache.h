@@ -43,6 +43,7 @@ struct EpiChordFingerCacheEntry
 };
 
 typedef std::map<OverlayKey, EpiChordFingerCacheEntry> CacheMap;
+typedef std::map<TransportAddress, EpiChordFingerCacheEntry> DeadMap;
 
 class EpiChord;
 
@@ -106,7 +107,7 @@ public:
 
 protected:
 	CacheMap liveCache;
-	CacheMap deadCache;
+	DeadMap deadCache;
 	NodeHandle thisNode;
 	EpiChord* overlay;
 	double ttl;

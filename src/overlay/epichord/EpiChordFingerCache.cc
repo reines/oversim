@@ -84,12 +84,12 @@ void EpiChordFingerCache::updateFinger(const NodeHandle& node, bool direct, simt
 
 	OverlayKey sum = node.getKey() - (thisNode.getKey() + OverlayKey::ONE);
 
-	CacheMap::iterator it = deadCache.find(sum);
+	DeadMap::iterator dit = deadCache.find(node);
 	// We were alerted of a node which recently timed out for us
-	if (it != deadCache.end()) {
+	if (dit != deadCache.end()) {
 		// If we heard from them directly then I guess they are still alive...
 		if (direct)
-			deadCache.erase(it);
+			deadCache.erase(dit);
 		// Otherwise don't bother adding them
 		else
 			return;
@@ -99,7 +99,7 @@ void EpiChordFingerCache::updateFinger(const NodeHandle& node, bool direct, simt
 
 	simtime_t now = simTime();
 
-	it = liveCache.find(sum);
+	CacheMap::iterator it = liveCache.find(sum);
 	if (it != liveCache.end()) {
 		// Update the existing nodes added time
 		if (lastUpdate < it->second.added)
@@ -152,7 +152,7 @@ bool EpiChordFingerCache::handleFailedNode(const TransportAddress& failed)
 		if (failed == it->second.nodeHandle) {
 			it->second.lastUpdate = now;
 
-			deadCache[it->first] = it->second;
+			deadCache[failed] = it->second;
 			liveCache.erase(it);
 			return true;
 		}
@@ -175,7 +175,7 @@ void EpiChordFingerCache::removeOldFingers()
 		it++;
 	}
 
-	for (CacheMap::iterator it = deadCache.begin();it != deadCache.end();) {
+	for (DeadMap::iterator it = deadCache.begin();it != deadCache.end();) {
 		if (it->second.lastUpdate + (it->second.ttl * 3) < now) {
 //			std::cout << now << ": [" << thisNode.getKey() << "] Removing dead cache entry: " << it->second << std::endl;
 
@@ -293,11 +293,10 @@ simtime_t EpiChordFingerCache::estimateNodeLifetime(int minSampleSize)
 
 	simtime_t lifetime = 0;
 
-	for (CacheMap::iterator it = deadCache.begin();it != deadCache.end();it++)
+	for (DeadMap::iterator it = deadCache.begin();it != deadCache.end();it++)
 		lifetime += (it->second.lastUpdate - it->second.added);
 
 	return lifetime / count;
 }
-
 
 }; // namespace

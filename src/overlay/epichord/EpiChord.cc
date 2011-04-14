@@ -483,7 +483,7 @@ void EpiChord::checkCacheSlice(OverlayKey start, OverlayKey end)
 
 		LookupCall* call = new LookupCall();
 		call->setKey(destKey);
-		call->setNumSiblings(this->getMaxNumSiblings());
+		call->setNumSiblings(requiredNodes > this->getMaxNumSiblings() ? this->getMaxNumSiblings() : requiredNodes);
 
 //		std::cout << simTime() << ": [" << thisNode.getKey() << "] Sending fix fingers to: " << destKey << std::endl;
 		sendRouteRpcCall(OVERLAY_COMP, destKey, call);
@@ -543,38 +543,37 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 		nextHop->push_back(thisNode);
 		lastUpdates->push_back(now);
 
-		// Check numSiblings isn't too high
-		if ((uint32_t) numSiblings > predecessorList->getSize())
-			numSiblings = predecessorList->getSize();
+		nextHop->push_back(predecessorList->getNode());
+		lastUpdates->push_back(now);
 
-		// inform of siblings
-		for (int i = 0;i < numSiblings;i++) {
-			nextHop->push_back(predecessorList->getNode(i));
-			lastUpdates->push_back(now);
-		}
+		nextHop->push_back(successorList->getNode());
+		lastUpdates->push_back(now);
 	}
 	else {
+		const NodeHandle* node = NULL;
+
 		// No source specified, this implies it is a local request
 		if (source.isUnspecified()) {
 			OverlayKey successorDistance = distance(successorList->getNode().getKey(), key);
 			OverlayKey predecessorDistance = distance(predecessorList->getNode().getKey(), key);
 
 			// add a successor or predecessor, depending on which one is closer to the target
-			nextHop->push_back(predecessorDistance < successorDistance ? predecessorList->getNode() : successorList->getNode());
-			lastUpdates->push_back(now);
+			node = predecessorDistance < successorDistance ? &predecessorList->getNode() : &successorList->getNode();
 		}
 		//   ---- (source) ---- (us) ---- (destination) ----
 		else if (thisNode.getKey().isBetween(source.getKey(), key)) {
 			// add a successor
-			nextHop->push_back(successorList->getNode());
-			lastUpdates->push_back(now);
+			node = &successorList->getNode();
 		}
 		// ---- (source) ---- (destination) ---- (us) ----
 		else {
 			// add a predecessor
-			nextHop->push_back(predecessorList->getNode());
-			lastUpdates->push_back(now);
+			node = &predecessorList->getNode();
 		}
+
+		nextHop->push_back(*node);
+		lastUpdates->push_back(now);
+		exclude->insert(*node);
 
 		// Add the numRedundantNodes best next hops
 		fingerCache->findBestHops(key, nextHop, lastUpdates, exclude, numRedundantNodes - 1);
@@ -631,13 +630,10 @@ bool EpiChord::isSiblingFor(const NodeHandle& node, const OverlayKey& key, int n
 {
 	assert(!key.isUnspecified());
 
-	if (state != READY) {
+	if (state != READY || numSiblings > getMaxNumSiblings()) {
 		*err = true;
 		return false;
 	}
-
-	if (numSiblings > getMaxNumSiblings())
-		throw new cRuntimeError("EpiChord::isSiblingFor(): numSiblings too big!");
 
 	// set default number of siblings to consider
 	if (numSiblings == -1)

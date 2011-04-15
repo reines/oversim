@@ -514,9 +514,9 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 
 	simtime_t now = simTime();
 	NodeHandle source = NodeHandle::UNSPECIFIED_NODE;
-
-	// A list of nodes to exclude from the search
+	std::vector<simtime_t>* lastUpdates = new std::vector<simtime_t>();
 	std::set<NodeHandle>* exclude = new std::set<NodeHandle>();
+	bool err;
 
 	if (msg != NULL) {
 		// Add the origin node to the finger cache
@@ -535,9 +535,6 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 			}
 		}
 	}
-
-	std::vector<simtime_t>* lastUpdates = new std::vector<simtime_t>();
-	bool err;
 
 	// see section II of EpiChord MIT-LCS-TR-963
 
@@ -610,6 +607,7 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 	}
 
 	delete exclude;
+	delete lastUpdates;
 	return nextHop;
 }
 

@@ -40,7 +40,7 @@ static const int EPICHORDTTL_L = 8;
 #define EPICHORD_STABILIZECALL_L(msg) (BASECALL_L(msg) + (msg->getAdditionsArraySize() * NODEHANDLE_L) + (msg->getRemovalsArraySize()) + EPICHORDNODETYPE_L)
 #define EPICHORD_STABILIZERESPONSE_L(msg) (BASERESPONSE_L(msg) + (msg->getPredecessorsArraySize() * NODEHANDLE_L) + (msg->getSuccessorsArraySize() * NODEHANDLE_L) + EPICHORDNODETYPE_L)
 
-#define EPICHORD_FINDNODEEXTMESSAGE_L(msg) ((msg->getLastUpdatesArraySize() * EPICHORDTTL_L) + (msg->getAlreadyVisitedNodeArraySize() * NODEHANDLE_L) + (msg->getAlreadyVisitedLastUpdateArraySize() * EPICHORDTTL_L))
+#define EPICHORD_FINDNODEEXTMESSAGE_L(msg) ((msg->getLastUpdatesArraySize() * EPICHORDTTL_L))
 #define EPICOORD_BROADCASTINFO_L(msg) (KEY_L)
 }}
 
@@ -123,8 +123,6 @@ packet EpiChordStabilizeResponse extends BaseResponseMessage
 packet EpiChordFindNodeExtMessage
 {
 	simtime_t lastUpdates[];		// expire times of the nodes in this findNodeResponse
-	NodeHandle alreadyVisitedNode[];	// nodes we have already visited in this lookup
-	simtime_t alreadyVisitedLastUpdate[];	// last update times for nodes already visited
 }
 
 packet EpiCoordBroadcastInfo

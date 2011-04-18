@@ -77,7 +77,6 @@ void EpiChord::initializeOverlay(int stage)
 	cacheUpdateDelta = par("cacheUpdateDelta");
 	activePropagation = par("activePropagation");
 	sendFalseNegWarnings = par("sendFalseNegWarnings");
-	sendAlreadyVisited = par("sendAlreadyVisited");
 
 	// statistics
 	joinCount = 0;
@@ -522,18 +521,6 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 		// Add the origin node to the finger cache
 		source = ((FindNodeCall*) msg)->getSrcNode();
 		fingerCache->updateFinger(source, true);
-
-		if (sendAlreadyVisited) {
-			assert(findNodeExt->getAlreadyVisitedNodeArraySize() == findNodeExt->getAlreadyVisitedLastUpdateArraySize());
-
-			int numAlreadyVisited = findNodeExt->getAlreadyVisitedNodeArraySize();
-			for (int i = 0;i < numAlreadyVisited;i++) {
-				NodeHandle node = findNodeExt->getAlreadyVisitedNode(i);
-
-				fingerCache->updateFinger(node, false, now - findNodeExt->getAlreadyVisitedLastUpdate(i));
-				exclude->insert(node);
-			}
-		}
 	}
 
 	// see section II of EpiChord MIT-LCS-TR-963
@@ -590,17 +577,6 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 		for (int i = 0;i < numVisited;i++) {
 			simtime_t offset = now - (*lastUpdates)[i];
 			findNodeExt->setLastUpdates(i, offset);
-		}
-
-		if (sendAlreadyVisited) {
-			int numAlreadyVisited = findNodeExt->getAlreadyVisitedNodeArraySize();
-			findNodeExt->setAlreadyVisitedNodeArraySize(numAlreadyVisited + numVisited);
-			findNodeExt->setAlreadyVisitedLastUpdateArraySize(numAlreadyVisited + numVisited);
-
-			for (int i = 0;i < numVisited;i++) {
-				findNodeExt->setAlreadyVisitedNode(i + numAlreadyVisited, (*nextHop)[i]);
-				findNodeExt->setAlreadyVisitedLastUpdate(i + numAlreadyVisited, findNodeExt->getLastUpdates(i));
-			}
 		}
 
 		findNodeExt->setBitLength(EPICHORD_FINDNODEEXTMESSAGE_L(findNodeExt));

@@ -517,9 +517,14 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 	std::set<NodeHandle>* exclude = new std::set<NodeHandle>();
 	bool err;
 
+	exclude->insert(thisNode);
+
 	if (msg != NULL) {
 		// Add the origin node to the finger cache
 		source = ((FindNodeCall*) msg)->getSrcNode();
+		if (!source.isUnspecified())
+			exclude->insert(source);
+
 		fingerCache->updateFinger(source, true);
 	}
 

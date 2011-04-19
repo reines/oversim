@@ -64,23 +64,22 @@ void EpiChordIterativePathLookup::checkFalseNegative()
 	if (!lookup->getVisited(preceedingEntry->handle) || !lookup->getVisited(succeedingEntry->handle))
 		return;
 
-	bool falseNegative = false;
+	bool assumeSuccess = success;
+	bool assumeFinished = finished;
 
 	// One of the 2 nodes has outdated successor/predecessor - this is a false negative
 	if (bestSuccessor == bestPredecessorsSuccessor || bestPredecessor == bestSuccessorsPredecessor) {
-		falseNegative = true;
-	}
-	// There is only 1 node in between, and it is dead (or only just joined/not ready) - this is a false negative
-	else if (bestPredecessorsSuccessor == bestSuccessorsPredecessor) {
-		falseNegative = true;
+		assumeSuccess = true;
+		assumeFinished = true;
 	}
 	// both nodes have dead blockers, but there could be alive in the middle
 	else if (lookup->getDead(bestPredecessorsSuccessor) && lookup->getDead(bestSuccessorsPredecessor)) {
-		// TODO: Maybe?
+		assumeSuccess = true;
+		// Wait until the query has finished until we assume this is true
 	}
 
-	// If this isn't a false negative, do nothing
-	if (!falseNegative)
+	// If this isn't a false negative or we haven't finished yet, do nothing
+	if (!assumeSuccess || !assumeFinished)
 		return;
 
 	NodeVector* deadNodes = new NodeVector();
@@ -91,11 +90,10 @@ void EpiChordIterativePathLookup::checkFalseNegative()
 			deadNodes->push_back(it->handle);
 	}
 
-	// There is no dead nodes inbetween the 2 best options - this shouldn't happen!
-	if (deadNodes->isEmpty())
-		return;
+	// There are dead nodes inbetween the 2 best options - alert their successor/predecessor
+	if (!deadNodes->isEmpty())
+		epichord->sendFalseNegWarning(bestPredecessor, bestSuccessor, deadNodes);
 
-	epichord->sendFalseNegWarning(bestPredecessor, bestSuccessor, deadNodes);
 	delete deadNodes;
 
 	lookup->addSibling(bestSuccessor);
@@ -109,18 +107,29 @@ void EpiChordIterativePathLookup::handleResponse(FindNodeResponse* msg)
 	if (finished)
 		return;
 
-	if (msg->getClosestNodesArraySize() > 0) {
-		NodeHandle source = msg->getSrcNode();
-
+	NodeHandle source = msg->getSrcNode();
+	if (!source.isUnspecified() && msg->getClosestNodesArraySize() > 0) {
 		// This is the best predecessor so far
+		//   ---- (best predecessor) ---- (source) ---- (destination) ----
 		if (source.getKey().isBetween(bestPredecessor.getKey(), lookup->getKey())) {
 			bestPredecessor = source;
-			bestPredecessorsSuccessor = msg->getClosestNodes(0);
+			// If position 0 is the node itself then it thinks it is
+			// responsible, it's successor is returned in position 2
+			if (msg->getClosestNodes(0) == source)
+				bestPredecessorsSuccessor = msg->getClosestNodes(2);
+			else
+				bestPredecessorsSuccessor = msg->getClosestNodes(0);
 		}
 		// This is the best successor so far
+		//   ---- (destination) ---- (source) ---- (best successor) ----
 		else if (source.getKey().isBetween(lookup->getKey(), bestSuccessor.getKey())) {
 			bestSuccessor = source;
-			bestSuccessorsPredecessor = msg->getClosestNodes(0);
+			// If position 0 is the node itself then it thinks it is
+			// responsible, it's predecessor is returned in position 1
+			if (msg->getClosestNodes(0) == source)
+				bestSuccessorsPredecessor = msg->getClosestNodes(1);
+			else
+				bestSuccessorsPredecessor = msg->getClosestNodes(0);
 		}
 	}
 
@@ -128,7 +137,7 @@ void EpiChordIterativePathLookup::handleResponse(FindNodeResponse* msg)
 
 	// The lookup isn't finished, but the response was
 	// negative so check if it was a false-negative.
-	checkFalseNegative();
+	this->checkFalseNegative();
 }
 
 void EpiChordIterativePathLookup::handleTimeout(BaseCallMessage* msg, const TransportAddress& dest, int rpcId)

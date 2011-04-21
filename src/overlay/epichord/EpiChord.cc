@@ -615,14 +615,14 @@ bool EpiChord::isSiblingFor(const NodeHandle& node, const OverlayKey& key, int n
 {
 	assert(!key.isUnspecified());
 
-	if (state != READY || numSiblings > getMaxNumSiblings()) {
+	if (state != READY) {
 		*err = true;
 		return false;
 	}
 
 	// set default number of siblings to consider
-	if (numSiblings == -1)
-		numSiblings = getMaxNumSiblings();
+	if (numSiblings < 0 || numSiblings > this->getMaxNumSiblings())
+		numSiblings = this->getMaxNumSiblings();
 
 	// if this is the first and only node on the ring, it is responsible
 	if (predecessorList->isEmpty() && node == thisNode) {

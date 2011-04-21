@@ -34,7 +34,7 @@ EpiChordIterativeLookup::EpiChordIterativeLookup(BaseOverlay* overlay, RoutingTy
 
 IterativePathLookup* EpiChordIterativeLookup::createPathLookup()
 {
-    return new EpiChordIterativePathLookup(this, epichord);
+	return new EpiChordIterativePathLookup(this, epichord);
 }
 
 EpiChordIterativePathLookup::EpiChordIterativePathLookup(EpiChordIterativeLookup* lookup, EpiChord* epichord) : IterativePathLookup(lookup)
@@ -111,7 +111,7 @@ void EpiChordIterativePathLookup::handleResponse(FindNodeResponse* msg)
 	if (!source.isUnspecified() && msg->getClosestNodesArraySize() > 0) {
 		// This is the best predecessor so far
 		//   ---- (best predecessor) ---- (source) ---- (destination) ----
-		if (source.getKey().isBetween(bestPredecessor.getKey(), lookup->getKey())) {
+		if (source.getKey().isBetweenR(bestPredecessor.getKey(), lookup->getKey())) {
 			bestPredecessor = source;
 			// If position 0 is the node itself then it thinks it is
 			// responsible, it's successor is returned in position 2

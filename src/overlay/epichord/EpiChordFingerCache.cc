@@ -82,7 +82,7 @@ bool EpiChordFingerCache::contains(const TransportAddress& node)
 void EpiChordFingerCache::updateFinger(const NodeHandle& node, bool direct, simtime_t lastUpdate, double ttl)
 {
 	// Trying to update an unspecified node (happens if we receive a local findNode call)
-	if (node.isUnspecified() || node.getKey().isUnspecified())
+	if (node.isUnspecified() || node.getKey().isUnspecified() || node == thisNode)
 		return;
 
 	OverlayKey sum = node.getKey() - (thisNode.getKey() + OverlayKey::ONE);

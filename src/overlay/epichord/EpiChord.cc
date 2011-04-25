@@ -535,11 +535,15 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 		nextHop->push_back(thisNode);
 		lastUpdates->push_back(now);
 
-		nextHop->push_back(predecessorList->getNode());
-		lastUpdates->push_back(now);
+		if (!predecessorList->isEmpty()) {
+			nextHop->push_back(predecessorList->getNode());
+			lastUpdates->push_back(now);
+		}
 
-		nextHop->push_back(successorList->getNode());
-		lastUpdates->push_back(now);
+		if (!successorList->isEmpty()) {
+			nextHop->push_back(successorList->getNode());
+			lastUpdates->push_back(now);
+		}
 	}
 	else {
 		const NodeHandle* node = NULL;

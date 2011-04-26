@@ -345,7 +345,6 @@ void EpiChord::handleStabilizeTimerExpired(cMessage* msg)
 		call->setNodeType(SUCCESSOR);
 
 		NodeVector* successorAdditions = successorList->getAdditions();
-		NodeVector* successorRemovals = successorList->getRemovals();
 
 		int numAdditions = successorAdditions->size();
 		call->setAdditionsArraySize(numAdditions);
@@ -353,14 +352,7 @@ void EpiChord::handleStabilizeTimerExpired(cMessage* msg)
 		for (int i = 0;i < numAdditions;i++)
 			call->setAdditions(i, (*successorAdditions)[i]);
 
-		int numRemovals = successorRemovals->size();
-		call->setRemovalsArraySize(numRemovals);
-
-		for (int i = 0;i < numRemovals;i++)
-			call->setRemovals(i, (*successorRemovals)[i]);
-
 		successorAdditions->clear();
-		successorRemovals->clear();
 
 		call->setBitLength(EPICHORD_STABILIZECALL_L(call));
 		sendUdpRpcCall(predecessorList->getNode(), call);
@@ -372,7 +364,6 @@ void EpiChord::handleStabilizeTimerExpired(cMessage* msg)
 		call->setNodeType(PREDECESSOR);
 
 		NodeVector* predecessorAdditions = predecessorList->getAdditions();
-		NodeVector* predecessorRemovals = predecessorList->getRemovals();
 
 		int numAdditions = predecessorAdditions->size();
 		call->setAdditionsArraySize(numAdditions);
@@ -380,14 +371,7 @@ void EpiChord::handleStabilizeTimerExpired(cMessage* msg)
 		for (int i = 0;i < numAdditions;i++)
 			call->setAdditions(i, (*predecessorAdditions)[i]);
 
-		int numRemovals = predecessorRemovals->size();
-		call->setRemovalsArraySize(numRemovals);
-
-		for (int i = 0;i < numRemovals;i++)
-			call->setRemovals(i, (*predecessorRemovals)[i]);
-
 		predecessorAdditions->clear();
-		predecessorRemovals->clear();
 
 		call->setBitLength(EPICHORD_STABILIZECALL_L(call));
 		sendUdpRpcCall(successorList->getNode(), call);
@@ -1006,10 +990,6 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 		default:
 			throw new cRuntimeError("Received a stabilize request from an unknown source.");
 	}
-
-	int numRemovals = call->getRemovalsArraySize();
-	for (int i = 0;i < numRemovals;i++)
-		handleFailedNode(call->getRemovals(i));
 
 	// If there were any changes, and they effected us
 	if (activePropagation && (predecessorList->hasChanged() || successorList->hasChanged())) {

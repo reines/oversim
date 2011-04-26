@@ -111,7 +111,9 @@ void EpiChordIterativePathLookup::handleResponse(FindNodeResponse* msg)
 	if (!source.isUnspecified() && msg->getClosestNodesArraySize() > 0) {
 		// This is the best predecessor so far
 		//   ---- (best predecessor) ---- (source) ---- (destination) ----
-		if (source.getKey().isBetweenR(bestPredecessor.getKey(), lookup->getKey())) {
+		if ((!bestPredecessor.isUnspecified() && source.getKey().isBetweenR(bestPredecessor.getKey(), lookup->getKey())) ||
+				//   ---- (us) ---- (source) ---- (destination) ----
+				(bestPredecessor.isUnspecified() && source.getKey().isBetweenR(overlay->getThisNode().getKey(), lookup->getKey()))) {
 			bestPredecessor = source;
 			// If position 0 is the node itself then it thinks it is
 			// responsible, it's successor is returned in position 2
@@ -122,7 +124,9 @@ void EpiChordIterativePathLookup::handleResponse(FindNodeResponse* msg)
 		}
 		// This is the best successor so far
 		//   ---- (destination) ---- (source) ---- (best successor) ----
-		else if (source.getKey().isBetween(lookup->getKey(), bestSuccessor.getKey())) {
+		else if ((!bestSuccessor.isUnspecified() && source.getKey().isBetween(lookup->getKey(), bestSuccessor.getKey())) ||
+				//   ---- (destination) ---- (source) ---- (us) ----
+				(bestSuccessor.isUnspecified() && source.getKey().isBetween(lookup->getKey(), overlay->getThisNode().getKey()))) {
 			bestSuccessor = source;
 			// If position 0 is the node itself then it thinks it is
 			// responsible, it's predecessor is returned in position 1

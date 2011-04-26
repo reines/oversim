@@ -171,8 +171,6 @@ bool EpiChordNodeList::handleFailedNode(const TransportAddress& failed)
 	assert(failed != thisNode);
 	for (NodeMap::iterator it = nodeMap.begin();it != nodeMap.end();it++) {
 		if (failed == it->second.nodeHandle) {
-			removals.push_back(it->second.nodeHandle);
-
 			nodeMap.erase(it);
 			overlay->callUpdate(failed, false);
 			cache->handleFailedNode(failed);
@@ -219,17 +217,12 @@ void EpiChordNodeList::removeOldNodes()
 
 bool EpiChordNodeList::hasChanged()
 {
-	return !additions.isEmpty() || !removals.isEmpty();
+	return !additions.isEmpty();
 }
 
 NodeVector* EpiChordNodeList::getAdditions()
 {
 	return &additions;
-}
-
-NodeVector* EpiChordNodeList::getRemovals()
-{
-	return &removals;
 }
 
 void EpiChordNodeList::updateDisplayString()

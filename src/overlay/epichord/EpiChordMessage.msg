@@ -37,7 +37,7 @@ static const int EPICHORDTTL_L = 8;
 #define EPICHORD_FALSENEGWARNINGCALL_L(msg) (BASECALL_L(msg) + NODEHANDLE_L + (msg->getDeadNodeArraySize() * NODEHANDLE_L))
 #define EPICHORD_FALSENEGWARNINGRESPONSE_L(msg) BASERESPONSE_L(msg)
 
-#define EPICHORD_STABILIZECALL_L(msg) (BASECALL_L(msg) + (msg->getAdditionsArraySize() * NODEHANDLE_L) + (msg->getRemovalsArraySize()) + EPICHORDNODETYPE_L)
+#define EPICHORD_STABILIZECALL_L(msg) (BASECALL_L(msg) + (msg->getAdditionsArraySize() * NODEHANDLE_L) + EPICHORDNODETYPE_L)
 #define EPICHORD_STABILIZERESPONSE_L(msg) (BASERESPONSE_L(msg) + (msg->getPredecessorsArraySize() * NODEHANDLE_L) + (msg->getSuccessorsArraySize() * NODEHANDLE_L) + EPICHORDNODETYPE_L)
 
 #define EPICHORD_FINDNODEEXTMESSAGE_L(msg) ((msg->getLastUpdatesArraySize() * EPICHORDTTL_L))
@@ -103,7 +103,6 @@ packet EpiChordFalseNegWarningResponse extends BaseResponseMessage
 packet EpiChordStabilizeCall extends BaseCallMessage
 {
 	NodeHandle additions[];
-	NodeHandle removals[];
 	int nodeType enum(EpiChordNodeType);	// Type of node we are
 }
 

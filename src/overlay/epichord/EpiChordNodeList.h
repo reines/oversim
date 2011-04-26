@@ -129,7 +129,6 @@ class EpiChordNodeList : public cSimpleModule
 
 	bool hasChanged();
 	NodeVector* getAdditions();
-	NodeVector* getRemovals();
 
 	void display ();
 
@@ -139,7 +138,6 @@ class EpiChordNodeList : public cSimpleModule
 	NodeMap nodeMap; /**< internal representation of the node list */
 
 	NodeVector additions;
-	NodeVector removals;
 
 	uint32_t nodeListSize; /**< maximum size of the node list */
 	bool forwards;

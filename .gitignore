@@ -1,6 +1,7 @@
 /.project
 /.cproject
 /.pydevproject
+/nbproject/
 /out
 /doc
 /src/Makefile

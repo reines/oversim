@@ -65,9 +65,6 @@ void EpiChordFingerCache::initializeCache(NodeHandle owner, EpiChord* overlay, d
 	deadCache.clear();
 
 	successfulUpdates = 0;
-
-	// Add ourselves to the cache with an expire time of 0
-	updateFinger(owner, true, simTime(), 0);
 }
 
 bool EpiChordFingerCache::contains(const TransportAddress& node)
@@ -79,7 +76,7 @@ bool EpiChordFingerCache::contains(const TransportAddress& node)
 	return false;
 }
 
-void EpiChordFingerCache::updateFinger(const NodeHandle& node, bool direct, simtime_t lastUpdate, double ttl)
+void EpiChordFingerCache::updateFinger(const NodeHandle& node, bool direct, simtime_t lastUpdate, double ttl, NodeSource source)
 {
 	// Trying to update an unspecified node (happens if we receive a local findNode call)
 	if (node.isUnspecified() || node.getKey().isUnspecified() || node == thisNode)
@@ -100,8 +97,6 @@ void EpiChordFingerCache::updateFinger(const NodeHandle& node, bool direct, simt
 
 	successfulUpdates++;
 
-	simtime_t now = simTime();
-
 	CacheMap::iterator it = liveCache.find(sum);
 	if (it != liveCache.end()) {
 		// Update the existing nodes added time
@@ -113,7 +108,7 @@ void EpiChordFingerCache::updateFinger(const NodeHandle& node, bool direct, simt
 			it->second.lastUpdate = lastUpdate;
 
 		// Update the existing nodes ttl
-		if (it->second.ttl > 0 && ttl > it->second.ttl)
+		if (it->second.ttl > 0 && (ttl > it->second.ttl || ttl == 0))
 			it->second.ttl = ttl;
 
 		return;
@@ -125,6 +120,7 @@ void EpiChordFingerCache::updateFinger(const NodeHandle& node, bool direct, simt
 	entry.added = lastUpdate;
 	entry.lastUpdate = lastUpdate;
 	entry.ttl = ttl;
+	entry.source = source;
 
 //	std::cout << simTime() << ": [" << thisNode.getKey() << "] Adding cache entry: " << entry << std::endl;
 	liveCache[sum] = entry;
@@ -190,29 +186,40 @@ void EpiChordFingerCache::removeOldFingers()
 	}
 }
 
-EpiChordFingerCacheEntry EpiChordFingerCache::getNode(uint32_t pos)
+EpiChordFingerCacheEntry* EpiChordFingerCache::getNode(const NodeHandle& node)
+{
+	OverlayKey sum = node.getKey() - (thisNode.getKey() + OverlayKey::ONE);
+
+	CacheMap::iterator it = liveCache.find(sum);
+	if (it == liveCache.end())
+		return NULL;
+
+	return &it->second;
+}
+
+EpiChordFingerCacheEntry* EpiChordFingerCache::getNode(uint32_t pos)
 {
 	if (pos >= liveCache.size())
-		throw cRuntimeError("Index out of bound (EpiChordFingerCache, getNode())");
+		return NULL;
 
 	CacheMap::iterator it = liveCache.begin();
 	for (uint32_t i = 0; i < pos; i++) {
 		it++;
 		if (i == (pos - 1))
-			return it->second;
+			return &it->second;
 	}
-	return it->second;
+	return &it->second;
 }
 
 uint32_t EpiChordFingerCache::countSlice(OverlayKey start, OverlayKey end)
 {
 	uint32_t count = 0;
 
-	start -= thisNode.getKey() + OverlayKey::ONE;
-	end -= thisNode.getKey() + OverlayKey::ONE;
+	start -= (thisNode.getKey() + OverlayKey::ONE);
+	end -= (thisNode.getKey() + OverlayKey::ONE);
 
 	for (CacheMap::iterator it = liveCache.lower_bound(start);it != liveCache.end();it++) {
-		if (it->first >= end)
+		if (it->first > end)
 			break;
 
 		count++;
@@ -342,6 +349,36 @@ simtime_t EpiChordFingerCache::estimateNodeLifetime(int minSampleSize)
 		lifetime += (it->second.lastUpdate - it->second.added);
 
 	return lifetime / count;
+}
+
+void EpiChordFingerCache::display()
+{
+	std::cout << "---------------------------" << std::endl;
+	std::cout << "live: " << this->countLive() << std::endl;
+
+	for (CacheMap::iterator it = liveCache.begin();it != liveCache.end();it++)
+		std::cout << it->second.nodeHandle.getKey() << std::endl;
+
+	std::cout << "dead: " << this->countDead() << std::endl;
+
+	for (DeadMap::iterator it = deadCache.begin();it != deadCache.end();it++)
+		std::cout << it->second.nodeHandle.getKey() << std::endl;
+
+	int local = 0, observed = 0, maintenance = 0, cache_transfer = 0;
+	for (CacheMap::iterator it = liveCache.begin();it != liveCache.end();it++) {
+		switch (it->second.source) {
+			case LOCAL: local++; break;
+			case OBSERVED: observed++; break;
+			case MAINTENANCE: maintenance++; break;
+			case CACHE_TRANSFER: cache_transfer++; break;
+		}
+	}
+
+	std::cout << "from local: " << local << std::endl;
+	std::cout << "from observed: " << observed << std::endl;
+	std::cout << "from maintenance: " << maintenance << std::endl;
+	std::cout << "from cache transfer: " << cache_transfer << std::endl;
+	std::cout << "---------------------------" << std::endl;
 }
 
 }; // namespace

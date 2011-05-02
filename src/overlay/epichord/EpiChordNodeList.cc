@@ -138,7 +138,10 @@ void EpiChordNodeList::addNode(NodeHandle node, bool resize)
 	else
 		it->second.newEntry = true;
 
-	cache->updateFinger(node, true, simTime(), 0);
+	if (node != thisNode) {
+		cache->updateFinger(node, true, simTime(), 0, LOCAL);
+		assert (cache->getNode(node) != NULL);
+	}
 
 	if ((resize == true) && (nodeMap.size() > (uint32_t)nodeListSize)) {
 		it = nodeMap.end();

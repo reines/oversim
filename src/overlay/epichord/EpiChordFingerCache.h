@@ -35,12 +35,15 @@ class BaseOverlay;
 
 namespace oversim {
 
+enum NodeSource { OBSERVED, LOCAL, MAINTENANCE, CACHE_TRANSFER };
+
 struct EpiChordFingerCacheEntry
 {
 	NodeHandle nodeHandle;
 	simtime_t lastUpdate;
 	simtime_t added;
 	double ttl;
+	NodeSource source;
 };
 
 typedef std::map<OverlayKey, EpiChordFingerCacheEntry> CacheMap;
@@ -80,8 +83,8 @@ public:
 	 */
 	virtual void initializeCache(NodeHandle owner, EpiChord* overlay, double ttl);
 
-	virtual void updateFinger(const NodeHandle& node, bool direct, simtime_t lastUpdate = simTime()) { updateFinger(node, direct, lastUpdate, ttl); }
-	virtual void updateFinger(const NodeHandle& node, bool direct, simtime_t lastUpdate, double ttl);
+	virtual void updateFinger(const NodeHandle& node, bool direct, NodeSource source, simtime_t lastUpdate = simTime()) { updateFinger(node, direct, lastUpdate, ttl, source); }
+	virtual void updateFinger(const NodeHandle& node, bool direct, simtime_t lastUpdate, double ttl, NodeSource source);
 
 	virtual void setFingerTTL(const NodeHandle& node) { setFingerTTL(node, ttl); }
 	virtual void setFingerTTL(const NodeHandle& node, double ttl);
@@ -90,7 +93,8 @@ public:
 
 	void removeOldFingers();
 
-	EpiChordFingerCacheEntry getNode(uint32_t pos);
+	EpiChordFingerCacheEntry* getNode(const NodeHandle& node);
+	EpiChordFingerCacheEntry* getNode(uint32_t pos);
 
 	uint32_t countSlice(OverlayKey startOffset, OverlayKey endOffset);
 
@@ -107,6 +111,7 @@ public:
 	simtime_t estimateNodeLifetime(int minSampleSize = 5);
 
 	virtual bool contains(const TransportAddress& node);
+	virtual void display();
 
 protected:
 	CacheMap liveCache;

@@ -426,6 +426,7 @@ void EpiChord::checkCacheInvariant()
 
 	// Check successor list
 	OverlayKey lastSuccessor = successorList->getNode(successorList->getSize() - 1).getKey();
+	//   ---- (us) ---- (last successor) ---- (near limit) ----
 	while (lastSuccessor.isBetween(thisNode.getKey(), nearLimit)) {
 		checkCacheSlice(nearLimit, farLimit);
 
@@ -443,6 +444,7 @@ void EpiChord::checkCacheInvariant()
 
 	// Check predecessor list
 	OverlayKey lastPredecessor = predecessorList->getNode(predecessorList->getSize() - 1).getKey();
+	//   ---- (near limit) ---- (last predecessor) ---- (us) ----
 	while (lastPredecessor.isBetween(nearLimit, thisNode.getKey())) {
 		checkCacheSlice(farLimit, nearLimit);
 
@@ -457,8 +459,8 @@ void EpiChord::checkCacheSlice(OverlayKey start, OverlayKey end)
 	double gamma = this->calculateGamma();
 
 	int numNodes = fingerCache->countSlice(start, end);
-	int requiredNodes = (int) ceil(nodesPerSlice / (1.0 - gamma));
-//	std::cout << "requiredNodes: " << requiredNodes << std::endl;
+	int requiredNodes = nodesPerSlice; // Disable the nodes per slice calculation since it isn't used in the original implementation
+	// int requiredNodes = (int) ceil(nodesPerSlice / (1.0 - gamma));
 
 	// If this slice doesn't have enough nodes, try look up some more...
 	if (numNodes < requiredNodes) {
@@ -470,7 +472,7 @@ void EpiChord::checkCacheSlice(OverlayKey start, OverlayKey end)
 		call->setNumSiblings(requiredNodes > this->getMaxNumSiblings() ? this->getMaxNumSiblings() : requiredNodes);
 
 //		std::cout << simTime() << ": [" << thisNode.getKey() << "] Sending fix fingers to: " << destKey << std::endl;
-		sendRouteRpcCall(OVERLAY_COMP, destKey, call);
+		sendInternalRpcCall(OVERLAY_COMP, call);
 	}
 }
 
@@ -509,7 +511,7 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 		if (!source.isUnspecified())
 			exclude->insert(source);
 
-		fingerCache->updateFinger(source, true);
+		fingerCache->updateFinger(source, true, OBSERVED);
 	}
 
 	// see section II of EpiChord MIT-LCS-TR-963
@@ -520,17 +522,25 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 		lastUpdates->push_back(now);
 
 		if (!predecessorList->isEmpty()) {
-			nextHop->push_back(predecessorList->getNode());
-			lastUpdates->push_back(now);
+			EpiChordFingerCacheEntry* entry = fingerCache->getNode(predecessorList->getNode());
+			assert (entry != NULL);
+			if (entry != NULL) {
+				nextHop->push_back(entry->nodeHandle);
+				lastUpdates->push_back(entry->lastUpdate);
+			}
 		}
 
 		if (!successorList->isEmpty()) {
-			nextHop->push_back(successorList->getNode());
-			lastUpdates->push_back(now);
+			EpiChordFingerCacheEntry* entry = fingerCache->getNode(successorList->getNode());
+			assert (entry != NULL);
+			if (entry != NULL) {
+				nextHop->push_back(entry->nodeHandle);
+				lastUpdates->push_back(entry->lastUpdate);
+			}
 		}
 	}
 	else {
-		const NodeHandle* node = NULL;
+		const EpiChordFingerCacheEntry* entry;
 
 		// No source specified, this implies it is a local request
 		if (source.isUnspecified()) {
@@ -538,25 +548,28 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 			OverlayKey predecessorDistance = distance(predecessorList->getNode().getKey(), key);
 
 			// add a successor or predecessor, depending on which one is closer to the target
-			node = predecessorDistance < successorDistance ? &predecessorList->getNode() : &successorList->getNode();
+			entry = fingerCache->getNode(predecessorDistance < successorDistance ? predecessorList->getNode() : successorList->getNode());
 		}
 		//   ---- (source) ---- (us) ---- (destination) ----
 		else if (thisNode.getKey().isBetween(source.getKey(), key)) {
 			// add a successor
-			node = &successorList->getNode();
+			entry = fingerCache->getNode(successorList->getNode());
 		}
-		// ---- (source) ---- (destination) ---- (us) ----
+		// ---- (destination) ---- (us) ---- (source) ----
 		else {
 			// add a predecessor
-			node = &predecessorList->getNode();
+			entry = fingerCache->getNode(predecessorList->getNode());
 		}
 
-		nextHop->push_back(*node);
-		lastUpdates->push_back(now);
-		exclude->insert(*node);
+		assert (entry != NULL);
+		if (entry != NULL) {
+			nextHop->push_back(entry->nodeHandle);
+			lastUpdates->push_back(entry->lastUpdate);
+			exclude->insert(entry->nodeHandle);
+		}
 
 		// Add the numRedundantNodes best next hops
-		fingerCache->findBestHops(key, nextHop, lastUpdates, exclude, numRedundantNodes - 1);
+		fingerCache->findBestHops(key, nextHop, lastUpdates, exclude, numRedundantNodes);
 	}
 
 	// Check we managed to actually find something
@@ -594,7 +607,7 @@ void EpiChord::joinForeignPartition(const NodeHandle &node)
 	EpiChordJoinCall *call = new EpiChordJoinCall("EpiChordJoinCall");
 	call->setBitLength(EPICHORD_JOINCALL_L(call));
 
-	fingerCache->updateFinger(node, true);
+	fingerCache->updateFinger(node, true, LOCAL);
 
 	sendRouteRpcCall(OVERLAY_COMP, node, thisNode.getKey(), call, NULL, defaultRoutingType, joinDelay);
 }
@@ -704,7 +717,7 @@ bool EpiChord::handleRpcCall(BaseCallMessage* msg)
 	}
 
 	// Add the origin node to the finger cache
-	fingerCache->updateFinger(msg->getSrcNode(), true);
+	fingerCache->updateFinger(msg->getSrcNode(), true, OBSERVED);
 
 	// delegate messages
 	RPC_SWITCH_START(msg)
@@ -723,7 +736,7 @@ bool EpiChord::handleRpcCall(BaseCallMessage* msg)
 void EpiChord::handleRpcResponse(BaseResponseMessage* msg, cPolymorphic* context, int rpcId, simtime_t rtt)
 {
 	// Add the origin node to the finger cache
-	fingerCache->updateFinger(msg->getSrcNode(), true);
+	fingerCache->updateFinger(msg->getSrcNode(), true, OBSERVED);
 
 	RPC_SWITCH_START(msg)
 	RPC_ON_RESPONSE(FindNode) {
@@ -846,10 +859,12 @@ void EpiChord::rpcJoin(EpiChordJoinCall* joinCall)
 	joinResponse->setCacheLastUpdateArraySize(cacheNum);
 
 	for (int k = 0;k < cacheNum;k++) {
-		EpiChordFingerCacheEntry entry = fingerCache->getNode(k);
+		EpiChordFingerCacheEntry* entry = fingerCache->getNode(k);
+		if (entry == NULL)
+			continue;
 
-		joinResponse->setCacheNode(k, entry.nodeHandle);
-		joinResponse->setCacheLastUpdate(k, now - entry.lastUpdate);
+		joinResponse->setCacheNode(k, entry->nodeHandle);
+		joinResponse->setCacheLastUpdate(k, now - entry->lastUpdate);
 	}
 
 	// Send the response
@@ -890,7 +905,7 @@ void EpiChord::handleRpcJoinResponse(EpiChordJoinResponse* joinResponse)
 
 	int cacheNum = joinResponse->getCacheNodeArraySize();
 	for (int k = 0;k < cacheNum; k++)
-		fingerCache->updateFinger(joinResponse->getCacheNode(k), false, now - joinResponse->getCacheLastUpdate(k));
+		fingerCache->updateFinger(joinResponse->getCacheNode(k), false, CACHE_TRANSFER, now - joinResponse->getCacheLastUpdate(k));
 
 	updateTooltip();
 
@@ -1073,11 +1088,11 @@ void EpiChord::handleRpcStabilizeResponse(EpiChordStabilizeResponse* stabilizeRe
 	// Update the finger cache with them all
 	int preNum = stabilizeResponse->getPredecessorsArraySize();
 	for (int i = 0;i < preNum;i++)
-		fingerCache->updateFinger(stabilizeResponse->getPredecessors(i), false);
+		fingerCache->updateFinger(stabilizeResponse->getPredecessors(i), false, MAINTENANCE);
 
 	int sucNum = stabilizeResponse->getSuccessorsArraySize();
 	for (int i = 0;i < sucNum;i++)
-		fingerCache->updateFinger(stabilizeResponse->getSuccessors(i), false);
+		fingerCache->updateFinger(stabilizeResponse->getSuccessors(i), false, MAINTENANCE);
 }
 
 AbstractLookup* EpiChord::createLookup(RoutingType routingType, const BaseOverlayMessage* msg, const cPacket* findNodeExt, bool appLookup)
@@ -1108,7 +1123,7 @@ void EpiChord::handleRpcFindNodeResponse(FindNodeResponse* response)
 	// Take a note of all nodes returned in this FindNodeResponse
 	int nodeNum = response->getClosestNodesArraySize();
 	for (int i = 0;i < nodeNum;i++)
-		fingerCache->updateFinger(response->getClosestNodes(i), false, now - findNodeExt->getLastUpdates(i));
+		fingerCache->updateFinger(response->getClosestNodes(i), false, OBSERVED, now - findNodeExt->getLastUpdates(i));
 }
 
 }; //namespace

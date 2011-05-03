@@ -511,7 +511,7 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 		if (!source.isUnspecified())
 			exclude->insert(source);
 
-		fingerCache->updateFinger(source, true, OBSERVED);
+		this->receiveNewNode(source, true, OBSERVED, now);
 	}
 
 	// see section II of EpiChord MIT-LCS-TR-963
@@ -607,7 +607,7 @@ void EpiChord::joinForeignPartition(const NodeHandle &node)
 	EpiChordJoinCall *call = new EpiChordJoinCall("EpiChordJoinCall");
 	call->setBitLength(EPICHORD_JOINCALL_L(call));
 
-	fingerCache->updateFinger(node, true, LOCAL);
+	this->receiveNewNode(node, true, LOCAL, simTime());
 
 	sendRouteRpcCall(OVERLAY_COMP, node, thisNode.getKey(), call, NULL, defaultRoutingType, joinDelay);
 }
@@ -717,7 +717,7 @@ bool EpiChord::handleRpcCall(BaseCallMessage* msg)
 	}
 
 	// Add the origin node to the finger cache
-	fingerCache->updateFinger(msg->getSrcNode(), true, OBSERVED);
+	this->receiveNewNode(msg->getSrcNode(), true, OBSERVED, simTime());
 
 	// delegate messages
 	RPC_SWITCH_START(msg)
@@ -736,7 +736,7 @@ bool EpiChord::handleRpcCall(BaseCallMessage* msg)
 void EpiChord::handleRpcResponse(BaseResponseMessage* msg, cPolymorphic* context, int rpcId, simtime_t rtt)
 {
 	// Add the origin node to the finger cache
-	fingerCache->updateFinger(msg->getSrcNode(), true, OBSERVED);
+	this->receiveNewNode(msg->getSrcNode(), true, OBSERVED, simTime());
 
 	RPC_SWITCH_START(msg)
 	RPC_ON_RESPONSE(FindNode) {
@@ -905,7 +905,7 @@ void EpiChord::handleRpcJoinResponse(EpiChordJoinResponse* joinResponse)
 
 	int cacheNum = joinResponse->getCacheNodeArraySize();
 	for (int k = 0;k < cacheNum; k++)
-		fingerCache->updateFinger(joinResponse->getCacheNode(k), false, CACHE_TRANSFER, now - joinResponse->getCacheLastUpdate(k));
+		this->receiveNewNode(joinResponse->getCacheNode(k), false, CACHE_TRANSFER, now - joinResponse->getCacheLastUpdate(k));
 
 	updateTooltip();
 
@@ -1038,6 +1038,8 @@ void EpiChord::handleRpcStabilizeResponse(EpiChordStabilizeResponse* stabilizeRe
 	if (state != READY)
 		return;
 
+	simtime_t now = simTime();
+
 	switch (stabilizeResponse->getNodeType()) {
 		// the message is from our predecessor, so update the predecessor list
 		case PREDECESSOR: {
@@ -1088,11 +1090,11 @@ void EpiChord::handleRpcStabilizeResponse(EpiChordStabilizeResponse* stabilizeRe
 	// Update the finger cache with them all
 	int preNum = stabilizeResponse->getPredecessorsArraySize();
 	for (int i = 0;i < preNum;i++)
-		fingerCache->updateFinger(stabilizeResponse->getPredecessors(i), false, MAINTENANCE);
+		this->receiveNewNode(stabilizeResponse->getPredecessors(i), false, MAINTENANCE, now);
 
 	int sucNum = stabilizeResponse->getSuccessorsArraySize();
 	for (int i = 0;i < sucNum;i++)
-		fingerCache->updateFinger(stabilizeResponse->getSuccessors(i), false, MAINTENANCE);
+		this->receiveNewNode(stabilizeResponse->getSuccessors(i), false, MAINTENANCE, now);
 }
 
 AbstractLookup* EpiChord::createLookup(RoutingType routingType, const BaseOverlayMessage* msg, const cPacket* findNodeExt, bool appLookup)
@@ -1123,7 +1125,45 @@ void EpiChord::handleRpcFindNodeResponse(FindNodeResponse* response)
 	// Take a note of all nodes returned in this FindNodeResponse
 	int nodeNum = response->getClosestNodesArraySize();
 	for (int i = 0;i < nodeNum;i++)
-		fingerCache->updateFinger(response->getClosestNodes(i), false, OBSERVED, now - findNodeExt->getLastUpdates(i));
+		this->receiveNewNode(response->getClosestNodes(i), false, OBSERVED, now - findNodeExt->getLastUpdates(i));
+}
+
+void EpiChord::receiveNewNode(const NodeHandle& node, bool direct, NodeSource source, simtime_t lastUpdate)
+{
+	if (node.isUnspecified())
+		return;
+
+	fingerCache->updateFinger(node, direct, lastUpdate, cacheTTL, source);
+
+	// Attempt to add to successor list
+	if (!successorList->contains(node) && (!successorList->isFull() || node.getKey().isBetween(thisNode.getKey(), successorList->getNode(successorList->getSize() - 1).getKey()))) {
+		if (direct)
+			successorList->addNode(node, true);
+//		else
+//			this->pingNode(node);
+	}
+
+	// Attempt to add to predecessor list
+	if (!predecessorList->contains(node) && (!predecessorList->isFull() || node.getKey().isBetween(predecessorList->getNode(predecessorList->getSize() - 1).getKey(), thisNode.getKey()))) {
+		if (direct)
+			predecessorList->addNode(node, true);
+//		else
+//			this->pingNode(node);
+	}
+
+//	// If there were any changes, and they effected us
+//	if (activePropagation && (predecessorList->hasChanged() || successorList->hasChanged())) {
+//		// schedule next stabilization process
+//		cancelEvent(stabilize_timer);
+//		scheduleAt(simTime(), stabilize_timer);
+//
+//		updateTooltip();
+//	}
+}
+
+void EpiChord::pingResponse(PingResponse* pingResponse, cPolymorphic* context, int rpcId, simtime_t rtt)
+{
+	this->receiveNewNode(pingResponse->getSrcNode(), true, MAINTENANCE, simTime());
 }
 
 }; //namespace

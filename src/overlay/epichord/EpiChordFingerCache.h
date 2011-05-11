@@ -47,7 +47,7 @@ struct EpiChordFingerCacheEntry
 };
 
 typedef std::map<OverlayKey, EpiChordFingerCacheEntry> CacheMap;
-typedef std::map<TransportAddress, EpiChordFingerCacheEntry> DeadMap;
+typedef std::map<OverlayKey, EpiChordFingerCacheEntry> DeadMap;
 
 class EpiChord;
 
@@ -95,6 +95,7 @@ public:
 
 	EpiChordFingerCacheEntry* getNode(const NodeHandle& node);
 	EpiChordFingerCacheEntry* getNode(uint32_t pos);
+	std::vector<EpiChordFingerCacheEntry> getDeadRange(OverlayKey start, OverlayKey end);
 
 	uint32_t countSlice(OverlayKey startOffset, OverlayKey endOffset);
 

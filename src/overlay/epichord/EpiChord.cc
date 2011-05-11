@@ -1015,19 +1015,38 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 		updateTooltip();
 	}
 
-	// Add predecessor list
-	int preNum = predecessorList->getSize();
-	stabilizeResponse->setPredecessorsArraySize(preNum);
+	// Full stabilize response
+	if (predecessorList->hasChanged() || successorList->hasChanged()) {
+		// Add predecessor list
+		int preNum = predecessorList->getSize();
+		stabilizeResponse->setPredecessorsArraySize(preNum);
 
-	for (int k = 0; k < preNum; k++)
-		stabilizeResponse->setPredecessors(k, predecessorList->getNode(k));
+		for (int k = 0; k < preNum; k++)
+			stabilizeResponse->setPredecessors(k, predecessorList->getNode(k));
 
-	// Add successor list
-	int sucNum = successorList->getSize();
-	stabilizeResponse->setSuccessorsArraySize(sucNum);
+		// Add successor list
+		int sucNum = successorList->getSize();
+		stabilizeResponse->setSuccessorsArraySize(sucNum);
 
-	for (int k = 0; k < sucNum; k++)
-		stabilizeResponse->setSuccessors(k, successorList->getNode(k));
+		for (int k = 0; k < sucNum; k++)
+			stabilizeResponse->setSuccessors(k, successorList->getNode(k));
+
+		// Add dead neighbouring nodes
+		std::vector<EpiChordFingerCacheEntry> dead = fingerCache->getDeadRange(predecessorList->getNode(predecessorList->getSize() - 1).getKey(), successorList->getNode(successorList->getSize() - 1).getKey());
+		stabilizeResponse->setDeadArraySize(dead.size());
+		for (int k = 0;k < dead.size();k++)
+			stabilizeResponse->setDead(k, dead.at(k).nodeHandle);
+	}
+	// Partial stabilize response
+	else {
+		stabilizeResponse->setPredecessorsArraySize(1);
+		stabilizeResponse->setPredecessors(0, predecessorList->getNode());
+
+		stabilizeResponse->setSuccessorsArraySize(1);
+		stabilizeResponse->setSuccessors(0, successorList->getNode());
+
+		stabilizeResponse->setDeadArraySize(0);
+	}
 
 	stabilizeResponse->setBitLength(EPICHORD_STABILIZERESPONSE_L(stabilizeResponse));
 	sendRpcResponse(call, stabilizeResponse);
@@ -1052,8 +1071,6 @@ void EpiChord::handleRpcStabilizeResponse(EpiChordStabilizeResponse* stabilizeRe
 			for (int i = 0;i < nodeNum;i++)
 				predecessorList->addNode(stabilizeResponse->getPredecessors(i), false);
 
-			predecessorList->removeOldNodes();
-
 			break;
 		}
 
@@ -1068,23 +1085,12 @@ void EpiChord::handleRpcStabilizeResponse(EpiChordStabilizeResponse* stabilizeRe
 			for (int i = 0;i < nodeNum;i++)
 				successorList->addNode(stabilizeResponse->getSuccessors(i), false);
 
-			successorList->removeOldNodes();
-
 			break;
 		}
 
 		// the person we contacted doesn't recognise us!
 		default:
 			break;
-	}
-
-	// If there were any changes, and they effected us
-	if (activePropagation && (predecessorList->hasChanged() || successorList->hasChanged())) {
-		// schedule next stabilization process
-		cancelEvent(stabilize_timer);
-		scheduleAt(simTime(), stabilize_timer);
-
-		updateTooltip();
 	}
 
 	// Update the finger cache with them all
@@ -1095,6 +1101,20 @@ void EpiChord::handleRpcStabilizeResponse(EpiChordStabilizeResponse* stabilizeRe
 	int sucNum = stabilizeResponse->getSuccessorsArraySize();
 	for (int i = 0;i < sucNum;i++)
 		this->receiveNewNode(stabilizeResponse->getSuccessors(i), false, MAINTENANCE, now);
+
+	// Handle any dead nodes
+	int deadNum = stabilizeResponse->getDeadArraySize();
+	for (int i = 0;i < deadNum;i++)
+		this->handleFailedNode(stabilizeResponse->getDead(i));
+
+	// If there were any changes, and they effected us
+	if (activePropagation && (predecessorList->hasChanged() || successorList->hasChanged())) {
+		// schedule next stabilization process
+		cancelEvent(stabilize_timer);
+		scheduleAt(simTime(), stabilize_timer);
+
+		updateTooltip();
+	}
 }
 
 AbstractLookup* EpiChord::createLookup(RoutingType routingType, const BaseOverlayMessage* msg, const cPacket* findNodeExt, bool appLookup)

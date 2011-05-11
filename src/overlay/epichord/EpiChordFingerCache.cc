@@ -84,7 +84,7 @@ void EpiChordFingerCache::updateFinger(const NodeHandle& node, bool direct, simt
 
 	OverlayKey sum = node.getKey() - (thisNode.getKey() + OverlayKey::ONE);
 
-	DeadMap::iterator dit = deadCache.find(node);
+	DeadMap::iterator dit = deadCache.find(sum);
 	// We were alerted of a node which recently timed out for us
 	if (dit != deadCache.end()) {
 		// If we heard from them directly then I guess they are still alive...
@@ -151,7 +151,7 @@ bool EpiChordFingerCache::handleFailedNode(const TransportAddress& failed)
 		if (failed == it->second.nodeHandle) {
 			it->second.lastUpdate = now;
 
-			deadCache[failed] = it->second;
+			deadCache[it->first] = it->second;
 			liveCache.erase(it);
 			return true;
 		}
@@ -209,6 +209,23 @@ EpiChordFingerCacheEntry* EpiChordFingerCache::getNode(uint32_t pos)
 			return &it->second;
 	}
 	return &it->second;
+}
+
+std::vector<EpiChordFingerCacheEntry> EpiChordFingerCache::getDeadRange(OverlayKey start, OverlayKey end)
+{
+	std::vector<EpiChordFingerCacheEntry> entries;
+
+	start -= (thisNode.getKey() + OverlayKey::ONE);
+	end -= (thisNode.getKey() + OverlayKey::ONE);
+
+	for (DeadMap::iterator it = deadCache.lower_bound(start);it != deadCache.end();it++) {
+		if (it->first > end)
+			break;
+
+		entries.push_back(it->second);
+	}
+
+	return entries;
 }
 
 uint32_t EpiChordFingerCache::countSlice(OverlayKey start, OverlayKey end)

@@ -456,7 +456,7 @@ void EpiChord::checkCacheInvariant()
 
 void EpiChord::checkCacheSlice(OverlayKey start, OverlayKey end)
 {
-	double gamma = this->calculateGamma();
+//	double gamma = this->calculateGamma();
 
 	int numNodes = fingerCache->countSlice(start, end);
 	int requiredNodes = nodesPerSlice; // Disable the nodes per slice calculation since it isn't used in the original implementation
@@ -523,7 +523,6 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 
 		if (!predecessorList->isEmpty()) {
 			EpiChordFingerCacheEntry* entry = fingerCache->getNode(predecessorList->getNode());
-			assert (entry != NULL);
 			if (entry != NULL) {
 				nextHop->push_back(entry->nodeHandle);
 				lastUpdates->push_back(entry->lastUpdate);
@@ -532,7 +531,6 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 
 		if (!successorList->isEmpty()) {
 			EpiChordFingerCacheEntry* entry = fingerCache->getNode(successorList->getNode());
-			assert (entry != NULL);
 			if (entry != NULL) {
 				nextHop->push_back(entry->nodeHandle);
 				lastUpdates->push_back(entry->lastUpdate);
@@ -982,9 +980,6 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 			for (int i = 0;i < numAdditions;i++)
 				predecessorList->addNode(call->getAdditions(i));
 
-			// our predecessor wants to know about our successors
-			stabilizeResponse->setNodeType(SUCCESSOR);
-
 			break;
 		}
 
@@ -995,9 +990,6 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 			int numAdditions = call->getAdditionsArraySize();
 			for (int i = 0;i < numAdditions;i++)
 				successorList->addNode(call->getAdditions(i));
-
-			// our successor wants to know about our predecessors
-			stabilizeResponse->setNodeType(PREDECESSOR);
 
 			break;
 		}
@@ -1015,35 +1007,75 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 		updateTooltip();
 	}
 
+	simtime_t now = simTime();
+
 	// Full stabilize response
 	if (predecessorList->hasChanged() || successorList->hasChanged()) {
 		// Add predecessor list
-		int preNum = predecessorList->getSize();
-		stabilizeResponse->setPredecessorsArraySize(preNum);
+		{
+			int preNum = predecessorList->getSize();
+			stabilizeResponse->setPredecessorsArraySize(preNum);
+			stabilizeResponse->setPredecessorsLastUpdateArraySize(preNum);
 
-		for (int k = 0; k < preNum; k++)
-			stabilizeResponse->setPredecessors(k, predecessorList->getNode(k));
+			for (int k = 0; k < preNum; k++) {
+				EpiChordFingerCacheEntry* entry = fingerCache->getNode(predecessorList->getNode(k));
+				stabilizeResponse->setPredecessors(k, predecessorList->getNode(k));
+				if (entry != NULL)
+					stabilizeResponse->setPredecessorsLastUpdate(k, entry->lastUpdate);
+				else
+					stabilizeResponse->setPredecessorsLastUpdate(k, now);
+			}
+		}
 
 		// Add successor list
-		int sucNum = successorList->getSize();
-		stabilizeResponse->setSuccessorsArraySize(sucNum);
+		{
+			int sucNum = successorList->getSize();
+			stabilizeResponse->setSuccessorsArraySize(sucNum);
+			stabilizeResponse->setSuccessorsLastUpdateArraySize(sucNum);
 
-		for (int k = 0; k < sucNum; k++)
-			stabilizeResponse->setSuccessors(k, successorList->getNode(k));
+			for (int k = 0; k < sucNum; k++) {
+				EpiChordFingerCacheEntry* entry = fingerCache->getNode(successorList->getNode(k));
+				stabilizeResponse->setSuccessors(k, successorList->getNode(k));
+				if (entry != NULL)
+					stabilizeResponse->setSuccessorsLastUpdate(k, entry->lastUpdate);
+				else
+					stabilizeResponse->setSuccessorsLastUpdate(k, now);
+			}
+		}
 
 		// Add dead neighbouring nodes
 		std::vector<EpiChordFingerCacheEntry> dead = fingerCache->getDeadRange(predecessorList->getNode(predecessorList->getSize() - 1).getKey(), successorList->getNode(successorList->getSize() - 1).getKey());
 		stabilizeResponse->setDeadArraySize(dead.size());
-		for (int k = 0;k < dead.size();k++)
+		for (uint k = 0;k < dead.size();k++)
 			stabilizeResponse->setDead(k, dead.at(k).nodeHandle);
 	}
 	// Partial stabilize response
 	else {
-		stabilizeResponse->setPredecessorsArraySize(1);
-		stabilizeResponse->setPredecessors(0, predecessorList->getNode());
+		// Predecessors
+		{
+			stabilizeResponse->setPredecessorsArraySize(1);
+			stabilizeResponse->setPredecessorsLastUpdateArraySize(1);
 
-		stabilizeResponse->setSuccessorsArraySize(1);
-		stabilizeResponse->setSuccessors(0, successorList->getNode());
+			EpiChordFingerCacheEntry* entry = fingerCache->getNode(predecessorList->getNode());
+			stabilizeResponse->setPredecessors(0, predecessorList->getNode());
+			if (entry != NULL)
+				stabilizeResponse->setPredecessorsLastUpdate(0, entry->lastUpdate);
+			else
+				stabilizeResponse->setPredecessorsLastUpdate(0, now);
+		}
+
+		// Successors
+		{
+			stabilizeResponse->setSuccessorsArraySize(1);
+			stabilizeResponse->setSuccessorsLastUpdateArraySize(1);
+
+			EpiChordFingerCacheEntry* entry = fingerCache->getNode(successorList->getNode());
+			stabilizeResponse->setSuccessors(0, successorList->getNode());
+			if (entry != NULL)
+				stabilizeResponse->setSuccessorsLastUpdate(0, entry->lastUpdate);
+			else
+				stabilizeResponse->setSuccessorsLastUpdate(0, now);
+		}
 
 		stabilizeResponse->setDeadArraySize(0);
 	}
@@ -1057,50 +1089,14 @@ void EpiChord::handleRpcStabilizeResponse(EpiChordStabilizeResponse* stabilizeRe
 	if (state != READY)
 		return;
 
-	simtime_t now = simTime();
-
-	switch (stabilizeResponse->getNodeType()) {
-		// the message is from our predecessor, so update the predecessor list
-		case PREDECESSOR: {
-			predecessorList->addNode(stabilizeResponse->getSrcNode(), false);
-
-			int nodeNum = stabilizeResponse->getPredecessorsArraySize();
-			if (successorListSize - 1 < nodeNum)
-				nodeNum = successorListSize - 1;
-
-			for (int i = 0;i < nodeNum;i++)
-				predecessorList->addNode(stabilizeResponse->getPredecessors(i), false);
-
-			break;
-		}
-
-		// the message is from our successor, so update the successor list
-		case SUCCESSOR: {
-			successorList->addNode(stabilizeResponse->getSrcNode(), false);
-
-			int nodeNum = stabilizeResponse->getSuccessorsArraySize();
-			if (successorListSize - 1 < nodeNum)
-				nodeNum = successorListSize - 1;
-
-			for (int i = 0;i < nodeNum;i++)
-				successorList->addNode(stabilizeResponse->getSuccessors(i), false);
-
-			break;
-		}
-
-		// the person we contacted doesn't recognise us!
-		default:
-			break;
-	}
-
 	// Update the finger cache with them all
 	int preNum = stabilizeResponse->getPredecessorsArraySize();
 	for (int i = 0;i < preNum;i++)
-		this->receiveNewNode(stabilizeResponse->getPredecessors(i), false, MAINTENANCE, now);
+		this->receiveNewNode(stabilizeResponse->getPredecessors(i), false, MAINTENANCE, stabilizeResponse->getPredecessorsLastUpdate(i));
 
 	int sucNum = stabilizeResponse->getSuccessorsArraySize();
 	for (int i = 0;i < sucNum;i++)
-		this->receiveNewNode(stabilizeResponse->getSuccessors(i), false, MAINTENANCE, now);
+		this->receiveNewNode(stabilizeResponse->getSuccessors(i), false, MAINTENANCE, stabilizeResponse->getSuccessorsLastUpdate(i));
 
 	// Handle any dead nodes
 	int deadNum = stabilizeResponse->getDeadArraySize();

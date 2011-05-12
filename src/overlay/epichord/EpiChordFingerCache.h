@@ -98,6 +98,7 @@ public:
 	std::vector<EpiChordFingerCacheEntry> getDeadRange(OverlayKey start, OverlayKey end);
 
 	uint32_t countSlice(OverlayKey startOffset, OverlayKey endOffset);
+	bool isDead(const NodeHandle& node);
 
 	virtual uint32_t getSize();
 	virtual uint32_t countLive();

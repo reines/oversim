@@ -107,7 +107,7 @@ const NodeHandle& EpiChordNodeList::getNode(uint32_t pos)
 
 void EpiChordNodeList::addNode(NodeHandle node, bool resize)
 {
-	if (node.isUnspecified())
+	if (node.isUnspecified() || cache->isDead(node))
 		return;
 
 	bool changed = false;
@@ -176,7 +176,6 @@ bool EpiChordNodeList::handleFailedNode(const TransportAddress& failed)
 		if (failed == it->second.nodeHandle) {
 			nodeMap.erase(it);
 			overlay->callUpdate(failed, false);
-			cache->handleFailedNode(failed);
 
 			// ensure that thisNode is always in the node list
 			if (getSize() == 0)

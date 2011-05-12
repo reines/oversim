@@ -203,11 +203,8 @@ EpiChordFingerCacheEntry* EpiChordFingerCache::getNode(uint32_t pos)
 		return NULL;
 
 	CacheMap::iterator it = liveCache.begin();
-	for (uint32_t i = 0; i < pos; i++) {
-		it++;
-		if (i == (pos - 1))
-			return &it->second;
-	}
+	std::advance(it, pos);
+
 	return &it->second;
 }
 
@@ -243,6 +240,13 @@ uint32_t EpiChordFingerCache::countSlice(OverlayKey start, OverlayKey end)
 	}
 
 	return count;
+}
+
+bool EpiChordFingerCache::isDead(const NodeHandle& node)
+{
+	OverlayKey sum = node.getKey() - (thisNode.getKey() + OverlayKey::ONE);
+
+	return deadCache.find(sum) != deadCache.end();
 }
 
 uint32_t EpiChordFingerCache::getSize()

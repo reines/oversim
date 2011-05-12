@@ -112,9 +112,10 @@ packet EpiChordStabilizeCall extends BaseCallMessage
 packet EpiChordStabilizeResponse extends BaseResponseMessage
 {
 	NodeHandle predecessors[];		// predecessor list of the message originator
+	simtime_t predecessorsLastUpdate[];
 	NodeHandle successors[];		// successor list of the message originator
+	simtime_t successorsLastUpdate[];
 	NodeHandle dead[];				// dead nodes within the message originators neighbour list
-	int nodeType enum(EpiChordNodeType);	// Type of node we are
 }
 
 //

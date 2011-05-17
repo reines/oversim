@@ -523,18 +523,20 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 
 		if (!predecessorList->isEmpty()) {
 			EpiChordFingerCacheEntry* entry = fingerCache->getNode(predecessorList->getNode());
-			if (entry != NULL) {
-				nextHop->push_back(entry->nodeHandle);
+			nextHop->push_back(predecessorList->getNode());
+			if (entry != NULL)
 				lastUpdates->push_back(entry->lastUpdate);
-			}
+			else
+				lastUpdates->push_back(now);
 		}
 
 		if (!successorList->isEmpty()) {
 			EpiChordFingerCacheEntry* entry = fingerCache->getNode(successorList->getNode());
-			if (entry != NULL) {
-				nextHop->push_back(entry->nodeHandle);
+			nextHop->push_back(successorList->getNode());
+			if (entry != NULL)
 				lastUpdates->push_back(entry->lastUpdate);
-			}
+			else
+				lastUpdates->push_back(now);
 		}
 	}
 	else {
@@ -559,7 +561,6 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 			entry = fingerCache->getNode(predecessorList->getNode());
 		}
 
-		assert (entry != NULL);
 		if (entry != NULL) {
 			nextHop->push_back(entry->nodeHandle);
 			lastUpdates->push_back(entry->lastUpdate);
@@ -578,10 +579,8 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 		int numVisited = nextHop->size();
 		findNodeExt->setLastUpdatesArraySize(numVisited);
 
-		for (int i = 0;i < numVisited;i++) {
-			simtime_t offset = now - (*lastUpdates)[i];
-			findNodeExt->setLastUpdates(i, offset);
-		}
+		for (int i = 0;i < numVisited;i++)
+			findNodeExt->setLastUpdates(i, (*lastUpdates)[i]);
 
 		findNodeExt->setBitLength(EPICHORD_FINDNODEEXTMESSAGE_L(findNodeExt));
 	}
@@ -833,8 +832,6 @@ void EpiChord::sendFalseNegWarning(NodeHandle bestPredecessor, NodeHandle bestSu
 
 void EpiChord::rpcJoin(EpiChordJoinCall* joinCall)
 {
-	simtime_t now = simTime();
-
 	EpiChordJoinResponse* joinResponse = new EpiChordJoinResponse("EpiChordJoinResponse");
 
 	// Add successor list
@@ -862,7 +859,7 @@ void EpiChord::rpcJoin(EpiChordJoinCall* joinCall)
 			continue;
 
 		joinResponse->setCacheNode(k, entry->nodeHandle);
-		joinResponse->setCacheLastUpdate(k, now - entry->lastUpdate);
+		joinResponse->setCacheLastUpdate(k, entry->lastUpdate);
 	}
 
 	// Send the response
@@ -874,8 +871,6 @@ void EpiChord::rpcJoin(EpiChordJoinCall* joinCall)
 
 void EpiChord::handleRpcJoinResponse(EpiChordJoinResponse* joinResponse)
 {
-	simtime_t now = simTime();
-
 	// determine the number of successor nodes to add
 	uint sucNum = successorListSize;
 	if (joinResponse->getSucNodeArraySize() < sucNum)
@@ -903,7 +898,7 @@ void EpiChord::handleRpcJoinResponse(EpiChordJoinResponse* joinResponse)
 
 	int cacheNum = joinResponse->getCacheNodeArraySize();
 	for (int k = 0;k < cacheNum; k++)
-		this->receiveNewNode(joinResponse->getCacheNode(k), false, CACHE_TRANSFER, now - joinResponse->getCacheLastUpdate(k));
+		this->receiveNewNode(joinResponse->getCacheNode(k), false, CACHE_TRANSFER, joinResponse->getCacheLastUpdate(k));
 
 	updateTooltip();
 
@@ -1136,12 +1131,10 @@ void EpiChord::handleRpcFindNodeResponse(FindNodeResponse* response)
 	EpiChordFindNodeExtMessage* findNodeExt = (EpiChordFindNodeExtMessage*) response->getObject("findNodeExt");
 	assert(response->getClosestNodesArraySize() == findNodeExt->getLastUpdatesArraySize());
 
-	simtime_t now = simTime();
-
 	// Take a note of all nodes returned in this FindNodeResponse
 	int nodeNum = response->getClosestNodesArraySize();
 	for (int i = 0;i < nodeNum;i++)
-		this->receiveNewNode(response->getClosestNodes(i), false, OBSERVED, now - findNodeExt->getLastUpdates(i));
+		this->receiveNewNode(response->getClosestNodes(i), false, OBSERVED, findNodeExt->getLastUpdates(i));
 }
 
 void EpiChord::receiveNewNode(const NodeHandle& node, bool direct, NodeSource source, simtime_t lastUpdate)

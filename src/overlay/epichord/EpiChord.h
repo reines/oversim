@@ -84,6 +84,7 @@ protected:
 	double cacheUpdateDelta;
 	bool activePropagation;
 	bool sendFalseNegWarnings;
+	bool fibonacci;
 
 	// timer messages
 	cMessage* join_timer;

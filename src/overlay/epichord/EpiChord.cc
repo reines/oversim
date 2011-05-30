@@ -77,6 +77,7 @@ void EpiChord::initializeOverlay(int stage)
 	cacheUpdateDelta = par("cacheUpdateDelta");
 	activePropagation = par("activePropagation");
 	sendFalseNegWarnings = par("sendFalseNegWarnings");
+	fibonacci = par("fibonacci");
 
 	// statistics
 	joinCount = 0;
@@ -417,40 +418,77 @@ void EpiChord::checkCacheInvariant()
 	if (state != READY || !predecessorList->isFull() || !successorList->isFull())
 		return;
 
-	// Set the offset
-	int offset = 1;
+	if (fibonacci) {
+		// Set the limits
+		OverlayKey nearOffset = 0;
+		OverlayKey farOffset = 1;
+		OverlayKey limitOffset = (OverlayKey::getMax() / 2);
+		OverlayKey neighbourOffset = successorList->getNode(successorList->getSize() - 1).getKey() - thisNode.getKey();
+		OverlayKey temp;
 
-	// Set the limits
-	OverlayKey farLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
-	OverlayKey nearLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
+		// Until we pass halfway
+		while (nearOffset < limitOffset) {
+			// Only check if we have passed the end of the successor list
+			if (neighbourOffset < nearOffset)
+				checkCacheSlice(thisNode.getKey() + nearOffset, thisNode.getKey() + farOffset);
 
-	// Check successor list
-	OverlayKey lastSuccessor = successorList->getNode(successorList->getSize() - 1).getKey();
-	//   ---- (us) ---- (last successor) ---- (near limit) ----
-	while (lastSuccessor.isBetween(thisNode.getKey(), nearLimit)) {
-		checkCacheSlice(nearLimit, farLimit);
+			temp = farOffset;
+			farOffset = nearOffset + farOffset;
+			nearOffset = temp;
+		}
 
-		// Calculate the limits of the next slice
-		farLimit = nearLimit;
-		nearLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
+		// Reset the limits
+		nearOffset = 0;
+		farOffset = 1;
+		neighbourOffset = thisNode.getKey() - predecessorList->getNode(predecessorList->getSize() - 1).getKey();
+
+		// Until we pass halfway
+		while (nearOffset < limitOffset) {
+			// Only check if we have passed the end of the successor list
+			if (neighbourOffset < nearOffset)
+				checkCacheSlice(thisNode.getKey() - farOffset, thisNode.getKey() - nearOffset);
+
+			temp = farOffset;
+			farOffset = nearOffset + farOffset;
+			nearOffset = temp;
+		}
 	}
+	else {
+		// Set the offset
+		int offset = 1;
 
-	// Reset the offset
-	offset = 1;
+		// Set the limits
+		OverlayKey farLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
+		OverlayKey nearLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
 
-	// Reset the limits
-	farLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
-	nearLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
+		// Check successor list
+		OverlayKey lastSuccessor = successorList->getNode(successorList->getSize() - 1).getKey();
+		//   ---- (us) ---- (last successor) ---- (near limit) ----
+		while (lastSuccessor.isBetween(thisNode.getKey(), nearLimit)) {
+			checkCacheSlice(nearLimit, farLimit);
 
-	// Check predecessor list
-	OverlayKey lastPredecessor = predecessorList->getNode(predecessorList->getSize() - 1).getKey();
-	//   ---- (near limit) ---- (last predecessor) ---- (us) ----
-	while (lastPredecessor.isBetween(nearLimit, thisNode.getKey())) {
-		checkCacheSlice(farLimit, nearLimit);
+			// Calculate the limits of the next slice
+			farLimit = nearLimit;
+			nearLimit = thisNode.getKey() + (OverlayKey::getMax() >> offset++);
+		}
 
-		// Calculate the limits of the next slice
-		farLimit = nearLimit;
+		// Reset the offset
+		offset = 1;
+
+		// Reset the limits
+		farLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
 		nearLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
+
+		// Check predecessor list
+		OverlayKey lastPredecessor = predecessorList->getNode(predecessorList->getSize() - 1).getKey();
+		//   ---- (near limit) ---- (last predecessor) ---- (us) ----
+		while (lastPredecessor.isBetween(nearLimit, thisNode.getKey())) {
+			checkCacheSlice(farLimit, nearLimit);
+
+			// Calculate the limits of the next slice
+			farLimit = nearLimit;
+			nearLimit = thisNode.getKey() - (OverlayKey::getMax() >> offset++);
+		}
 	}
 }
 

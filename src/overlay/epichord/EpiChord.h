@@ -25,12 +25,12 @@
 
 #include <BaseOverlay.h>
 
+#include "EpiChordFingerCache.h"
 #include "EpiChordMessage_m.h"
 
 namespace oversim {
 
 class EpiChordNodeList;
-class EpiChordFingerCache;
 
 /**
  * EpiChord overlay module
@@ -84,6 +84,7 @@ protected:
 	double cacheUpdateDelta;
 	bool activePropagation;
 	bool sendFalseNegWarnings;
+	bool fibonacci;
 
 	// timer messages
 	cMessage* join_timer;
@@ -178,6 +179,9 @@ protected:
 	// see BaseOverlay.h
 	virtual bool handleFailedNode(const TransportAddress& failed);
 
+	// see BaseRpc.h
+	virtual void pingResponse(PingResponse* pingResponse, cPolymorphic* context, int rpcId, simtime_t rtt);
+
 	void sendFalseNegWarning(NodeHandle bestPredecessor, NodeHandle bestSuccessor, NodeVector* deadNodes);
 
 	/**
@@ -204,6 +208,8 @@ protected:
 
 	virtual void handleRpcStabilizeResponse(EpiChordStabilizeResponse* stabilizeResponse);
 	virtual void handleRpcFindNodeResponse(FindNodeResponse* response);
+
+	virtual void receiveNewNode(const NodeHandle& node, bool direct, NodeSource source, simtime_t lastUpdate);
 
 	friend class EpiChordFingerCache;
 	friend class EpiChordNodeList;

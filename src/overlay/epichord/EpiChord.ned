@@ -48,6 +48,7 @@ simple EpiChord extends BaseOverlay
         double cacheUpdateDelta; // weighting to apply to old cache freshness ratios
         bool activePropagation; // should we call stabilization routines as soon as our neighbour lists are changed?
         bool sendFalseNegWarnings; // should we send warnings to fix false negatives?
+		bool fibonacci; // use regular (logarithmic) finger spacing, or fibonacci finger spacing as with F-Chord
 }
 
 //

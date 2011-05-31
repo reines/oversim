@@ -34,18 +34,13 @@ EpiChordIterativeLookup::EpiChordIterativeLookup(BaseOverlay* overlay, RoutingTy
 
 IterativePathLookup* EpiChordIterativeLookup::createPathLookup()
 {
-    return new EpiChordIterativePathLookup(this, epichord);
+	return new EpiChordIterativePathLookup(this, epichord);
 }
 
 EpiChordIterativePathLookup::EpiChordIterativePathLookup(EpiChordIterativeLookup* lookup, EpiChord* epichord) : IterativePathLookup(lookup)
 {
 	this->nextHops = LookupVector(lookup->config.redundantNodes * lookup->config.redundantNodes, lookup);
 	this->epichord = epichord;
-
-	bestPredecessor = epichord->getThisNode();
-	bestPredecessorsSuccessor = epichord->successorList->getNode();
-	bestSuccessor = epichord->getThisNode();
-	bestSuccessorsPredecessor = epichord->predecessorList->getNode();
 }
 
 void EpiChordIterativePathLookup::checkFalseNegative()
@@ -54,33 +49,36 @@ void EpiChordIterativePathLookup::checkFalseNegative()
 	if (success)
 		return;
 
-	LookupEntry* preceedingEntry = getPreceedingEntry();
-	LookupEntry* succeedingEntry = getSucceedingEntry();
+	if (bestPredecessor.isUnspecified() || bestSuccessor.isUnspecified())
+		return;
+
+	// Get the surrounding non-dead nodes
+	LookupEntry* preceedingEntry = this->getPreceedingEntry(false, true);
+	LookupEntry* succeedingEntry = this->getSucceedingEntry(false, true);
 
 	if (preceedingEntry == NULL || succeedingEntry == NULL)
 		return;
 
-	// Check that we have visited the closest surrounding nodes
+	// Check that we have visited the surrounding nodes
 	if (!lookup->getVisited(preceedingEntry->handle) || !lookup->getVisited(succeedingEntry->handle))
 		return;
 
-	bool falseNegative = false;
+	bool assumeSuccess = success;
+	bool assumeFinished = finished;
 
 	// One of the 2 nodes has outdated successor/predecessor - this is a false negative
 	if (bestSuccessor == bestPredecessorsSuccessor || bestPredecessor == bestSuccessorsPredecessor) {
-		falseNegative = true;
-	}
-	// There is only 1 node in between, and it is dead (or only just joined/not ready) - this is a false negative
-	else if (bestPredecessorsSuccessor == bestSuccessorsPredecessor) {
-		falseNegative = true;
+		assumeSuccess = true;
+		assumeFinished = true;
 	}
 	// both nodes have dead blockers, but there could be alive in the middle
 	else if (lookup->getDead(bestPredecessorsSuccessor) && lookup->getDead(bestSuccessorsPredecessor)) {
-		// TODO: Maybe?
+		assumeSuccess = true;
+		// Wait until the query has finished until we assume this is true
 	}
 
-	// If this isn't a false negative, do nothing
-	if (!falseNegative)
+	// If this isn't a false negative or we haven't finished yet, do nothing
+	if (!assumeSuccess || !assumeFinished)
 		return;
 
 	NodeVector* deadNodes = new NodeVector();
@@ -91,11 +89,10 @@ void EpiChordIterativePathLookup::checkFalseNegative()
 			deadNodes->push_back(it->handle);
 	}
 
-	// There is no dead nodes inbetween the 2 best options - this shouldn't happen!
-	if (deadNodes->isEmpty())
-		return;
+	// There are dead nodes inbetween the 2 best options - alert their successor/predecessor
+	if (!deadNodes->isEmpty())
+		epichord->sendFalseNegWarning(bestPredecessor, bestSuccessor, deadNodes);
 
-	epichord->sendFalseNegWarning(bestPredecessor, bestSuccessor, deadNodes);
 	delete deadNodes;
 
 	lookup->addSibling(bestSuccessor);
@@ -109,26 +106,55 @@ void EpiChordIterativePathLookup::handleResponse(FindNodeResponse* msg)
 	if (finished)
 		return;
 
-	if (msg->getClosestNodesArraySize() > 0) {
-		NodeHandle source = msg->getSrcNode();
-
+	NodeHandle source = msg->getSrcNode();
+	if (!source.isUnspecified() && msg->getClosestNodesArraySize() > 0) {
 		// This is the best predecessor so far
-		if (source.getKey().isBetween(bestPredecessor.getKey(), lookup->getKey())) {
+		//   ---- (best predecessor) ---- (source) ---- (destination) ----
+		if ((!bestPredecessor.isUnspecified() && source.getKey().isBetweenR(bestPredecessor.getKey(), lookup->getKey())) ||
+				//   ---- (us) ---- (source) ---- (destination) ----
+				(bestPredecessor.isUnspecified() && source.getKey().isBetweenR(overlay->getThisNode().getKey(), lookup->getKey()))) {
 			bestPredecessor = source;
-			bestPredecessorsSuccessor = msg->getClosestNodes(0);
+			// If position 0 is the node itself then it thinks it is
+			// responsible, it's successor is returned in position 2
+			if (msg->getClosestNodes(0) == source && msg->getClosestNodesArraySize() > 2)
+				bestPredecessorsSuccessor = msg->getClosestNodes(2);
+			else
+				bestPredecessorsSuccessor = msg->getClosestNodes(0);
 		}
 		// This is the best successor so far
-		else if (source.getKey().isBetween(lookup->getKey(), bestSuccessor.getKey())) {
+		//   ---- (destination) ---- (source) ---- (best successor) ----
+		if ((!bestSuccessor.isUnspecified() && source.getKey().isBetweenL(lookup->getKey(), bestSuccessor.getKey())) ||
+				//   ---- (destination) ---- (source) ---- (us) ----
+				(bestSuccessor.isUnspecified() && source.getKey().isBetweenL(lookup->getKey(), overlay->getThisNode().getKey()))) {
 			bestSuccessor = source;
-			bestSuccessorsPredecessor = msg->getClosestNodes(0);
+			// If position 0 is the node itself then it thinks it is
+			// responsible, it's predecessor is returned in position 1
+			if (msg->getClosestNodes(0) == source && msg->getClosestNodesArraySize() > 1)
+				bestSuccessorsPredecessor = msg->getClosestNodes(1);
+			else
+				bestSuccessorsPredecessor = msg->getClosestNodes(0);
 		}
+	}
+
+	// We are the best predecessor
+	//   ---- (best successor) ---- (us) ---- (destination) ----
+	if (!bestSuccessor.isUnspecified() && bestPredecessor.isUnspecified() && overlay->getThisNode().getKey().isBetween(bestSuccessor.getKey(), lookup->getKey())) {
+		bestPredecessor = overlay->getThisNode();
+		bestPredecessorsSuccessor = epichord->successorList->getNode();
+	}
+
+	// We are the best successor
+	//   ---- (destination) ---- (us) ---- (best predecessor) ----
+	if (!bestPredecessor.isUnspecified() && bestSuccessor.isUnspecified() && overlay->getThisNode().getKey().isBetweenL(lookup->getKey(), bestPredecessor.getKey())) {
+		bestSuccessor = overlay->getThisNode();
+		bestSuccessorsPredecessor = epichord->predecessorList->getNode();
 	}
 
 	IterativePathLookup::handleResponse(msg);
 
 	// The lookup isn't finished, but the response was
 	// negative so check if it was a false-negative.
-	checkFalseNegative();
+	this->checkFalseNegative();
 }
 
 void EpiChordIterativePathLookup::handleTimeout(BaseCallMessage* msg, const TransportAddress& dest, int rpcId)
@@ -140,7 +166,7 @@ void EpiChordIterativePathLookup::handleTimeout(BaseCallMessage* msg, const Tran
 
 	// The lookup isn't finished, but a node timed out
 	// so check if a previous response was a false-negative.
-	checkFalseNegative();
+	this->checkFalseNegative();
 }
 
 LookupEntry* EpiChordIterativePathLookup::getPreceedingEntry(bool incDead, bool incUsed)
@@ -194,14 +220,50 @@ LookupEntry* EpiChordIterativePathLookup::getSucceedingEntry(bool incDead, bool 
 LookupEntry* EpiChordIterativePathLookup::getNextEntry()
 {
 	// First look for the closest node after the key
-	LookupEntry* entry = getSucceedingEntry(false, true);
+	LookupEntry* successor = getSucceedingEntry(false, false);
+	if (successor != NULL) {
+		// We are the best successor
+		//   ---- (destination) ---- (us) ---- (entry) ----
+		if (bestSuccessor.isUnspecified() && overlay->getThisNode().getKey().isBetweenL(lookup->getKey(), successor->handle.getKey())) {
+			bestSuccessor = overlay->getThisNode();
+			bestSuccessorsPredecessor = epichord->predecessorList->getNode();
+			successor = NULL;
+		}
+		// the old best successor is still the best successor
+		//   ---- (destination) ---- (best successor) ---- (entry) ----
+		else if (!bestSuccessor.isUnspecified() && bestSuccessor.getKey().isBetweenL(lookup->getKey(), successor->handle.getKey()))
+			successor = NULL;
 
-	// If the closest alive node after the key isn't checked, use it
-	if (entry != NULL && !entry->alreadyUsed)
-		return entry;
+		// the new node is the best successor
+	}
 
-	// Otherwise simply look for the closest alive not used node
-	return IterativePathLookup::getNextEntry();
+	// If we found a good successor
+	if (successor != NULL)
+		return successor;
+
+	// Second look for the closest node before the key
+	LookupEntry* predecessor = getPreceedingEntry(false, false);
+	if (predecessor != NULL) {
+		// We the best predecessor
+		//   ---- (entry) ---- (us) ---- (destination) ----
+		if (bestPredecessor.isUnspecified() && overlay->getThisNode().getKey().isBetween(predecessor->handle.getKey(), lookup->getKey())) {
+			bestPredecessor = overlay->getThisNode();
+			bestPredecessorsSuccessor = epichord->successorList->getNode();
+			predecessor = NULL;
+		}
+		// the old best predecessor is still the best predecessor
+		//   ---- (entry) ---- (best predecessor) ---- (destination) ----
+		else if (!bestPredecessor.isUnspecified() && bestPredecessor.getKey().isBetween(predecessor->handle.getKey(), lookup->getKey()))
+			predecessor = NULL;
+
+		// the new node is the best predecessor
+	}
+
+	// If we found a good predecessor
+	if (predecessor != NULL)
+		return predecessor;
+
+	return NULL;
 }
 
 }; //namespace

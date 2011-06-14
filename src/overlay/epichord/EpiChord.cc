@@ -419,38 +419,38 @@ void EpiChord::checkCacheInvariant()
 		return;
 
 	if (fibonacci) {
-		// Set the limits
-		OverlayKey nearOffset = 0;
-		OverlayKey farOffset = 1;
-		OverlayKey limitOffset = (OverlayKey::getMax() / 2);
-		OverlayKey neighbourOffset = successorList->getNode(successorList->getSize() - 1).getKey() - thisNode.getKey();
-		OverlayKey temp;
+		std::vector<OverlayKey> jumps;
 
-		// Until we pass halfway
-		while (nearOffset < limitOffset) {
-			// Only check if we have passed the end of the successor list
-			if (neighbourOffset < nearOffset)
-				checkCacheSlice(thisNode.getKey() + nearOffset, thisNode.getKey() + farOffset);
+		OverlayKey a = 0;
+		OverlayKey b = 1;
+		OverlayKey tmp;
 
-			temp = farOffset;
-			farOffset = nearOffset + farOffset;
-			nearOffset = temp;
+		// Once b < a OverlayKey has overflown so we've reached the end
+		while (b >= a) {
+			jumps.push_back(b);
+
+			tmp = b;
+			b += a;
+			a = tmp;
 		}
 
-		// Reset the limits
-		nearOffset = 0;
-		farOffset = 1;
-		neighbourOffset = thisNode.getKey() - predecessorList->getNode(predecessorList->getSize() - 1).getKey();
+		OverlayKey neighbour = successorList->getNode(successorList->getSize() - 1).getKey() - thisNode.getKey();
+		int skip = 1; // fibonacci(1/skip)
+
+		// Until we pass halfway or run out of jumps
+		for (int i = skip;i < jumps.size();i += skip) {
+			// Only check if we have passed the end of the successor list
+			if (neighbour < jumps[i - skip])
+				checkCacheSlice(thisNode.getKey() + jumps[i - skip], thisNode.getKey() + jumps[i]);
+		}
+
+		neighbour = thisNode.getKey() - predecessorList->getNode(predecessorList->getSize() - 1).getKey();
 
 		// Until we pass halfway
-		while (nearOffset < limitOffset) {
+		for (int i = skip;i < jumps.size();i += skip) {
 			// Only check if we have passed the end of the successor list
-			if (neighbourOffset < nearOffset)
-				checkCacheSlice(thisNode.getKey() - farOffset, thisNode.getKey() - nearOffset);
-
-			temp = farOffset;
-			farOffset = nearOffset + farOffset;
-			nearOffset = temp;
+			if (neighbour < jumps[i - skip])
+				checkCacheSlice(thisNode.getKey() - jumps[i], thisNode.getKey() - jumps[i - skip]);
 		}
 	}
 	else {

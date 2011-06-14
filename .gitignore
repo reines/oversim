@@ -1,6 +1,7 @@
 /.project
 /.cproject
 /.pydevproject
+/.settings/
 /nbproject/
 /out
 /doc

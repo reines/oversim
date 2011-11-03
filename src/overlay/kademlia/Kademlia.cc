@@ -118,6 +118,14 @@ void Kademlia::initializeOverlay(int stage)
     proximityNeighborSelection = par("proximityNeighborSelection");
     altRecMode = recordRoute = par("altRecMode");
 
+    std::string temp = par("bucketType").stdstringValue();
+    if (temp == "kademlia")
+    	bucketType = KADEMLIA;
+    else if (temp == "nr128")
+    	bucketType = NR128;
+    else
+    	throw cRuntimeError((std::string("Wrong bucket type: ") + temp).c_str());
+
     k = par("k");
     b = par("b");
     s = par("s");
@@ -283,21 +291,45 @@ int Kademlia::getMaxNumRedundantNodes()
 
 int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 {
-    // calculate XOR distance
-    OverlayKey delta = key ^ getThisNode().getKey();
+	switch (bucketType) {
+		// Original Kademlia style - exponentially increasing buckets
+		case NR128:
+		case KADEMLIA:
+		default: {
+			// calculate XOR distance
+			OverlayKey delta = key ^ getThisNode().getKey();
 
-    // find first subinteger that is not zero...
-    int i;
-    for (i = key.getLength() - b; i >= 0 && delta.getBitRange(i, b) == 0;
-         i -= b);
+			// find first subinteger that is not zero...
+			int i;
+			for (i = key.getLength() - b; i >= 0 && delta.getBitRange(i, b) == 0;
+				 i -= b);
 
-    if (i < 0)
-        return -1;
+			if (i < 0)
+				return -1;
 
-    if (!firstOnLayer)
-        return (i / b) * ((1 << b) - 1) + (delta.getBitRange(i, b) - 1);
-    else
-        return (i / b) * ((1 << b) - 1) + (pow(2, b) - 2);
+			if (!firstOnLayer)
+				return (i / b) * ((1 << b) - 1) + (delta.getBitRange(i, b) - 1);
+			else
+				return (i / b) * ((1 << b) - 1) + (pow(2, b) - 2);
+		}
+	}
+}
+
+int Kademlia::routingBucketSize(int index)
+{
+	switch (bucketType) {
+		// With NR128 the final buckets hold more nodes
+		case NR128: {
+			int offset = OverlayKey::getLength() - index;
+			return k + (OverlayKey::getLength() / offset);
+		}
+
+		// Original kademlia style - each bucket holds k nodes
+		case KADEMLIA:
+		default: {
+			return k;
+		}
+	}
 }
 
 KademliaBucket* Kademlia::routingBucket(const OverlayKey& key, bool ensure)
@@ -310,7 +342,10 @@ KademliaBucket* Kademlia::routingBucket(const OverlayKey& key, bool ensure)
     // get bucket and allocate if necessary
     KademliaBucket* bucket = routingTable[ num ];
     if (bucket == NULL && ensure)
-        bucket = routingTable[ num ] = new KademliaBucket( k, comparator );
+    {
+    	int bucketSize = routingBucketSize(num);
+        bucket = routingTable[ num ] = new KademliaBucket( bucketSize, comparator );
+    }
 
     // return bucket
     return bucket;

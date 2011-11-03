@@ -35,6 +35,11 @@
 #include "KademliaNodeHandle.h"
 #include "KademliaBucket.h"
 
+enum BucketType {
+	KADEMLIA = 0,
+	NR128 = 1
+};
+
 
 /**
  * Kademlia overlay module
@@ -85,6 +90,8 @@ protected://fields: kademlia parameters
     bool proximityRouting;
     bool proximityNeighborSelection;
     bool altRecMode;
+
+    BucketType bucketType;
 
     simtime_t minSiblingTableRefreshInterval;
     simtime_t minBucketRefreshInterval;
@@ -180,6 +187,16 @@ private:
      * @return int The index of the bucket
      */
     int routingBucketIndex(const OverlayKey& key, bool firstOnLayer = false);
+
+    /**
+     * Returns the maxmimum size of the bucket with the given
+     * index
+     *
+     * @param index The index of the bucket
+
+     * @return int The maximum size of the bucket
+     */
+    int routingBucketSize(int index);
 
     /**
      * Returns a Bucket or <code>NULL</code> if the bucket has not

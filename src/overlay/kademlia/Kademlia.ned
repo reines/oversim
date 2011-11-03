@@ -54,6 +54,8 @@ simple Kademlia extends BaseOverlay
         bool proximityRouting; // enable proximity routing (recursive only)
         bool proximityNeighborSelection; // enable proximity neighbor selection
         bool altRecMode; // use source-routing mode instead of direct mode
+        
+        string bucketType; // used to test alternative bucket/node distributions
 }
 
 //

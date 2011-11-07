@@ -189,12 +189,22 @@ void Kademlia::finishOverlay()
     simtime_t time = globalStatistics->calcMeasuredLifetime(creationTime);
     if (time < GlobalStatistics::MIN_MEASURED) return;
 
-    globalStatistics->addStdDev("Kademlia: Nodes replaced in buckets/s",
-                                nodesReplaced / time);
-    globalStatistics->addStdDev("Kademlia: Bucket Refreshes/s",
-                                bucketRefreshCount / time);
-    globalStatistics->addStdDev("Kademlia: Sibling Table Refreshes/s",
-                                siblingTableRefreshCount / time);
+    uint routingTableSize = 0;
+    uint numBuckets = 0;
+
+    for (uint i = 0;i < routingTable.size();i++) {
+    	if (routingTable[i] == NULL)
+    		continue;
+
+    	numBuckets++;
+    	routingTableSize += routingTable[i]->size();
+    }
+
+    globalStatistics->addStdDev("Kademlia: Routing table size", routingTableSize);
+    globalStatistics->addStdDev("Kademlia: Number of buckets", numBuckets);
+    globalStatistics->addStdDev("Kademlia: Nodes replaced in buckets/s", nodesReplaced / time);
+    globalStatistics->addStdDev("Kademlia: Bucket Refreshes/s", bucketRefreshCount / time);
+    globalStatistics->addStdDev("Kademlia: Sibling Table Refreshes/s", siblingTableRefreshCount / time);
 }
 
 void Kademlia::sendSiblingFindNodeCall(const TransportAddress& dest)

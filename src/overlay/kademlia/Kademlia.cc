@@ -292,6 +292,10 @@ int Kademlia::getMaxNumRedundantNodes()
 int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 {
 	switch (bucketType) {
+		case DKADEMLIA: {
+			// TODO
+		}
+
 		// Original Kademlia style - exponentially increasing buckets
 		case NR128:
 		case KADEMLIA:
@@ -325,6 +329,7 @@ int Kademlia::routingBucketSize(int index)
 		}
 
 		// Original kademlia style - each bucket holds k nodes
+		case DKADEMLIA:
 		case KADEMLIA:
 		default: {
 			return k;

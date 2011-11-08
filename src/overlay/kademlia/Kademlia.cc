@@ -125,6 +125,8 @@ void Kademlia::initializeOverlay(int stage)
     	bucketType = NR128;
     else if (temp == "dkademlia")
     	bucketType = DKADEMLIA;
+    else if (temp == "akademlia2")
+    	bucketType = AKADEMLIA2;
     else
     	throw cRuntimeError((std::string("Wrong bucket type: ") + temp).c_str());
 
@@ -311,6 +313,10 @@ int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 			// TODO
 		}
 
+		case AKADEMLIA2: {
+			// TODO
+		}
+
 		// Original Kademlia style - exponentially increasing buckets
 		case NR128:
 		case KADEMLIA:
@@ -342,6 +348,7 @@ int Kademlia::routingBucketSize(int index)
 
 		// Original kademlia style - each bucket holds k nodes
 		case DKADEMLIA:
+		case AKADEMLIA2:
 		case KADEMLIA:
 		default: {
 			return k;

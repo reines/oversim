@@ -38,7 +38,8 @@
 enum BucketType {
 	KADEMLIA = 0,
 	NR128 = 1,
-	DKADEMLIA = 2
+	DKADEMLIA = 2,
+	AKADEMLIA2 = 3
 };
 
 

@@ -123,6 +123,8 @@ void Kademlia::initializeOverlay(int stage)
     	bucketType = KADEMLIA;
     else if (temp == "nr128")
     	bucketType = NR128;
+    else if (temp == "dkademlia")
+    	bucketType = DKADEMLIA;
     else
     	throw cRuntimeError((std::string("Wrong bucket type: ") + temp).c_str());
 
@@ -301,6 +303,9 @@ int Kademlia::getMaxNumRedundantNodes()
 
 int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 {
+	// calculate XOR distance
+	OverlayKey delta = key ^ getThisNode().getKey();
+
 	switch (bucketType) {
 		case DKADEMLIA: {
 			// TODO
@@ -310,9 +315,6 @@ int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 		case NR128:
 		case KADEMLIA:
 		default: {
-			// calculate XOR distance
-			OverlayKey delta = key ^ getThisNode().getKey();
-
 			// find first subinteger that is not zero...
 			int i;
 			for (i = key.getLength() - b; i >= 0 && delta.getBitRange(i, b) == 0;

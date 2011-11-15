@@ -1462,14 +1462,24 @@ void Kademlia::handleBucketPingTimerExpired()
 
 	if (state == READY) {
 		if (siblingTable->size()) {
-            int32_t index = ((OverlayKey::getLength() - b) / b) * ((1 << b) - 1);  // TODO: Choose a random bucket
+			int32_t diff = OverlayKey::getLength() - b*(getThisNode().getKey().sharedPrefixLength(siblingTable->front().getKey(), b) + 1);
+			int32_t lower = (diff / b) * ((1 << b) - 1) + ((1 << b) - 2);
+            int32_t upper = ((OverlayKey::getLength() - b) / b) * ((1 << b) - 1);
+
+            // Generate a random bucket index within the given bounds
+            uint32_t index;
+            if (upper == lower)
+            	index = upper;
+            else
+            	index = (rand() % (upper - lower)) + lower;
+
 			KademliaBucket* bucket = routingTable[index];
 			if (bucket == NULL || bucket->isEmpty()) {
 				// TODO: What to do if the bucket is empty?
 			}
 			else {
 				// Ping the found oldest node
-				pingNode(*bucket->getOldestNode()); // TODO: handlePingResponse/handlePingTimeout
+				pingNode(*bucket->getOldestNode());
 			}
 		}
 	}
@@ -1488,9 +1498,9 @@ void Kademlia::pingTimeout(PingCall* pingCall, const TransportAddress& dest, cPo
 {
 	BaseOverlay::pingTimeout(pingCall, dest, context, rpcId);
 
-	std::cout << "ping timeout" << std::endl;
+	handleFailedNode(dest);
 
-	// TODO: Remove this node?
+	// TODO: What to do if the bucket is empty?
 }
 
 //virtual public: xor metric

@@ -97,9 +97,11 @@ protected://fields: kademlia parameters
 
     simtime_t minSiblingTableRefreshInterval;
     simtime_t minBucketRefreshInterval;
+    simtime_t bucketPingInterval;
     simtime_t siblingPingInterval;
 
     cMessage* bucketRefreshTimer;
+    cMessage* bucketPingTimer;
     cMessage* siblingPingTimer;
 
 public:
@@ -147,6 +149,14 @@ protected:
      * handle a expired bucket refresh timer
      */
     void handleBucketRefreshTimerExpired();
+
+    /**
+     * handle a expired bucket ping timer (NICE maintenance)
+     */
+    void handleBucketPingTimerExpired();
+
+    void pingResponse(PingResponse* pingResponse, cPolymorphic* context, int rpcId, simtime_t rtt);
+    void pingTimeout(PingCall* pingCall, const TransportAddress& dest, cPolymorphic* context, int rpcId);
 
     OverlayKey distance(const OverlayKey& x,
                         const OverlayKey& y,

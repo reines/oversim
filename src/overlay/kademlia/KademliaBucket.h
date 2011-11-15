@@ -40,6 +40,8 @@ public:
         return this->lastUsage;
     }
 
+    KademliaBucketEntry* getOldestNode();
+
     std::list<KademliaBucketEntry> replacementCache;
 
 private:

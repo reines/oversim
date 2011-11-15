@@ -33,6 +33,7 @@ simple Kademlia extends BaseOverlay
         @class(Kademlia);
         double minSiblingTableRefreshInterval @unit(s); // siblingTable refresh delay
         double minBucketRefreshInterval @unit(s); // bucket refresh delay
+        double bucketPingInterval @unit(s); // interval in which buckets get pinged (NICE maintenance - 0 to disable)
         double siblingPingInterval @unit(s); // interval in which all siblings get pinged (0 to disable)
         int maxStaleCount; // number of timeouts before node removal
         int k; // number of paths (size of k-bucket)

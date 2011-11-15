@@ -102,6 +102,7 @@ void Kademlia::initializeOverlay(int stage)
     // setup kademlia parameters
     minSiblingTableRefreshInterval = par("minSiblingTableRefreshInterval");
     minBucketRefreshInterval = par("minBucketRefreshInterval");
+    bucketPingInterval = par("bucketPingInterval");
     siblingPingInterval = par("siblingPingInterval");
     exhaustiveRefresh = par("exhaustiveRefresh");
     maxStaleCount = par("maxStaleCount");
@@ -160,6 +161,7 @@ void Kademlia::initializeOverlay(int stage)
 
     // self-message
     bucketRefreshTimer = new cMessage("bucketRefreshTimer");
+    bucketPingTimer = new cMessage("bucketPingTimer");
     siblingPingTimer = new cMessage("siblingPingTimer");
 
     // statistics
@@ -175,6 +177,7 @@ Kademlia::Kademlia()
     siblingTable = NULL;
     comparator = NULL;
     bucketRefreshTimer = NULL;
+    bucketPingTimer = NULL;
     siblingPingTimer = NULL;
 }
 
@@ -185,6 +188,7 @@ Kademlia::~Kademlia()
     delete siblingTable;
     delete comparator;
     cancelAndDelete(bucketRefreshTimer);
+    cancelAndDelete(bucketPingTimer);
     cancelAndDelete(siblingPingTimer);
 }
 
@@ -250,6 +254,8 @@ void Kademlia::joinOverlay()
         // schedule bucket refresh timer
         cancelEvent(bucketRefreshTimer);
         scheduleAt(simTime(), bucketRefreshTimer);
+        cancelEvent(bucketPingTimer);
+        scheduleAt(simTime(), bucketPingTimer);
         cancelEvent(siblingPingTimer);
         scheduleAt(simTime() + siblingPingInterval, siblingPingTimer);
     }
@@ -310,7 +316,13 @@ int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 
 	switch (bucketType) {
 		case DKADEMLIA: {
-			// TODO
+			OverlayKey bucketSize = OverlayKey::getMax() / OverlayKey::getLength();
+			std::cout << "bucketSize: " << bucketSize << std::endl;
+
+			OverlayKey bucketIndex = key / bucketSize;
+
+			std::cout << "key: " << key << std::endl;
+			std::cout << "index: " << bucketIndex << std::endl;
 		}
 
 		case AKADEMLIA2: {
@@ -1138,6 +1150,8 @@ void Kademlia::handleTimerEvent(cMessage* msg)
 {
     if (msg == bucketRefreshTimer) {
         handleBucketRefreshTimerExpired();
+    } else if (msg == bucketPingTimer) {
+    	handleBucketPingTimerExpired();
     } else if (msg == siblingPingTimer) {
         if (siblingPingInterval == 0) {
             return;
@@ -1212,6 +1226,8 @@ void Kademlia::handleRpcResponse(BaseResponseMessage* msg,
                 // schedule bucket refresh timer
                 cancelEvent(bucketRefreshTimer);
                 scheduleAt(simTime(), bucketRefreshTimer);
+                cancelEvent(bucketPingTimer);
+                scheduleAt(simTime(), bucketPingTimer);
                 cancelEvent(siblingPingTimer);
                 scheduleAt(simTime() + siblingPingInterval, siblingPingTimer);
                 state = JOIN;
@@ -1235,6 +1251,8 @@ void Kademlia::handleRpcResponse(BaseResponseMessage* msg,
                     // schedule bucket refresh timer
                     cancelEvent(bucketRefreshTimer);
                     scheduleAt(simTime(), bucketRefreshTimer);
+                    cancelEvent(bucketPingTimer);
+                    scheduleAt(simTime(), bucketPingTimer);
                     cancelEvent(siblingPingTimer);
                     scheduleAt(simTime() + siblingPingInterval, siblingPingTimer);
                 }
@@ -1319,6 +1337,7 @@ void Kademlia::lookupFinished(bool isValid)
 {
     if (state == JOIN) {
         cancelEvent(bucketRefreshTimer);
+        cancelEvent(bucketPingTimer);
 
         if (siblingTable->size() == 0) {
             // initial lookup failed - get new bootstrap node
@@ -1327,6 +1346,7 @@ void Kademlia::lookupFinished(bool isValid)
         }
 
         scheduleAt(simTime(), bucketRefreshTimer);
+        scheduleAt(simTime(), bucketPingTimer);
 
         if (!newMaintenance) {
             state = READY;
@@ -1431,6 +1451,46 @@ void Kademlia::handleBucketRefreshTimerExpired()
         scheduleAt(simTime() + (std::min(minSiblingTableRefreshInterval,
                         minBucketRefreshInterval) / 10.0), bucketRefreshTimer);
     }
+}
+
+// handle a expired bucket ping timer (NICE maintenance)
+void Kademlia::handleBucketPingTimerExpired()
+{
+    if (bucketPingInterval == 0) {
+        return;
+    }
+
+	if (state == READY) {
+		if (siblingTable->size()) {
+            int32_t index = ((OverlayKey::getLength() - b) / b) * ((1 << b) - 1);  // TODO: Choose a random bucket
+			KademliaBucket* bucket = routingTable[index];
+			if (bucket == NULL || bucket->isEmpty()) {
+				// TODO: What to do if the bucket is empty?
+			}
+			else {
+				// Ping the found oldest node
+				pingNode(*bucket->getOldestNode()); // TODO: handlePingResponse/handlePingTimeout
+			}
+		}
+	}
+
+    // schedule next bucket refresh process
+    cancelEvent(bucketPingTimer);
+    scheduleAt(simTime() + bucketPingInterval, bucketPingTimer);
+}
+
+void Kademlia::pingResponse(PingResponse* pingResponse, cPolymorphic* context, int rpcId, simtime_t rtt)
+{
+	BaseOverlay::pingResponse(pingResponse, context, rpcId, rtt);
+}
+
+void Kademlia::pingTimeout(PingCall* pingCall, const TransportAddress& dest, cPolymorphic* context, int rpcId)
+{
+	BaseOverlay::pingTimeout(pingCall, dest, context, rpcId);
+
+	std::cout << "ping timeout" << std::endl;
+
+	// TODO: Remove this node?
 }
 
 //virtual public: xor metric

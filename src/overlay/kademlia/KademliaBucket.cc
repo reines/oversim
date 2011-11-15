@@ -34,3 +34,16 @@ KademliaBucket::~KademliaBucket()
 {
 }
 
+KademliaBucketEntry* KademliaBucket::getOldestNode()
+{
+	if (this->isEmpty())
+		return NULL;
+
+	uint32_t oldest = 0;
+	for (uint32_t i = 1;i < this->size();i++) {
+		if (this->at(i).getLastSeen() < this->at(oldest).getLastSeen())
+			oldest = i;
+	}
+
+	return &this->at(oldest);
+}

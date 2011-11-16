@@ -155,9 +155,6 @@ protected:
      */
     void handleBucketPingTimerExpired();
 
-    void pingResponse(PingResponse* pingResponse, cPolymorphic* context, int rpcId, simtime_t rtt);
-    void pingTimeout(PingCall* pingCall, const TransportAddress& dest, cPolymorphic* context, int rpcId);
-
     OverlayKey distance(const OverlayKey& x,
                         const OverlayKey& y,
                         bool useAlternative = false) const;

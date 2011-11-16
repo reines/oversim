@@ -1472,10 +1472,7 @@ void Kademlia::handleBucketPingTimerExpired()
             	currentBucketPing = upper;
 
 			KademliaBucket* bucket = routingTable[currentBucketPing];
-			if (bucket == NULL || bucket->isEmpty()) {
-				// TODO: What to do if the bucket is empty?
-			}
-			else {
+			if (bucket != NULL && !bucket->isEmpty()) {
 				// Ping the found oldest node
 				pingNode(*bucket->getOldestNode());
 			}
@@ -1485,20 +1482,6 @@ void Kademlia::handleBucketPingTimerExpired()
     // schedule next bucket refresh process
     cancelEvent(bucketPingTimer);
     scheduleAt(simTime() + bucketPingInterval, bucketPingTimer);
-}
-
-void Kademlia::pingResponse(PingResponse* pingResponse, cPolymorphic* context, int rpcId, simtime_t rtt)
-{
-	BaseOverlay::pingResponse(pingResponse, context, rpcId, rtt);
-}
-
-void Kademlia::pingTimeout(PingCall* pingCall, const TransportAddress& dest, cPolymorphic* context, int rpcId)
-{
-	BaseOverlay::pingTimeout(pingCall, dest, context, rpcId);
-
-	handleFailedNode(dest);
-
-	// TODO: What to do if the bucket is empty?
 }
 
 //virtual public: xor metric

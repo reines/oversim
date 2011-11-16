@@ -185,6 +185,8 @@ private:
     std::vector<KademliaBucket*> routingTable;
     int numBuckets;
 
+    int currentBucketPing;
+
     void routingInit();
 
     void routingDeinit();

@@ -164,6 +164,8 @@ void Kademlia::initializeOverlay(int stage)
     bucketPingTimer = new cMessage("bucketPingTimer");
     siblingPingTimer = new cMessage("siblingPingTimer");
 
+    currentBucketPing = 0;
+
     // statistics
     bucketRefreshCount = 0;
     siblingTableRefreshCount = 0;
@@ -1466,14 +1468,10 @@ void Kademlia::handleBucketPingTimerExpired()
 			int32_t lower = (diff / b) * ((1 << b) - 1) + ((1 << b) - 2);
             int32_t upper = ((OverlayKey::getLength() - b) / b) * ((1 << b) - 1);
 
-            // Generate a random bucket index within the given bounds
-            uint32_t index;
-            if (upper == lower)
-            	index = upper;
-            else
-            	index = (rand() % (upper - lower)) + lower;
+            if (--currentBucketPing < lower)
+            	currentBucketPing = upper;
 
-			KademliaBucket* bucket = routingTable[index];
+			KademliaBucket* bucket = routingTable[currentBucketPing];
 			if (bucket == NULL || bucket->isEmpty()) {
 				// TODO: What to do if the bucket is empty?
 			}

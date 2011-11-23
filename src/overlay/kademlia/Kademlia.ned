@@ -50,6 +50,8 @@ simple Kademlia extends BaseOverlay
         int siblingRefreshNodes; // number of redundant nodes for exhaustive sibling table refresh lookups (0 = numRedundantNodes)
         int bucketRefreshNodes; // number of redundant nodes for exhaustive bucket refresh lookups (0 = numRedundantNodes)
 
+		int routingTableStatsDelay @unit(s); // delay between routing table stat logging
+
         // R/Kademlia
         bool activePing; // ping new neighbors?
         bool proximityRouting; // enable proximity routing (recursive only)

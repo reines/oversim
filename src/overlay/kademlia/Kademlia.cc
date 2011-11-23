@@ -113,6 +113,8 @@ void Kademlia::initializeOverlay(int stage)
     secureMaintenance = par("secureMaintenance");
     newMaintenance = par("newMaintenance");
 
+    routingTableStatsDelay = par("routingTableStatsDelay");
+
     // R/Kademlia
     activePing = par("activePing");
     proximityRouting = par("proximityRouting");
@@ -163,6 +165,7 @@ void Kademlia::initializeOverlay(int stage)
     bucketRefreshTimer = new cMessage("bucketRefreshTimer");
     bucketPingTimer = new cMessage("bucketPingTimer");
     siblingPingTimer = new cMessage("siblingPingTimer");
+    routingTableStatsTimer = new cMessage("routingTableStatsTimer");
 
     currentBucketPing = 0;
 
@@ -172,6 +175,8 @@ void Kademlia::initializeOverlay(int stage)
     nodesReplaced = 0;
 
     comparator = NULL;
+
+    scheduleAt(simTime() + routingTableStatsDelay, routingTableStatsTimer);
 }
 
 Kademlia::Kademlia()
@@ -181,6 +186,7 @@ Kademlia::Kademlia()
     bucketRefreshTimer = NULL;
     bucketPingTimer = NULL;
     siblingPingTimer = NULL;
+    routingTableStatsTimer = NULL;
 }
 
 Kademlia::~Kademlia()
@@ -192,6 +198,7 @@ Kademlia::~Kademlia()
     cancelAndDelete(bucketRefreshTimer);
     cancelAndDelete(bucketPingTimer);
     cancelAndDelete(siblingPingTimer);
+    cancelAndDelete(routingTableStatsTimer);
 }
 
 void Kademlia::finishOverlay()
@@ -1164,6 +1171,31 @@ void Kademlia::handleTimerEvent(cMessage* msg)
             pingNode(*i);
         }
         scheduleAt(simTime() + siblingPingInterval, msg);
+    } else if (msg == routingTableStatsTimer) {
+    	if (!routingTable.empty() && globalStatistics->isMeasuring() && !underlayConfigurator->isSimulationEndingSoon()) {
+    	    double routingTableSize = 0;
+    	    double routingTableAlive = 0;
+
+    	    for (uint i = 0;i < routingTable.size();i++) {
+    	    	if (routingTable[i] == NULL)
+    	    		continue;
+
+    	    	for (uint j = 0;j < routingTable[i]->size();j++) {
+    	    		routingTableSize++;
+
+    	    		PeerInfo* info = globalNodeList->getPeerInfo(routingTable[i]->at(j));
+    	    		if (info != NULL)
+    	    			routingTableAlive++;
+    	    	}
+    	    }
+
+    	    if (routingTableSize > 0) {
+    	    	RECORD_STATS(globalStatistics->recordOutVector(
+    	    			"Kademlia: Routing table accuracy", routingTableAlive / routingTableSize));
+    	    }
+    	}
+
+    	scheduleAt(simTime() + routingTableStatsDelay, msg);
     }
 }
 

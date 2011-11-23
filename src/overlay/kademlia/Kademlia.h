@@ -30,6 +30,8 @@
 #include <CommonMessages_m.h>
 #include <BaseOverlay.h>
 #include <GlobalStatistics.h>
+#include <GlobalNodeList.h>
+#include <UnderlayConfigurator.h>
 #include <NeighborCache.h>
 
 #include "KademliaNodeHandle.h"
@@ -87,6 +89,8 @@ protected://fields: kademlia parameters
     int siblingRefreshNodes; /*< number of redundant nodes for exhaustive sibling table refresh lookups (0 = numRedundantNodes) */
     int bucketRefreshNodes; /*< number of redundant nodes for exhaustive bucket refresh lookups (0 = numRedundantNodes) */
 
+    int routingTableStatsDelay;
+
     // R/Kademlia
     bool activePing;
     bool proximityRouting;
@@ -103,6 +107,7 @@ protected://fields: kademlia parameters
     cMessage* bucketRefreshTimer;
     cMessage* bucketPingTimer;
     cMessage* siblingPingTimer;
+    cMessage* routingTableStatsTimer;
 
 public:
     Kademlia();

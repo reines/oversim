@@ -146,10 +146,11 @@ public://virtual methods: comparator induced by distance in BaseOverlay
 protected://fields
     NodeVector siblings;           /**< closest nodes */
     TransportAddress::Set visited; /**< nodes already visited */
-    TransportAddress::Set dead;    /**< nodes which seem to be dead */
     TransportAddress::Set pinged;  /**< nodes already pinged */
+    typedef std::map<TransportAddress, NodeHandle> DeadNodes;
     typedef std::map<int,int> PendingPings;
     typedef std::set<NodeHandle> MajoritySiblings;
+    DeadNodes dead;                /**< nodes which seem to be dead */
     MajoritySiblings majoritySiblings; /**< map for majority decision on correct siblings */
     int numSiblings;               /**< number of siblings */
     int hopCountMax;               /**< maximum hop count */
@@ -200,8 +201,9 @@ protected://methods
      * add a dead node to the dead node list
      *
      * @param addr TransportAddress of the node to add
+     * @param source NodeHandle of the node who provided this address
      */
-    void setDead(const TransportAddress& addr);
+    void setDead(const TransportAddress& addr, const NodeHandle& source = NodeHandle::UNSPECIFIED_NODE);
 
     /**
      * check if a node seems to be dead

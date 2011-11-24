@@ -455,9 +455,9 @@ bool IterativeLookup::getVisited(const TransportAddress& addr)
     return (visited.count(addr) != 0);
 }
 
-void IterativeLookup::setDead(const TransportAddress& addr, const NodeHandle& source)
+void IterativeLookup::setDead(const TransportAddress& addr)
 {
-    dead.insert(make_pair(addr, source));
+    dead.insert(addr);
 }
 
 bool IterativeLookup::getDead(const TransportAddress& addr)

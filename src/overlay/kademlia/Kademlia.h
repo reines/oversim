@@ -98,6 +98,7 @@ protected://fields: kademlia parameters
     bool altRecMode;
 
     BucketType bucketType;
+    bool enableDownlists;
 
     simtime_t minSiblingTableRefreshInterval;
     simtime_t minBucketRefreshInterval;
@@ -169,7 +170,7 @@ protected:
      */
     void updateTooltip();
 
-    virtual void lookupFinished(bool isValid);
+    virtual void lookupFinished(bool isValid, Downlist downlist);
 
     virtual void handleNodeGracefulLeaveNotification();
 

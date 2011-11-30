@@ -144,6 +144,7 @@ void IterativeLookup::start()
     siblings = NodeVector(numSiblings == 0 ? 1 : numSiblings, this);
     visited.clear();
     dead.clear();
+    downlist.clear();
     pinged.clear();
 
     startTime = simTime();
@@ -455,9 +456,14 @@ bool IterativeLookup::getVisited(const TransportAddress& addr)
     return (visited.count(addr) != 0);
 }
 
-void IterativeLookup::setDead(const TransportAddress& addr)
+void IterativeLookup::setDead(const TransportAddress& addr, const NodeHandle& source)
 {
     dead.insert(addr);
+
+    if (source.isUnspecified())
+    	return;
+
+    downlist[source].insert(addr);
 }
 
 bool IterativeLookup::getDead(const TransportAddress& addr)
@@ -599,11 +605,19 @@ void IterativeLookup::handleRpcTimeout(BaseCallMessage* msg,
         return;
     }
 
-    // mark the node as dead
-    setDead(dest);
-
     RpcInfoVector infos = rpcs[dest];
     rpcs.erase(dest);
+
+    // mark the node as dead
+    for (uint32_t i=0; i < infos.size(); i++) {
+    	const RpcInfo& info = infos[i];
+
+    	std::map<TransportAddress, NodeHandle>::iterator it = info.path->oldNextHops.find(dest);
+    	if (it == info.path->oldNextHops.end())
+    		setDead(dest);
+    	else
+    		setDead(dest, it->second);
+    }
 
     // iterate
     for (uint32_t i=0; i < infos.size(); i++) {

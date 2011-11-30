@@ -84,7 +84,7 @@ public:
 
     virtual void lookupFinished(AbstractLookup *lookup)
     {
-        overlay->lookupFinished(lookup->isValid());
+        overlay->lookupFinished(lookup->isValid(), lookup->getDownlist());
         delete this;
     }
 };
@@ -132,6 +132,8 @@ void Kademlia::initializeOverlay(int stage)
     	bucketType = AKADEMLIA2;
     else
     	throw cRuntimeError((std::string("Wrong bucket type: ") + temp).c_str());
+
+    enableDownlists = par("enableDownlists");
 
     k = par("k");
     b = par("b");
@@ -1367,7 +1369,7 @@ void Kademlia::proxCallback(const TransportAddress& node, int rpcId,
     }
 }
 
-void Kademlia::lookupFinished(bool isValid)
+void Kademlia::lookupFinished(bool isValid, Downlist downlist)
 {
     if (state == JOIN) {
         cancelEvent(bucketRefreshTimer);
@@ -1386,6 +1388,13 @@ void Kademlia::lookupFinished(bool isValid)
             state = READY;
             setOverlayReady(true);
         }
+    }
+
+    // If downlist modification is enabled alert nodes that sent us dead results
+    if (enableDownlists) {
+    	for (Downlist::iterator it = downlist.begin(); it != downlist.end(); it++) {
+    		// TODO: Send downlist to the source
+    	}
     }
 }
 

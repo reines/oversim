@@ -201,7 +201,7 @@ protected://methods
      *
      * @param addr TransportAddress of the node to add
      */
-    void setDead(const TransportAddress& addr);
+    void setDead(const TransportAddress& addr, const NodeHandle& source = NodeHandle::UNSPECIFIED_NODE);
 
     /**
      * check if a node seems to be dead

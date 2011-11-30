@@ -59,6 +59,7 @@ simple Kademlia extends BaseOverlay
         bool altRecMode; // use source-routing mode instead of direct mode
         
         string bucketType; // used to test alternative bucket/node distributions
+        bool enableDownlists; // toggle downlists on/off
 }
 
 //

@@ -1201,23 +1201,30 @@ void Kademlia::handleTimerEvent(cMessage* msg)
     }
 }
 
-// R/Kademlia
 void Kademlia::handleUDPMessage(BaseOverlayMessage* msg)
 {
-    // only used for recursive Kademlia
-    OverlayCtrlInfo* ctrlInfo =
-            check_and_cast<OverlayCtrlInfo*>(msg->removeControlInfo());
-    KademliaRoutingInfoMessage* kadRoutingInfoMsg =
-            check_and_cast<KademliaRoutingInfoMessage*>(msg);
+	OverlayCtrlInfo* ctrlInfo = check_and_cast<OverlayCtrlInfo*>(msg->removeControlInfo());
 
-    routingAdd(kadRoutingInfoMsg->getSrcNode(), true);
+	if (dynamic_cast<KademliaRoutingInfoMessage*>(msg)) {
+		// only used for recursive Kademlia
+		KademliaRoutingInfoMessage* kadRoutingInfoMsg = check_and_cast<KademliaRoutingInfoMessage*>(msg);
 
-    for (uint32_t i = 0; i < kadRoutingInfoMsg->getNextHopsArraySize(); i++) {
-        routingAdd(kadRoutingInfoMsg->getNextHops(i),
-                   kadRoutingInfoMsg->getNextHops(i).getIsAlive());
-    }
+		routingAdd(kadRoutingInfoMsg->getSrcNode(), true);
 
-    delete ctrlInfo;
+		for (uint32_t i = 0; i < kadRoutingInfoMsg->getNextHopsArraySize(); i++) {
+			routingAdd(kadRoutingInfoMsg->getNextHops(i), kadRoutingInfoMsg->getNextHops(i).getIsAlive());
+		}
+	}
+	else if (dynamic_cast<KademliaDownlistMessage*>(msg)) {
+		KademliaDownlistMessage* kadDownlistMsg = check_and_cast<KademliaDownlistMessage*>(msg);
+
+		// Ping each node we were informed has failed
+		for (uint32_t i = 0; i < kadDownlistMsg->getFailedArraySize(); i++) {
+			pingNode(kadDownlistMsg->getFailed(i));
+		}
+	}
+
+	delete ctrlInfo;
     delete msg;
 }
 
@@ -1392,8 +1399,18 @@ void Kademlia::lookupFinished(bool isValid, Downlist downlist)
 
     // If downlist modification is enabled alert nodes that sent us dead results
     if (enableDownlists) {
-    	for (Downlist::iterator it = downlist.begin(); it != downlist.end(); it++) {
-    		// TODO: Send downlist to the source
+    	for (Downlist::iterator sourceIterator = downlist.begin(); sourceIterator != downlist.end(); sourceIterator++) {
+    		KademliaDownlistMessage* msg = new KademliaDownlistMessage();
+        	msg->setSrcNode(thisNode);
+
+        	msg->setFailedArraySize(sourceIterator->second.size());
+
+        	TransportAddress::Set::iterator deadIterator = sourceIterator->second.begin();
+        	for (uint32_t i = 0; deadIterator != sourceIterator->second.end(); deadIterator++) {
+        		msg->setFailed(i++, *deadIterator);
+        	}
+
+        	sendMessageToUDP(sourceIterator->first, msg);
     	}
     }
 }

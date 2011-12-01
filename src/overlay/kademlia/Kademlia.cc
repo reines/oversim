@@ -84,7 +84,7 @@ public:
 
     virtual void lookupFinished(AbstractLookup *lookup)
     {
-        overlay->lookupFinished(lookup->isValid(), lookup->getDownlist());
+        overlay->lookupFinished(lookup->isValid());
         delete this;
     }
 };
@@ -1220,7 +1220,7 @@ void Kademlia::handleUDPMessage(BaseOverlayMessage* msg)
 
 		// Ping each node we were informed has failed
 		for (uint32_t i = 0; i < kadDownlistMsg->getFailedArraySize(); i++) {
-			pingNode(kadDownlistMsg->getFailed(i));
+            handleFailedNode(kadDownlistMsg->getFailed(i));
 		}
 	}
 
@@ -1376,7 +1376,7 @@ void Kademlia::proxCallback(const TransportAddress& node, int rpcId,
     }
 }
 
-void Kademlia::lookupFinished(bool isValid, Downlist downlist)
+void Kademlia::lookupFinished(bool isValid)
 {
     if (state == JOIN) {
         cancelEvent(bucketRefreshTimer);
@@ -1396,9 +1396,16 @@ void Kademlia::lookupFinished(bool isValid, Downlist downlist)
             setOverlayReady(true);
         }
     }
+}
+
+void Kademlia::removeLookup(AbstractLookup* lookup)
+{
+	BaseOverlay::removeLookup(lookup);
 
     // If downlist modification is enabled alert nodes that sent us dead results
     if (enableDownlists) {
+    	Downlist downlist = lookup->getDownlist();
+
     	for (Downlist::iterator sourceIterator = downlist.begin(); sourceIterator != downlist.end(); sourceIterator++) {
     		KademliaDownlistMessage* msg = new KademliaDownlistMessage();
         	msg->setSrcNode(thisNode);

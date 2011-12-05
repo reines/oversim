@@ -114,6 +114,8 @@ IterativeLookup::~IterativeLookup()
     delete firstCallExt;
     overlay->removeLookup(this);
 
+    downlist.clear();
+
 //    std::cout << "time: " << simTime() << "deleting " << this << endl;
 }
 

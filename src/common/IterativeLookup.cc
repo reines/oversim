@@ -456,14 +456,9 @@ bool IterativeLookup::getVisited(const TransportAddress& addr)
     return (visited.count(addr) != 0);
 }
 
-void IterativeLookup::setDead(const TransportAddress& addr, const NodeHandle& source)
+void IterativeLookup::setDead(const TransportAddress& addr)
 {
     dead.insert(addr);
-
-    if (source.isUnspecified())
-    	return;
-
-    downlist[source].insert(addr);
 }
 
 bool IterativeLookup::getDead(const TransportAddress& addr)
@@ -612,11 +607,15 @@ void IterativeLookup::handleRpcTimeout(BaseCallMessage* msg,
     for (uint32_t i=0; i < infos.size(); i++) {
     	const RpcInfo& info = infos[i];
 
-    	std::map<TransportAddress, NodeHandle>::iterator it = info.path->oldNextHops.find(dest);
-    	if (it == info.path->oldNextHops.end())
-    		setDead(dest);
-    	else
-    		setDead(dest, it->second);
+    	setDead(dest);
+
+    	for (LookupVector::iterator it = info.path->allHops.begin(); it != info.path->allHops.end(); it++) {
+    		if (it->handle.isUnspecified() || it->source.isUnspecified())
+    			continue;
+
+    		if (dest == it->handle)
+    			downlist[it->source].insert(it->handle);
+    	}
     }
 
     // iterate
@@ -968,7 +967,10 @@ void IterativePathLookup::handleTimeout(BaseCallMessage* msg,
                    findNodeCall->getLookupKey(), -1, lookup->numSiblings, msg);
 
                 for (NodeVector::iterator i = retry->begin(); i != retry->end(); i++) {
-                    nextHops.add(LookupEntry(*i, NodeHandle::UNSPECIFIED_NODE, false));
+                	LookupEntry* entry = new LookupEntry(*i, NodeHandle::UNSPECIFIED_NODE, false);
+
+                    nextHops.add(*entry);
+                    allHops.add(*entry);
                 }
 
                 delete retry;
@@ -1023,7 +1025,10 @@ void IterativePathLookup::handleFailedNodeResponse(const NodeHandle& src,
         // failed node recovery are both needed at the same time!
         lookup->setVisited(src, false);
 
-        nextHops.add(LookupEntry(src, *oldSrc, false));
+        LookupEntry* entry = new LookupEntry(src, *oldSrc, false);
+
+        nextHops.add(*entry);
+        allHops.add(*entry);
     }
 
     oldNextHops.erase(oldPos);
@@ -1141,10 +1146,13 @@ void IterativePathLookup::sendRpc(int num, cPacket* findNodeExt)
 
 int IterativePathLookup::add(const NodeHandle& handle, const NodeHandle& source)
 {
+	LookupEntry* entry = new LookupEntry(handle, source, false);
+	allHops.add(*entry);
+
     if (lookup->config.merge) {
-        return nextHops.add(LookupEntry(handle, source, false));
+        return nextHops.add(*entry);
     } else {
-        nextHops.push_back(LookupEntry(handle, source, false));
+        nextHops.push_back(*entry);
         return (nextHops.size() - 1);
     }
 }

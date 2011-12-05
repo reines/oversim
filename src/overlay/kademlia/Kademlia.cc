@@ -1220,7 +1220,7 @@ void Kademlia::handleUDPMessage(BaseOverlayMessage* msg)
 
 		// Ping each node we were informed has failed
 		for (uint32_t i = 0; i < kadDownlistMsg->getFailedArraySize(); i++) {
-            handleFailedNode(kadDownlistMsg->getFailed(i));
+            pingNode(kadDownlistMsg->getFailed(i));
 		}
 	}
 
@@ -1400,8 +1400,6 @@ void Kademlia::lookupFinished(bool isValid)
 
 void Kademlia::removeLookup(AbstractLookup* lookup)
 {
-	BaseOverlay::removeLookup(lookup);
-
     // If downlist modification is enabled alert nodes that sent us dead results
     if (enableDownlists) {
     	Downlist downlist = lookup->getDownlist();
@@ -1412,14 +1410,17 @@ void Kademlia::removeLookup(AbstractLookup* lookup)
 
         	msg->setFailedArraySize(sourceIterator->second.size());
 
-        	TransportAddress::Set::iterator deadIterator = sourceIterator->second.begin();
+        	std::set<NodeHandle>::iterator deadIterator = sourceIterator->second.begin();
         	for (uint32_t i = 0; deadIterator != sourceIterator->second.end(); deadIterator++) {
         		msg->setFailed(i++, *deadIterator);
         	}
 
+        	msg->setBitLength(KADEMLIADOWNLIST_L(msg));
         	sendMessageToUDP(sourceIterator->first, msg);
     	}
     }
+
+    BaseOverlay::removeLookup(lookup);
 }
 
 // handle a expired bucket refresh timer

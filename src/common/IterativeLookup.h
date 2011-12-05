@@ -201,7 +201,7 @@ protected://methods
      *
      * @param addr TransportAddress of the node to add
      */
-    void setDead(const TransportAddress& addr, const NodeHandle& source = NodeHandle::UNSPECIFIED_NODE);
+    void setDead(const TransportAddress& addr);
 
     /**
      * check if a node seems to be dead
@@ -299,6 +299,7 @@ protected://fields: state
     bool finished;
     bool success;
     LookupVector nextHops;
+    LookupVector allHops;
     std::map<TransportAddress, NodeHandle> oldNextHops;
 
 protected://methods: rpc handling

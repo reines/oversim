@@ -29,7 +29,7 @@
 class OverlayKey;
 class LookupListener;
 
-typedef std::map<NodeHandle, TransportAddress::Set> Downlist;
+typedef std::map<NodeHandle, std::set<NodeHandle> > Downlist;
 
 /**
  * This class declares an abstract iterative lookup.

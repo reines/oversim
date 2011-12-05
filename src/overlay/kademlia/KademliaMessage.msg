@@ -33,6 +33,10 @@ static const int ALIVEFLAG_L = 8;
                                     KEY_L + \
                                     msg->getNextHopsArraySize() * \
                                     MARKEDNODEHANDLE_L)
+
+#define KADEMLIADOWNLIST_L(msg) (BASEOVERLAY_L(msg) + NODEHANDLE_L + \
+									msg->getFailedArraySize() * \
+									NODEHANDLE_L)
 }}
 
 class noncobject MarkedNodeHandle;
@@ -55,5 +59,5 @@ packet KademliaRoutingInfoMessage extends BaseOverlayMessage
 packet KademliaDownlistMessage extends BaseOverlayMessage
 {
 	NodeHandle srcNode;
-	TransportAddress failed[];
+	NodeHandle failed[];
 }

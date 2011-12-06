@@ -127,6 +127,7 @@ protected:
     int retries;                    /**< number of retries, if lookup fails */
     bool appLookup;
     SimTime startTime;              /**< time at which the lookup was started */
+    Downlist downlist;
 
 public://virtual methods: comparator induced by distance in BaseOverlay
     /**
@@ -272,6 +273,7 @@ public://methods
                 LookupListener* listener = NULL);
 
     const NodeVector& getResult() const;
+    Downlist* getDownlist();
 
     bool isValid() const;
     void abortLookup();

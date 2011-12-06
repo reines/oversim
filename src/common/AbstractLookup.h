@@ -38,8 +38,6 @@ typedef std::map<NodeHandle, std::set<NodeHandle> > Downlist;
  */
 class AbstractLookup
 {
-protected:
-	Downlist downlist;
 public:
     /**
      * Virtual destructor
@@ -66,7 +64,7 @@ public:
      */
     virtual const NodeVector& getResult() const = 0;
 
-    inline Downlist getDownlist() const { return downlist; }
+    virtual Downlist* getDownlist() = 0;
 
     /**
      * Returns true, if the lookup was successful.

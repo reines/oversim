@@ -114,8 +114,6 @@ IterativeLookup::~IterativeLookup()
     delete firstCallExt;
     overlay->removeLookup(this);
 
-    downlist.clear();
-
 //    std::cout << "time: " << simTime() << "deleting " << this << endl;
 }
 
@@ -287,6 +285,9 @@ void IterativeLookup::stop()
         listener->lookupFinished(this);
         listener = NULL;
     }
+
+    // delete downlist entries
+    downlist.clear();
 }
 
 inline void IterativeLookup::checkStop()
@@ -721,6 +722,11 @@ const NodeVector& IterativeLookup::getResult() const
     return siblings;
 }
 
+Downlist* IterativeLookup::getDownlist()
+{
+	return &downlist;
+}
+
 bool IterativeLookup::isValid() const
 {
     return success && finished;
@@ -753,7 +759,9 @@ IterativePathLookup::IterativePathLookup(IterativeLookup* lookup)
 }
 
 IterativePathLookup::~IterativePathLookup()
-{}
+{
+	allHops.clear();
+}
 
 bool IterativePathLookup::accepts(int rpcId)
 {
@@ -969,10 +977,10 @@ void IterativePathLookup::handleTimeout(BaseCallMessage* msg,
                    findNodeCall->getLookupKey(), -1, lookup->numSiblings, msg);
 
                 for (NodeVector::iterator i = retry->begin(); i != retry->end(); i++) {
-                	LookupEntry* entry = new LookupEntry(*i, NodeHandle::UNSPECIFIED_NODE, false);
+                	LookupEntry entry = LookupEntry(*i, NodeHandle::UNSPECIFIED_NODE, false);
 
-                    nextHops.add(*entry);
-                    allHops.add(*entry);
+                    nextHops.add(entry);
+                    allHops.add(entry);
                 }
 
                 delete retry;
@@ -1027,10 +1035,10 @@ void IterativePathLookup::handleFailedNodeResponse(const NodeHandle& src,
         // failed node recovery are both needed at the same time!
         lookup->setVisited(src, false);
 
-        LookupEntry* entry = new LookupEntry(src, *oldSrc, false);
+        LookupEntry entry = LookupEntry(src, *oldSrc, false);
 
-        nextHops.add(*entry);
-        allHops.add(*entry);
+        nextHops.add(entry);
+        allHops.add(entry);
     }
 
     oldNextHops.erase(oldPos);
@@ -1148,13 +1156,13 @@ void IterativePathLookup::sendRpc(int num, cPacket* findNodeExt)
 
 int IterativePathLookup::add(const NodeHandle& handle, const NodeHandle& source)
 {
-	LookupEntry* entry = new LookupEntry(handle, source, false);
-	allHops.add(*entry);
+	LookupEntry entry = LookupEntry(handle, source, false);
+	allHops.add(entry);
 
     if (lookup->config.merge) {
-        return nextHops.add(*entry);
+        return nextHops.add(entry);
     } else {
-        nextHops.push_back(*entry);
+        nextHops.push_back(entry);
         return (nextHops.size() - 1);
     }
 }

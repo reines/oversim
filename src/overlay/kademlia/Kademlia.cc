@@ -84,7 +84,7 @@ public:
 
     virtual void lookupFinished(AbstractLookup *lookup)
     {
-        overlay->lookupFinished(lookup->isValid());
+        overlay->lookupFinished(lookup->isValid(), lookup->getDownlist());
         delete this;
     }
 };
@@ -1376,7 +1376,7 @@ void Kademlia::proxCallback(const TransportAddress& node, int rpcId,
     }
 }
 
-void Kademlia::lookupFinished(bool isValid)
+void Kademlia::lookupFinished(bool isValid, Downlist* downlist)
 {
     if (state == JOIN) {
         cancelEvent(bucketRefreshTimer);
@@ -1396,15 +1396,10 @@ void Kademlia::lookupFinished(bool isValid)
             setOverlayReady(true);
         }
     }
-}
 
-void Kademlia::removeLookup(AbstractLookup* lookup)
-{
     // If downlist modification is enabled alert nodes that sent us dead results
     if (enableDownlists) {
-    	Downlist downlist = lookup->getDownlist();
-
-    	for (Downlist::iterator sourceIterator = downlist.begin(); sourceIterator != downlist.end(); sourceIterator++) {
+    	for (Downlist::iterator sourceIterator = downlist->begin(); sourceIterator != downlist->end(); sourceIterator++) {
     		KademliaDownlistMessage* msg = new KademliaDownlistMessage();
         	msg->setSrcNode(thisNode);
 
@@ -1419,8 +1414,6 @@ void Kademlia::removeLookup(AbstractLookup* lookup)
         	sendMessageToUDP(sourceIterator->first, msg);
     	}
     }
-
-    BaseOverlay::removeLookup(lookup);
 }
 
 // handle a expired bucket refresh timer

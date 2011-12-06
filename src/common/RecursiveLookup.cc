@@ -74,6 +74,11 @@ const NodeVector& RecursiveLookup::getResult() const
     return siblings;
 }
 
+Downlist* RecursiveLookup::getDownlist()
+{
+	return NULL;
+}
+
 bool RecursiveLookup::isValid() const
 {
     return valid;

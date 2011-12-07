@@ -170,7 +170,8 @@ protected:
      */
     void updateTooltip();
 
-    virtual void lookupFinished(bool isValid, Downlist* downlist);
+    virtual void lookupFinished(bool isValid);
+    virtual void removeLookup(AbstractLookup* lookup);
 
     virtual void handleNodeGracefulLeaveNotification();
 

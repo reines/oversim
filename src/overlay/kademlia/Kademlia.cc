@@ -1379,6 +1379,7 @@ void Kademlia::handleRpcTimeout(BaseCallMessage* msg,
     }
 }
 
+// Managed connections
 void Kademlia::openManagedConnection(NodeHandle dest)
 {
 	TransportAddress address = TransportAddress(dest.getIp(), localPort);
@@ -1389,6 +1390,7 @@ void Kademlia::openManagedConnection(NodeHandle dest)
 	managedConnections.insert(std::make_pair(address, dest));
 }
 
+// Managed connections
 void Kademlia::closeManagedConnection(TransportAddress dest)
 {
 	TransportAddress address = TransportAddress(dest.getIp(), localPort);

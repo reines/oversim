@@ -182,6 +182,7 @@ protected:
     // Managed connection support
 
     void openManagedConnection(NodeHandle);
+    void closeManagedConnection(TransportAddress dest);
 
     void handleConnectionEvent(EvCode code, TransportAddress address);
 

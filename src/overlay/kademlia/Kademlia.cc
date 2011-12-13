@@ -151,6 +151,8 @@ void Kademlia::initializeOverlay(int stage)
         bucketRefreshNodes = iterativeLookupConfig.redundantNodes;
     }
 
+    enableManagedConnections = par("enableManagedConnections");
+
     // calculate number of buckets: ( (2^b)-1 ) * ( keylength / b )
     numBuckets = ((1L << b) - 1L) * (OverlayKey::getLength() / b);
 
@@ -177,6 +179,9 @@ void Kademlia::initializeOverlay(int stage)
     nodesReplaced = 0;
 
     comparator = NULL;
+
+    // Listen for incoming managed connections
+    bindAndListenTcp(localPort);
 
     scheduleAt(simTime() + routingTableStatsDelay, routingTableStatsTimer);
 }
@@ -617,6 +622,10 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
          }
 
         bucket->push_back(kadHandle);
+
+        if (enableManagedConnections)
+        	openManagedConnection(kadHandle);
+
         result = true;
     } else if (isAlive) {
         //PNS node replacement
@@ -1006,7 +1015,6 @@ bool Kademlia::recursiveRoutingHook(const TransportAddress& dest,
     return true;
 }
 
-
 NodeVector* Kademlia::findNode(const OverlayKey& key, int numRedundantNodes,
                                int numSiblings, BaseOverlayMessage* msg)
 {
@@ -1155,7 +1163,6 @@ NodeVector* Kademlia::findNode(const OverlayKey& key, int numRedundantNodes,
 }
 
 //-----------------------------------------------------------------------------
-
 
 void Kademlia::handleTimerEvent(cMessage* msg)
 {
@@ -1361,6 +1368,60 @@ void Kademlia::handleRpcTimeout(BaseCallMessage* msg,
            << msg << " -> " << dest << ")" << endl;
         return;
     }
+}
+
+void Kademlia::openManagedConnection(NodeHandle dest)
+{
+	TransportAddress address = TransportAddress(dest.getIp(), localPort);
+
+//	std::cout << thisNode.getIp() << ": Opening outgoing TCP connection to " << address << std::endl;
+
+	establishTcpConnection(address);
+	managedConnections.insert(std::make_pair(address, dest));
+}
+
+// Managed connections
+void Kademlia::handleConnectionEvent(EvCode code, TransportAddress address)
+{
+	std::map<TransportAddress, NodeHandle>::iterator it = managedConnections.find(address);
+	if (it == managedConnections.end())
+		return;
+
+	NodeHandle handle = it->second;
+
+	switch (code) {
+		case PEER_CLOSED:
+		case PEER_TIMEDOUT:
+		case PEER_REFUSED:
+		case CONNECTION_RESET: {
+			routingTimeout(handle.getKey(), true);
+		}
+
+		default: {
+//			std::cout << thisNode.getIp() << ": Removing closed TCP connection to " << address << std::endl;
+
+			managedConnections.erase(it);
+
+			BaseTcpSupport::handleConnectionEvent(code, address);
+
+			break;
+		}
+	}
+}
+
+// Managed connections
+void Kademlia::handleIncomingConnection(TransportAddress address)
+{
+//	std::cout << thisNode.getIp() << ": Received incoming TCP connection from " << address << std::endl;
+
+	// TODO: Test
+//	closeTcpConnection(address);
+}
+
+// Managed connections
+void Kademlia::handleDataReceived(TransportAddress address, cPacket* msg, bool urgent)
+{
+	// Not actually used - for the simulation we only need the connection to update routing state
 }
 
 // R/Kademlia

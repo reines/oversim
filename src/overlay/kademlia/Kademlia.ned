@@ -60,6 +60,8 @@ simple Kademlia extends BaseOverlay
         
         string bucketType; // used to test alternative bucket/node distributions
         bool enableDownlists; // toggle downlists on/off
+
+		bool enableManagedConnections; // toggle managed connections on/off
 }
 
 //
@@ -85,9 +87,12 @@ module KademliaModules like IOverlay
                 @display("p=60,60;i=block/circle");
 
         }
+
     connections allowunconnected:
         udpIn --> kademlia.udpIn;
         udpOut <-- kademlia.udpOut;
+        tcpIn --> kademlia.tcpIn;
+        tcpOut <-- kademlia.tcpOut;
         appIn --> kademlia.appIn;
         appOut <-- kademlia.appOut;
 }

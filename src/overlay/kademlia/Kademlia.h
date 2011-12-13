@@ -44,7 +44,6 @@ enum BucketType {
 	AKADEMLIA2 = 3
 };
 
-
 /**
  * Kademlia overlay module
  *
@@ -99,6 +98,9 @@ protected://fields: kademlia parameters
 
     BucketType bucketType;
     bool enableDownlists;
+
+    bool enableManagedConnections;
+    std::map<TransportAddress, NodeHandle> managedConnections;
 
     simtime_t minSiblingTableRefreshInterval;
     simtime_t minBucketRefreshInterval;
@@ -177,6 +179,15 @@ protected:
 
     friend class KademliaLookupListener;
 
+    // Managed connection support
+
+    void openManagedConnection(NodeHandle);
+
+    void handleConnectionEvent(EvCode code, TransportAddress address);
+
+    void handleIncomingConnection(TransportAddress address);
+
+    void handleDataReceived(TransportAddress address, cPacket* msg, bool urgent);
 
 private:
     uint32_t bucketRefreshCount; /*< statistics: total number of bucket refreshes */

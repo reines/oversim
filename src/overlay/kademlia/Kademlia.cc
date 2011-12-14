@@ -1386,8 +1386,8 @@ void Kademlia::openManagedConnection(NodeHandle dest)
 
 //	std::cout << thisNode.getIp() << ": Opening outgoing TCP connection to " << address << std::endl;
 
-	establishTcpConnection(address);
 	managedConnections.insert(std::make_pair(address, dest));
+	establishTcpConnection(address);
 }
 
 // Managed connections

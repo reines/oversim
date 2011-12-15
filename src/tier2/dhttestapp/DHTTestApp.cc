@@ -270,7 +270,7 @@ void DHTTestApp::handleTraceMessage(cMessage* msg)
         RECORD_STATS(numSent++; numPutSent++);
         sendInternalRpcCall(TIER1_COMP, dhtPutMsg,
                 new DHTStatsContext(globalStatistics->isMeasuring(),
-                                    simTime(), destKey));
+                                    simTime(), destKey, buf));
     } else if (strncmp(cmd, "GET ", 4) == 0) {
         // Get key
         BinaryValue b(cmd + 4);

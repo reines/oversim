@@ -134,6 +134,7 @@ void Kademlia::initializeOverlay(int stage)
     	throw cRuntimeError((std::string("Wrong bucket type: ") + temp).c_str());
 
     enableDownlists = par("enableDownlists");
+    enableDownlistsForwarding = par("enableDownlistsForwarding");
 
     k = par("k");
     b = par("b");
@@ -1222,6 +1223,15 @@ void Kademlia::handleUDPMessage(BaseOverlayMessage* msg)
 		for (uint32_t i = 0; i < kadDownlistMsg->getFailedArraySize(); i++) {
             pingNode(kadDownlistMsg->getFailed(i));
 		}
+
+		// If this message wasn't forwarded, then forward it to our siblings.
+		if (enableDownlistsForwarding && !kadDownlistMsg->getForwarded()) {
+			kadDownlistMsg->setForwarded(true);
+
+		    for (KademliaBucket::iterator i = siblingTable->begin(); i != siblingTable->end(); i++) {
+		    	sendMessageToUDP(*i, kadDownlistMsg->dup());
+		    }
+		}
 	}
 
 	delete ctrlInfo;
@@ -1406,6 +1416,7 @@ void Kademlia::removeLookup(AbstractLookup* lookup)
     	for (Downlist::iterator sourceIterator = downlist->begin(); sourceIterator != downlist->end(); sourceIterator++) {
     		KademliaDownlistMessage* msg = new KademliaDownlistMessage();
         	msg->setSrcNode(thisNode);
+        	msg->setForwarded(false);
 
         	msg->setFailedArraySize(sourceIterator->second.size());
 

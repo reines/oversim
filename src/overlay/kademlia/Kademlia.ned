@@ -60,6 +60,7 @@ simple Kademlia extends BaseOverlay
         
         string bucketType; // used to test alternative bucket/node distributions
         bool enableDownlists; // toggle downlists on/off
+        bool enableDownlistsForwarding; // toggle downlists being forwarded to siblings
 }
 
 //

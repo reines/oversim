@@ -99,6 +99,7 @@ protected://fields: kademlia parameters
 
     BucketType bucketType;
     bool enableDownlists;
+    bool enableDownlistsForwarding;
 
     simtime_t minSiblingTableRefreshInterval;
     simtime_t minBucketRefreshInterval;

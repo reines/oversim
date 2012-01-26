@@ -124,12 +124,19 @@ void Kademlia::initializeOverlay(int stage)
     std::string temp = par("bucketType").stdstringValue();
     if (temp == "kademlia")
     	bucketType = KADEMLIA;
-    else if (temp == "nr128")
-    	bucketType = NR128;
     else if (temp == "dkademlia")
     	bucketType = DKADEMLIA;
+    else if (temp == "nkademlia") {
+    	bucketType = NKADEMLIA;
+
+        globalNodeLimit = par("globalNodeLimit");
+    }
+    else if (temp == "akademlia1")
+    	bucketType = AKADEMLIA1;
     else if (temp == "akademlia2")
     	bucketType = AKADEMLIA2;
+    else if (temp == "nr128")
+    	bucketType = NR128;
     else
     	throw cRuntimeError((std::string("Wrong bucket type: ") + temp).c_str());
 
@@ -209,18 +216,16 @@ void Kademlia::finishOverlay()
     simtime_t time = globalStatistics->calcMeasuredLifetime(creationTime);
     if (time < GlobalStatistics::MIN_MEASURED) return;
 
-    uint routingTableSize = 0;
-    uint numBuckets = 0;
+    uint32_t numBuckets = 0;
 
     for (uint i = 0;i < routingTable.size();i++) {
     	if (routingTable[i] == NULL)
     		continue;
 
     	numBuckets++;
-    	routingTableSize += routingTable[i]->size();
     }
 
-    globalStatistics->addStdDev("Kademlia: Routing table size", routingTableSize);
+    globalStatistics->addStdDev("Kademlia: Routing table size", currentRoutingTableSize);
     globalStatistics->addStdDev("Kademlia: Number of buckets", numBuckets);
     globalStatistics->addStdDev("Kademlia: Nodes replaced in buckets/s", nodesReplaced / time);
     globalStatistics->addStdDev("Kademlia: Bucket Refreshes/s", bucketRefreshCount / time);
@@ -287,6 +292,8 @@ void Kademlia::routingInit()
 
     siblingTable->setComparator(comparator);
 
+    currentRoutingTableSize = 0;
+
     updateTooltip();
     BUCKET_CONSISTENCY(routingInit: end);
 }
@@ -300,6 +307,8 @@ void Kademlia::routingDeinit()
             routingTable[i] = NULL;
         }
     }
+
+    currentRoutingTableSize = 0;
 
     if (siblingTable != NULL) {
         siblingTable->clear();
@@ -337,6 +346,10 @@ int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 			std::cout << "index: " << bucketIndex << std::endl;
 		}
 
+		case AKADEMLIA1: {
+			// TODO
+		}
+
 		case AKADEMLIA2: {
 			// TODO
 		}
@@ -344,6 +357,7 @@ int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 		// Original Kademlia style - exponentially increasing buckets
 		case NR128:
 		case KADEMLIA:
+		case NKADEMLIA:
 		default: {
 			// find first subinteger that is not zero...
 			int i;
@@ -364,6 +378,11 @@ int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 int Kademlia::routingBucketSize(int index)
 {
 	switch (bucketType) {
+		// no maximum size per bucket - max size for entire table instead
+		case NKADEMLIA: {
+			return 0;
+		}
+
 		// With NR128 the final buckets hold more nodes
 		case NR128: {
 			int offset = OverlayKey::getLength() - index;
@@ -376,6 +395,25 @@ int Kademlia::routingBucketSize(int index)
 		case KADEMLIA:
 		default: {
 			return k;
+		}
+	}
+}
+
+// NKad
+void discardFromBucket()
+{
+	for (uint32_t bucketLimit = k;bucketLimit > 0;bucketLimit--) {
+		for (uint32_t i = 0; i < routingTable.size(); i++) {
+			if (routingTable[i] == NULL || routingTable[i]->isEmpty())
+				continue;
+
+			// This bucket has > k nodes, kick one!
+			if (routingTable[i]->size() > bucketLimit) {
+				// TODO: Kick one out!
+				currentRoutingTableSize--;
+
+				return;
+			}
 		}
 	}
 }
@@ -587,7 +625,7 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 
     /* add node to the appropriate bucket, if not full ---------------------*/
     bucket = routingBucket(kadHandle.getKey(), true);
-    if (!bucket->isFull()) {
+    if (!bucket->isFull()) { // Note: In NKad bucket->isFull will always return false
         if (secureMaintenance && !authenticated) {
             if (/*!maintenanceLookup || */(isAlive && (rtt == MAXTIME))) {
                 // received a FindNodeCall or PingCall from a potential new bucket entry
@@ -617,7 +655,16 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
              }
          }
 
+		// NKad - if the table size is over the global limit then
+		// drop a node from another bucket so we can add this one
+		if (bucketType == NKADEMLIA) {
+			if (currentRoutingTableSize >= globalNodeLimit) {
+				discardFromBucket();
+			}
+		}
+
         bucket->push_back(kadHandle);
+        currentRoutingTableSize++;
         result = true;
     } else if (isAlive) {
         //PNS node replacement
@@ -721,6 +768,7 @@ bool Kademlia::routingTimeout(const OverlayKey& key, bool immediately)
         if (i->getStaleCount() > maxStaleCount || immediately) {
             // remove from routing table
             bucket->erase(i);
+            currentRoutingTableSize--;
 
             if (enableReplacementCache) {
                 if (bucket->replacementCache.size()) {
@@ -773,6 +821,7 @@ void Kademlia::refillSiblingTable()
         // remove node from bucket
         routingTable[index]->erase(routingTable[index]->
               findIterator(sortedBucket.front().getKey()));
+        currentRoutingTableSize--;
         assert(siblingTable->isFull());
         BUCKET_CONSISTENCY(routingTimeout: end refillSiblingTable());
     }
@@ -1176,7 +1225,6 @@ void Kademlia::handleTimerEvent(cMessage* msg)
         scheduleAt(simTime() + siblingPingInterval, msg);
     } else if (msg == routingTableStatsTimer) {
     	if (!routingTable.empty() && globalStatistics->isMeasuring() && !underlayConfigurator->isSimulationEndingSoon()) {
-    	    double routingTableSize = 0;
     	    double routingTableAlive = 0;
 
     	    for (uint i = 0;i < routingTable.size();i++) {
@@ -1184,17 +1232,15 @@ void Kademlia::handleTimerEvent(cMessage* msg)
     	    		continue;
 
     	    	for (uint j = 0;j < routingTable[i]->size();j++) {
-    	    		routingTableSize++;
-
     	    		PeerInfo* info = globalNodeList->getPeerInfo(routingTable[i]->at(j));
     	    		if (info != NULL)
     	    			routingTableAlive++;
     	    	}
     	    }
 
-    	    if (routingTableSize > 0) {
+    	    if (currentRoutingTableSize > 0) {
     	    	RECORD_STATS(globalStatistics->recordOutVector(
-    	    			"Kademlia: Routing table accuracy", routingTableAlive / routingTableSize));
+    	    			"Kademlia: Routing table accuracy", routingTableAlive / currentRoutingTableSize));
     	    }
     	}
 

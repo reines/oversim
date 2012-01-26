@@ -39,9 +39,11 @@
 
 enum BucketType {
 	KADEMLIA = 0,
-	NR128 = 1,
-	DKADEMLIA = 2,
-	AKADEMLIA2 = 3
+	DKADEMLIA = 1,
+	NKADEMLIA = 2,
+	AKADEMLIA1 = 3,
+	AKADEMLIA2 = 4,
+	NR128 = 5
 };
 
 
@@ -98,6 +100,7 @@ protected://fields: kademlia parameters
     bool altRecMode;
 
     BucketType bucketType;
+    uint32_t globalNodeLimit; /*< maximum number of nodes in the routing table, used with NKademlia */
     bool enableDownlists;
     bool enableDownlistsForwarding;
 
@@ -191,6 +194,7 @@ private:
     int numBuckets;
 
     int currentBucketPing;
+    int currentRoutingTableSize;
 
     void routingInit();
 

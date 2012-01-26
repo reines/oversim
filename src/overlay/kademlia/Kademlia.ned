@@ -59,6 +59,7 @@ simple Kademlia extends BaseOverlay
         bool altRecMode; // use source-routing mode instead of direct mode
         
         string bucketType; // used to test alternative bucket/node distributions
+        int globalNodeLimit; // maximum number of nodes in the routing table, used with NKademlia
         bool enableDownlists; // toggle downlists on/off
         bool enableDownlistsForwarding; // toggle downlists being forwarded to siblings
 }

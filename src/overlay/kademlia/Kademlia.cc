@@ -219,7 +219,7 @@ void Kademlia::finishOverlay()
     uint32_t numBuckets = 0;
 
     for (uint i = 0;i < routingTable.size();i++) {
-    	if (routingTable[i] == NULL)
+        if (routingTable[i] == NULL || routingTable[i]->isEmpty())
     		continue;
 
     	numBuckets++;
@@ -385,8 +385,15 @@ int Kademlia::routingBucketSize(int index)
 
 		// With NR128 the final buckets hold more nodes
 		case NR128: {
-			int offset = OverlayKey::getLength() - index;
-			return k + (OverlayKey::getLength() / offset);
+			int limit = log(OverlayKey::getLength()) / log(2);
+			int offset = limit - (OverlayKey::getLength() - (index + 1));
+			if (offset > 0) {
+				offset = pow(2, offset);
+				if (offset > k)
+					return offset;
+			}
+
+			return k;
 		}
 
 		// Original kademlia style - each bucket holds k nodes
@@ -399,23 +406,62 @@ int Kademlia::routingBucketSize(int index)
 	}
 }
 
-// NKad
-void discardFromBucket()
+// NKademlia
+bool Kademlia::discardFromBucket()
 {
-	for (uint32_t bucketLimit = k;bucketLimit > 0;bucketLimit--) {
+    uint32_t numBuckets = 0;
+
+    for (uint i = 0;i < routingTable.size();i++) {
+        if (routingTable[i] == NULL || routingTable[i]->isEmpty())
+            continue;
+
+        numBuckets++;
+    }
+
+	if (numBuckets == 0) {
+		return false;
+	}
+
+	// Calculate the average number of nodes per bucket as a max limit,
+	// then each iteration reduce this if no buckets have more
+	// Since it is an average, unless all buckets are equal, 1 iteration should do
+	for (uint32_t bucketLimit = k;bucketLimit >= 0;bucketLimit--) { // floor(currentRoutingTableSize / numBuckets)
 		for (uint32_t i = 0; i < routingTable.size(); i++) {
-			if (routingTable[i] == NULL || routingTable[i]->isEmpty())
+			KademliaBucket* bucket = routingTable[i];
+
+			if (bucket == NULL || bucket->isEmpty())
 				continue;
 
-			// This bucket has > k nodes, kick one!
-			if (routingTable[i]->size() > bucketLimit) {
-				// TODO: Kick one out!
-				currentRoutingTableSize--;
+			// This bucket has > limit nodes, kick one!
+			if (bucket->size() > bucketLimit) {
+				//PNS node replacement
+				if (proximityNeighborSelection) {
+				    KademliaBucket::iterator kickHim, it;
+				    kickHim = it = bucket->begin();
+				    ++it;
+				    while (it != bucket->end()) {
+				        if (it->getRtt() > kickHim->getRtt()) {
+				            kickHim = it;
+				        }
+				        ++it;
+				    }
 
-				return;
+				    bucket->erase(kickHim);
+				    currentRoutingTableSize--;
+				    return true;
+				}
+
+                KademliaBucket::iterator it = bucket->begin();
+                if (it != bucket->end()) {
+					bucket->erase(it);
+					currentRoutingTableSize--;
+					return true;
+                }
 			}
 		}
 	}
+
+	return false;
 }
 
 KademliaBucket* Kademlia::routingBucket(const OverlayKey& key, bool ensure)
@@ -658,8 +704,9 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 		// NKad - if the table size is over the global limit then
 		// drop a node from another bucket so we can add this one
 		if (bucketType == NKADEMLIA) {
-			if (currentRoutingTableSize >= globalNodeLimit) {
-				discardFromBucket();
+			// If the routing table is oversized and we didn't manage to discard a node then stop
+			if (currentRoutingTableSize >= globalNodeLimit && !discardFromBucket()) {
+				return false;
 			}
 		}
 

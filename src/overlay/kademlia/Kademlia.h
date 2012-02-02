@@ -216,10 +216,17 @@ private:
      * index
      *
      * @param index The index of the bucket
-
+     *
      * @return int The maximum size of the bucket
      */
     int routingBucketSize(int index);
+
+    /**
+     * Discards one node from the routing table
+     *
+     * @return bool If a node was discarded or not
+     */
+    bool discardFromBucket();
 
     /**
      * Returns a Bucket or <code>NULL</code> if the bucket has not

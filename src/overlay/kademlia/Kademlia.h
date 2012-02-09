@@ -84,6 +84,7 @@ protected://fields: kademlia parameters
     bool pingNewSiblings;
     bool secureMaintenance; /**< if true, ping not authenticated nodes before adding them to a bucket */
     bool newMaintenance;
+    bool niceMaintenance;
 
     bool enableReplacementCache; /*< enables the replacement cache to store nodes if a bucket is full */
     bool replacementCachePing; /*< ping the least recently used node in a full bucket, when a node is added to the replacement cache */
@@ -226,7 +227,7 @@ private:
      *
      * @return bool If a node was discarded or not
      */
-    bool discardFromBucket();
+    NodeHandle* discardFromBucket();
 
     /**
      * Returns a Bucket or <code>NULL</code> if the bucket has not

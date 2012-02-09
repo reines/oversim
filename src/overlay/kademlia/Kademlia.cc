@@ -749,9 +749,12 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 				}
 				// Someone was kicked, add them to the replacement cache
 				else {
-					bucket->replacementCache.push_front(*kicked);
-				    if (bucket->replacementCache.size() > replacementCandidates) {
-				        bucket->replacementCache.pop_back();
+					KademliaBucket* kickedBucket = routingBucket(kicked->getKey(), true);
+					if (kickedBucket != NULL) {
+						kickedBucket->replacementCache.push_front(*kicked);
+						if (kickedBucket->replacementCache.size() > replacementCandidates) {
+						    kickedBucket->replacementCache.pop_back();
+						}
 				    }
 				}
 			}

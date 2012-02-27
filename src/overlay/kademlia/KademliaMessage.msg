@@ -27,6 +27,8 @@ cplusplus {{
 #include <CommonMessages_m.h>
 
 static const int ALIVEFLAG_L = 8;
+static const int FORWARDEDFLAG_L = 8;
+
 #define MARKEDNODEHANDLE_L (NODEHANDLE_L + ALIVEFLAG_L)
 
 #define KADEMLIAROUTINGINFO_L(msg) (BASEOVERLAY_L(msg) + NODEHANDLE_L + \
@@ -36,7 +38,7 @@ static const int ALIVEFLAG_L = 8;
 
 #define KADEMLIADOWNLIST_L(msg) (BASEOVERLAY_L(msg) + NODEHANDLE_L + \
 									msg->getFailedArraySize() * \
-									NODEHANDLE_L)
+									NODEHANDLE_L + FORWARDEDFLAG_L)
 }}
 
 class noncobject MarkedNodeHandle;
@@ -60,4 +62,5 @@ packet KademliaDownlistMessage extends BaseOverlayMessage
 {
 	NodeHandle srcNode;
 	NodeHandle failed[];
+	bool forwarded;
 }

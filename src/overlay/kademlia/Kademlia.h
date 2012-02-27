@@ -39,9 +39,11 @@
 
 enum BucketType {
 	KADEMLIA = 0,
-	NR128 = 1,
-	DKADEMLIA = 2,
-	AKADEMLIA2 = 3
+	DKADEMLIA = 1,
+	NKADEMLIA = 2,
+	AKADEMLIA1 = 3,
+	AKADEMLIA2 = 4,
+	NR128 = 5
 };
 
 /**
@@ -81,6 +83,7 @@ protected://fields: kademlia parameters
     bool pingNewSiblings;
     bool secureMaintenance; /**< if true, ping not authenticated nodes before adding them to a bucket */
     bool newMaintenance;
+    bool niceMaintenance;
 
     bool enableReplacementCache; /*< enables the replacement cache to store nodes if a bucket is full */
     bool replacementCachePing; /*< ping the least recently used node in a full bucket, when a node is added to the replacement cache */
@@ -97,7 +100,10 @@ protected://fields: kademlia parameters
     bool altRecMode;
 
     BucketType bucketType;
+    uint32_t globalNodeLimit; /*< maximum number of nodes in the routing table, used with NKademlia */
+    uint32_t extraNodesFinalBucket;
     bool enableDownlists;
+    bool enableDownlistsForwarding;
 
     bool enableManagedConnections;
     std::map<TransportAddress, NodeHandle> managedConnections;
@@ -202,6 +208,7 @@ private:
     int numBuckets;
 
     int currentBucketPing;
+    int currentRoutingTableSize;
 
     void routingInit();
 
@@ -223,7 +230,7 @@ private:
      * index
      *
      * @param index The index of the bucket
-
+     *
      * @return int The maximum size of the bucket
      */
     int routingBucketSize(int index);

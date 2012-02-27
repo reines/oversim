@@ -25,6 +25,8 @@
 
 #include <assert.h>
 #include <algorithm>
+#include <iostream>
+#include <sstream>
 
 #include <IPAddressResolver.h>
 #include <IPvXAddress.h>
@@ -35,6 +37,9 @@
 #include <LookupListener.h>
 #include <RpcMacros.h>
 #include <BootstrapList.h>
+
+#include <GlobalStatistics.h>
+#include <GlobalStatisticsAccess.h>
 
 #if 0
 #define BUCKET_CONSISTENCY(msg) \
@@ -76,14 +81,19 @@ class KademliaLookupListener : public LookupListener
 {
 private:
     Kademlia* overlay;
+    GlobalStatistics* globalStatistics;
 public:
     KademliaLookupListener(Kademlia* overlay)
     {
         this->overlay = overlay;
+
+		this->globalStatistics = GlobalStatisticsAccess().get();
     }
 
     virtual void lookupFinished(AbstractLookup *lookup)
     {
+    	RECORD_STATS(globalStatistics->recordOutVector("Kademlia: Maintenance lookup hops", lookup->getAccumulatedHops()));
+
         overlay->lookupFinished(lookup->isValid());
         delete this;
     }
@@ -112,6 +122,7 @@ void Kademlia::initializeOverlay(int stage)
     replacementCandidates = par("replacementCandidates");
     secureMaintenance = par("secureMaintenance");
     newMaintenance = par("newMaintenance");
+    niceMaintenance = par("niceMaintenance");
 
     routingTableStatsDelay = par("routingTableStatsDelay");
 
@@ -124,16 +135,29 @@ void Kademlia::initializeOverlay(int stage)
     std::string temp = par("bucketType").stdstringValue();
     if (temp == "kademlia")
     	bucketType = KADEMLIA;
-    else if (temp == "nr128")
-    	bucketType = NR128;
     else if (temp == "dkademlia")
     	bucketType = DKADEMLIA;
+    else if (temp == "nkademlia") {
+    	bucketType = NKADEMLIA;
+
+        globalNodeLimit = par("globalNodeLimit");
+    }
+    else if (temp == "akademlia1")
+    	bucketType = AKADEMLIA1;
     else if (temp == "akademlia2")
     	bucketType = AKADEMLIA2;
+    else if (temp == "nr128") {
+    	bucketType = NR128;
+
+		extraNodesFinalBucket = par("extraNodesFinalBucket");
+		if (extraNodesFinalBucket == 0)
+			extraNodesFinalBucket = OverlayKey::getLength();
+	}
     else
     	throw cRuntimeError((std::string("Wrong bucket type: ") + temp).c_str());
 
     enableDownlists = par("enableDownlists");
+    enableDownlistsForwarding = par("enableDownlistsForwarding");
 
     k = par("k");
     b = par("b");
@@ -213,18 +237,22 @@ void Kademlia::finishOverlay()
     simtime_t time = globalStatistics->calcMeasuredLifetime(creationTime);
     if (time < GlobalStatistics::MIN_MEASURED) return;
 
-    uint routingTableSize = 0;
-    uint numBuckets = 0;
+    uint32_t numBuckets = 0;
 
     for (uint i = 0;i < routingTable.size();i++) {
-    	if (routingTable[i] == NULL)
-    		continue;
+		uint32_t bucketSize = 0;
+		
+        if (routingTable[i] != NULL && !routingTable[i]->isEmpty()) {
+        	bucketSize = routingTable[i]->size();
+    		numBuckets++;
+    	}
 
-    	numBuckets++;
-    	routingTableSize += routingTable[i]->size();
+		std::stringstream ss;
+		ss << "Kademlia: Bucket " << i << " size";
+	   	globalStatistics->addStdDev(ss.str().c_str(), bucketSize);
     }
 
-    globalStatistics->addStdDev("Kademlia: Routing table size", routingTableSize);
+    globalStatistics->addStdDev("Kademlia: Routing table size", currentRoutingTableSize);
     globalStatistics->addStdDev("Kademlia: Number of buckets", numBuckets);
     globalStatistics->addStdDev("Kademlia: Nodes replaced in buckets/s", nodesReplaced / time);
     globalStatistics->addStdDev("Kademlia: Bucket Refreshes/s", bucketRefreshCount / time);
@@ -291,6 +319,8 @@ void Kademlia::routingInit()
 
     siblingTable->setComparator(comparator);
 
+    currentRoutingTableSize = 0;
+
     updateTooltip();
     BUCKET_CONSISTENCY(routingInit: end);
 }
@@ -304,6 +334,8 @@ void Kademlia::routingDeinit()
             routingTable[i] = NULL;
         }
     }
+
+    currentRoutingTableSize = 0;
 
     if (siblingTable != NULL) {
         siblingTable->clear();
@@ -341,6 +373,10 @@ int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 			std::cout << "index: " << bucketIndex << std::endl;
 		}
 
+		case AKADEMLIA1: {
+			// TODO
+		}
+
 		case AKADEMLIA2: {
 			// TODO
 		}
@@ -348,6 +384,7 @@ int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 		// Original Kademlia style - exponentially increasing buckets
 		case NR128:
 		case KADEMLIA:
+		case NKADEMLIA:
 		default: {
 			// find first subinteger that is not zero...
 			int i;
@@ -368,10 +405,22 @@ int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 int Kademlia::routingBucketSize(int index)
 {
 	switch (bucketType) {
+		// no maximum size per bucket - max size for entire table instead
+		case NKADEMLIA: {
+			return 0;
+		}
+
 		// With NR128 the final buckets hold more nodes
 		case NR128: {
-			int offset = OverlayKey::getLength() - index;
-			return k + (OverlayKey::getLength() / offset);
+			int limit = log(extraNodesFinalBucket) / log(2); // how many buckets will be affected: log_2(<key size>)
+			int offset = limit - (OverlayKey::getLength() - (index + 1)); // offset of the current bucket from the first bucket which should be increased
+			if (offset > 0) { // if the offset is under 0 then it has no extra nodes
+				offset = pow(2, offset);
+				if (offset > k)
+					return offset;
+			}
+
+			return k;
 		}
 
 		// Original kademlia style - each bucket holds k nodes
@@ -591,7 +640,48 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 
     /* add node to the appropriate bucket, if not full ---------------------*/
     bucket = routingBucket(kadHandle.getKey(), true);
-    if (!bucket->isFull()) {
+    if (bucketType == NKADEMLIA) {
+    	// This bucket is large enough and we are already at the maximum routing table size
+		if (bucket->size() >= k && currentRoutingTableSize >= globalNodeLimit) {
+			if (isAlive && enableReplacementCache && (!secureMaintenance || authenticated)) {
+				bucket->replacementCache.push_front(kadHandle);
+				if (bucket->replacementCache.size() > replacementCandidates) {
+				    bucket->replacementCache.pop_back();
+				}
+
+				if (replacementCachePing) {
+				    KademliaBucket::iterator it = bucket->begin();
+				    while (it != bucket->end() && (it->getPingSent() == true)) {
+				        it++;
+				    }
+				    if (it != bucket->end()) {
+				        pingNode(*it);
+				        it->setPingSent(true);
+				    }
+				}
+			}
+
+			return false;
+		}
+
+        if (secureMaintenance && !authenticated) {
+            if (/*!maintenanceLookup || */(isAlive && (rtt == MAXTIME))) {
+                // received a FindNodeCall or PingCall from a potential new bucket entry
+                // or new nodes from a FindNodeReponse app lookup
+                // optimization: don't send a ping for nodes from FindNodeResponse for app lookups
+                pingNode(kadHandle);
+            }
+            return false;
+        }
+
+		// Either this bucket needs more nodes, or we haven't reached the global
+		// limit yet, or we managed to kick a node to make more room.
+
+		bucket->push_back(kadHandle);
+		currentRoutingTableSize++;
+		result = true;
+    }
+    else if (!bucket->isFull()) {
         if (secureMaintenance && !authenticated) {
             if (/*!maintenanceLookup || */(isAlive && (rtt == MAXTIME))) {
                 // received a FindNodeCall or PingCall from a potential new bucket entry
@@ -622,6 +712,7 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
          }
 
         bucket->push_back(kadHandle);
+        currentRoutingTableSize++;
 
         if (enableManagedConnections)
         	openManagedConnection(kadHandle);
@@ -735,6 +826,7 @@ bool Kademlia::routingTimeout(const OverlayKey& key, bool immediately)
         if (i->getStaleCount() > maxStaleCount || immediately) {
             // remove from routing table
             bucket->erase(i);
+            currentRoutingTableSize--;
 
             if (enableManagedConnections)
             	closeManagedConnection(*i);
@@ -790,6 +882,7 @@ void Kademlia::refillSiblingTable()
         // remove node from bucket
         routingTable[index]->erase(routingTable[index]->
               findIterator(sortedBucket.front().getKey()));
+        currentRoutingTableSize--;
         assert(siblingTable->isFull());
         BUCKET_CONSISTENCY(routingTimeout: end refillSiblingTable());
     }
@@ -1191,7 +1284,6 @@ void Kademlia::handleTimerEvent(cMessage* msg)
         scheduleAt(simTime() + siblingPingInterval, msg);
     } else if (msg == routingTableStatsTimer) {
     	if (!routingTable.empty() && globalStatistics->isMeasuring() && !underlayConfigurator->isSimulationEndingSoon()) {
-    	    double routingTableSize = 0;
     	    double routingTableAlive = 0;
 
     	    for (uint i = 0;i < routingTable.size();i++) {
@@ -1199,17 +1291,15 @@ void Kademlia::handleTimerEvent(cMessage* msg)
     	    		continue;
 
     	    	for (uint j = 0;j < routingTable[i]->size();j++) {
-    	    		routingTableSize++;
-
     	    		PeerInfo* info = globalNodeList->getPeerInfo(routingTable[i]->at(j));
     	    		if (info != NULL)
     	    			routingTableAlive++;
     	    	}
     	    }
 
-    	    if (routingTableSize > 0) {
+    	    if (currentRoutingTableSize > 0) {
     	    	RECORD_STATS(globalStatistics->recordOutVector(
-    	    			"Kademlia: Routing table accuracy", routingTableAlive / routingTableSize));
+    	    			"Kademlia: Routing table accuracy", routingTableAlive / currentRoutingTableSize));
     	    }
     	}
 
@@ -1237,6 +1327,15 @@ void Kademlia::handleUDPMessage(BaseOverlayMessage* msg)
 		// Ping each node we were informed has failed
 		for (uint32_t i = 0; i < kadDownlistMsg->getFailedArraySize(); i++) {
             pingNode(kadDownlistMsg->getFailed(i));
+		}
+
+		// If this message wasn't forwarded, then forward it to our siblings.
+		if (enableDownlistsForwarding && !kadDownlistMsg->getForwarded()) {
+			kadDownlistMsg->setForwarded(true);
+
+		    for (KademliaBucket::iterator i = siblingTable->begin(); i != siblingTable->end(); i++) {
+		    	sendMessageToUDP(*i, kadDownlistMsg->dup());
+		    }
 		}
 	}
 
@@ -1486,6 +1585,7 @@ void Kademlia::removeLookup(AbstractLookup* lookup)
     	for (Downlist::iterator sourceIterator = downlist->begin(); sourceIterator != downlist->end(); sourceIterator++) {
     		KademliaDownlistMessage* msg = new KademliaDownlistMessage();
         	msg->setSrcNode(thisNode);
+        	msg->setForwarded(false);
 
         	msg->setFailedArraySize(sourceIterator->second.size());
 
@@ -1607,20 +1707,30 @@ void Kademlia::handleBucketPingTimerExpired()
         return;
     }
 
-	if (state == READY) {
-		if (siblingTable->size()) {
-			int32_t diff = OverlayKey::getLength() - b*(getThisNode().getKey().sharedPrefixLength(siblingTable->front().getKey(), b) + 1);
+	if (state == READY && siblingTable->size()) {
+		if (niceMaintenance) {
+			int32_t diff = OverlayKey::getLength() - b * (getThisNode().getKey().sharedPrefixLength(siblingTable->front().getKey(), b) + 1);
 			int32_t lower = (diff / b) * ((1 << b) - 1) + ((1 << b) - 2);
-            int32_t upper = ((OverlayKey::getLength() - b) / b) * ((1 << b) - 1);
+			int32_t upper = ((OverlayKey::getLength() - b) / b) * ((1 << b) - 1);
 
-            if (--currentBucketPing < lower)
-            	currentBucketPing = upper;
+		    if (--currentBucketPing < lower)
+			  	currentBucketPing = upper;
+		}
+		else {
+			OverlayKey lower = siblingTable->front().getKey();
 
-			KademliaBucket* bucket = routingTable[currentBucketPing];
-			if (bucket != NULL && !bucket->isEmpty()) {
-				// Ping the found oldest node
-				pingNode(*bucket->getOldestNode());
-			}
+			// FIXME: Disgusting hack to get random key in the range [lower, max]
+			OverlayKey rand = OverlayKey::random();
+			while (rand < lower)
+				rand = OverlayKey::random();
+
+			currentBucketPing = routingBucketIndex(rand);
+		}
+
+		KademliaBucket* bucket = routingTable[currentBucketPing];
+		if (bucket != NULL && !bucket->isEmpty()) {
+			// Ping the found oldest node
+			pingNode(*bucket->getOldestNode());
 		}
 	}
 

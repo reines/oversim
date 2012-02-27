@@ -146,8 +146,13 @@ void Kademlia::initializeOverlay(int stage)
     	bucketType = AKADEMLIA1;
     else if (temp == "akademlia2")
     	bucketType = AKADEMLIA2;
-    else if (temp == "nr128")
+    else if (temp == "nr128") {
     	bucketType = NR128;
+
+		extraNodesFinalBucket = par("extraNodesFinalBucket");
+		if (extraNodesFinalBucket == 0)
+			extraNodesFinalBucket = OverlayKey::getLength();
+	}
     else
     	throw cRuntimeError((std::string("Wrong bucket type: ") + temp).c_str());
 
@@ -402,9 +407,9 @@ int Kademlia::routingBucketSize(int index)
 
 		// With NR128 the final buckets hold more nodes
 		case NR128: {
-			int limit = log(OverlayKey::getLength()) / log(2);
-			int offset = limit - (OverlayKey::getLength() - (index + 1));
-			if (offset > 0) {
+			int limit = log(extraNodesFinalBucket) / log(2); // how many buckets will be affected: log_2(<key size>)
+			int offset = limit - (OverlayKey::getLength() - (index + 1)); // offset of the current bucket from the first bucket which should be increased
+			if (offset > 0) { // if the offset is under 0 then it has no extra nodes
 				offset = pow(2, offset);
 				if (offset > k)
 					return offset;
@@ -421,64 +426,6 @@ int Kademlia::routingBucketSize(int index)
 			return k;
 		}
 	}
-}
-
-// NKademlia
-NodeHandle* Kademlia::discardFromBucket()
-{
-    uint32_t numBuckets = 0;
-
-    for (uint i = 0;i < routingTable.size();i++) {
-        if (routingTable[i] == NULL || routingTable[i]->isEmpty())
-            continue;
-
-        numBuckets++;
-    }
-
-	if (numBuckets == 0) {
-		return NULL;
-	}
-
-	// Calculate the average number of nodes per bucket as a max limit,
-	// then each iteration reduce this if no buckets have more
-	// Since it is an average, unless all buckets are equal, 1 iteration should do
-	for (uint32_t bucketLimit = k;bucketLimit >= 0;bucketLimit--) { // floor(currentRoutingTableSize / numBuckets)
-		for (uint32_t i = 0; i < routingTable.size(); i++) {
-			KademliaBucket* bucket = routingTable[i];
-
-			if (bucket == NULL || bucket->isEmpty())
-				continue;
-
-			// This bucket has > limit nodes, kick one!
-			if (bucket->size() > bucketLimit) {
-				//PNS node replacement
-				if (proximityNeighborSelection) {
-				    KademliaBucket::iterator kickHim, it;
-				    kickHim = it = bucket->begin();
-				    ++it;
-				    while (it != bucket->end()) {
-				        if (it->getRtt() > kickHim->getRtt()) {
-				            kickHim = it;
-				        }
-				        ++it;
-				    }
-
-				    bucket->erase(kickHim);
-				    currentRoutingTableSize--;
-				    return &(*kickHim);
-				}
-
-                KademliaBucket::iterator it = bucket->begin();
-                if (it != bucket->end()) {
-					bucket->erase(it);
-					currentRoutingTableSize--;
-					return &(*it);
-                }
-			}
-		}
-	}
-
-	return NULL;
 }
 
 KademliaBucket* Kademlia::routingBucket(const OverlayKey& key, bool ensure)
@@ -688,7 +635,48 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 
     /* add node to the appropriate bucket, if not full ---------------------*/
     bucket = routingBucket(kadHandle.getKey(), true);
-    if (!bucket->isFull()) { // Note: In NKad bucket->isFull will always return false
+    if (bucketType == NKADEMLIA) {
+    	// This bucket is large enough and we are already at the maximum routing table size
+		if (bucket->size() >= k && currentRoutingTableSize >= globalNodeLimit) {
+			if (isAlive && enableReplacementCache && (!secureMaintenance || authenticated)) {
+				bucket->replacementCache.push_front(kadHandle);
+				if (bucket->replacementCache.size() > replacementCandidates) {
+				    bucket->replacementCache.pop_back();
+				}
+
+				if (replacementCachePing) {
+				    KademliaBucket::iterator it = bucket->begin();
+				    while (it != bucket->end() && (it->getPingSent() == true)) {
+				        it++;
+				    }
+				    if (it != bucket->end()) {
+				        pingNode(*it);
+				        it->setPingSent(true);
+				    }
+				}
+			}
+
+			return false;
+		}
+
+        if (secureMaintenance && !authenticated) {
+            if (/*!maintenanceLookup || */(isAlive && (rtt == MAXTIME))) {
+                // received a FindNodeCall or PingCall from a potential new bucket entry
+                // or new nodes from a FindNodeReponse app lookup
+                // optimization: don't send a ping for nodes from FindNodeResponse for app lookups
+                pingNode(kadHandle);
+            }
+            return false;
+        }
+
+		// Either this bucket needs more nodes, or we haven't reached the global
+		// limit yet, or we managed to kick a node to make more room.
+
+		bucket->push_back(kadHandle);
+		currentRoutingTableSize++;
+		result = true;
+    }
+    else if (!bucket->isFull()) {
         if (secureMaintenance && !authenticated) {
             if (/*!maintenanceLookup || */(isAlive && (rtt == MAXTIME))) {
                 // received a FindNodeCall or PingCall from a potential new bucket entry
@@ -717,48 +705,6 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
                  kadHandle.setProx(prox);
              }
          }
-
-		// NKad - if the table size is over the global limit then
-		// drop a node from another bucket so we can add this one
-		if (bucketType == NKADEMLIA) {
-			// If the routing table is oversized and we didn't manage to discard a node then just cache the node
-			if (currentRoutingTableSize >= globalNodeLimit) {
-				NodeHandle* kicked = discardFromBucket();
-				
-				// No-one was kicked, so add the new node to the replacement cache
-				if (kicked == NULL) {
-					if (isAlive && enableReplacementCache && (!secureMaintenance || authenticated)) {
-						bucket->replacementCache.push_front(kadHandle);
-						if (bucket->replacementCache.size() > replacementCandidates) {
-						    bucket->replacementCache.pop_back();
-						}
-
-						if (replacementCachePing) {
-						    KademliaBucket::iterator it = bucket->begin();
-						    while (it != bucket->end() && (it->getPingSent() == true)) {
-						        it++;
-						    }
-						    if (it != bucket->end()) {
-						        pingNode(*it);
-						        it->setPingSent(true);
-						    }
-						}
-					}
-
-					return false;
-				}
-				// Someone was kicked, add them to the replacement cache
-				else {
-					KademliaBucket* kickedBucket = routingBucket(kicked->getKey(), true);
-					if (kickedBucket != NULL) {
-						kickedBucket->replacementCache.push_front(*kicked);
-						if (kickedBucket->replacementCache.size() > replacementCandidates) {
-						    kickedBucket->replacementCache.pop_back();
-						}
-				    }
-				}
-			}
-		}
 
         bucket->push_back(kadHandle);
         currentRoutingTableSize++;

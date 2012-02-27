@@ -61,6 +61,7 @@ simple Kademlia extends BaseOverlay
         
         string bucketType; // used to test alternative bucket/node distributions
         int globalNodeLimit; // maximum number of nodes in the routing table, used with NKademlia
+        int extraNodesFinalBucket; // number of extra nodes in bucket 0 for NR128
         bool enableDownlists; // toggle downlists on/off
         bool enableDownlistsForwarding; // toggle downlists being forwarded to siblings
 }

@@ -102,6 +102,7 @@ protected://fields: kademlia parameters
 
     BucketType bucketType;
     uint32_t globalNodeLimit; /*< maximum number of nodes in the routing table, used with NKademlia */
+    uint32_t extraNodesFinalBucket;
     bool enableDownlists;
     bool enableDownlistsForwarding;
 
@@ -221,13 +222,6 @@ private:
      * @return int The maximum size of the bucket
      */
     int routingBucketSize(int index);
-
-    /**
-     * Discards one node from the routing table
-     *
-     * @return bool If a node was discarded or not
-     */
-    NodeHandle* discardFromBucket();
 
     /**
      * Returns a Bucket or <code>NULL</code> if the bucket has not

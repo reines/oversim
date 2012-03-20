@@ -254,6 +254,7 @@ void Kademlia::finishOverlay()
 
     globalStatistics->addStdDev("Kademlia: Routing table size", currentRoutingTableSize);
     globalStatistics->addStdDev("Kademlia: Number of buckets", numBuckets);
+    globalStatistics->addStdDev("Kademlia: Managed connections", managedConnections.size());
     globalStatistics->addStdDev("Kademlia: Nodes replaced in buckets/s", nodesReplaced / time);
     globalStatistics->addStdDev("Kademlia: Bucket Refreshes/s", bucketRefreshCount / time);
     globalStatistics->addStdDev("Kademlia: Sibling Table Refreshes/s", siblingTableRefreshCount / time);
@@ -737,8 +738,8 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
                 bucket->push_back(kadHandle);
 
                 if (enableManagedConnections) {
-                	openManagedConnection(kadHandle);
                 	closeManagedConnection(*kickHim);
+                	openManagedConnection(kadHandle);
                 }
 
                 kadHandle = temp;
@@ -1479,13 +1480,17 @@ void Kademlia::handleRpcTimeout(BaseCallMessage* msg,
 }
 
 // Managed connections
-void Kademlia::openManagedConnection(NodeHandle dest)
+void Kademlia::openManagedConnection(NodeHandle handle)
 {
-	TransportAddress address = TransportAddress(dest.getIp(), localPort);
+	KademliaBucket* bucket = routingBucket(handle.getKey(), false);
+//	if (bucket->hasManagedConnections())
+//		return;
 
-//	std::cout << thisNode.getIp() << ": Opening outgoing TCP connection to " << address << std::endl;
+	TransportAddress address = TransportAddress(handle.getIp(), localPort);
 
-	managedConnections.insert(std::make_pair(address, dest));
+	managedConnections.insert(std::make_pair(address, handle));
+
+	bucket->incManagedConnections();
 	establishTcpConnection(address);
 }
 
@@ -1493,9 +1498,12 @@ void Kademlia::openManagedConnection(NodeHandle dest)
 void Kademlia::closeManagedConnection(TransportAddress dest)
 {
 	TransportAddress address = TransportAddress(dest.getIp(), localPort);
-
-//	std::cout << thisNode.getIp() << ": Closing outgoing TCP connection to " << address << std::endl;
-
+	
+	// Check if this is a valid managed connection before attempting to close it
+	std::map<TransportAddress, NodeHandle>::iterator it = managedConnections.find(address);
+	if (it == managedConnections.end())
+		return;
+	
 	closeTcpConnection(address);
 }
 
@@ -1506,34 +1514,31 @@ void Kademlia::handleConnectionEvent(EvCode code, TransportAddress address)
 	if (it == managedConnections.end())
 		return;
 
-	NodeHandle handle = it->second;
+	KademliaBucketEntry handle = it->second;
+	KademliaBucket* bucket = routingBucket(handle.getKey(), false);
 
-	switch (code) {
-		case PEER_TIMEDOUT:
-		case PEER_REFUSED:
-		case CONNECTION_RESET: {
-			routingTimeout(handle.getKey(), true);
-		}
+	bucket->decManagedConnections();
+	managedConnections.erase(it);
 
-		default: {
-//			std::cout << thisNode.getIp() << ": Removing closed TCP connection to " << address << std::endl;
+//			if (!bucket->hasManagedConnections()) {
+//				// We now have no managed connection in this bucket, replace it
+//				
+//				KademliaBucket::iterator it = bucket->begin();
+//				if (it != bucket->end()) {
+//					openManagedConnection(*it);
+//				}
+//			}
 
-			managedConnections.erase(it);
+	if (code == PEER_TIMEDOUT || code == PEER_REFUSED || code == CONNECTION_RESET)
+		routingTimeout(handle.getKey(), true);
 
-			BaseTcpSupport::handleConnectionEvent(code, address);
-
-			break;
-		}
-	}
+	BaseTcpSupport::handleConnectionEvent(code, address);
 }
 
 // Managed connections
 void Kademlia::handleIncomingConnection(TransportAddress address)
 {
-//	std::cout << thisNode.getIp() << ": Received incoming TCP connection from " << address << std::endl;
-
-	// TODO: Test
-//	closeTcpConnection(address);
+	// TODO: ?
 }
 
 // Managed connections

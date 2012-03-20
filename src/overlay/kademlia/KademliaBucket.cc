@@ -28,6 +28,7 @@ KademliaBucket::KademliaBucket(uint16_t maxSize,
     : BaseKeySortedVector< KademliaBucketEntry >(maxSize, comparator)
 {
     lastUsage = -1;
+    managedConnections = 0;
 }
 
 KademliaBucket::~KademliaBucket()

@@ -39,6 +39,22 @@ public:
     inline simtime_t getLastUsage() const {
         return this->lastUsage;
     }
+    
+    inline void incManagedConnections() {
+    	this->managedConnections++;
+    }
+    
+    inline void decManagedConnections() {
+    	this->managedConnections--;
+    }
+    
+    inline bool hasManagedConnections() {
+    	return this->managedConnections > 0;
+    }
+    
+    inline int countManagedConnections() {
+    	return this->managedConnections;
+    }
 
     KademliaBucketEntry* getOldestNode();
 
@@ -46,6 +62,7 @@ public:
 
 private:
     simtime_t lastUsage;
+    int managedConnections;
 };
 
 #endif

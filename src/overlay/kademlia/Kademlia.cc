@@ -680,6 +680,10 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 
 		bucket->push_back(kadHandle);
 		currentRoutingTableSize++;
+
+        if (enableManagedConnections)
+        	openManagedConnection(kadHandle);
+
 		result = true;
     }
     else if (!bucket->isFull()) {

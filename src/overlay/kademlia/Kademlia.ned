@@ -33,6 +33,7 @@ simple Kademlia extends BaseOverlay
         @class(Kademlia);
         double minSiblingTableRefreshInterval @unit(s); // siblingTable refresh delay
         double minBucketRefreshInterval @unit(s); // bucket refresh delay
+        double bucketPingInterval @unit(s); // interval in which buckets get pinged (NICE maintenance - 0 to disable)
         double siblingPingInterval @unit(s); // interval in which all siblings get pinged (0 to disable)
         int maxStaleCount; // number of timeouts before node removal
         int k; // number of paths (size of k-bucket)
@@ -42,6 +43,7 @@ simple Kademlia extends BaseOverlay
         bool pingNewSiblings; // ping new unknown siblings?
         bool secureMaintenance; // if true, ping not authenticated nodes before adding them to a bucket
         bool newMaintenance;
+        bool niceMaintenance;
 
         bool enableReplacementCache; // enables the replacement cache to store nodes if a bucket is full
         bool replacementCachePing; // ping the least recently used node in a full bucket, when a node is added to the replacement cache
@@ -49,11 +51,20 @@ simple Kademlia extends BaseOverlay
         int siblingRefreshNodes; // number of redundant nodes for exhaustive sibling table refresh lookups (0 = numRedundantNodes)
         int bucketRefreshNodes; // number of redundant nodes for exhaustive bucket refresh lookups (0 = numRedundantNodes)
 
+		int routingTableStatsDelay @unit(s); // delay between routing table stat logging
+
         // R/Kademlia
         bool activePing; // ping new neighbors?
         bool proximityRouting; // enable proximity routing (recursive only)
         bool proximityNeighborSelection; // enable proximity neighbor selection
         bool altRecMode; // use source-routing mode instead of direct mode
+        
+        string bucketType; // used to test alternative bucket/node distributions
+        int globalNodeLimit; // maximum number of nodes in the routing table, used with NKademlia
+        int extraNodesFinalBucket; // number of extra nodes in bucket 0 for NR128
+        bool enableDownlists; // toggle downlists on/off
+		bool enableManagedConnections; // toggle managed connections on/off
+        bool enableDownlistsForwarding; // toggle downlists being forwarded to siblings
 }
 
 //
@@ -79,9 +90,12 @@ module KademliaModules like IOverlay
                 @display("p=60,60;i=block/circle");
 
         }
+
     connections allowunconnected:
         udpIn --> kademlia.udpIn;
         udpOut <-- kademlia.udpOut;
+        tcpIn --> kademlia.tcpIn;
+        tcpOut <-- kademlia.tcpOut;
         appIn --> kademlia.appIn;
         appOut <-- kademlia.appOut;
 }

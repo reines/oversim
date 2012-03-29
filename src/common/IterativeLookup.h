@@ -128,6 +128,7 @@ protected:
     int retries;                    /**< number of retries, if lookup fails */
     bool appLookup;
     SimTime startTime;              /**< time at which the lookup was started */
+    Downlist downlist;
 
 public://virtual methods: comparator induced by distance in BaseOverlay
     /**
@@ -275,6 +276,7 @@ public://methods
 
     const NodeVector& getResult() const;
     const OverlayKey& getKey() const;
+    Downlist* getDownlist();
 
     bool isValid() const;
     void abortLookup();
@@ -303,6 +305,7 @@ protected://fields: state
     bool finished;
     bool success;
     LookupVector nextHops;
+    LookupVector allHops;
     std::map<TransportAddress, NodeHandle> oldNextHops;
 
 protected://methods: rpc handling

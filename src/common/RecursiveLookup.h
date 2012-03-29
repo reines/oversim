@@ -68,6 +68,7 @@ public:
      * @return The result node vector.
      */
     virtual const NodeVector& getResult() const;
+    virtual Downlist* getDownlist();
 
     /**
      * Returns true, if the lookup was successful.

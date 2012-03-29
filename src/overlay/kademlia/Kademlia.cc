@@ -25,6 +25,8 @@
 
 #include <assert.h>
 #include <algorithm>
+#include <iostream>
+#include <sstream>
 
 #include <IPAddressResolver.h>
 #include <IPvXAddress.h>
@@ -35,6 +37,9 @@
 #include <LookupListener.h>
 #include <RpcMacros.h>
 #include <BootstrapList.h>
+
+#include <GlobalStatistics.h>
+#include <GlobalStatisticsAccess.h>
 
 #if 0
 #define BUCKET_CONSISTENCY(msg) \
@@ -76,14 +81,19 @@ class KademliaLookupListener : public LookupListener
 {
 private:
     Kademlia* overlay;
+    GlobalStatistics* globalStatistics;
 public:
     KademliaLookupListener(Kademlia* overlay)
     {
         this->overlay = overlay;
+
+		this->globalStatistics = GlobalStatisticsAccess().get();
     }
 
     virtual void lookupFinished(AbstractLookup *lookup)
     {
+    	RECORD_STATS(globalStatistics->recordOutVector("Kademlia: Maintenance lookup hops", lookup->getAccumulatedHops()));
+
         overlay->lookupFinished(lookup->isValid());
         delete this;
     }
@@ -102,6 +112,7 @@ void Kademlia::initializeOverlay(int stage)
     // setup kademlia parameters
     minSiblingTableRefreshInterval = par("minSiblingTableRefreshInterval");
     minBucketRefreshInterval = par("minBucketRefreshInterval");
+    bucketPingInterval = par("bucketPingInterval");
     siblingPingInterval = par("siblingPingInterval");
     exhaustiveRefresh = par("exhaustiveRefresh");
     maxStaleCount = par("maxStaleCount");
@@ -111,12 +122,42 @@ void Kademlia::initializeOverlay(int stage)
     replacementCandidates = par("replacementCandidates");
     secureMaintenance = par("secureMaintenance");
     newMaintenance = par("newMaintenance");
+    niceMaintenance = par("niceMaintenance");
+
+    routingTableStatsDelay = par("routingTableStatsDelay");
 
     // R/Kademlia
     activePing = par("activePing");
     proximityRouting = par("proximityRouting");
     proximityNeighborSelection = par("proximityNeighborSelection");
     altRecMode = recordRoute = par("altRecMode");
+
+    std::string temp = par("bucketType").stdstringValue();
+    if (temp == "kademlia")
+    	bucketType = KADEMLIA;
+    else if (temp == "dkademlia")
+    	bucketType = DKADEMLIA;
+    else if (temp == "nkademlia") {
+    	bucketType = NKADEMLIA;
+
+        globalNodeLimit = par("globalNodeLimit");
+    }
+    else if (temp == "akademlia1")
+    	bucketType = AKADEMLIA1;
+    else if (temp == "akademlia2")
+    	bucketType = AKADEMLIA2;
+    else if (temp == "nr128") {
+    	bucketType = NR128;
+
+		extraNodesFinalBucket = par("extraNodesFinalBucket");
+		if (extraNodesFinalBucket == 0)
+			extraNodesFinalBucket = OverlayKey::getLength();
+	}
+    else
+    	throw cRuntimeError((std::string("Wrong bucket type: ") + temp).c_str());
+
+    enableDownlists = par("enableDownlists");
+    enableDownlistsForwarding = par("enableDownlistsForwarding");
 
     k = par("k");
     b = par("b");
@@ -134,6 +175,8 @@ void Kademlia::initializeOverlay(int stage)
         bucketRefreshNodes = iterativeLookupConfig.redundantNodes;
     }
 
+    enableManagedConnections = par("enableManagedConnections");
+
     // calculate number of buckets: ( (2^b)-1 ) * ( keylength / b )
     numBuckets = ((1L << b) - 1L) * (OverlayKey::getLength() / b);
 
@@ -148,7 +191,11 @@ void Kademlia::initializeOverlay(int stage)
 
     // self-message
     bucketRefreshTimer = new cMessage("bucketRefreshTimer");
+    bucketPingTimer = new cMessage("bucketPingTimer");
     siblingPingTimer = new cMessage("siblingPingTimer");
+    routingTableStatsTimer = new cMessage("routingTableStatsTimer");
+
+    currentBucketPing = 0;
 
     // statistics
     bucketRefreshCount = 0;
@@ -156,6 +203,11 @@ void Kademlia::initializeOverlay(int stage)
     nodesReplaced = 0;
 
     comparator = NULL;
+
+    // Listen for incoming managed connections
+    bindAndListenTcp(localPort);
+
+    scheduleAt(simTime() + routingTableStatsDelay, routingTableStatsTimer);
 }
 
 Kademlia::Kademlia()
@@ -163,7 +215,9 @@ Kademlia::Kademlia()
     siblingTable = NULL;
     comparator = NULL;
     bucketRefreshTimer = NULL;
+    bucketPingTimer = NULL;
     siblingPingTimer = NULL;
+    routingTableStatsTimer = NULL;
 }
 
 Kademlia::~Kademlia()
@@ -173,7 +227,9 @@ Kademlia::~Kademlia()
     delete siblingTable;
     delete comparator;
     cancelAndDelete(bucketRefreshTimer);
+    cancelAndDelete(bucketPingTimer);
     cancelAndDelete(siblingPingTimer);
+    cancelAndDelete(routingTableStatsTimer);
 }
 
 void Kademlia::finishOverlay()
@@ -181,12 +237,27 @@ void Kademlia::finishOverlay()
     simtime_t time = globalStatistics->calcMeasuredLifetime(creationTime);
     if (time < GlobalStatistics::MIN_MEASURED) return;
 
-    globalStatistics->addStdDev("Kademlia: Nodes replaced in buckets/s",
-                                nodesReplaced / time);
-    globalStatistics->addStdDev("Kademlia: Bucket Refreshes/s",
-                                bucketRefreshCount / time);
-    globalStatistics->addStdDev("Kademlia: Sibling Table Refreshes/s",
-                                siblingTableRefreshCount / time);
+    uint32_t numBuckets = 0;
+
+    for (uint i = 0;i < routingTable.size();i++) {
+		uint32_t bucketSize = 0;
+		
+        if (routingTable[i] != NULL && !routingTable[i]->isEmpty()) {
+        	bucketSize = routingTable[i]->size();
+    		numBuckets++;
+    	}
+
+		std::stringstream ss;
+		ss << "Kademlia: Bucket " << i << " size";
+	   	globalStatistics->addStdDev(ss.str().c_str(), bucketSize);
+    }
+
+    globalStatistics->addStdDev("Kademlia: Routing table size", currentRoutingTableSize);
+    globalStatistics->addStdDev("Kademlia: Number of buckets", numBuckets);
+    globalStatistics->addStdDev("Kademlia: Managed connections", managedConnections.size());
+    globalStatistics->addStdDev("Kademlia: Nodes replaced in buckets/s", nodesReplaced / time);
+    globalStatistics->addStdDev("Kademlia: Bucket Refreshes/s", bucketRefreshCount / time);
+    globalStatistics->addStdDev("Kademlia: Sibling Table Refreshes/s", siblingTableRefreshCount / time);
 }
 
 void Kademlia::sendSiblingFindNodeCall(const TransportAddress& dest)
@@ -228,6 +299,8 @@ void Kademlia::joinOverlay()
         // schedule bucket refresh timer
         cancelEvent(bucketRefreshTimer);
         scheduleAt(simTime(), bucketRefreshTimer);
+        cancelEvent(bucketPingTimer);
+        scheduleAt(simTime(), bucketPingTimer);
         cancelEvent(siblingPingTimer);
         scheduleAt(simTime() + siblingPingInterval, siblingPingTimer);
     }
@@ -247,6 +320,8 @@ void Kademlia::routingInit()
 
     siblingTable->setComparator(comparator);
 
+    currentRoutingTableSize = 0;
+
     updateTooltip();
     BUCKET_CONSISTENCY(routingInit: end);
 }
@@ -260,6 +335,8 @@ void Kademlia::routingDeinit()
             routingTable[i] = NULL;
         }
     }
+
+    currentRoutingTableSize = 0;
 
     if (siblingTable != NULL) {
         siblingTable->clear();
@@ -283,21 +360,78 @@ int Kademlia::getMaxNumRedundantNodes()
 
 int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 {
-    // calculate XOR distance
-    OverlayKey delta = key ^ getThisNode().getKey();
+	// calculate XOR distance
+	OverlayKey delta = key ^ getThisNode().getKey();
 
-    // find first subinteger that is not zero...
-    int i;
-    for (i = key.getLength() - b; i >= 0 && delta.getBitRange(i, b) == 0;
-         i -= b);
+	switch (bucketType) {
+		case DKADEMLIA: {
+			OverlayKey bucketSize = OverlayKey::getMax() / OverlayKey::getLength();
+			std::cout << "bucketSize: " << bucketSize << std::endl;
 
-    if (i < 0)
-        return -1;
+			OverlayKey bucketIndex = key / bucketSize;
 
-    if (!firstOnLayer)
-        return (i / b) * ((1 << b) - 1) + (delta.getBitRange(i, b) - 1);
-    else
-        return (i / b) * ((1 << b) - 1) + (pow(2, b) - 2);
+			std::cout << "key: " << key << std::endl;
+			std::cout << "index: " << bucketIndex << std::endl;
+		}
+
+		case AKADEMLIA1: {
+			// TODO
+		}
+
+		case AKADEMLIA2: {
+			// TODO
+		}
+
+		// Original Kademlia style - exponentially increasing buckets
+		case NR128:
+		case KADEMLIA:
+		case NKADEMLIA:
+		default: {
+			// find first subinteger that is not zero...
+			int i;
+			for (i = key.getLength() - b; i >= 0 && delta.getBitRange(i, b) == 0;
+				 i -= b);
+
+			if (i < 0)
+				return -1;
+
+			if (!firstOnLayer)
+				return (i / b) * ((1 << b) - 1) + (delta.getBitRange(i, b) - 1);
+			else
+				return (i / b) * ((1 << b) - 1) + (pow(2, b) - 2);
+		}
+	}
+}
+
+int Kademlia::routingBucketSize(int index)
+{
+	switch (bucketType) {
+		// no maximum size per bucket - max size for entire table instead
+		case NKADEMLIA: {
+			return 0;
+		}
+
+		// With NR128 the final buckets hold more nodes
+		case NR128: {
+			int limit = log(extraNodesFinalBucket) / log(2); // how many buckets will be affected: log_2(<key size>)
+			int offset = limit - (OverlayKey::getLength() - (index + 1)); // offset of the current bucket from the first bucket which should be increased
+			if (offset > 0) { // if the offset is under 0 then it has no extra nodes
+				offset = pow(2, offset);
+				if (offset > k)
+					return offset;
+			}
+
+			return k;
+		}
+
+		// Original kademlia style - each bucket holds k nodes
+		case DKADEMLIA:
+		case AKADEMLIA2:
+		case KADEMLIA:
+		default: {
+			return k;
+		}
+	}
 }
 
 KademliaBucket* Kademlia::routingBucket(const OverlayKey& key, bool ensure)
@@ -310,7 +444,10 @@ KademliaBucket* Kademlia::routingBucket(const OverlayKey& key, bool ensure)
     // get bucket and allocate if necessary
     KademliaBucket* bucket = routingTable[ num ];
     if (bucket == NULL && ensure)
-        bucket = routingTable[ num ] = new KademliaBucket( k, comparator );
+    {
+    	int bucketSize = routingBucketSize(num);
+        bucket = routingTable[ num ] = new KademliaBucket( bucketSize, comparator );
+    }
 
     // return bucket
     return bucket;
@@ -504,7 +641,52 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 
     /* add node to the appropriate bucket, if not full ---------------------*/
     bucket = routingBucket(kadHandle.getKey(), true);
-    if (!bucket->isFull()) {
+    if (bucketType == NKADEMLIA) {
+    	// This bucket is large enough and we are already at the maximum routing table size
+		if (bucket->size() >= k && currentRoutingTableSize >= globalNodeLimit) {
+			if (isAlive && enableReplacementCache && (!secureMaintenance || authenticated)) {
+				bucket->replacementCache.push_front(kadHandle);
+				if (bucket->replacementCache.size() > replacementCandidates) {
+				    bucket->replacementCache.pop_back();
+				}
+
+				if (replacementCachePing) {
+				    KademliaBucket::iterator it = bucket->begin();
+				    while (it != bucket->end() && (it->getPingSent() == true)) {
+				        it++;
+				    }
+				    if (it != bucket->end()) {
+				        pingNode(*it);
+				        it->setPingSent(true);
+				    }
+				}
+			}
+
+			return false;
+		}
+
+        if (secureMaintenance && !authenticated) {
+            if (/*!maintenanceLookup || */(isAlive && (rtt == MAXTIME))) {
+                // received a FindNodeCall or PingCall from a potential new bucket entry
+                // or new nodes from a FindNodeReponse app lookup
+                // optimization: don't send a ping for nodes from FindNodeResponse for app lookups
+                pingNode(kadHandle);
+            }
+            return false;
+        }
+
+		// Either this bucket needs more nodes, or we haven't reached the global
+		// limit yet, or we managed to kick a node to make more room.
+
+		bucket->push_back(kadHandle);
+		currentRoutingTableSize++;
+
+        if (enableManagedConnections)
+        	openManagedConnection(kadHandle);
+
+		result = true;
+    }
+    else if (!bucket->isFull()) {
         if (secureMaintenance && !authenticated) {
             if (/*!maintenanceLookup || */(isAlive && (rtt == MAXTIME))) {
                 // received a FindNodeCall or PingCall from a potential new bucket entry
@@ -535,6 +717,11 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
          }
 
         bucket->push_back(kadHandle);
+        currentRoutingTableSize++;
+
+        if (enableManagedConnections)
+        	openManagedConnection(kadHandle);
+
         result = true;
     } else if (isAlive) {
         //PNS node replacement
@@ -553,6 +740,12 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
                 KademliaBucketEntry temp = *kickHim;
                 bucket->erase(kickHim);
                 bucket->push_back(kadHandle);
+
+                if (enableManagedConnections) {
+                	closeManagedConnection(*kickHim);
+                	openManagedConnection(kadHandle);
+                }
+
                 kadHandle = temp;
             }
         }
@@ -638,6 +831,10 @@ bool Kademlia::routingTimeout(const OverlayKey& key, bool immediately)
         if (i->getStaleCount() > maxStaleCount || immediately) {
             // remove from routing table
             bucket->erase(i);
+            currentRoutingTableSize--;
+
+            if (enableManagedConnections)
+            	closeManagedConnection(*i);
 
             if (enableReplacementCache) {
                 if (bucket->replacementCache.size()) {
@@ -690,6 +887,7 @@ void Kademlia::refillSiblingTable()
         // remove node from bucket
         routingTable[index]->erase(routingTable[index]->
               findIterator(sortedBucket.front().getKey()));
+        currentRoutingTableSize--;
         assert(siblingTable->isFull());
         BUCKET_CONSISTENCY(routingTimeout: end refillSiblingTable());
     }
@@ -924,7 +1122,6 @@ bool Kademlia::recursiveRoutingHook(const TransportAddress& dest,
     return true;
 }
 
-
 NodeVector* Kademlia::findNode(const OverlayKey& key, int numRedundantNodes,
                                int numSiblings, BaseOverlayMessage* msg)
 {
@@ -1074,11 +1271,12 @@ NodeVector* Kademlia::findNode(const OverlayKey& key, int numRedundantNodes,
 
 //-----------------------------------------------------------------------------
 
-
 void Kademlia::handleTimerEvent(cMessage* msg)
 {
     if (msg == bucketRefreshTimer) {
         handleBucketRefreshTimerExpired();
+    } else if (msg == bucketPingTimer) {
+    	handleBucketPingTimerExpired();
     } else if (msg == siblingPingTimer) {
         if (siblingPingInterval == 0) {
             return;
@@ -1089,26 +1287,64 @@ void Kademlia::handleTimerEvent(cMessage* msg)
             pingNode(*i);
         }
         scheduleAt(simTime() + siblingPingInterval, msg);
+    } else if (msg == routingTableStatsTimer) {
+    	if (!routingTable.empty() && globalStatistics->isMeasuring() && !underlayConfigurator->isSimulationEndingSoon()) {
+    	    double routingTableAlive = 0;
+
+    	    for (uint i = 0;i < routingTable.size();i++) {
+    	    	if (routingTable[i] == NULL)
+    	    		continue;
+
+    	    	for (uint j = 0;j < routingTable[i]->size();j++) {
+    	    		PeerInfo* info = globalNodeList->getPeerInfo(routingTable[i]->at(j));
+    	    		if (info != NULL)
+    	    			routingTableAlive++;
+    	    	}
+    	    }
+
+    	    if (currentRoutingTableSize > 0) {
+    	    	RECORD_STATS(globalStatistics->recordOutVector(
+    	    			"Kademlia: Routing table accuracy", routingTableAlive / currentRoutingTableSize));
+    	    }
+    	}
+
+    	scheduleAt(simTime() + routingTableStatsDelay, msg);
     }
 }
 
-// R/Kademlia
 void Kademlia::handleUDPMessage(BaseOverlayMessage* msg)
 {
-    // only used for recursive Kademlia
-    OverlayCtrlInfo* ctrlInfo =
-            check_and_cast<OverlayCtrlInfo*>(msg->removeControlInfo());
-    KademliaRoutingInfoMessage* kadRoutingInfoMsg =
-            check_and_cast<KademliaRoutingInfoMessage*>(msg);
+	OverlayCtrlInfo* ctrlInfo = check_and_cast<OverlayCtrlInfo*>(msg->removeControlInfo());
 
-    routingAdd(kadRoutingInfoMsg->getSrcNode(), true);
+	if (dynamic_cast<KademliaRoutingInfoMessage*>(msg)) {
+		// only used for recursive Kademlia
+		KademliaRoutingInfoMessage* kadRoutingInfoMsg = check_and_cast<KademliaRoutingInfoMessage*>(msg);
 
-    for (uint32_t i = 0; i < kadRoutingInfoMsg->getNextHopsArraySize(); i++) {
-        routingAdd(kadRoutingInfoMsg->getNextHops(i),
-                   kadRoutingInfoMsg->getNextHops(i).getIsAlive());
-    }
+		routingAdd(kadRoutingInfoMsg->getSrcNode(), true);
 
-    delete ctrlInfo;
+		for (uint32_t i = 0; i < kadRoutingInfoMsg->getNextHopsArraySize(); i++) {
+			routingAdd(kadRoutingInfoMsg->getNextHops(i), kadRoutingInfoMsg->getNextHops(i).getIsAlive());
+		}
+	}
+	else if (dynamic_cast<KademliaDownlistMessage*>(msg)) {
+		KademliaDownlistMessage* kadDownlistMsg = check_and_cast<KademliaDownlistMessage*>(msg);
+
+		// Ping each node we were informed has failed
+		for (uint32_t i = 0; i < kadDownlistMsg->getFailedArraySize(); i++) {
+            pingNode(kadDownlistMsg->getFailed(i));
+		}
+
+		// If this message wasn't forwarded, then forward it to our siblings.
+		if (enableDownlistsForwarding && !kadDownlistMsg->getForwarded()) {
+			kadDownlistMsg->setForwarded(true);
+
+		    for (KademliaBucket::iterator i = siblingTable->begin(); i != siblingTable->end(); i++) {
+		    	sendMessageToUDP(*i, kadDownlistMsg->dup());
+		    }
+		}
+	}
+
+	delete ctrlInfo;
     delete msg;
 }
 
@@ -1153,6 +1389,8 @@ void Kademlia::handleRpcResponse(BaseResponseMessage* msg,
                 // schedule bucket refresh timer
                 cancelEvent(bucketRefreshTimer);
                 scheduleAt(simTime(), bucketRefreshTimer);
+                cancelEvent(bucketPingTimer);
+                scheduleAt(simTime(), bucketPingTimer);
                 cancelEvent(siblingPingTimer);
                 scheduleAt(simTime() + siblingPingInterval, siblingPingTimer);
                 state = JOIN;
@@ -1176,6 +1414,8 @@ void Kademlia::handleRpcResponse(BaseResponseMessage* msg,
                     // schedule bucket refresh timer
                     cancelEvent(bucketRefreshTimer);
                     scheduleAt(simTime(), bucketRefreshTimer);
+                    cancelEvent(bucketPingTimer);
+                    scheduleAt(simTime(), bucketPingTimer);
                     cancelEvent(siblingPingTimer);
                     scheduleAt(simTime() + siblingPingInterval, siblingPingTimer);
                 }
@@ -1243,6 +1483,74 @@ void Kademlia::handleRpcTimeout(BaseCallMessage* msg,
     }
 }
 
+// Managed connections
+void Kademlia::openManagedConnection(NodeHandle handle)
+{
+	KademliaBucket* bucket = routingBucket(handle.getKey(), false);
+//	if (bucket->hasManagedConnections())
+//		return;
+
+	TransportAddress address = TransportAddress(handle.getIp(), localPort);
+
+	managedConnections.insert(std::make_pair(address, handle));
+
+	bucket->incManagedConnections();
+	establishTcpConnection(address);
+}
+
+// Managed connections
+void Kademlia::closeManagedConnection(TransportAddress dest)
+{
+	TransportAddress address = TransportAddress(dest.getIp(), localPort);
+	
+	// Check if this is a valid managed connection before attempting to close it
+	std::map<TransportAddress, NodeHandle>::iterator it = managedConnections.find(address);
+	if (it == managedConnections.end())
+		return;
+	
+	closeTcpConnection(address);
+}
+
+// Managed connections
+void Kademlia::handleConnectionEvent(EvCode code, TransportAddress address)
+{
+	std::map<TransportAddress, NodeHandle>::iterator it = managedConnections.find(address);
+	if (it == managedConnections.end())
+		return;
+
+	KademliaBucketEntry handle = it->second;
+	KademliaBucket* bucket = routingBucket(handle.getKey(), false);
+
+	bucket->decManagedConnections();
+	managedConnections.erase(it);
+
+//			if (!bucket->hasManagedConnections()) {
+//				// We now have no managed connection in this bucket, replace it
+//				
+//				KademliaBucket::iterator it = bucket->begin();
+//				if (it != bucket->end()) {
+//					openManagedConnection(*it);
+//				}
+//			}
+
+	if (code == PEER_TIMEDOUT || code == PEER_REFUSED || code == CONNECTION_RESET)
+		routingTimeout(handle.getKey(), true);
+
+	BaseTcpSupport::handleConnectionEvent(code, address);
+}
+
+// Managed connections
+void Kademlia::handleIncomingConnection(TransportAddress address)
+{
+	// TODO: ?
+}
+
+// Managed connections
+void Kademlia::handleDataReceived(TransportAddress address, cPacket* msg, bool urgent)
+{
+	// Not actually used - for the simulation we only need the connection to update routing state
+}
+
 // R/Kademlia
 void Kademlia::proxCallback(const TransportAddress& node, int rpcId,
                             cPolymorphic *contextPointer, Prox prox)
@@ -1260,6 +1568,7 @@ void Kademlia::lookupFinished(bool isValid)
 {
     if (state == JOIN) {
         cancelEvent(bucketRefreshTimer);
+        cancelEvent(bucketPingTimer);
 
         if (siblingTable->size() == 0) {
             // initial lookup failed - get new bootstrap node
@@ -1268,12 +1577,38 @@ void Kademlia::lookupFinished(bool isValid)
         }
 
         scheduleAt(simTime(), bucketRefreshTimer);
+        scheduleAt(simTime(), bucketPingTimer);
 
         if (!newMaintenance) {
             state = READY;
             setOverlayReady(true);
         }
     }
+}
+
+void Kademlia::removeLookup(AbstractLookup* lookup)
+{
+    // If downlist modification is enabled alert nodes that sent us dead results
+    if (enableDownlists) {
+    	Downlist* downlist = lookup->getDownlist();
+    	for (Downlist::iterator sourceIterator = downlist->begin(); sourceIterator != downlist->end(); sourceIterator++) {
+    		KademliaDownlistMessage* msg = new KademliaDownlistMessage();
+        	msg->setSrcNode(thisNode);
+        	msg->setForwarded(false);
+
+        	msg->setFailedArraySize(sourceIterator->second.size());
+
+        	std::set<NodeHandle>::iterator deadIterator = sourceIterator->second.begin();
+        	for (uint32_t i = 0; deadIterator != sourceIterator->second.end(); deadIterator++) {
+        		msg->setFailed(i++, *deadIterator);
+        	}
+
+        	msg->setBitLength(KADEMLIADOWNLIST_L(msg));
+        	sendMessageToUDP(sourceIterator->first, msg);
+    	}
+    }
+
+    BaseOverlay::removeLookup(lookup);
 }
 
 // handle a expired bucket refresh timer
@@ -1372,6 +1707,45 @@ void Kademlia::handleBucketRefreshTimerExpired()
         scheduleAt(simTime() + (std::min(minSiblingTableRefreshInterval,
                         minBucketRefreshInterval) / 10.0), bucketRefreshTimer);
     }
+}
+
+// handle a expired bucket ping timer (NICE maintenance)
+void Kademlia::handleBucketPingTimerExpired()
+{
+    if (bucketPingInterval == 0) {
+        return;
+    }
+
+	if (state == READY && siblingTable->size()) {
+		if (niceMaintenance) {
+			int32_t diff = OverlayKey::getLength() - b * (getThisNode().getKey().sharedPrefixLength(siblingTable->front().getKey(), b) + 1);
+			int32_t lower = (diff / b) * ((1 << b) - 1) + ((1 << b) - 2);
+			int32_t upper = ((OverlayKey::getLength() - b) / b) * ((1 << b) - 1);
+
+		    if (--currentBucketPing < lower)
+			  	currentBucketPing = upper;
+		}
+		else {
+			OverlayKey lower = siblingTable->front().getKey();
+
+			// FIXME: Disgusting hack to get random key in the range [lower, max]
+			OverlayKey rand = OverlayKey::random();
+			while (rand < lower)
+				rand = OverlayKey::random();
+
+			currentBucketPing = routingBucketIndex(rand);
+		}
+
+		KademliaBucket* bucket = routingTable[currentBucketPing];
+		if (bucket != NULL && !bucket->isEmpty()) {
+			// Ping the found oldest node
+			pingNode(*bucket->getOldestNode());
+		}
+	}
+
+    // schedule next bucket refresh process
+    cancelEvent(bucketPingTimer);
+    scheduleAt(simTime() + bucketPingInterval, bucketPingTimer);
 }
 
 //virtual public: xor metric

@@ -30,11 +30,21 @@
 #include <CommonMessages_m.h>
 #include <BaseOverlay.h>
 #include <GlobalStatistics.h>
+#include <GlobalNodeList.h>
+#include <UnderlayConfigurator.h>
 #include <NeighborCache.h>
 
 #include "KademliaNodeHandle.h"
 #include "KademliaBucket.h"
 
+enum BucketType {
+	KADEMLIA = 0,
+	DKADEMLIA = 1,
+	NKADEMLIA = 2,
+	AKADEMLIA1 = 3,
+	AKADEMLIA2 = 4,
+	NR128 = 5
+};
 
 /**
  * Kademlia overlay module
@@ -73,6 +83,7 @@ protected://fields: kademlia parameters
     bool pingNewSiblings;
     bool secureMaintenance; /**< if true, ping not authenticated nodes before adding them to a bucket */
     bool newMaintenance;
+    bool niceMaintenance;
 
     bool enableReplacementCache; /*< enables the replacement cache to store nodes if a bucket is full */
     bool replacementCachePing; /*< ping the least recently used node in a full bucket, when a node is added to the replacement cache */
@@ -80,18 +91,32 @@ protected://fields: kademlia parameters
     int siblingRefreshNodes; /*< number of redundant nodes for exhaustive sibling table refresh lookups (0 = numRedundantNodes) */
     int bucketRefreshNodes; /*< number of redundant nodes for exhaustive bucket refresh lookups (0 = numRedundantNodes) */
 
+    int routingTableStatsDelay;
+
     // R/Kademlia
     bool activePing;
     bool proximityRouting;
     bool proximityNeighborSelection;
     bool altRecMode;
 
+    BucketType bucketType;
+    uint32_t globalNodeLimit; /*< maximum number of nodes in the routing table, used with NKademlia */
+    uint32_t extraNodesFinalBucket;
+    bool enableDownlists;
+    bool enableDownlistsForwarding;
+
+    bool enableManagedConnections;
+    std::map<TransportAddress, NodeHandle> managedConnections;
+
     simtime_t minSiblingTableRefreshInterval;
     simtime_t minBucketRefreshInterval;
+    simtime_t bucketPingInterval;
     simtime_t siblingPingInterval;
 
     cMessage* bucketRefreshTimer;
+    cMessage* bucketPingTimer;
     cMessage* siblingPingTimer;
+    cMessage* routingTableStatsTimer;
 
 public:
     Kademlia();
@@ -139,6 +164,11 @@ protected:
      */
     void handleBucketRefreshTimerExpired();
 
+    /**
+     * handle a expired bucket ping timer (NICE maintenance)
+     */
+    void handleBucketPingTimerExpired();
+
     OverlayKey distance(const OverlayKey& x,
                         const OverlayKey& y,
                         bool useAlternative = false) const;
@@ -149,11 +179,22 @@ protected:
     void updateTooltip();
 
     virtual void lookupFinished(bool isValid);
+    virtual void removeLookup(AbstractLookup* lookup);
 
     virtual void handleNodeGracefulLeaveNotification();
 
     friend class KademliaLookupListener;
 
+    // Managed connection support
+
+    void openManagedConnection(NodeHandle);
+    void closeManagedConnection(TransportAddress dest);
+
+    void handleConnectionEvent(EvCode code, TransportAddress address);
+
+    void handleIncomingConnection(TransportAddress address);
+
+    void handleDataReceived(TransportAddress address, cPacket* msg, bool urgent);
 
 private:
     uint32_t bucketRefreshCount; /*< statistics: total number of bucket refreshes */
@@ -165,6 +206,9 @@ private:
     KademliaBucket*  siblingTable;
     std::vector<KademliaBucket*> routingTable;
     int numBuckets;
+
+    int currentBucketPing;
+    int currentRoutingTableSize;
 
     void routingInit();
 
@@ -180,6 +224,16 @@ private:
      * @return int The index of the bucket
      */
     int routingBucketIndex(const OverlayKey& key, bool firstOnLayer = false);
+
+    /**
+     * Returns the maxmimum size of the bucket with the given
+     * index
+     *
+     * @param index The index of the bucket
+     *
+     * @return int The maximum size of the bucket
+     */
+    int routingBucketSize(int index);
 
     /**
      * Returns a Bucket or <code>NULL</code> if the bucket has not

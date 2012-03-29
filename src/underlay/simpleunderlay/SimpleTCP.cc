@@ -239,9 +239,9 @@ SimpleTCPConnection *SimpleTCP::createConnection(int appGateIndex, int connId)
 
 void SimpleTCP::segmentArrivalWhileClosed(TCPSegment *tcpseg, IPvXAddress srcAddr, IPvXAddress destAddr)
 {
-    SimpleTCPConnection *tmp = new SimpleTCPConnection();
-    tmp->segmentArrivalWhileClosed(tcpseg, srcAddr, destAddr);
-    delete tmp;
+//    SimpleTCPConnection *tmp = new SimpleTCPConnection();
+//    tmp->segmentArrivalWhileClosed(tcpseg, srcAddr, destAddr);
+//    delete tmp;
     delete tcpseg;
 }
 

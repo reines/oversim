@@ -29,6 +29,8 @@
 class OverlayKey;
 class LookupListener;
 
+typedef std::map<NodeHandle, std::set<NodeHandle> > Downlist;
+
 /**
  * This class declares an abstract iterative lookup.
  *
@@ -61,6 +63,8 @@ public:
      * @return The result node vector.
      */
     virtual const NodeVector& getResult() const = 0;
+
+    virtual Downlist* getDownlist() = 0;
 
     /**
      * Returns true, if the lookup was successful.

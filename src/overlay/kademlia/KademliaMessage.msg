@@ -23,20 +23,28 @@
 cplusplus {{
 #include <KademliaNodeHandle.h>
 #include <OverlayKey.h>
+#include <TransportAddress.h>
 #include <CommonMessages_m.h>
 
 static const int ALIVEFLAG_L = 8;
+static const int FORWARDEDFLAG_L = 8;
+
 #define MARKEDNODEHANDLE_L (NODEHANDLE_L + ALIVEFLAG_L)
 
 #define KADEMLIAROUTINGINFO_L(msg) (BASEOVERLAY_L(msg) + NODEHANDLE_L + \
                                     KEY_L + \
                                     msg->getNextHopsArraySize() * \
                                     MARKEDNODEHANDLE_L)
+
+#define KADEMLIADOWNLIST_L(msg) (BASEOVERLAY_L(msg) + NODEHANDLE_L + \
+									msg->getFailedArraySize() * \
+									NODEHANDLE_L + FORWARDEDFLAG_L)
 }}
 
 class noncobject MarkedNodeHandle;
 class noncobject NodeHandle;
 class noncobject OverlayKey;
+class noncobject TransportAddress;
 
 class BaseOverlayMessage;
 
@@ -45,7 +53,14 @@ class BaseOverlayMessage;
 //
 packet KademliaRoutingInfoMessage extends BaseOverlayMessage
 {
-        NodeHandle srcNode;
-        OverlayKey destKey = OverlayKey::UNSPECIFIED_KEY;
-        MarkedNodeHandle nextHops[];
+    NodeHandle srcNode;
+    OverlayKey destKey = OverlayKey::UNSPECIFIED_KEY;
+    MarkedNodeHandle nextHops[];
+}
+
+packet KademliaDownlistMessage extends BaseOverlayMessage
+{
+	NodeHandle srcNode;
+	NodeHandle failed[];
+	bool forwarded;
 }

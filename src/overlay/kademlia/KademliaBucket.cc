@@ -39,8 +39,6 @@ KademliaBucket::~KademliaBucket()
 
 void KademliaBucket::updateManagedConnections()
 {
-	std::cout << overlay->getThisNode().getKey() << ": " << this->countManagedConnections() << std::endl;
-
 	// If all nodes in this bucket (if any) have managed connections, stop
 	if (this->size() <= this->countManagedConnections())
 		return;
@@ -50,9 +48,29 @@ void KademliaBucket::updateManagedConnections()
 		return;
 
 	// Choose which node to upgrade to a managed connection, and do so
-	KademliaBucketEntry* handle = this->getOldestNode(); // TODO: Choose the "best" node, that *isn't* already a managed connection
+	KademliaBucketEntry* handle = this->getNextNonManagedConnection();
+	if (handle == NULL)
+		return;
 
 	overlay->openManagedConnection(*handle);
+}
+
+KademliaBucketEntry* KademliaBucket::getNextNonManagedConnection()
+{
+	KademliaBucketEntry* handle = NULL;
+
+	for (KademliaBucket::iterator it = this->begin();it != this->end();it++) {
+		// If better than the best already found
+		if (handle == NULL || it->getLastSeen() > handle->getLastSeen()) { // Currently gets the newest
+			// If already a managed connection
+			if (overlay->isManagedConnection(*it))
+				continue;
+
+			handle = &(*it);
+		}
+	}
+
+	return handle;
 }
 
 KademliaBucketEntry* KademliaBucket::getOldestNode()

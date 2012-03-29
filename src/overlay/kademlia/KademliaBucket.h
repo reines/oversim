@@ -50,7 +50,7 @@ public:
     	this->managedConnections--;
     }
     
-    inline int countManagedConnections() {
+    inline uint32_t countManagedConnections() {
     	return this->managedConnections;
     }
     
@@ -62,8 +62,10 @@ public:
 
 protected:
     simtime_t lastUsage;
-    int managedConnections;
+    uint32_t managedConnections;
     Kademlia* overlay;
+
+	KademliaBucketEntry* getNextNonManagedConnection();
 };
 
 #endif

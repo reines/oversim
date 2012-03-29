@@ -107,7 +107,8 @@ protected://fields: kademlia parameters
 
     bool enableManagedConnections;
     uint32_t managedConnectionBucketLimit; /*< maximum number of managed connections in each bucket */
-    std::map<TransportAddress, NodeHandle> managedConnections;
+    std::map<IPvXAddress, NodeHandle> outgoingManagedConnections;
+	std::set<IPvXAddress> incomingManagedConnections;
 
     simtime_t minSiblingTableRefreshInterval;
     simtime_t minBucketRefreshInterval;
@@ -189,8 +190,9 @@ protected:
 
     // Managed connection support
 
-    void openManagedConnection(NodeHandle);
+    void openManagedConnection(NodeHandle handle);
     void closeManagedConnection(TransportAddress dest);
+    bool isManagedConnection(NodeHandle handle);
 
     void handleConnectionEvent(EvCode code, TransportAddress address);
 

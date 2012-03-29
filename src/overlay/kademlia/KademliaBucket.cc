@@ -50,7 +50,7 @@ void KademliaBucket::updateManagedConnections()
 		return;
 
 	// Choose which node to upgrade to a managed connection, and do so
-	KademliaBucketEntry* handle = this->getOldestNode(); // TODO
+	KademliaBucketEntry* handle = this->getOldestNode(); // TODO: Choose the "best" node, that *isn't* already a managed connection
 
 	overlay->openManagedConnection(*handle);
 }

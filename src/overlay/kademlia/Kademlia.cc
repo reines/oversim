@@ -135,17 +135,11 @@ void Kademlia::initializeOverlay(int stage)
     std::string temp = par("bucketType").stdstringValue();
     if (temp == "kademlia")
     	bucketType = KADEMLIA;
-    else if (temp == "dkademlia")
-    	bucketType = DKADEMLIA;
     else if (temp == "nkademlia") {
     	bucketType = NKADEMLIA;
 
         globalNodeLimit = par("globalNodeLimit");
     }
-    else if (temp == "akademlia1")
-    	bucketType = AKADEMLIA1;
-    else if (temp == "akademlia2")
-    	bucketType = AKADEMLIA2;
     else if (temp == "nr128") {
     	bucketType = NR128;
 
@@ -365,24 +359,6 @@ int Kademlia::routingBucketIndex(const OverlayKey& key, bool firstOnLayer)
 	OverlayKey delta = key ^ getThisNode().getKey();
 
 	switch (bucketType) {
-		case DKADEMLIA: {
-			OverlayKey bucketSize = OverlayKey::getMax() / OverlayKey::getLength();
-			std::cout << "bucketSize: " << bucketSize << std::endl;
-
-			OverlayKey bucketIndex = key / bucketSize;
-
-			std::cout << "key: " << key << std::endl;
-			std::cout << "index: " << bucketIndex << std::endl;
-		}
-
-		case AKADEMLIA1: {
-			// TODO
-		}
-
-		case AKADEMLIA2: {
-			// TODO
-		}
-
 		// Original Kademlia style - exponentially increasing buckets
 		case NR128:
 		case KADEMLIA:
@@ -426,8 +402,6 @@ int Kademlia::routingBucketSize(int index)
 		}
 
 		// Original kademlia style - each bucket holds k nodes
-		case DKADEMLIA:
-		case AKADEMLIA2:
 		case KADEMLIA:
 		default: {
 			return k;

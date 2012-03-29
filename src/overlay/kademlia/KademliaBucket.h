@@ -20,6 +20,8 @@
 
 #include "KademliaNodeHandle.h"
 
+class Kademlia;
+
 /**
  * @file KademliaBucket.h
  * @author Sebastian Mies, Ingmar Baumgart, Bernhard Heep
@@ -27,7 +29,7 @@
 
 class KademliaBucket : public BaseKeySortedVector< KademliaBucketEntry > {
 public:
-    KademliaBucket(uint16_t maxSize=0,
+    KademliaBucket(Kademlia* overlay, uint16_t maxSize=0,
                    const Comparator<OverlayKey>* comparator = NULL);
 
     ~KademliaBucket();
@@ -48,21 +50,20 @@ public:
     	this->managedConnections--;
     }
     
-    inline bool hasManagedConnections() {
-    	return this->managedConnections > 0;
-    }
-    
     inline int countManagedConnections() {
     	return this->managedConnections;
     }
+    
+    void updateManagedConnections();
 
     KademliaBucketEntry* getOldestNode();
 
     std::list<KademliaBucketEntry> replacementCache;
 
-private:
+protected:
     simtime_t lastUsage;
     int managedConnections;
+    Kademlia* overlay;
 };
 
 #endif

@@ -176,12 +176,13 @@ void Kademlia::initializeOverlay(int stage)
     }
 
     enableManagedConnections = par("enableManagedConnections");
+    managedConnectionBucketLimit = par("managedConnectionBucketLimit");
 
     // calculate number of buckets: ( (2^b)-1 ) * ( keylength / b )
     numBuckets = ((1L << b) - 1L) * (OverlayKey::getLength() / b);
 
     // init routing and sibling table
-    siblingTable = new KademliaBucket(s * 5, NULL);
+    siblingTable = new KademliaBucket(this, s * 5, NULL);
 
     // initialize pointers
     routingTable.assign(numBuckets, (KademliaBucket*)NULL);
@@ -446,7 +447,7 @@ KademliaBucket* Kademlia::routingBucket(const OverlayKey& key, bool ensure)
     if (bucket == NULL && ensure)
     {
     	int bucketSize = routingBucketSize(num);
-        bucket = routingTable[ num ] = new KademliaBucket( bucketSize, comparator );
+        bucket = routingTable[ num ] = new KademliaBucket( this, bucketSize, comparator );
     }
 
     // return bucket
@@ -682,7 +683,7 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 		currentRoutingTableSize++;
 
         if (enableManagedConnections)
-        	openManagedConnection(kadHandle);
+        	bucket->updateManagedConnections();
 
 		result = true;
     }
@@ -720,7 +721,7 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
         currentRoutingTableSize++;
 
         if (enableManagedConnections)
-        	openManagedConnection(kadHandle);
+        	bucket->updateManagedConnections();
 
         result = true;
     } else if (isAlive) {
@@ -743,7 +744,7 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 
                 if (enableManagedConnections) {
                 	closeManagedConnection(*kickHim);
-                	openManagedConnection(kadHandle);
+                	bucket->updateManagedConnections();
                 }
 
                 kadHandle = temp;
@@ -870,7 +871,7 @@ void Kademlia::refillSiblingTable()
     if (index < (int)OverlayKey::getLength() &&
             routingTable[index] != NULL && routingTable[index]->size()) {
 
-        KademliaBucket sortedBucket(k, comparator);
+        KademliaBucket sortedBucket(this, k, comparator);
         for (uint32_t i = 0; i < routingTable[index]->size(); ++i) {
             sortedBucket.add(routingTable[index]->at(i));
         }
@@ -1487,9 +1488,6 @@ void Kademlia::handleRpcTimeout(BaseCallMessage* msg,
 void Kademlia::openManagedConnection(NodeHandle handle)
 {
 	KademliaBucket* bucket = routingBucket(handle.getKey(), false);
-//	if (bucket->hasManagedConnections())
-//		return;
-
 	TransportAddress address = TransportAddress(handle.getIp(), localPort);
 
 	managedConnections.insert(std::make_pair(address, handle));
@@ -1524,14 +1522,7 @@ void Kademlia::handleConnectionEvent(EvCode code, TransportAddress address)
 	bucket->decManagedConnections();
 	managedConnections.erase(it);
 
-//			if (!bucket->hasManagedConnections()) {
-//				// We now have no managed connection in this bucket, replace it
-//				
-//				KademliaBucket::iterator it = bucket->begin();
-//				if (it != bucket->end()) {
-//					openManagedConnection(*it);
-//				}
-//			}
+	bucket->updateManagedConnections();
 
 	if (code == PEER_TIMEDOUT || code == PEER_REFUSED || code == CONNECTION_RESET)
 		routingTimeout(handle.getKey(), true);

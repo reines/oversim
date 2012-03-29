@@ -106,6 +106,7 @@ protected://fields: kademlia parameters
     bool enableDownlistsForwarding;
 
     bool enableManagedConnections;
+    uint32_t managedConnectionBucketLimit; /*< maximum number of managed connections in each bucket */
     std::map<TransportAddress, NodeHandle> managedConnections;
 
     simtime_t minSiblingTableRefreshInterval;
@@ -184,6 +185,7 @@ protected:
     virtual void handleNodeGracefulLeaveNotification();
 
     friend class KademliaLookupListener;
+    friend class KademliaBucket;
 
     // Managed connection support
 

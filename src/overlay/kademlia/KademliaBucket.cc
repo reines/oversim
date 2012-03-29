@@ -22,17 +22,37 @@
 
 
 #include "KademliaBucket.h"
+#include "Kademlia.h"
 
-KademliaBucket::KademliaBucket(uint16_t maxSize,
-                               const Comparator<OverlayKey>* comparator)
-    : BaseKeySortedVector< KademliaBucketEntry >(maxSize, comparator)
+KademliaBucket::KademliaBucket(Kademlia* overlay, uint16_t maxSize, const Comparator<OverlayKey>* comparator)
+	: BaseKeySortedVector< KademliaBucketEntry >(maxSize, comparator)
 {
+	this->overlay = overlay;
+
     lastUsage = -1;
     managedConnections = 0;
 }
 
 KademliaBucket::~KademliaBucket()
 {
+}
+
+void KademliaBucket::updateManagedConnections()
+{
+	std::cout << overlay->getThisNode().getKey() << ": " << this->countManagedConnections() << std::endl;
+
+	// If all nodes in this bucket (if any) have managed connections, stop
+	if (this->size() <= this->countManagedConnections())
+		return;
+
+	// If we have enough managed connections in this bucket, stop
+	if (this->countManagedConnections() >= overlay->managedConnectionBucketLimit)
+		return;
+
+	// Choose which node to upgrade to a managed connection, and do so
+	KademliaBucketEntry* handle = this->getOldestNode(); // TODO
+
+	overlay->openManagedConnection(*handle);
 }
 
 KademliaBucketEntry* KademliaBucket::getOldestNode()
@@ -48,3 +68,4 @@ KademliaBucketEntry* KademliaBucket::getOldestNode()
 
 	return &this->at(oldest);
 }
+

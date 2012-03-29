@@ -64,6 +64,7 @@ simple Kademlia extends BaseOverlay
         int extraNodesFinalBucket; // number of extra nodes in bucket 0 for NR128
         bool enableDownlists; // toggle downlists on/off
 		bool enableManagedConnections; // toggle managed connections on/off
+		int managedConnectionBucketLimit; // maximum number of managed connections in each bucket
         bool enableDownlistsForwarding; // toggle downlists being forwarded to siblings
 }
 

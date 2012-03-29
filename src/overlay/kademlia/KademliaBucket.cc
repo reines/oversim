@@ -22,17 +22,55 @@
 
 
 #include "KademliaBucket.h"
+#include "Kademlia.h"
 
-KademliaBucket::KademliaBucket(uint16_t maxSize,
-                               const Comparator<OverlayKey>* comparator)
-    : BaseKeySortedVector< KademliaBucketEntry >(maxSize, comparator)
+KademliaBucket::KademliaBucket(Kademlia* overlay, uint16_t maxSize, const Comparator<OverlayKey>* comparator)
+	: BaseKeySortedVector< KademliaBucketEntry >(maxSize, comparator)
 {
+	this->overlay = overlay;
+
     lastUsage = -1;
     managedConnections = 0;
 }
 
 KademliaBucket::~KademliaBucket()
 {
+}
+
+void KademliaBucket::updateManagedConnections()
+{
+	// If all nodes in this bucket (if any) have managed connections, stop
+	if (this->size() <= this->countManagedConnections())
+		return;
+
+	// If we have enough managed connections in this bucket, stop
+	if (this->countManagedConnections() >= overlay->managedConnectionBucketLimit)
+		return;
+
+	// Choose which node to upgrade to a managed connection, and do so
+	KademliaBucketEntry* handle = this->getNextNonManagedConnection();
+	if (handle == NULL)
+		return;
+
+	overlay->openManagedConnection(*handle);
+}
+
+KademliaBucketEntry* KademliaBucket::getNextNonManagedConnection()
+{
+	KademliaBucketEntry* handle = NULL;
+
+	for (KademliaBucket::iterator it = this->begin();it != this->end();it++) {
+		// If better than the best already found
+		if (handle == NULL || it->getLastSeen() > handle->getLastSeen()) { // Currently gets the newest
+			// If already a managed connection
+			if (overlay->isManagedConnection(*it))
+				continue;
+
+			handle = &(*it);
+		}
+	}
+
+	return handle;
 }
 
 KademliaBucketEntry* KademliaBucket::getOldestNode()
@@ -48,3 +86,4 @@ KademliaBucketEntry* KademliaBucket::getOldestNode()
 
 	return &this->at(oldest);
 }
+

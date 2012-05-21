@@ -1,0 +1,11 @@
+--- a/src/base/NotifierConsts.h	2010-10-19 16:13:57.000000000 +0100
++++ b/src/base/NotifierConsts.h	2011-06-14 15:46:58.679770435 +0100
+@@ -79,6 +79,7 @@
+     NF_OVERLAY_TRANSPORTADDRESS_CHANGED,  // OverSim
+     NF_OVERLAY_NODE_GRACEFUL_LEAVE,       // OverSim
+     NF_OVERLAY_NODE_LEAVE,                // OverSim
++    NF_OVERLAY_BROADCAST_INIT,            // OverSim
+ 
+ 
+     // - layer 7 (application)
+

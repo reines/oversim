@@ -1,0 +1,14 @@
+--- a/src/transport/tcp/TCPConnection.h	2010-10-19 16:13:57.000000000 +0100
++++ b/src/transport/tcp/TCPConnection.h	2012-04-11 13:18:44.329415943 +0100
+@@ -111,8 +111,8 @@
+ 
+ /** @name Timeout values */
+ //@{
+-#define TCP_TIMEOUT_CONN_ESTAB    75    // 75 seconds
+-#define TCP_TIMEOUT_FIN_WAIT_2   600    // 10 minutes
++#define TCP_TIMEOUT_CONN_ESTAB    5     // 5 seconds
++#define TCP_TIMEOUT_FIN_WAIT_2   60     // 1 minute
+ #define TCP_TIMEOUT_2MSL         240    // 2 * 2 minutes
+ #define TCP_TIMEOUT_SYN_REXMIT     3    // initially 3 seconds
+ #define TCP_TIMEOUT_SYN_REXMIT_MAX 240  // 4 mins (will only be used with SYN+ACK: with SYN CONN_ESTAB occurs sooner)
+

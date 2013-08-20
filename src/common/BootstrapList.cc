@@ -25,6 +25,7 @@
 #include <BootstrapList.h>
 #include <GlobalNodeList.h>
 #include <BaseOverlay.h>
+#include <NeighborCache.h>
 #include <UnderlayConfiguratorAccess.h>
 #include <ZeroconfConnector.h>
 #include <CommonMessages_m.h>
@@ -233,11 +234,18 @@ void BootstrapList::pingTimeout(PingCall* pingCall,
 }
 
 
-const TransportAddress BootstrapList::getBootstrapNode()
+const TransportAddress BootstrapList::getBootstrapNode(int32_t overlayId)
 {
+    // ask neighborCache (discovery or re-join)
+    const TransportAddress temp = neighborCache->getBootstrapNode();
+    if (!temp.isUnspecified()) {
+        return temp;
+    }
+
     if (!maintainList) {
         // TODO: add a parameter to return malicious bootstrap nodes also
-        return overlay->globalNodeList->getRandomNode(-1, true, true);
+        return overlay->globalNodeList->getRandomNode(overlayId, -1, true,
+                                                      true);
         // return overlay->globalNodeList->getBootstrapNode();
     } else {
         const NodeHandle *bootstrapNode = &NodeHandle::UNSPECIFIED_NODE;
@@ -258,7 +266,7 @@ const TransportAddress BootstrapList::getBootstrapNode()
             // if the list empty, get a bootstrap node from GlobalNodeList
             if (!zeroconfConnector)
                 bootstrapNode = &overlay->globalNodeList->
-                        getBootstrapNode(overlay->getThisNode());
+                        getBootstrapNode(overlayId, overlay->getThisNode());
         }
         return *bootstrapNode;
     }
@@ -349,9 +357,10 @@ void BootstrapList::removeBootstrapCandidate(const TransportAddress& addr)
 }
 
 
-void BootstrapList::removeBootstrapNode(const NodeHandle& node)
+void BootstrapList::removeBootstrapNode(const NodeHandle& node,
+                                        int32_t overlayId)
 {
-    overlay->globalNodeList->removePeer(node);
+    overlay->globalNodeList->removePeer(node, overlayId);
     // at this point, we consider this node not being able to provide the
     // boot service anymore, therefore we have to revoke
     // the service via zeroconfConnector
@@ -361,9 +370,10 @@ void BootstrapList::removeBootstrapNode(const NodeHandle& node)
 }
 
 
-void BootstrapList::registerBootstrapNode(const NodeHandle& node)
+void BootstrapList::registerBootstrapNode(const NodeHandle& node,
+                                          int32_t overlayId)
 {
-    globalNodeList->registerPeer(node);
+    globalNodeList->registerPeer(node, overlayId);
 
     // at this point, we consider this node as booted and therefore have to
     // announce the boot service for it via zeroconfConnector

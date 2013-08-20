@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+// Copyright (C) 2012 Institute of Telematics, Karlsruhe Institute of Technology (KIT)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 
 #include "Bamboo.h"
 
+
 Define_Module(Bamboo);
 
 Bamboo::~Bamboo()
@@ -45,6 +46,7 @@ Bamboo::~Bamboo()
     cancelAndDelete(globalTuningTimer);
 }
 
+
 void Bamboo::initializeOverlay(int stage)
 {
     if ( stage != MIN_STAGE_OVERLAY )
@@ -53,18 +55,19 @@ void Bamboo::initializeOverlay(int stage)
     // Bamboo provides KBR services
     kbr = true;
 
+    rowToAsk = 0;
+
     baseInit();
 
     localTuningInterval = par("localTuningInterval");
     leafsetMaintenanceInterval = par("leafsetMaintenanceInterval");
     globalTuningInterval = par("globalTuningInterval");
 
-    joinTimeout = new cMessage("joinTimeout");
-
     localTuningTimer = new cMessage("repairTaskTimer");
     leafsetMaintenanceTimer = new cMessage("leafsetMaintenanceTimer");
     globalTuningTimer = new cMessage("globalTuningTimer");
 }
+
 
 void Bamboo::joinOverlay()
 {
@@ -75,9 +78,10 @@ void Bamboo::joinOverlay()
         changeState(READY);
     } else {
         // join existing pastry network
-        changeState(JOINING_2);
+        changeState(JOIN);
     }
 }
+
 
 void Bamboo::changeState(int toState)
 {
@@ -85,41 +89,38 @@ void Bamboo::changeState(int toState)
 
     switch (toState) {
     case INIT:
-
         break;
 
     case DISCOVERY:
-
         break;
 
-    case JOINING_2: {
-        PastryLeafsetMessage* msg = new PastryLeafsetMessage("Leafset");
-        msg->setPastryMsgType(PASTRY_MSG_LEAFSET_PULL);
-        msg->setStatType(MAINTENANCE_STAT);
-        msg->setSender(thisNode);
-        msg->setSendStateTo(thisNode);
-        leafSet->dumpToStateMessage(msg);
-        msg->setBitLength(PASTRYLEAFSET_L(msg));
-        RECORD_STATS(leafsetSent++; leafsetBytesSent += msg->getByteLength());
-        std::vector<TransportAddress> sourceRoute;
-        sourceRoute.push_back(bootstrapNode);
-        sendToKey(thisNode.getKey(), msg, 0/*1*/, sourceRoute);
+    case JOIN: {
+        EV << "[Bamboo::changeState()]\n"
+           << "    sending join message via " << bootstrapNode
+           << " to " << thisNode.getKey()
+           << endl;
 
-        if (joinTimeout->isScheduled()) cancelEvent(joinTimeout);
-        scheduleAt(simTime() + joinTimeoutAmount, joinTimeout);
+        RequestLeafSetCall* call = new RequestLeafSetCall("JOIN Call");
+        call->setTimestamp(simTime());
+        call->setStatType(MAINTENANCE_STAT);
+
+        call->setBitLength(PASTRYREQUESTLEAFSETCALL_L(call));
+        call->encapsulate(createStateMessage(PASTRY_STATE_LEAFSET));
+        RECORD_STATS(leafsetReqSent++;
+                     leafsetReqBytesSent += call->getByteLength());
+
+        sendRouteRpcCall(OVERLAY_COMP, bootstrapNode, thisNode.getKey(), call);
     }
 
     break;
 
     case READY:
+        cancelEvent(leafsetMaintenanceTimer);
+        scheduleAt(simTime(), leafsetMaintenanceTimer);
 
         // schedule routing table maintenance task
         cancelEvent(localTuningTimer);
         scheduleAt(simTime() + localTuningInterval, localTuningTimer);
-
-        cancelEvent(leafsetMaintenanceTimer);
-        //scheduleAt(simTime() + leafsetMaintenanceInterval, leafsetMaintenanceTimer);
-        scheduleAt(simTime() + 0.2 /* 200ms */, leafsetMaintenanceTimer);
 
         cancelEvent(globalTuningTimer);
         scheduleAt(simTime() + globalTuningInterval, globalTuningTimer);
@@ -128,15 +129,10 @@ void Bamboo::changeState(int toState)
     }
 }
 
+
 void Bamboo::handleTimerEvent(cMessage* msg)
 {
-    if (msg == joinTimeout) {
-        EV << "[Bamboo::handleTimerEvent() @ " << thisNode.getIp()
-           << " (" << thisNode.getKey().toString(16) << ")]\n"
-           << "    join timeout expired, restarting..."
-           << endl;
-        joinOverlay();
-    } else if (msg == localTuningTimer) {
+    if (msg == localTuningTimer) {
         EV << "[Bamboo::handleTimerEvent() @ " << thisNode.getIp()
            << " (" << thisNode.getKey().toString(16) << ")]\n"
            << "    starting local tuning "
@@ -162,167 +158,65 @@ void Bamboo::handleTimerEvent(cMessage* msg)
     }
 }
 
-void Bamboo::handleUDPMessage(BaseOverlayMessage* msg)
+
+void Bamboo::handleRpcResponse(BaseResponseMessage* msg,
+                               cPolymorphic* context, int rpcId,
+                               simtime_t rtt)
 {
-    PastryMessage* pastryMsg = check_and_cast<PastryMessage*>(msg);
-    uint32_t type = pastryMsg->getPastryMsgType();
+    BasePastry::handleRpcResponse(msg, context, rpcId, rtt);
 
-    if (debugOutput) {
-        EV << "[Bamboo::handleUDPMessage() @ " << thisNode.getIp()
+    RPC_SWITCH_START( msg )
+    RPC_ON_RESPONSE( RequestLeafSet ) {
+        EV << "[Bamboo::handleRpcResponse() @ " << thisNode.getIp()
            << " (" << thisNode.getKey().toString(16) << ")]\n"
-           << "    incoming message of type ";
-        switch(type) {
-        case PASTRY_MSG_STD:
-            EV << "PASTRY_MSG_STD";
-            break;
-        case PASTRY_MSG_JOIN:
-            EV << "PASTRY_MSG_JOIN";
-            break;
-        case PASTRY_MSG_STATE:
-            EV << "PASTRY_MSG_STATE";
-            break;
-        case PASTRY_MSG_LEAFSET:
-            EV << "PASTRY_MSG_LEAFSET";
-            break;
-        case PASTRY_MSG_LEAFSET_PULL:
-            EV << "PASTRY_MSG_LEAFSET_PULL";
-            break;
-        case PASTRY_MSG_ROWREQ:
-            EV << "PASTRY_MSG_ROWREQ";
-            break;
-        case PASTRY_MSG_RROW:
-            EV << "PASTRY_MSG_RROW";
-            break;
-        case PASTRY_MSG_REQ:
-            EV << "PASTRY_MSG_REQ";
-            break;
-        default:
-            EV << "UNKNOWN (" << type <<")";
-            break;
-        }
-        EV << endl;
-    }
-
-    switch (type) {
-    case PASTRY_MSG_STD:
-        opp_error("Pastry received PastryMessage of unknown type!");
+           << "    Received a RequestLeafSet RPC Response (PUSH): id="
+           << rpcId << "\n"
+           << "    msg=" << *_RequestLeafSetResponse << " rtt=" << rtt
+           << endl;
+        handleRequestLeafSetResponse(_RequestLeafSetResponse);
         break;
-    case PASTRY_MSG_JOIN:
-
-        break;
-
-    case PASTRY_MSG_LEAFSET: {
-        PastryLeafsetMessage* lmsg =
-            check_and_cast<PastryLeafsetMessage*>(pastryMsg);
-        RECORD_STATS(leafsetReceived++; leafsetBytesReceived +=
-            lmsg->getByteLength());
-
-        if (state == JOINING_2) {
-            cancelEvent(joinTimeout);
-        }
-
-        if ((state == JOINING_2) || (state == READY)) {
-            handleLeafsetMessage(lmsg, true);
-        } else {
-            delete lmsg;
-        }
     }
-        break;
+    RPC_SWITCH_END( )
+}
 
-    case PASTRY_MSG_LEAFSET_PULL: {
-        PastryLeafsetMessage* lmsg =
-            check_and_cast<PastryLeafsetMessage*>(pastryMsg);
-        RECORD_STATS(leafsetReceived++; leafsetBytesReceived +=
-            lmsg->getByteLength());
 
-        if (state == READY) {
-            sendLeafset(lmsg->getSendStateTo());
-            handleLeafsetMessage(lmsg, true);
+void Bamboo::handleRequestLeafSetResponse(RequestLeafSetResponse* response)
+{
+    EV << "[Bamboo::handleRequestLeafSetResponse() @ " << thisNode.getIp()
+       << " (" << thisNode.getKey().toString(16) << ")]"
+       << endl;
 
-        } else {
-            delete lmsg;
-        }
-    }
-        break;
-
-    case PASTRY_MSG_ROWREQ: {
-
-        PastryRoutingRowRequestMessage* rtrmsg =
-            check_and_cast<PastryRoutingRowRequestMessage*>(pastryMsg);
-        RECORD_STATS(routingTableReqReceived++; routingTableReqBytesReceived +=
-            rtrmsg->getByteLength());
-        if (state == READY)
-            if (rtrmsg->getRow() == -1)
-                sendRoutingRow(rtrmsg->getSendStateTo(), routingTable->getLastRow());
-                else if (rtrmsg->getRow() > routingTable->getLastRow())
-                    EV << "[Bamboo::handleUDPMessage() @ " << thisNode.getIp()
-                       << " (" << thisNode.getKey().toString(16) << ")]\n"
-                       << "    received request for nonexistent routing"
-                       << "table row, dropping message!" << endl;
-                else sendRoutingRow(rtrmsg->getSendStateTo(), rtrmsg->getRow());
-        else
-            EV << "[Bamboo::handleUDPMessage() @ " << thisNode.getIp()
-               << " (" << thisNode.getKey().toString(16) << ")]\n"
-               << "    received routing table request before reaching "
-               << "READY state, dropping message!" << endl;
-       delete rtrmsg;
-    }
-        break;
-
-    case PASTRY_MSG_RROW: {
-        PastryRoutingRowMessage* rtmsg =
-            check_and_cast<PastryRoutingRowMessage*>(pastryMsg);
-        RECORD_STATS(routingTableReceived++; routingTableBytesReceived +=
-            rtmsg->getByteLength());
-
-        if (state == READY) {
-            // create state message to probe all nodes from row message
-            PastryStateMessage* stateMsg = new PastryStateMessage("STATE");
-            stateMsg->setTimestamp(rtmsg->getTimestamp());
-            stateMsg->setPastryMsgType(PASTRY_MSG_STATE);
-            stateMsg->setStatType(MAINTENANCE_STAT);
-            stateMsg->setSender(rtmsg->getSender());
-            stateMsg->setLeafSetArraySize(0);
-            stateMsg->setNeighborhoodSetArraySize(0);
-            stateMsg->setRoutingTableArraySize(rtmsg->getRoutingTableArraySize());
-
-            for (uint32_t i = 0; i < rtmsg->getRoutingTableArraySize(); i++) {
-                stateMsg->setRoutingTable(i, rtmsg->getRoutingTable(i));
-            }
-
-            handleStateMessage(stateMsg);
-        }
-
-        delete rtmsg;
-    }
-    break;
-
-    case PASTRY_MSG_REQ: {
-        PastryRequestMessage* lrmsg =
-            check_and_cast<PastryRequestMessage*>(pastryMsg);
-        handleRequestMessage(lrmsg);
-    }
-        break;
-
-    case PASTRY_MSG_STATE: {
+    if (state == JOIN) {
         PastryStateMessage* stateMsg =
-            check_and_cast<PastryStateMessage*>(msg);
-        RECORD_STATS(stateReceived++; stateBytesReceived +=
-                     stateMsg->getByteLength());
+             check_and_cast<PastryStateMessage*>(response->decapsulate());
+
+        stateMsg->setLeafSetArraySize(stateMsg->getLeafSetArraySize() + 1);
+        stateMsg->setLeafSet(stateMsg->getLeafSetArraySize() - 1,
+                             stateMsg->getSender());
+
         handleStateMessage(stateMsg);
     }
-        break;
-    }
 }
+
 
 void Bamboo::doLeafsetMaintenance(void)
 {
     const TransportAddress& ask = leafSet->getRandomNode();
     if (!ask.isUnspecified()) {
-        sendLeafset(ask, true);
         EV << "[Bamboo::doLeafsetMaintenance()]\n"
            << "    leafset maintenance: pulling leafset from "
            << ask << endl;
+
+        RequestLeafSetCall* call = new RequestLeafSetCall("LeafSet PULL");
+        call->setTimestamp(simTime());
+        call->setStatType(MAINTENANCE_STAT);
+
+        call->setBitLength(PASTRYREQUESTLEAFSETCALL_L(call));
+        call->encapsulate(createStateMessage(PASTRY_STATE_LEAFSET));
+        RECORD_STATS(leafsetReqSent++;
+                     leafsetReqBytesSent += call->getByteLength());
+
+        sendUdpRpcCall(ask, call);
     }
 }
 
@@ -360,23 +254,20 @@ void Bamboo::doLocalTuning()
     const TransportAddress& ask4row = routingTable->getRandomNode(rowToAsk);
 
     if ((!ask4row.isUnspecified()) && (ask4row != thisNode)) {
-        PastryRoutingRowRequestMessage* msg =
-            new PastryRoutingRowRequestMessage("ROWREQ");
-        msg->setPastryMsgType(PASTRY_MSG_ROWREQ);
-        msg->setStatType(MAINTENANCE_STAT);
-        msg->setSendStateTo(thisNode);
-        msg->setRow(rowToAsk + 1);
-        msg->setBitLength(PASTRYRTREQ_L(msg));
-
-        RECORD_STATS(routingTableReqSent++;
-                     routingTableReqBytesSent += msg->getByteLength());
-
         EV << "[Bamboo::doLocalTuning() @ " << thisNode.getIp()
            << " (" << thisNode.getKey().toString(16) << ")]\n"
            << "    Sending  Message to Node in Row" << rowToAsk
            << endl;
 
-        sendMessageToUDP(ask4row, msg);
+        RequestRoutingRowCall* call =
+            new RequestRoutingRowCall("REQUEST ROUTINGROW Call (Local Tuning)");
+        call->setStatType(MAINTENANCE_STAT);
+        call->setRow(rowToAsk + 1);
+        call->setBitLength(PASTRYREQUESTROUTINGROWCALL_L(call));
+        RECORD_STATS(routingTableRowReqSent++;
+                     routingTableRowReqBytesSent += call->getByteLength());
+
+        sendUdpRpcCall(ask4row, call);
     }
 }
 
@@ -404,11 +295,10 @@ void Bamboo::doGlobalTuning(void)
     createLookup()->lookup(newKey, 1, 0, 0, new BambooLookupListener(this));
 }
 
+
 bool Bamboo::handleFailedNode(const TransportAddress& failed)
 {
-    if (state != READY) {
-        return false;
-    }
+    if (state != READY) return false;
 
     if (failed.isUnspecified()) {
         throw cRuntimeError("Bamboo::handleFailedNode(): failed is unspecified!");
@@ -429,54 +319,60 @@ bool Bamboo::handleFailedNode(const TransportAddress& failed)
     return true;
 }
 
+
 void Bamboo::checkProxCache(void)
 {
-    if (state == JOINING_2) {
-        changeState(READY);
-        return;
-    }
-
-    // state == READY
-    simtime_t now = simTime();
-
     // no cached STATE message?
-    if (!(stateCache.msg && stateCache.prox)) return;
+    if (stateCache.msg) {
+        simtime_t now = simTime();
+        if (stateCache.prox) {
+            // some entries not yet determined?
+            if ((find(stateCache.prox->pr_rt.begin(), stateCache.prox->pr_rt.end(),
+                      PASTRY_PROX_PENDING) != stateCache.prox->pr_rt.end()) ||
+                (find(stateCache.prox->pr_ls.begin(), stateCache.prox->pr_ls.end(),
+                      PASTRY_PROX_PENDING) != stateCache.prox->pr_ls.end()) ||
+                (find(stateCache.prox->pr_ns.begin(), stateCache.prox->pr_ns.end(),
+                      PASTRY_PROX_PENDING) != stateCache.prox->pr_ns.end())) {
+                return;
+            }
+        }
+        // merge info in own state tables
+        // except leafset (was already handled in handleStateMessage)
+        if (neighborhoodSet->mergeState(stateCache.msg, stateCache.prox)) {
+            lastStateChange = now;
+        }
 
-    // some entries not yet determined?
-    if (find(stateCache.prox->pr_rt.begin(), stateCache.prox->pr_rt.end(),
-             PASTRY_PROX_PENDING) != stateCache.prox->pr_rt.end()) return;
-    if (find(stateCache.prox->pr_ls.begin(), stateCache.prox->pr_ls.end(),
-             PASTRY_PROX_PENDING) != stateCache.prox->pr_ls.end()) return;
-    if (find(stateCache.prox->pr_ns.begin(), stateCache.prox->pr_ns.end(),
-             PASTRY_PROX_PENDING) != stateCache.prox->pr_ns.end()) return;
-
-    // merge info in own state tables
-    // except leafset (was already handled in handleStateMessage)
-    if (neighborhoodSet->mergeState(stateCache.msg, stateCache.prox)) {
-        lastStateChange = now;
+        if (routingTable->mergeState(stateCache.msg, stateCache.prox)) {
+            lastStateChange = now;
+            EV << "[Bamboo::checkProxCache()]\n"
+                    << "    Merged nodes into routing table."
+                    << endl;
+        }
     }
-
-    if (routingTable->mergeState(stateCache.msg, stateCache.prox)) {
-        lastStateChange = now;
-        EV << "[Bamboo::checkProxCache()]\n"
-           << "    Merged nodes into routing table."
-           << endl;
-    }
-
-    updateTooltip();
 
     delete stateCache.msg;
     stateCache.msg = NULL;
     delete stateCache.prox;
     stateCache.prox = NULL;
 
+    if (state == JOIN) {
+        changeState(READY);
+    }
+
+    updateTooltip();
+
     // process next queued message:
     if (! stateCacheQueue.empty()) {
         stateCache = stateCacheQueue.front();
 	      stateCacheQueue.pop();
-        pingNodes();
+        if (proximityNeighborSelection) {
+            pingNodes();
+        } else {
+            checkProxCache();
+        }
     }
 }
+
 
 void Bamboo::handleStateMessage(PastryStateMessage* msg)
 {
@@ -485,7 +381,7 @@ void Bamboo::handleStateMessage(PastryStateMessage* msg)
            << " (" << thisNode.getKey().toString(16) << ")]\n"
            << "    new STATE message to process "
            << static_cast<void*>(msg) << " in state "
-           << ((state == READY)?"READY":((state == JOINING_2)?"JOIN":"INIT"))
+           << ((state == READY)?"READY":((state == JOIN)?"JOIN":"INIT"))
            << endl;
     }
 
@@ -500,7 +396,7 @@ void Bamboo::handleStateMessage(PastryStateMessage* msg)
 
     PastryStateMsgHandle handle(msg);
 
-    if (state == JOINING_2) {
+    if (state == JOIN) {
         determineAliveTable(msg);
         leafSet->mergeState(msg, &aliveTable);
         // merged state into leafset right now
@@ -509,8 +405,12 @@ void Bamboo::handleStateMessage(PastryStateMessage* msg)
         updateTooltip();
 
         // no state message is processed right now, start immediately:
-       stateCache = handle;
-       pingNodes();
+        stateCache = handle;
+        if (proximityNeighborSelection) {
+            pingNodes();
+        } else {
+            checkProxCache();
+        }
 
         return;
     }
@@ -531,27 +431,33 @@ void Bamboo::handleStateMessage(PastryStateMessage* msg)
         if (proximityNeighborSelection) {
             pingNodes();
         } else {
-            simtime_t now = simTime();
-            if (neighborhoodSet->mergeState(stateCache.msg, NULL)) {
-                lastStateChange = now;
-            }
-            if (routingTable->mergeState(stateCache.msg, NULL)) {
-                lastStateChange = now;
-                EV << "[Bamboo::checkProxCache()]\n"
-                   << "    Merged nodes into routing table."
-                   << endl;
-            }
+            checkProxCache();
         }
     } else {
         // enqueue message for later processing:
         stateCacheQueue.push(handle);
-        if (proximityNeighborSelection) prePing(msg);
+        if (stateCacheQueue.size() > 15) {
+            delete stateCacheQueue.front().msg;
+            stateCacheQueue.pop();
+            EV << "[Bamboo::handleStateMessage() @ " << thisNode.getIp()
+               << " (" << thisNode.getKey().toString(16) << ")]\n"
+               << "    stateCacheQueue full -> pop()" << endl;
+        }
+        if (proximityNeighborSelection) {
+            prePing(msg);
+        } else {
+            checkProxCache();
+        }
     }
 }
 
+
 void Bamboo::lookupFinished(AbstractLookup *lookup)
 {
-    EV << "[Bamboo::lookupFinished()]\n";
+    EV << "[Bamboo::lookupFinished() @ " << thisNode.getIp()
+       << " (" << thisNode.getKey().toString(16) << ")]\n"
+       << endl;
+
     if (lookup->isValid()) {
         EV  << "    Lookup successful" << endl;
         const NodeVector& result = lookup->getResult();
@@ -562,15 +468,15 @@ void Bamboo::lookupFinished(AbstractLookup *lookup)
                                                    NEIGHBORCACHE_DEFAULT,
                                                    PING_SINGLE_NODE,
                                                    this, NULL);
-                if (prox != Prox::PROX_UNKNOWN) {
+                if (prox != Prox::PROX_UNKNOWN && prox != Prox::PROX_WAITING) {
                     routingTable->mergeNode(result[0], prox.proximity);
                 }
             } else {
                 routingTable->mergeNode(result[0], -1.0);
+                checkProxCache();
             }
         }
     } else {
         EV << "    Lookup failed" << endl;
     }
 }
-

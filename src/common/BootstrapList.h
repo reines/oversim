@@ -61,8 +61,11 @@ public:
     * Get a bootstrap node from the bootstrap list.
     * If not using SingleHostUnderlayConfigurator and the list is empty,
     * return a node by asking the GlobalNodeList.
+    *
+    * @param overlayId id of the overlay. Is used to support
+    *                  multiple disjoint overlays. Default is 0.
     */
-    const TransportAddress getBootstrapNode();
+    const TransportAddress getBootstrapNode(int32_t overlayId = 0);
 
    /**
     * Determine locality of a bootstrap node.
@@ -90,9 +93,9 @@ public:
      */
     void removeBootstrapCandidate(const TransportAddress &addr);
 
-    void removeBootstrapNode(const NodeHandle& node);
+    void removeBootstrapNode(const NodeHandle& node, int32_t overlayId = 0);
 
-    void registerBootstrapNode(const NodeHandle& node);
+    void registerBootstrapNode(const NodeHandle& node, int32_t overlayId = 0);
 
 protected:
     // see BaseRpc.h

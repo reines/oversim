@@ -28,6 +28,7 @@
 #include "GlobalStatistics.h"
 #include "GlobalNodeList.h"
 #include "IPAddressResolver.h"
+#include "BootstrapList.h"
 
 using namespace std;
 
@@ -68,6 +69,10 @@ void TCPExampleApp::initializeApp(int stage)
     // set up and listen on tcp
     bindAndListenTcp(24000);
 
+    BootstrapList* bootstrapList = check_and_cast<BootstrapList*>(
+            overlay->getCompModule(BOOTSTRAPLIST_COMP));
+    bootstrapList->registerBootstrapNode(thisNode);
+
     // first node which was created starts with PING-PONG messaging
     if (globalNodeList->getNumNodes() == 1) {
         scheduleAt(simTime() + SimTime::parse("20s"), timerMsg);
@@ -100,9 +105,11 @@ void TCPExampleApp::handleTimerEvent(cMessage* msg)
 
         // get the address of one of the other nodes
         TransportAddress* addr = globalNodeList->getRandomAliveNode();
-        while (thisNode.getIp().equals(addr->getIp())) {
+        while ((addr != NULL) && (thisNode.getIp().equals(addr->getIp()))) {
             addr = globalNodeList->getRandomAliveNode();
         }
+
+        assert(addr != NULL);
 
         // create a PING message
         TCPExampleMessage *TCPMsg = new TCPExampleMessage();

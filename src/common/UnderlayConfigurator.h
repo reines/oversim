@@ -105,6 +105,8 @@ public:
 
     uint8_t getChurnGeneratorNum();
 
+    int getOverlayTerminalCount(){ return overlayTerminalCount;}
+
 protected:
 
     /**

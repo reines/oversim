@@ -264,10 +264,10 @@ void BaseApp::callRoute(const OverlayKey& key, cPacket* msg,
     // debug message
     if (debugOutput && !ev.isDisabled()) {
         EV << "[BaseApp::callRoute() @ " << thisNode.getIp()
-        << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
-        << "    Sending " << *msg
-        << " to destination key " << key
-        << " with source route ";
+           << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+           << "    Sending " << *msg
+           << " to destination key " << key
+           << " with source route ";
 
         for (uint32_t i = 0; i < sourceRoute.size(); ++i) {
             EV << sourceRoute[i] << " ";
@@ -316,6 +316,17 @@ void BaseApp::forwardResponse(const OverlayKey& key, cPacket* msg,
 
 void BaseApp::update(const NodeHandle& node, bool joined)
 {
+    EV << "[BaseApp::update() @ " << thisNode.getIp()
+       << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+       << "    " << node << (joined ? " joined " : " left ") << "siblings"
+       << endl;
+
+    /*
+    std::cout << simTime() << "  [BaseApp::update() @ " << thisNode.getIp()
+              << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+              << "    " << node << (joined ? " joined " : " left ") << "siblings"
+              << std::endl;
+     */
 }
 
 void BaseApp::handleCommonAPIMessage(CommonAPIMessage* commonAPIMsg)
@@ -334,7 +345,7 @@ void BaseApp::handleCommonAPIMessage(CommonAPIMessage* commonAPIMsg)
         case KBR_DELIVER:
         {
             KBRdeliver* apiMsg = dynamic_cast<KBRdeliver*>(commonAPIMsg);
-            OverlayKey key = apiMsg->getDestKey();
+            OverlayKey key = apiMsg->getDestKey(); // TODO key in overlayCtrlInfo
             NodeHandle nextHopNode = overlay->getThisNode();
 
             //first call forward, then deliver
@@ -405,6 +416,7 @@ void BaseApp::handleCommonAPIMessage(CommonAPIMessage* commonAPIMsg)
         default:
         {
             delete tempMsg;
+            break;
         }
     }
     delete commonAPIMsg;
@@ -443,11 +455,12 @@ void BaseApp::sendMessageToLowerTier(cPacket* msg)
 
     send(msg, "to_lowerTier");
 }
-void BaseApp::sendReadyMessage(bool ready)
+void BaseApp::sendReadyMessage(bool ready, const OverlayKey& nodeId)
 {
     CompReadyMessage* msg = new CompReadyMessage();
     msg->setReady(ready);
     msg->setComp(getThisCompType());
+    msg->setNodeId(nodeId);
 
     overlay->sendMessageToAllComp(msg, getThisCompType());
 }
@@ -510,7 +523,8 @@ void BaseApp::bindToPort(int port)
     send(msg, "udpOut");
 }
 
-void BaseApp::sendMessageToUDP(const TransportAddress& destAddr, cPacket *msg)
+void BaseApp::sendMessageToUDP(const TransportAddress& destAddr, cPacket *msg,
+                               simtime_t delay)
 {
     // send message to UDP, with the appropriate control info attached
     msg->removeControlInfo();
@@ -538,7 +552,7 @@ void BaseApp::sendMessageToUDP(const TransportAddress& destAddr, cPacket *msg)
 
 
     RECORD_STATS(numUdpSent++; bytesUdpSent += msg->getByteLength());
-    send(msg, "udpOut");
+    sendDelayed(msg, delay, "udpOut");
 }
 
 //private

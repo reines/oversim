@@ -63,6 +63,27 @@ NodeRecord& NodeRecord::operator=(const NodeRecord& nodeRecord)
     return *this;
 }
 
+// beginning of behaviour code
+bool NodeRecord::operator==(const BaseLocation& rhs)
+{
+    const NodeRecord* temp = dynamic_cast<const NodeRecord*>(&rhs);
+
+    if (this->getDim() != temp->getDim()) {
+        return false;
+    }
+
+    bool ret = true;
+
+    for (int i = 0; i < this->getDim(); i++) {
+        if (abs(this->coords[i] - temp->coords[i]) > 0.00000001){
+            ret = false;
+        }
+    }
+    return ret;
+}
+
+// end of behaviour code
+
 SimpleNodeEntry::SimpleNodeEntry(cModule* node,
                                  cChannelType* typeRx,
                                  cChannelType* typeTx,
@@ -70,39 +91,15 @@ SimpleNodeEntry::SimpleNodeEntry(cModule* node,
                                  uint32_t fieldSize)
 {
     assert(NodeRecord::dim == 2);
-    cModule* udpModule = node->getSubmodule("udp");
-    UdpIPv4ingate = udpModule->gate("ipIn");
-    UdpIPv6ingate = udpModule->gate("ipv6In");
-    cModule* tcpModule = node->getSubmodule("tcp", 0);
-    if (tcpModule) {
-        TcpIPv4ingate = tcpModule->gate("ipIn");
-        TcpIPv6ingate = tcpModule->gate("ipv6In");
-    }
 
     nodeRecord = new NodeRecord;
     index = -1;
 
-    //use random values as coordinates
+    // use random values as coordinates
     nodeRecord->coords[0] = uniform(0, fieldSize) - fieldSize / 2;
     nodeRecord->coords[1] = uniform(0, fieldSize) - fieldSize / 2;
 
-    cDatarateChannel* tempRx = dynamic_cast<cDatarateChannel*>(typeRx->create("temp"));
-    cDatarateChannel* tempTx = dynamic_cast<cDatarateChannel*>(typeTx->create("temp"));
-
-    rx.bandwidth = tempRx->par("datarate");
-    rx.errorRate = tempRx->par("ber");
-    rx.accessDelay = tempRx->par("delay");
-    rx.maxQueueTime = 0;
-    rx.finished = simTime();
-
-    tx.bandwidth = tempTx->par("datarate");
-    tx.errorRate = tempTx->par("ber");
-    tx.accessDelay = tempTx->par("delay");
-    tx.maxQueueTime = (sendQueueLength * 8.) / tx.bandwidth;
-    tx.finished = simTime();
-
-    delete tempRx;
-    delete tempTx;
+    SimpleNodeEntry(node, typeRx, typeTx, sendQueueLength, nodeRecord, index);
 }
 
 SimpleNodeEntry::SimpleNodeEntry(cModule* node,
@@ -129,14 +126,14 @@ SimpleNodeEntry::SimpleNodeEntry(cModule* node,
     rx.bandwidth = tempRx->par("datarate");
     rx.errorRate = tempRx->par("ber");
     rx.accessDelay = tempRx->par("delay");
-    rx.maxQueueTime = 0;
-    rx.finished = simTime();
+    rx.maxQueueTime = (sendQueueLength * 8.0) / rx.bandwidth;
+    rx.finished = 0;
 
     tx.bandwidth = tempTx->par("datarate");
     tx.errorRate = tempTx->par("ber");
     tx.accessDelay = tempTx->par("delay");
-    tx.maxQueueTime = (sendQueueLength * 8.) / tx.bandwidth;
-    tx.finished = simTime();
+    tx.maxQueueTime = (sendQueueLength * 8.0) / tx.bandwidth;
+    tx.finished = 0;
 
     delete tempRx;
     delete tempTx;
@@ -162,7 +159,7 @@ SimpleNodeEntry::SimpleDelay SimpleNodeEntry::calcDelay(cPacket* msg,
     }
 
     simtime_t now = simTime();
-    simtime_t bandwidthDelay= ((msg->getByteLength() * 8) / tx.bandwidth);
+    simtime_t bandwidthDelay = ((msg->getByteLength() * 8) / tx.bandwidth);
     simtime_t newTxFinished = std::max(tx.finished, now) + bandwidthDelay;
 
     // send queue
@@ -193,6 +190,36 @@ SimpleNodeEntry::SimpleDelay SimpleNodeEntry::calcDelay(cPacket* msg,
                        + coordDelay
                        + destBandwidthDelay + dest.rx.accessDelay, true);
 }
+
+SimpleNodeEntry::SimpleDelay SimpleNodeEntry::calcAccessRouterDelay(cPacket* msg)
+{
+    simtime_t now = simTime();
+    simtime_t bandwidthDelay = ((msg->getByteLength() * 8) / rx.bandwidth);
+    simtime_t newRxFinished = std::max(rx.finished + rx.accessDelay +
+                                       bandwidthDelay, now);
+
+    // access router send queue
+    if ((newRxFinished > (now + rx.maxQueueTime)) && (rx.maxQueueTime != 0)) {
+        EV << "[SimpleNodeEntry::calcAccessRouterDelay()]\n"
+           << "    Access router send queue overrun"
+           << "\n    newRxFinished = fmax(rxFinished + accessDelay + bandwidthDelay, now)"
+           << "\n    newRxFinished = " << newRxFinished
+           << "\n    rx.finished = " << rx.finished
+           << "\n    now = " << now
+           << "\n    bandwidthDelay = " << bandwidthDelay
+           << "\n    (newRxFinished > now + rxMaxQueueTime) == true"
+           << "\n    rx.maxQueueTime = " << rx.maxQueueTime
+           << endl;
+        return SimpleDelay(0, false);
+    }
+
+    rx.finished = newRxFinished;
+
+    std::cout << "RouterDelay: " << rx.finished - now << std::endl;
+
+    return SimpleDelay(rx.finished - now, true);
+}
+
 
 simtime_t SimpleNodeEntry::getFaultyDelay(simtime_t oldDelay) {
 
@@ -248,9 +275,11 @@ simtime_t SimpleNodeEntry::getFaultyDelay(simtime_t oldDelay) {
     */
 
     // If faulty rtt is smaller, set errorRatio to max 0.6
-    errorRatio = (sign == -1 && errorRatio > 0.6) ? 0.6 : errorRatio;
+    //errorRatio = (sign == -1 && errorRatio > 0.6) ? 0.6 : errorRatio;
 
-    return oldDelay + sign * errorRatio * oldDelay;
+    errorRatio = (errorRatio > 0.6) ? 0.6 : errorRatio;
+
+    return (oldDelay + sign * errorRatio * oldDelay); // * 0.789; //TODO
 }
 
 std::string SimpleNodeEntry::info() const

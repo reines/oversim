@@ -36,7 +36,7 @@ void GlobalStatistics::initialize()
     sentKBRTestAppMessages = 0;
     deliveredKBRTestAppMessages = 0;
 
-    measuring = par("measureNetwInitPhase");
+    measuring = measureNetwInitPhase = par("measureNetwInitPhase");
     measureStartTime = 0;
 
     currentDeliveryVector.setName("Current Delivery Ratio");

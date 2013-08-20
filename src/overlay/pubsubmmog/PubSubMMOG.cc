@@ -317,7 +317,7 @@ void PubSubMMOG::handleAppMessage(cMessage* msg)
     if( GameAPIPositionMessage *posMsg = dynamic_cast<GameAPIPositionMessage*>(msg) ) {
         if( state == READY ) {
             handleMove( posMsg );
-        } else if ( state == JOINING ) {
+        } else if ( state == JOIN ) {
             // We are not connected to our responsible node, inform app
             CompReadyMessage* msg = new CompReadyMessage("Overlay not READY!");
             msg->setReady(false);
@@ -332,7 +332,7 @@ void PubSubMMOG::handleAppMessage(cMessage* msg)
             joinMsg->setRessources( 4 );
             sendUdpRpcCall( lobbyServer, joinMsg );
 
-            state = JOINING;
+            state = JOIN;
             setBootstrapedIcon();
 
             // tell app to wait until login is confirmed...
@@ -366,7 +366,7 @@ void PubSubMMOG::handleSubscriptionResponse( PubSubSubscriptionResponse* subResp
 
 void PubSubMMOG::handleJoinResponse( PubSubJoinResponse* joinResp )
 {
-    state = JOINING;
+    state = JOIN;
     setBootstrapedIcon();
     PubSubSubspaceId region( currentRegionX, currentRegionY, numSubspaces);
 
@@ -628,7 +628,7 @@ void PubSubMMOG::handleMove( GameAPIPositionMessage* posMsg )
         sendMessageToUDP( subspace->getResponsibleNode(), moveMsg );
     } else {
         // trying to move to not-yet subscribed region
-        // FIXME: change state to JOINING?
+        // FIXME: change state to JOIN?
     }
 }
 
@@ -1931,7 +1931,7 @@ void PubSubMMOG::setBootstrapedIcon()
             getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "green");
             getDisplayString().setTagArg("i", 1, "green");
         }
-        else if(state == JOINING) {
+        else if(state == JOIN) {
             getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "yellow");
             getDisplayString().setTagArg("i", 1, "yellow");
         }

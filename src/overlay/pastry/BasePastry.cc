@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+// Copyright (C) 2012 Institute of Telematics, Karlsruhe Institute of Technology (KIT)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
  */
 
 #include <sstream>
+#include <stdint.h>
+#include <assert.h>
 
 #include <IPAddressResolver.h>
 #include <IPvXAddress.h>
@@ -32,7 +34,6 @@
 #include <NeighborCache.h>
 #include <GlobalStatistics.h>
 #include <BootstrapList.h>
-#include <assert.h>
 
 #include "BasePastry.h"
 
@@ -51,16 +52,6 @@ void BasePastry::purgeVectors(void)
     stateCache.msg = NULL;
     delete stateCache.prox;
     stateCache.prox = NULL;
-
-    // purge vector of waiting sendState messages:
-    if (! sendStateWait.empty()) {
-        for (std::vector<PastrySendState*>::iterator it =
-                 sendStateWait.begin(); it != sendStateWait.end(); it++) {
-            if ( (*it)->isScheduled() ) cancelEvent(*it);
-            delete *it;
-        }
-        sendStateWait.clear();
-    }
 }
 
 void BasePastry::baseInit()
@@ -101,8 +92,6 @@ void BasePastry::baseInit()
     stateCache.msg = NULL;
     stateCache.prox = NULL;
 
-    rowToAsk = 0;
-
     // initialize statistics
     joins = 0;
     joinTries = 0;
@@ -142,14 +131,14 @@ void BasePastry::baseInit()
     leafsetReceived = 0;
     leafsetBytesReceived = 0;
 
-    routingTableReqSent = 0;
-    routingTableReqBytesSent = 0;
-    routingTableReqReceived = 0;
-    routingTableReqBytesReceived = 0;
-    routingTableSent = 0;
-    routingTableBytesSent = 0;
-    routingTableReceived = 0;
-    routingTableBytesReceived = 0;
+    routingTableRowReqSent = 0;
+    routingTableRowReqBytesSent = 0;
+    routingTableRowReqReceived = 0;
+    routingTableRowReqBytesReceived = 0;
+    routingTableRowSent = 0;
+    routingTableRowBytesSent = 0;
+    routingTableRowReceived = 0;
+    routingTableRowBytesReceived = 0;
 
     WATCH(joins);
     WATCH(joinTries);
@@ -182,14 +171,16 @@ void BasePastry::baseInit()
     WATCH(leafsetReceived);
     WATCH(leafsetBytesReceived);
 
-    WATCH(routingTableReqSent);
-    WATCH(routingTableReqBytesSent);
-    WATCH(routingTableReqReceived);
-    WATCH(routingTableReqBytesReceived);
-    WATCH(routingTableSent);
-    WATCH(routingTableBytesSent);
-    WATCH(routingTableReceived);
-    WATCH(routingTableBytesReceived);
+    WATCH(routingTableRowReqSent);
+    WATCH(routingTableRowReqBytesSent);
+    WATCH(routingTableRowReqReceived);
+    WATCH(routingTableRowReqBytesReceived);
+    WATCH(routingTableRowSent);
+    WATCH(routingTableRowBytesSent);
+    WATCH(routingTableRowReceived);
+    WATCH(routingTableRowBytesReceived);
+
+    WATCH_PTR(stateCache.msg);
 }
 
 
@@ -202,8 +193,7 @@ void BasePastry::baseChangeState(int toState)
         if (!thisNode.getKey().isUnspecified())
             bootstrapList->removeBootstrapNode(thisNode);
 
-        if (joinTimeout->isScheduled()) cancelEvent(joinTimeout);
-
+        cancelAllRpcs();
         purgeVectors();
 
         bootstrapNode = bootstrapList->getBootstrapNode();
@@ -221,8 +211,8 @@ void BasePastry::baseChangeState(int toState)
 
         break;
 
-    case JOINING_2:
-        state = JOINING_2;
+    case JOIN:
+        state = JOIN;
 
         // bootstrapNode must be obtained before calling this method,
         // for example by calling changeState(INIT)
@@ -232,9 +222,6 @@ void BasePastry::baseChangeState(int toState)
             changeState(READY);
             return;
         }
-
-        cancelEvent(joinTimeout);
-        scheduleAt(simTime() + joinTimeoutAmount, joinTimeout);
 
         updateTooltip();
         getParentModule()->getParentModule()->bubble("entering JOIN state");
@@ -247,13 +234,10 @@ void BasePastry::baseChangeState(int toState)
         assert(state != READY);
         state = READY;
 
-         //bootstrapList->registerBootstrapNode(thisNode);
-
-        // if we are the first node in the network, there's nothing else
-        // to do
+        // if we are the first node in the network,
+        // there's nothing else to do
         if (bootstrapNode.isUnspecified()) {
-            RECORD_STATS(joinTries++);
-            RECORD_STATS(joins++);
+            RECORD_STATS(joinTries++; joins++);
             setOverlayReady(true);
             return;
         }
@@ -286,92 +270,6 @@ void BasePastry::newLeafs(void)
 }
 
 
-void BasePastry::changeState(int toState)
-{
-
-}
-
-
-void BasePastry::pingResponse(PingResponse* msg, cPolymorphic* context,
-                              int rpcId, simtime_t rtt)
-{
-    EV << "[BasePastry::pingResponse() @ " << thisNode.getIp()
-       << " (" << thisNode.getKey().toString(16) << ")]\n"
-       << "    Pong (or Ping-context from NeighborCache) received (from "
-       << msg->getSrcNode().getIp() << ")"
-       << endl;
-
-    const NodeHandle& src = msg->getSrcNode();
-    assert(!src.isUnspecified());
-
-    // merge single pinged nodes (bamboo global tuning)
-    if (rpcId == PING_SINGLE_NODE) {
-        routingTable->mergeNode(src, proximityNeighborSelection ?
-                                     rtt : SimTime::getMaxTime());
-        return;
-    }
-
-    /*// a node with the an equal ID has responded
-    if ((src.getKey() == thisNode.getKey()) && (src.getIp() != thisNode.getIp())) {
-        EV << "[BasePastry::pingResponse() @ " << thisNode.getIp()
-           << " (" << thisNode.getKey().toString(16) << ")]\n"
-           << "    a node with the an equal ID has responded, rejoining" << endl;
-        delete context;
-        //joinOverlay();
-        return;
-    }*/
-
-    if (context != NULL && stateCache.msg && stateCache.prox) {
-        PingContext* pingContext = check_and_cast<PingContext*>(context);
-        if (pingContext->nonce != stateCache.nonce) {
-            delete context;
-            return;
-            //throw cRuntimeError("response doesn't fit stateCache");
-        }
-        switch (pingContext->stateObject) {
-            case ROUTINGTABLE: {
-                /*node = &(stateCache.msg->getRoutingTable(pingContext->index));
-                if((node->isUnspecified()) || (*node != src)) {
-                    std::cout << simTime() << " " << thisNode.getIp() << " rt: state from "
-                              << stateCache.msg->getSender().getIp() << " *** failed: node "
-                              << node->ip << " src " << src.getIp() << std::endl;
-                    break;
-                }*/
-                *(stateCache.prox->pr_rt.begin() + pingContext->index) = rtt;
-                break;
-            }
-            case LEAFSET: {
-                /*node = &(stateCache.msg->getLeafSet(pingContext->index));
-                if ((node->isUnspecified()) || (*node != src)) {
-                    std::cout << simTime() << " " << thisNode.getIp() << " ls: state from "
-                              << stateCache.msg->getSender().getIp() << " *** failed: node "
-                              << node->ip << " src " << src.getIp() << std::endl;
-                    break;
-                }*/
-                *(stateCache.prox->pr_ls.begin() + pingContext->index) = rtt;
-                break;
-            }
-            case NEIGHBORHOODSET: {
-                /*node = &(stateCache.msg->getNeighborhoodSet(pingContext->index));
-                if((node->isUnspecified()) || (*node != src)) {
-                    std::cout << simTime() << " " << thisNode.getIp() << " ns: state from "
-                              << stateCache.msg->getSender().getIp() << " *** failed: node "
-                              << node->ip << " src " << src.getIp() << std::endl;
-                    break;
-                }*/
-                *(stateCache.prox->pr_ns.begin() + pingContext->index) = rtt;
-                break;
-            }
-            default: {
-                throw cRuntimeError("wrong state object type!");
-            }
-        }
-        checkProxCache();
-    }
-    delete context;
-}
-
-
 void BasePastry::proxCallback(const TransportAddress& node, int rpcId,
                               cPolymorphic *contextPointer, Prox prox)
 {
@@ -379,7 +277,7 @@ void BasePastry::proxCallback(const TransportAddress& node, int rpcId,
 
     EV << "[BasePastry::proxCallback() @ " << thisNode.getIp()
            << " (" << thisNode.getKey().toString(16) << ")]\n"
-           << "    Pong received (from "
+           << "    Pong (or timeout) received (from "
            << node.getIp() << ")"
            << endl;
 
@@ -403,7 +301,7 @@ void BasePastry::proxCallback(const TransportAddress& node, int rpcId,
             return;
         }
         // handle failed node
-        if (rtt == PASTRY_PROX_INFINITE && state== READY) {
+        if (rtt == PASTRY_PROX_INFINITE && state == READY) {
             handleFailedNode(node); // TODO
             updateTooltip();
 
@@ -416,14 +314,17 @@ void BasePastry::proxCallback(const TransportAddress& node, int rpcId,
         }
         switch (pingContext->stateObject) {
         case ROUTINGTABLE:
+            assert(stateCache.prox->pr_rt.size() > pingContext->index);
             *(stateCache.prox->pr_rt.begin() + pingContext->index) = rtt;
             break;
 
         case LEAFSET:
+            assert(stateCache.prox->pr_ls.size() > pingContext->index);
             *(stateCache.prox->pr_ls.begin() + pingContext->index) = rtt;
             break;
 
         case NEIGHBORHOODSET:
+            assert(stateCache.prox->pr_ns.size() > pingContext->index);
             *(stateCache.prox->pr_ns.begin() + pingContext->index) = rtt;
             break;
 
@@ -432,6 +333,8 @@ void BasePastry::proxCallback(const TransportAddress& node, int rpcId,
         }
         checkProxCache();
     }
+
+    assert(stateCacheQueue.size() < 50);
     delete contextPointer;
 }
 
@@ -456,18 +359,12 @@ void BasePastry::prePing(const PastryStateMessage* stateMsg)
         if ((node->isUnspecified()) || (*node == thisNode)) {
             continue;
         }
-        /*if (node->key == thisNode.getKey()) {
-            cerr << "Pastry Warning: Other node with same key found, "
-                "restarting!" << endl;
-            opp_error("TODO: Other node with same key found...");
-            joinOverlay(); //segfault
-            //return;
-            continue;
-        }*/
 
-        neighborCache->getProx(*node, NEIGHBORCACHE_DEFAULT, PING_RECEIVED_STATE, this, NULL);
+        neighborCache->getProx(*node, NEIGHBORCACHE_DEFAULT,
+                               PING_RECEIVED_STATE, this, NULL);
     }
 }
+
 
 void BasePastry::pingNodes(void)
 {
@@ -488,7 +385,6 @@ void BasePastry::pingNodes(void)
     uint32_t ns_size = stateCache.msg->getNeighborhoodSetArraySize();
     stateCache.prox->pr_ns.resize(ns_size, PASTRY_PROX_UNDEF);
 
-    std::vector< std::pair<const NodeHandle*, PingContext*> > nodesToPing;
     // set prox state
     for (uint32_t i = 0; i < rt_size + ls_size + ns_size; i++) {
         const NodeHandle* node;
@@ -518,21 +414,26 @@ void BasePastry::pingNodes(void)
             pingContext = new PingContext(stateObject, index,
                                           stateCache.nonce);
 
-            Prox prox = neighborCache->getProx(*node, NEIGHBORCACHE_DEFAULT, -1,
+            Prox prox = neighborCache->getProx(*node, NEIGHBORCACHE_DEFAULT,
+                                               PING_RECEIVED_STATE,
                                                this, pingContext);
             if (prox == Prox::PROX_SELF) {
                 *proxPos = 0;
-            } else if (prox == Prox::PROX_TIMEOUT) {
+            } else if ((prox == Prox::PROX_TIMEOUT) ||
+                       (prox == Prox::PROX_UNKNOWN)) {
                 *proxPos = PASTRY_PROX_INFINITE;
-            } else if (prox == Prox::PROX_UNKNOWN) {
+            } else if (prox == Prox::PROX_WAITING) {
                 *proxPos = PASTRY_PROX_PENDING;
             } else {
                 *proxPos = prox.proximity;
             }
+        } else {
+            throw cRuntimeError("Undefined node in STATE message!");
         }
     }
     checkProxCache();
 }
+
 
 void BasePastry::determineAliveTable(const PastryStateMessage* stateMsg)
 {
@@ -561,360 +462,282 @@ void BasePastry::determineAliveTable(const PastryStateMessage* stateMsg)
             node = &(stateMsg->getNeighborhoodSet(i - rt_size - ls_size));
             tblPos = aliveTable.pr_ns.begin() + (i - rt_size - ls_size);
         }
-        if (neighborCache->getProx(*node, NEIGHBORCACHE_DEFAULT_IMMEDIATELY) ==
-                Prox::PROX_TIMEOUT) {
+        if (node->isUnspecified()) {
+            *tblPos = PASTRY_PROX_UNDEF;
+        } else if (neighborCache->getProx(*node,
+                                          NEIGHBORCACHE_DEFAULT_IMMEDIATELY) ==
+                   Prox::PROX_TIMEOUT) {
             *tblPos = PASTRY_PROX_INFINITE;
         }
     }
 }
 
-void BasePastry::sendStateTables(const TransportAddress& destination,
-                                 int type, ...)
+
+bool BasePastry::handleRpcCall(BaseCallMessage* msg)
 {
-    if (destination.getIp() == thisNode.getIp())
-        opp_error("Pastry: trying to send state to self!");
-
-    int hops = 0;
-    bool last = false;
-    simtime_t timestamp = 0;
-
-    if ((type == PASTRY_STATE_JOIN) ||
-        (type == PASTRY_STATE_MINJOIN) ||
-        (type == PASTRY_STATE_UPDATE)) {
-        // additional parameters needed:
-        va_list ap;
-        va_start(ap, type);
-        if (type == PASTRY_STATE_JOIN || type == PASTRY_STATE_MINJOIN) {
-            hops = va_arg(ap, int);
-            last = static_cast<bool>(va_arg(ap, int));
-        } else {
-            timestamp = *va_arg(ap, simtime_t*);
-        }
-        va_end(ap);
+    if (state != READY) {
+        EV << "[BasePastry::handleRpcCall() @ " << thisNode.getIp()
+           << " (" << thisNode.getKey().toString(16) << ")]\n"
+           << "    Received RPC call and state != READY"
+           << endl;
+        return false;
     }
 
-    // create new state msg and set special fields for some types:
-    PastryStateMessage* stateMsg;
-    if (type == PASTRY_STATE_JOIN || type == PASTRY_STATE_MINJOIN) {
-        stateMsg = new PastryStateMessage("STATE (Join)");
-        stateMsg->setJoinHopCount(hops);
-        stateMsg->setLastHop(last);
-        stateMsg->setTimestamp(simTime());
-    } else if (type == PASTRY_STATE_UPDATE) {
-        stateMsg = new PastryStateMessage("STATE (Update)");
-        EV << "[BasePastry::sendStateTables() @ " << thisNode.getIp()
+    // delegate messages
+    RPC_SWITCH_START( msg )
+    // RPC_DELEGATE( <messageName>[Call|Response], <methodToCall> )
+    RPC_DELEGATE( RequestLeafSet, handleRequestLeafSetCall );
+    RPC_DELEGATE( RequestRoutingRow, handleRequestRoutingRowCall );
+    RPC_SWITCH_END( )
+
+    return RPC_HANDLED;
+}
+
+
+void BasePastry::handleRpcResponse(BaseResponseMessage* msg,
+                                   cPolymorphic* context, int rpcId,
+                                   simtime_t rtt)
+{
+    RPC_SWITCH_START(msg)
+    RPC_ON_RESPONSE( RequestLeafSet ) {
+        EV << "[BasePastry::handleRpcResponse() @ " << thisNode.getIp()
            << " (" << thisNode.getKey().toString(16) << ")]\n"
-           << "    sending state (update) to " << destination
+           << "    Received a RequestLeafSet RPC Response: id=" << rpcId << "\n"
+           << "    msg=" << *_RequestLeafSetResponse << " rtt=" << SIMTIME_DBL(rtt)
            << endl;
-        stateMsg->setTimestamp(timestamp);
-    } else if (type == PASTRY_STATE_REPAIR) {
-        stateMsg = new PastryStateMessage("STATE (Repair)");
-        stateMsg->setTimestamp(timestamp);
-        EV << "[BasePastry::sendStateTables() @ " << thisNode.getIp()
+        BasePastry::handleRequestLeafSetResponse(_RequestLeafSetResponse);
+        break;
+    }
+    RPC_ON_RESPONSE( RequestRoutingRow ) {
+        EV << "[BasePastry::handleRpcResponse() @ " << thisNode.getIp()
            << " (" << thisNode.getKey().toString(16) << ")]\n"
-           << "    sending state (repair) to " << destination
+           << "    Received a RequestRoutingRow RPC Response: id=" << rpcId << "\n"
+           << "    msg=" << *_RequestRoutingRowResponse << " rtt=" << SIMTIME_DBL(rtt)
            << endl;
+        BasePastry::handleRequestRoutingRowResponse(_RequestRoutingRowResponse);
+        break;
+    }
+    RPC_SWITCH_END( )
+}
+
+
+void BasePastry::handleRpcTimeout(BaseCallMessage* call,
+                                  const TransportAddress& dest,
+                                  cPolymorphic* context, int rpcId,
+                                  const OverlayKey& key)
+{
+    EV << "[BasePastry::handleRpcTimeout() @ " << thisNode.getIp()
+       << " (" << thisNode.getKey().toString(16) << ")]\n"
+       << "    Timeout of RPC Call: id=" << rpcId << "\n"
+       << "    msg=" << *call << " key=" << key
+       << endl;
+
+    if (state == JOIN) {
+        join();
+    } else if (state == READY && !dest.isUnspecified() && key.isUnspecified()) {
+        handleFailedNode(dest);
+    }
+}
+
+
+void BasePastry::handleRequestLeafSetCall(RequestLeafSetCall* call)
+{
+    EV << "[BasePastry::handleRequestLeafSetCall() @ " << thisNode.getIp()
+       << " (" << thisNode.getKey().toString(16) << ")]"
+       << endl;
+
+    RECORD_STATS(leafsetReqReceived++;
+                 leafsetReqBytesReceived += call->getByteLength());
+
+    if (state != READY) {
+        EV << "    local node is NOT in READY state (call deleted)!" << endl;
+        delete call;
+        return;
+    }
+
+    RequestLeafSetResponse* response =
+        new RequestLeafSetResponse("REQUEST LEAFSET Response");
+    response->setTimestamp(simTime());
+    response->setStatType(MAINTENANCE_STAT);
+
+    response->setBitLength(PASTRYREQUESTLEAFSETRESPONSE_L(response));
+    response->encapsulate(createStateMessage(PASTRY_STATE_LEAFSET));
+
+    //merge leafset and sender's NodeHandle from call (if exists: PULL)
+    if (call->getEncapsulatedPacket()) {
+        EV << "    ... it's a leafSet PULL message!" << endl;
+
+        PastryStateMessage* stateMsg =
+            check_and_cast<PastryStateMessage*>(call->decapsulate());
+
+        stateMsg->setLeafSetArraySize(stateMsg->getLeafSetArraySize() + 1);
+        stateMsg->setLeafSet(stateMsg->getLeafSetArraySize() - 1,
+                             stateMsg->getSender());
+
+        handleStateMessage(stateMsg);
+
+        //set sender's NodeHandle in response if it was set in call (PULL/PUSH)
+        //response->setSender(thisNode);
+        response->setName("LeafSet PUSH");
+    }
+
+    RECORD_STATS(leafsetSent++;
+                 leafsetBytesSent += response->getByteLength());
+
+    sendRpcResponse(call, response);
+}
+
+
+void BasePastry::handleRequestRoutingRowCall(RequestRoutingRowCall* call)
+{
+    EV << "[BasePastry::handleRequestRoutingRowCall() @ " << thisNode.getIp()
+       << " (" << thisNode.getKey().toString(16) << ")]"
+       << endl;
+
+    RECORD_STATS(routingTableRowReqReceived++;
+                 routingTableRowReqBytesReceived += call->getByteLength());
+
+    if (state == READY) {
+        // fill response with row entries
+        if (call->getRow() > routingTable->getLastRow()) {
+            EV << "    received request for nonexistent routing"
+               << "table row, dropping message!"
+               << endl;
+            delete call;
+        } else {
+            RequestRoutingRowResponse* response =
+                new RequestRoutingRowResponse("REQUEST ROUTINGROW Response");
+            response->setStatType(MAINTENANCE_STAT);
+
+            assert(call->getRow() >= -1 &&
+                   call->getRow() <= routingTable->getLastRow());
+
+            response->setBitLength(PASTRYREQUESTROUTINGROWRESPONSE_L(response));
+            response->encapsulate(createStateMessage(PASTRY_STATE_ROUTINGROW,
+                                                     -1,
+                                                     (call->getRow() == -1) ?
+                                                      routingTable->getLastRow() :
+                                                      call->getRow()));
+
+            RECORD_STATS(routingTableRowSent++;
+                         routingTableRowBytesSent += call->getByteLength());
+            sendRpcResponse(call, response);
+        }
     } else {
-        stateMsg = new PastryStateMessage("STATE");
-        EV << "[BasePastry::sendStateTables() @ " << thisNode.getIp()
-           << " (" << thisNode.getKey().toString(16) << ")]\n"
-           << "    sending state (standard) to " << destination
-           << endl;
+        EV << "    received routing table request before reaching "
+           << "READY state, dropping message!" << endl;
+        delete call;
+    }
+}
+
+
+void BasePastry::handleRequestLeafSetResponse(RequestLeafSetResponse* response)
+{
+    EV << "[BasePastry::handleRequestLeafSetResponse() @ " << thisNode.getIp()
+       << " (" << thisNode.getKey().toString(16) << ")]"
+       << endl;
+
+    RECORD_STATS(leafsetReceived++; leafsetBytesReceived +=
+                 response->getByteLength());
+
+    if (state == READY) {
+        handleStateMessage(check_and_cast<PastryStateMessage*>(response->decapsulate()));
+    }
+}
+
+
+void BasePastry::handleRequestRoutingRowResponse(RequestRoutingRowResponse* response)
+{
+    EV << "[BasePastry::handleRequestRoutingRowResponse() @ " << thisNode.getIp()
+       << " (" << thisNode.getKey().toString(16) << ")]"
+       << endl;
+
+    RECORD_STATS(routingTableRowReceived++;
+                 routingTableRowBytesReceived += response->getByteLength());
+
+    if (state == READY) {
+        handleStateMessage(check_and_cast<PastryStateMessage*>(response->decapsulate()));
+    }
+}
+
+
+PastryStateMessage* BasePastry::createStateMessage(enum PastryStateMsgType type,
+                                                   simtime_t timestamp,
+                                                   int16_t row,
+                                                   bool lastHop)
+{
+    //checks
+    if ((type & (PASTRY_STATE_JOIN | PASTRY_STATE_MINJOIN)) &&
+        ((row == -1) || (timestamp != -1))) {
+        throw cRuntimeError("Creating JOIN State without hopCount"
+                            " or with timestamp!");
+    } else if ((type & (PASTRY_STATE_ROUTINGROW)) && row == -1) {
+        throw cRuntimeError("Creating ROUTINGROW State without row!");
+    } else if ((type & (PASTRY_STATE_UPDATE)) &&
+                timestamp == -1) {
+        throw cRuntimeError("Creating UPDATE/REPAIR State without timestamp!");
+    } else if ((type & (PASTRY_STATE_LEAFSET | PASTRY_STATE_STD |
+                        PASTRY_STATE_REPAIR  | PASTRY_STATE_JOINUPDATE)) &&
+            ((row != -1) || (timestamp != -1))) {
+            throw cRuntimeError("Creating STD/UPDATE State with row/hopCount"
+                                " or timestamp!");
+    }
+
+    std::string typeStr = cEnum::get("PastryStateMsgType")->getStringFor(type);
+    typeStr.erase(0, 13);
+
+    EV << "[BasePastry::sendStateTables() @ " << thisNode.getIp()
+       << " (" << thisNode.getKey().toString(16) << ")]\n"
+       << "    creating new state message (" << typeStr << ")" //TODO
+       << endl;
+
+    // create new state msg and set special fields for some types:
+    PastryStateMessage* stateMsg =
+        new PastryStateMessage((std::string("STATE (") + typeStr + ")").c_str());
+
+    stateMsg->setTimestamp((timestamp == -1) ? simTime() : timestamp);
+
+    if (type == PASTRY_STATE_JOIN || type == PASTRY_STATE_MINJOIN) {
+        stateMsg->setRow(row);
+        stateMsg->setLastHop(lastHop);
     }
 
     // fill in standard content:
-    stateMsg->setPastryMsgType(PASTRY_MSG_STATE);
     stateMsg->setStatType(MAINTENANCE_STAT);
     stateMsg->setPastryStateMsgType(type);
     stateMsg->setSender(thisNode);
 
-    // the following part of the new join works on the assumption, that the node
-    // routing the join message is close to the joining node
-    // therefore its switched on together with the discovery algorithm
+    // the following part of the new join works on the assumption,
+    // that the node routing the join message is close to the joining node
+    // therefore it should be switched on together with the discovery algorithm
     if (type == PASTRY_STATE_MINJOIN) {
         //send just the needed row for new join protocol
-        routingTable->dumpRowToMessage(stateMsg, hops);
-        if (last) leafSet->dumpToStateMessage(stateMsg);
-        else stateMsg->setLeafSetArraySize(0);
-        if (hops == 1) neighborhoodSet->dumpToStateMessage(stateMsg);
-        else stateMsg->setNeighborhoodSetArraySize(0);
+        routingTable->dumpRowToMessage(stateMsg, row);
+        if (lastHop) {
+            leafSet->dumpToStateMessage(stateMsg);
+        } else {
+            stateMsg->setLeafSetArraySize(0);
+        }
+        if (row == 1) {
+            neighborhoodSet->dumpToStateMessage(stateMsg);
+        } else {
+            stateMsg->setNeighborhoodSetArraySize(0);
+        }
+    } else if (type == PASTRY_STATE_LEAFSET) {
+        leafSet->dumpToStateMessage(stateMsg);
+    } else if (type == PASTRY_STATE_ROUTINGROW) {
+        routingTable->dumpRowToMessage(stateMsg, row);
     } else {
         routingTable->dumpToStateMessage(stateMsg);
         leafSet->dumpToStateMessage(stateMsg);
         neighborhoodSet->dumpToStateMessage(stateMsg);
     }
 
-    // send...
     stateMsg->setBitLength(PASTRYSTATE_L(stateMsg));
-    RECORD_STATS(stateSent++; stateBytesSent += stateMsg->getByteLength());
-    sendMessageToUDP(destination, stateMsg);
+
+    return stateMsg;
 }
 
-void BasePastry::sendStateDelayed(const TransportAddress& destination)
-{
-    PastrySendState* selfMsg = new PastrySendState("sendStateWait");
-    selfMsg->setDest(destination);
-    sendStateWait.push_back(selfMsg);
-    scheduleAt(simTime() + 0.0001, selfMsg);
-}
-
-void BasePastry::pingTimeout(PingCall* msg,
-                             const TransportAddress& dest,
-                             cPolymorphic* context,
-                             int rpcId)
-{
-    EV << "[BasePastry::sendStateDelayed() @ " << thisNode.getIp()
-       << " (" << thisNode.getKey().toString(16) << ")]\n"
-       << "    Ping timeout occurred (" << dest.getIp() << ")"
-       << endl;
-
-    // handle failed node
-    if (state == READY) {
-        handleFailedNode(dest); // TODO
-        updateTooltip();
-
-        // this could initiate a re-join, exit the handler in that
-        // case because all local data was erased:
-        if (state != READY) {
-            delete context;
-            return;
-        }
-    }
-
-    //TODO must be removed
-    if (context && stateCache.msg && stateCache.prox &&
-        rpcId == PING_RECEIVED_STATE) {
-        PingContext* pingContext = check_and_cast<PingContext*>(context);
-        if (pingContext->nonce != stateCache.nonce) {
-            delete context;
-            return;
-            //std::stringstream temp;
-            //temp << thisNode << " timeout/call doesn't fit stateCache";
-            //throw cRuntimeError(temp.str().c_str());
-        }
-        //const NodeHandle* node;
-        switch (pingContext->stateObject) {
-            case ROUTINGTABLE: {
-                /*if (pingContext->index >=
-                    stateCache.msg->getRoutingTableArraySize()) {
-                    std::cout << "*** FAILED ***" << std::endl;
-                    break;
-                }
-                node = &(stateCache.msg->getRoutingTable(pingContext->index));
-                if((node->isUnspecified()) || (dest != *node)) {
-                    std::cout << msg->getNonce() << " " << simTime() << " " << thisNode.getIp() << " rt: state from "
-                    << stateCache.msg->getSender().getIp() << " *** failed: node "
-                    << node->ip << " failed dest " << dest.getIp() << std::endl;
-                    break;
-                }*/
-                *(stateCache.prox->pr_rt.begin() + pingContext->index) =
-                    PASTRY_PROX_INFINITE;
-                break;
-            }
-            case LEAFSET: {
-                /*if (pingContext->index >=
-                    stateCache.msg->getLeafSetArraySize()) {
-                    std::cout << "*** FAILED ***" << std::endl;
-                    break;
-                }
-                node = &(stateCache.msg->getLeafSet(pingContext->index));
-                if((node->isUnspecified()) || (dest != *node)) {
-                    std::cout << msg->getNonce() << " " << simTime() << " " << thisNode.getIp() << " ls: state from "
-                    << stateCache.msg->getSender().getIp() << " *** failed: node "
-                    << node->ip << " failed dest " << dest.getIp() << std::endl;
-                    break;
-                }*/
-                *(stateCache.prox->pr_ls.begin() + pingContext->index) =
-                    PASTRY_PROX_INFINITE;
-                break;
-            }
-            case NEIGHBORHOODSET: {
-                /*if (pingContext->index >=
-                    stateCache.msg->getNeighborhoodSetArraySize()) {
-                    std::cout << "*** FAILED ***" << std::endl;
-                    break;
-                }
-                node = &(stateCache.msg->getNeighborhoodSet(pingContext->index));
-                if((node->isUnspecified()) || (dest != *node)) {
-                    std::cout << msg->getNonce() << " " << simTime() << " " << thisNode.getIp() << " ns: state from "
-                    << stateCache.msg->getSender().getIp() << " *** failed: node "
-                    << node->ip << " failed dest " << dest.getIp() << std::endl;
-                    break;
-                }*/
-                *(stateCache.prox->pr_ns.begin() + pingContext->index) =
-                    PASTRY_PROX_INFINITE;
-                break;
-            }
-        }
-        checkProxCache();
-    }
-
-    delete context;
-}
-
-void BasePastry::sendRequest(const TransportAddress& ask, int type)
-{
-    assert(ask != thisNode);
-    std::string msgName("Req: ");
-    switch (type) {
-    case PASTRY_REQ_REPAIR:
-        if (ask.isUnspecified())
-            throw cRuntimeError("Pastry::sendRequest(): asked for repair from "
-                                "unspecified node!");
-        msgName += "Repair";
-        break;
-
-    case PASTRY_REQ_STATE:
-        if (ask.isUnspecified())
-            throw cRuntimeError("Pastry::sendRequest(): asked for state from "
-                                "unspecified node!");
-        msgName += "State";
-        break;
-
-    case PASTRY_REQ_LEAFSET:
-        if (ask.isUnspecified())
-            throw cRuntimeError("Pastry::sendRequest(): asked for leafset from "
-                  "unspecified node!");
-        msgName += "Leafset";
-        break;
-    }
-    PastryRequestMessage* msg = new PastryRequestMessage(msgName.c_str());
-    msg->setPastryMsgType(PASTRY_MSG_REQ);
-    msg->setPastryReqType(type);
-    msg->setStatType(MAINTENANCE_STAT);
-    msg->setSendStateTo(thisNode);
-    msg->setBitLength(PASTRYREQ_L(msg));
-    sendMessageToUDP(ask, msg); //TODO RPCs
-
-    switch (type) {
-    case PASTRY_REQ_REPAIR:
-        RECORD_STATS(repairReqSent++; repairReqBytesSent += msg->getByteLength());
-        break;
-
-    case PASTRY_REQ_STATE:
-        RECORD_STATS(stateReqSent++; stateReqBytesSent += msg->getByteLength());
-        break;
-
-    case PASTRY_REQ_LEAFSET:
-        RECORD_STATS(leafsetReqSent++; leafsetReqBytesSent += msg->getByteLength());
-        break;
-    }
-}
-
-
-void BasePastry::sendLeafset(const TransportAddress& tell, bool pull)
-{
-    if (tell.isUnspecified())
-        opp_error("Pastry::sendLeafset(): send leafset to "
-                  "unspecified node!");
-
-    PastryLeafsetMessage* msg = new PastryLeafsetMessage("Leafset");
-    if (pull) msg->setPastryMsgType(PASTRY_MSG_LEAFSET_PULL);
-    else msg->setPastryMsgType(PASTRY_MSG_LEAFSET);
-    msg->setTimestamp(simTime());
-    msg->setStatType(MAINTENANCE_STAT);
-    msg->setSender(thisNode);
-    msg->setSendStateTo(thisNode);
-    leafSet->dumpToStateMessage(msg);
-    msg->setBitLength(PASTRYLEAFSET_L(msg));
-    RECORD_STATS(leafsetSent++; leafsetBytesSent += msg->getByteLength());
-    sendMessageToUDP(tell, msg);
-
-
-}
-
-void BasePastry::sendRoutingRow(const TransportAddress& tell, int row)
-{
-    if (tell.isUnspecified())
-        opp_error("Pastry::sendRoutingTable(): asked for routing Table from "
-                  "unspecified node!");
-
-    PastryRoutingRowMessage* msg = new PastryRoutingRowMessage("Routing Row");
-    msg->setPastryMsgType(PASTRY_MSG_RROW);
-    msg->setStatType(MAINTENANCE_STAT);
-    //msg->setSendStateTo(thisNode);
-    msg->setSender(thisNode);
-    msg->setRow(row);
-    routingTable->dumpRowToMessage(msg, row);
-    msg->setBitLength(PASTRYRTABLE_L(msg));
-    RECORD_STATS(routingTableSent++; routingTableBytesSent += msg->getByteLength());
-    sendMessageToUDP(tell, msg);
-}
-
-void BasePastry::handleRequestMessage(PastryRequestMessage* msg)
-{
-    assert(msg->getSendStateTo() != thisNode);
-    uint32_t reqtype = msg->getPastryReqType();
-    if (reqtype == PASTRY_REQ_REPAIR) {
-        RECORD_STATS(repairReqReceived++; repairReqBytesReceived +=
-            msg->getByteLength());
-        if (state == READY)
-            sendStateTables(msg->getSendStateTo(),
-                            PASTRY_STATE_REPAIR);
-        else
-            EV << "[BasePastry::handleRequestMessage() @ " << thisNode.getIp()
-            << " (" << thisNode.getKey().toString(16) << ")]\n"
-            << "    received repair request before reaching"
-            << " READY state, dropping message!"
-            << endl;
-        delete msg;
-    }
-    else if (reqtype == PASTRY_REQ_STATE) {
-        RECORD_STATS(stateReqReceived++; stateReqBytesReceived +=
-            msg->getByteLength());
-        if (state == READY)
-            sendStateTables(msg->getSendStateTo());
-        else
-            EV << "[BasePastry::handleRequestMessage() @ " << thisNode.getIp()
-            << " (" << thisNode.getKey().toString(16) << ")]\n"
-            << "    received state request before reaching"
-            << " READY state, dropping message!"
-            << endl;
-        delete msg;
-    }
-    else if (PASTRY_REQ_LEAFSET) {
-        RECORD_STATS(leafsetReqReceived++; leafsetReqBytesReceived +=
-            msg->getByteLength());
-        if (state == READY) {
-            sendLeafset(msg->getSendStateTo());
-        }
-        else
-            EV << "[BasePastry::handleRequestMessage() @ " << thisNode.getIp()
-            << " (" << thisNode.getKey().toString(16) << ")]\n"
-            << "    received leafset request before reaching"
-            << " READY state, dropping message!"
-            << endl;
-        delete msg;
-    }
-
-}
-
-void BasePastry::handleLeafsetMessage(PastryLeafsetMessage* msg, bool mergeSender)
-{
-    uint32_t lsSize = msg->getLeafSetArraySize();
-    PastryStateMessage* stateMsg;
-
-    stateMsg = new PastryStateMessage("STATE");
-    stateMsg->setTimestamp(msg->getTimestamp());
-    stateMsg->setPastryMsgType(PASTRY_MSG_STATE);
-    stateMsg->setStatType(MAINTENANCE_STAT);
-    stateMsg->setSender(msg->getSender());
-    stateMsg->setLeafSetArraySize(lsSize);
-    stateMsg->setNeighborhoodSetArraySize(0);
-    stateMsg->setRoutingTableArraySize(0);
-
-    for (uint32_t i = 0; i < lsSize; i++) {
-        stateMsg->setLeafSet(i, msg->getLeafSet(i));
-    }
-
-    if (mergeSender) {
-        stateMsg->setLeafSetArraySize(lsSize+1);
-        stateMsg->setLeafSet(lsSize, msg->getSender());
-    }
-
-    handleStateMessage(stateMsg);
-    delete msg;
-}
 
 bool BasePastry::isSiblingFor(const NodeHandle& node,
                               const OverlayKey& key,
@@ -950,18 +773,6 @@ bool BasePastry::isSiblingFor(const NodeHandle& node,
         *err = true;
         return false;
     }
-
-    /*
-      const NodeHandle& dest = leafSet->getDestinationNode(key);
-      if (!dest.isUnspecified()) {
-      *err = false;
-      return true;
-      } else {
-
-      *err = true;
-      return false;
-      }
-    */
 }
 
 
@@ -969,6 +780,7 @@ void BasePastry::handleAppMessage(BaseOverlayMessage* msg)
 {
     delete msg;
 }
+
 
 void BasePastry::updateTooltip()
 {
@@ -990,14 +802,11 @@ void BasePastry::updateTooltip()
                                  "m=m,50,0,50,0;ls=red,1");
         showOverlayNeighborArrow(leafSet->getPredecessor(), false,
                                  "m=m,50,100,50,100;ls=green,1");
-
     }
 }
 
 BasePastry::~BasePastry()
 {
-    cancelAndDelete(joinTimeout);
-
     purgeVectors();
 }
 
@@ -1010,25 +819,19 @@ void BasePastry::finishOverlay()
     simtime_t time = globalStatistics->calcMeasuredLifetime(creationTime);
     if (time < GlobalStatistics::MIN_MEASURED) return;
 
-    // join statistics
-    //if (joinTries > joins)
-        //std::cout << thisNode << " jt:" << joinTries << " j:" << joins << " jts:"
-        //          << joinTimeout->isScheduled() << " rws:" << readyWait->isScheduled()
-        //          << " state:" << state << " time:" << time << std::endl;
-    // join is on the way...
-    if (joinTries > 0 && joinTimeout->isScheduled()) joinTries--;
-    if (joinTries > 0) {
-        globalStatistics->addStdDev("Pastry: join success ratio", (double)joins / (double)joinTries);
-        globalStatistics->addStdDev("Pastry: join tries", joinTries);
-    } else if (state == READY) {
-        // nodes has joined in init-/transition-phase
-        globalStatistics->addStdDev("Pastry: join success ratio", 1);
-        globalStatistics->addStdDev("Pastry: join tries", 1);
-    } else {
-        globalStatistics->addStdDev("Pastry: join success ratio", 0);
-        globalStatistics->addStdDev("Pastry: join tries", 1);
+    // join statistics: only evaluate join from nodes
+    // that have been created in measurement phase
+    if (globalStatistics->getMeasureNetwInitPhase() ||
+        time >= (simTime() - creationTime)) {
+        // join is on the way...
+        if (joinTries > 0 && state == JOIN) joinTries--;
+        if (joinTries > 0) {
+            globalStatistics->addStdDev("BasePastry: join success ratio", (double)joins / (double)joinTries);
+            globalStatistics->addStdDev("BasePastry: join tries", joinTries);
+        }
     }
 
+    // TODO new methods Pastry::finnishOverlay() / Bamboo::finishOverlay()
     globalStatistics->addStdDev("Pastry: joins with missing replies from routing path/s",
                                 joinPartial / time);
     globalStatistics->addStdDev("Pastry: JOIN Messages seen/s", joinSeen / time);
@@ -1038,64 +841,67 @@ void BasePastry::finishOverlay()
                                 joinBytesReceived / time);
     globalStatistics->addStdDev("Pastry: JOIN Messages sent/s", joinSent / time);
     globalStatistics->addStdDev("Pastry: bytes of JOIN Messages sent/s", joinBytesSent / time);
-    globalStatistics->addStdDev("Pastry: STATE Messages sent/s", stateSent / time);
-    globalStatistics->addStdDev("Pastry: bytes of STATE Messages sent/s", stateBytesSent / time);
-    globalStatistics->addStdDev("Pastry: STATE Messages received/s", stateReceived / time);
-    globalStatistics->addStdDev("Pastry: bytes of STATE Messages received/s",
-                                stateBytesReceived / time);
+
     globalStatistics->addStdDev("Pastry: REPAIR Requests sent/s", repairReqSent / time);
     globalStatistics->addStdDev("Pastry: bytes of REPAIR Requests sent/s",
                                 repairReqBytesSent / time);
     globalStatistics->addStdDev("Pastry: REPAIR Requests received/s", repairReqReceived / time);
     globalStatistics->addStdDev("Pastry: bytes of REPAIR Requests received/s",
                                 repairReqBytesReceived / time);
+
     globalStatistics->addStdDev("Pastry: STATE Requests sent/s", stateReqSent / time);
     globalStatistics->addStdDev("Pastry: bytes of STATE Requests sent/s", stateReqBytesSent / time);
     globalStatistics->addStdDev("Pastry: STATE Requests received/s", stateReqReceived / time);
     globalStatistics->addStdDev("Pastry: bytes of STATE Requests received/s",
                                 stateReqBytesReceived / time);
+    globalStatistics->addStdDev("Pastry: STATE Messages sent/s", stateSent / time);
+    globalStatistics->addStdDev("Pastry: bytes of STATE Messages sent/s", stateBytesSent / time);
+    globalStatistics->addStdDev("Pastry: STATE Messages received/s", stateReceived / time);
+    globalStatistics->addStdDev("Pastry: bytes of STATE Messages received/s",
+                                stateBytesReceived / time);
 
-    globalStatistics->addStdDev("Pastry: bytes of STATE Requests received/s",
-                                stateReqBytesReceived / time);
-
-    globalStatistics->addStdDev("Pastry: total number of lookups", totalLookups);
-    globalStatistics->addStdDev("Pastry: responsible lookups", responsibleLookups);
-    globalStatistics->addStdDev("Pastry: lookups in routing table", routingTableLookups);
-    globalStatistics->addStdDev("Pastry: lookups using closerNode()", closerNodeLookups);
-    globalStatistics->addStdDev("Pastry: lookups using closerNode() with result from "
-                                "neighborhood set", closerNodeLookupsFromNeighborhood);
-    globalStatistics->addStdDev("Pastry: LEAFSET Requests sent/s", leafsetReqSent / time);
-    globalStatistics->addStdDev("Pastry: bytes of LEAFSET Requests sent/s", leafsetReqBytesSent / time);
-    globalStatistics->addStdDev("Pastry: LEAFSET Requests received/s", leafsetReqReceived / time);
-    globalStatistics->addStdDev("Pastry: bytes of LEAFSET Requests received/s",
+    globalStatistics->addStdDev("BasePastry: LEAFSET Requests sent/s", leafsetReqSent / time);
+    globalStatistics->addStdDev("BasePastry: bytes of LEAFSET Requests sent/s", leafsetReqBytesSent / time);
+    globalStatistics->addStdDev("BasePastry: LEAFSET Requests received/s", leafsetReqReceived / time);
+    globalStatistics->addStdDev("BasePastry: bytes of LEAFSET Requests received/s",
                                 leafsetReqBytesReceived / time);
-    globalStatistics->addStdDev("Pastry: LEAFSET Messages sent/s", leafsetSent / time);
-    globalStatistics->addStdDev("Pastry: bytes of LEAFSET Messages sent/s", leafsetBytesSent / time);
-    globalStatistics->addStdDev("Pastry: LEAFSET Messages received/s", leafsetReceived / time);
-    globalStatistics->addStdDev("Pastry: bytes of LEAFSET Messages received/s",
+    globalStatistics->addStdDev("BasePastry: LEAFSET Messages sent/s", leafsetSent / time);
+    globalStatistics->addStdDev("BasePastry: bytes of LEAFSET Messages sent/s", leafsetBytesSent / time);
+    globalStatistics->addStdDev("BasePastry: LEAFSET Messages received/s", leafsetReceived / time);
+    globalStatistics->addStdDev("BasePastry: bytes of LEAFSET Messages received/s",
                                 leafsetBytesReceived / time);
-    globalStatistics->addStdDev("Pastry: ROUTING TABLE Requests sent/s", routingTableReqSent / time);
-    globalStatistics->addStdDev("Pastry: bytes of ROUTING TABLE Requests sent/s", routingTableReqBytesSent / time);
-    globalStatistics->addStdDev("Pastry: ROUTING TABLE Requests received/s", routingTableReqReceived / time);
-    globalStatistics->addStdDev("Pastry: bytes of ROUTING TABLE Requests received/s",
-                                routingTableReqBytesReceived / time);
-    globalStatistics->addStdDev("Pastry: ROUTING TABLE Messages sent/s", routingTableSent / time);
-    globalStatistics->addStdDev("Pastry: bytes of ROUTING TABLE Messages sent/s", routingTableBytesSent / time);
-    globalStatistics->addStdDev("Pastry: ROUTING TABLE Messages received/s", routingTableReceived / time);
-    globalStatistics->addStdDev("Pastry: bytes of ROUTING TABLE Messages received/s",
-                                routingTableBytesReceived / time);
 
+    globalStatistics->addStdDev("BasePastry: ROUTING TABLE ROW Requests sent/s", routingTableRowReqSent / time);
+    globalStatistics->addStdDev("BasePastry: bytes of ROUTING TABLE ROW Requests sent/s", routingTableRowReqBytesSent / time);
+    globalStatistics->addStdDev("BasePastry: ROUTING TABLE ROW Requests received/s", routingTableRowReqReceived / time);
+    globalStatistics->addStdDev("BasePastry: bytes of ROUTING TABLE ROW Requests received/s",
+                                routingTableRowReqBytesReceived / time);
+    globalStatistics->addStdDev("BasePastry: ROUTING TABLE ROW Messages sent/s", routingTableRowSent / time);
+    globalStatistics->addStdDev("BasePastry: bytes of ROUTING TABLE ROW Messages sent/s", routingTableRowBytesSent / time);
+    globalStatistics->addStdDev("BasePastry: ROUTING TABLE ROW Messages received/s", routingTableRowReceived / time);
+    globalStatistics->addStdDev("BasePastry: bytes of ROUTING TABLE ROW Messages received/s",
+                                routingTableRowBytesReceived / time);
+
+    globalStatistics->addStdDev("BasePastry: total number of lookups", totalLookups);
+    globalStatistics->addStdDev("BasePastry: responsible lookups", responsibleLookups);
+    globalStatistics->addStdDev("BasePastry: lookups in routing table", routingTableLookups);
+    globalStatistics->addStdDev("BasePastry: lookups using closerNode()", closerNodeLookups);
+    globalStatistics->addStdDev("BasePastry: lookups using closerNode() with result from "
+                                "neighborhood set", closerNodeLookupsFromNeighborhood);
 }
+
 
 int BasePastry::getMaxNumSiblings()
 {
     return (int)floor(numberOfLeaves / 2.0);
 }
 
+
 int BasePastry::getMaxNumRedundantNodes()
 {
     return (int)floor(numberOfLeaves);
 }
+
 
 NodeVector* BasePastry::findNode(const OverlayKey& key,
                                  int numRedundantNodes,
@@ -1209,24 +1015,25 @@ NodeVector* BasePastry::findNode(const OverlayKey& key,
     }
     return nextHops;
 }
+
+
 AbstractLookup* BasePastry::createLookup(RoutingType routingType,
                                          const BaseOverlayMessage* msg,
-                                         const cObject* dummy,
+                                         const cPacket* dummy,
                                          bool appLookup)
 {
     assert(dummy == NULL);
+
     PastryFindNodeExtData* findNodeExt =
         new PastryFindNodeExtData("findNodeExt");
 
-    if (msg) {
-        const PastryMessage* pmsg =
-            dynamic_cast<const PastryMessage*>(msg->getEncapsulatedPacket());
-        if ((pmsg) && (pmsg->getPastryMsgType() == PASTRY_MSG_JOIN)) {
-            const PastryJoinMessage* jmsg =
-                check_and_cast<const PastryJoinMessage*>(pmsg);
-            findNodeExt->setSendStateTo(jmsg->getSendStateTo());
-            findNodeExt->setJoinHopCount(1);
-        }
+    if (msg &&
+        dynamic_cast<const PastryJoinCall*>(msg->getEncapsulatedPacket())) {
+        const PastryJoinCall* joinCall =
+            static_cast<const PastryJoinCall*>(msg->getEncapsulatedPacket());
+        assert(!joinCall->getSrcNode().isUnspecified());
+        findNodeExt->setSendStateTo(joinCall->getSrcNode());
+        findNodeExt->setJoinHopCount(1);
     }
     findNodeExt->setBitLength(PASTRYFINDNODEEXTDATA_L);
 
@@ -1238,11 +1045,33 @@ AbstractLookup* BasePastry::createLookup(RoutingType routingType,
     return newLookup;
 }
 
+
 bool stateMsgIsSmaller(const PastryStateMsgHandle& hnd1,
                        const PastryStateMsgHandle& hnd2)
 {
-    return (hnd1.msg->getJoinHopCount() < hnd2.msg->getJoinHopCount());
+    return (hnd1.msg->getRow() < hnd2.msg->getRow());
 }
+
+
+uint8_t BasePastry::getRTLastRow() const
+{
+    return routingTable->getLastRow();
+};
+
+
+std::vector<TransportAddress>* BasePastry::getRTRow(uint8_t index) const
+{
+    return routingTable->getRow(index);
+};
+
+
+std::vector<TransportAddress>* BasePastry::getLeafSet() const
+{
+    std::vector<TransportAddress>* ret = new std::vector<TransportAddress>;
+    leafSet->dumpToVector(*ret);
+
+    return ret;
+};
 
 
 std::ostream& operator<<(std::ostream& os, const PastryStateMsgProximity& pr)
@@ -1268,6 +1097,12 @@ std::ostream& operator<<(std::ostream& os, const PastryStateMsgProximity& pr)
     os << "  }" << endl;
     os << "}" << endl;
     return os;
+}
+
+
+OverlayKey BasePastry::estimateMeanDistance()
+{
+    return leafSet->estimateMeanDistance();
 }
 
 

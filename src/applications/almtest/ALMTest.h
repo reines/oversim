@@ -26,48 +26,48 @@
 #ifndef __ALMTEST_H_
 #define __ALMTEST_H_
 
-#include <omnetpp.h>
 #include "BaseApp.h"
 #include "CommonMessages_m.h"
 #include "MessageObserver.h"
 
 class ALMTest : public BaseApp {
-    public:
-        ALMTest();
-        ~ALMTest();
+public:
+    ALMTest();
+    virtual ~ALMTest();
 
-        void initializeApp(int stage);
-	void finishApp();
-    protected:
-	// Handlers for message types
-	void handleLowerMessage(cMessage* msg);
-	//void handleNodeGracefulLeaveNotification();
-	//void handleNodeLeaveNotification();
-	void handleReadyMessage(CompReadyMessage* msg);
-	//void handleTraceMessage(cMessage* msg);
-	void handleTransportAddressChangedNotification();
+    void initializeApp(int stage);
+    void finishApp();
+
+protected:
+    // Handlers for message types
+    void handleLowerMessage(cMessage* msg);
+    //void handleNodeGracefulLeaveNotification();
+    //void handleNodeLeaveNotification();
+    void handleReadyMessage(CompReadyMessage* msg);
+    //void handleTraceMessage(cMessage* msg);
+    void handleTransportAddressChangedNotification();
 	void handleUDPMessage(cMessage* msg);
 	void handleUpperMessage(cMessage* msg);
 	void handleTimerEvent(cMessage* msg);
 
-        void joinGroup(int i);
-        void leaveGroup(int i);
-        void sendDataToGroup(int i);
-        void handleMCast( ALMMulticastMessage* mcast );
-        cMessage* timer;
-        int groupNum;
+	void joinGroup(int i);
+	void leaveGroup(int i);
+	void sendDataToGroup(int i);
+	void handleMCast( ALMMulticastMessage* mcast );
+	cMessage* timer;
+	int groupNum;
 
-    private:
-        // Controls if we'll try joining groups other than 1.
-        // True by default.
-        // Set to false for multicast protocols that do not support
-        // more than one multicast group.
-        bool joinGroups;
+private:
+	// Controls if we'll try joining groups other than 1.
+	// True by default.
+	// Set to false for multicast protocols that do not support
+	// more than one multicast group.
+	bool joinGroups;
 
 	bool sendMessages;
 
-        MessageObserver* observer;
-        int msglen;
+	MessageObserver* observer;
+	int msglen;
 };
 
 #endif

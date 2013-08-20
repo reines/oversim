@@ -24,13 +24,13 @@
 #ifndef _XMLRPCINTERFACE_H__
 #define _XMLRPCINTERFACE_H__
 
+#include <tunoutscheduler.h>
+#include <realtimescheduler.h>
 #include <omnetpp.h>
 #include <CommonMessages_m.h>
 #include <DHTMessage_m.h>
 #include <BaseOverlay.h>
 #include <BaseApp.h>
-#include <tunoutscheduler.h>
-#include <realtimescheduler.h>
 #include <XmlRpc.h>
 
 class P2pns;
@@ -47,7 +47,7 @@ protected:
     unsigned int mtu;
 
     cMessage* packetNotification; // used by TunOutScheduler to notify about new packets
-    RealtimeScheduler::PacketBuffer packetBuffer; // received packets are stored here
+    PacketBuffer packetBuffer; // received packets are stored here
     RealtimeScheduler* scheduler;
 
     //! Reads the http header
@@ -108,6 +108,16 @@ protected:
     XmlRpc::XmlRpcServerMethod* _dumpDht;
     XmlRpc::XmlRpcServerMethod* _joinOverlay;
 
+    // SODESSON interface
+    XmlRpc::XmlRpcServerMethod* _addContact;
+    XmlRpc::XmlRpcServerMethod* _removeContact;
+    XmlRpc::XmlRpcServerMethod* _getContacts;
+    XmlRpc::XmlRpcServerMethod* _getUserId;
+    XmlRpc::XmlRpcServerMethod* _searchContact;
+    XmlRpc::XmlRpcServerMethod* _publish;
+    XmlRpc::XmlRpcServerMethod* _pull_notification;
+    XmlRpc::XmlRpcServerMethod* _subscribe;
+
     /**
      * Check if the connected application is allowed to call privileged
      * methods. Currently this is true for all applications connecting to
@@ -165,6 +175,7 @@ public:
     void get(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
     void dumpDht(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
     void joinOverlay(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result);
+
 };
 
 #endif

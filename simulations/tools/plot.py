@@ -42,6 +42,7 @@ parser.add_option("-c", "--confidence-intervall", type="float", default=0, dest=
 parser.add_option("-l", "--legend-position", type="int", default=0, dest="lpos", help="Position of the legend (default:auto)")
 parser.add_option("-s", "--scale", type="float", default=1, help="Scale y values by a factor of SCALE")
 parser.add_option("-S", "--offset", type="float", default=0, help="Add OFFSET to y values")
+parser.add_option("-d", "--divide-by", type="string", dest="divexp", help="Divide values of yscalar by the values of DIVSCALAR", metavar="DIVSCALAR")
 parser.add_option("-o", "--outfile", help="Instead of displaying the plot, write a gnuplot-readable file to OUTFILE.dat and a gnuplot script to OUTFILE.plot.")
 parser.add_option("-x", "--xlabel", type="string", dest="xlabel", help="Label for the x-axis")
 parser.add_option("-y", "--ylabel", type="string", dest="ylabel", help="Label for the x-axis")
@@ -53,6 +54,9 @@ if len(args) < 3:
 varregexp = re.compile("(, )?" + args[0] + "=[0-9.]+")
 
 yParRegex = re.compile('"'+args[1]+'"')
+
+if options.divexp:
+    divexp = re.compile('"'+options.divexp+'"')
 
 incregex = []
 if options.include:
@@ -72,6 +76,7 @@ bucketlist = []
 matchedScalars = []
 
 yscalarFound = True;
+dscalarFound = True;
 
 # open all files
 for infilename in args[2:]:
@@ -79,6 +84,10 @@ for infilename in args[2:]:
 
     if not yscalarFound:
         print "Error: y scalar \"" + args[1] + "\" not found in " + oldInfile + "!"
+        exit(-1)
+    
+    if options.divexp and not dscalarFound:
+        print "Error: div scalar \"" + options.divexp + "\" not found in " + oldInfile + "!"
         exit(-1)
     
     infile = open(infilename, 'r')
@@ -119,6 +128,9 @@ for infilename in args[2:]:
             if line == "\n":
                 parseHeader = False
                 yscalarFound = False
+                dscalarFound = False
+                div = 1
+                appenddata = []
                 oldInfile = infilename;
                 if not confname or not vars:
                     print "Couldn't parse scalar header. Is this a valid .sca file?"
@@ -144,10 +156,27 @@ for infilename in args[2:]:
                     valuemap[vars][bucket]=[]
                 if bucket not in bucketlist:
                     bucketlist.append(bucket)
-                valuemap[vars][bucket].append(value)
+                appenddata.append(value)
+
+            if options.divexp:
+                dParMatch = divexp.match(splitline[1])
+                if dParMatch:
+                    if dscalarFound:
+                        print "Error: div scalar " + options.divexp + " matched twice in file " + infilename
+                        exit(-1)
+                    dscalarFound = True
+                    # get value
+                    div = float(splitline[2])
+
         else:
             print "Error: x variable \"" + args[0] + "\" not found, or all runs ignored due to the given include and exclude regexp!"
             exit(-1)
+
+    # apply div
+    if inc:
+        for vals in appenddata:
+            valuemap[vars][bucket].append(vals/div)
+
 
 print "Using the following scalars for the plot:"
 for matchedScalar in matchedScalars:
@@ -188,7 +217,7 @@ for run in sorted(valuemap.keys()):
         bucketmean = bucketarray.mean()
         # determine coinfidence interval if desired
         if options.ci > 0:
-            bucketci = stats.stderr(bucketarray) * stats.t._ppf((1+options.ci)/2., len(bucketarray)) * options.scale
+            bucketci = stats.sem(bucketarray) * stats.t._ppf((1+options.ci)/2., len(bucketarray)) * options.scale
             ci[bucket] = bucketci
         bucketmean = bucketmean*options.scale + options.offset
         row[bucket] = bucketmean

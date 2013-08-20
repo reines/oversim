@@ -30,6 +30,33 @@
 #include <list>
 #include <climits>
 
+
+class PacketBufferEntry {
+public:
+    char* data;
+    int32_t length;
+    sockaddr* addr;
+    socklen_t addrlen;
+    enum fdCommand {
+        PACKET_DATA = 0,
+        PACKET_FD_NEW = 1,
+        PACKET_FD_CLOSE = 2,
+        PACKET_APPTUN_DATA = 3
+    } func;
+    SOCKET fd;
+    PacketBufferEntry(char* buf, int32_t len) :
+        data(buf), length(len), addr(0), addrlen(0), func(PACKET_DATA), fd(0) {};
+    PacketBufferEntry(char* buf, int32_t len, sockaddr* ad, socklen_t al) :
+        data(buf), length(len), addr(ad), addrlen(al), func(PACKET_DATA), fd(0) {};
+    PacketBufferEntry(char* buf, int32_t len, fdCommand fc, int _fd) :
+        data(buf), length(len), addr(0), addrlen(0), func(fc), fd(_fd) {};
+    PacketBufferEntry(char* buf, int32_t len, sockaddr* ad, socklen_t al,
+                      fdCommand fc, int _fd) :
+                          data(buf), length(len), addr(ad), addrlen(al), func(fc), fd(_fd) {};
+};
+
+typedef std::list<PacketBufferEntry> PacketBuffer;
+
 /** This class implements a event scheduler for OMNeT++
  *  It makes the simulation run in realtime (i.e. 1 simsec == 1 sec)
  *  It must be subclassed; its subclasses must handle network
@@ -37,33 +64,24 @@
  **/
 class RealtimeScheduler : public cScheduler
 {
-public:
-    class PacketBufferEntry {
-	public:
-	    char* data;
-	    uint32_t length;
-	    sockaddr* addr;
-	    socklen_t addrlen;
-            enum fdCommand {
-                PACKET_DATA = 0,
-                PACKET_FD_NEW = 1,
-                PACKET_FD_CLOSE = 2,
-                PACKET_APPTUN_DATA = 3
-            } func;
-            SOCKET fd;
-	    PacketBufferEntry(char* buf, uint32_t len) :
-		    data(buf), length(len), addr(0), addrlen(0), func(PACKET_DATA), fd(0) {};
-	    PacketBufferEntry(char* buf, uint32_t len, sockaddr* ad, socklen_t al) :
-		    data(buf), length(len), addr(ad), addrlen(al), func(PACKET_DATA), fd(0) {};
-		PacketBufferEntry(char* buf, uint32_t len, fdCommand fc, int _fd) :
-		    data(buf), length(len), addr(0), addrlen(0), func(fc), fd(_fd) {};
-	    PacketBufferEntry(char* buf, uint32_t len, sockaddr* ad, socklen_t al,
-	                      fdCommand fc, int _fd) :
-		    data(buf), length(len), addr(ad), addrlen(al), func(fc), fd(_fd) {};
-    };
-    typedef std::list<PacketBufferEntry> PacketBuffer;
+
 
 protected:
+    class SocketContext {
+    public:
+        SocketContext() {};
+        SocketContext(cModule* mod, cMessage* notifMsg, PacketBuffer* buffer,
+                      size_t mtu) : mod(mod), notifMsg(notifMsg), buffer(buffer),
+                      mtu(mtu) {};
+
+        cModule* mod;
+        cMessage* notifMsg;
+        PacketBuffer* buffer;
+        size_t mtu;
+    };
+
+    std::map<SOCKET, SocketContext> socketContextMap;
+
     // FD set with all file descriptors
     fd_set all_fds;
     SOCKET maxfd;
@@ -156,6 +174,10 @@ public:
                                     PacketBuffer* buffer,
                                     int mtu,
                                     bool isApp = false);
+
+    void registerSocket(SOCKET fd, cModule *mod, cMessage *notifMsg,
+                        PacketBuffer* buffer, int mtu);
+
 
     /**
      * Scheduler function -- it comes from cScheduler interface.

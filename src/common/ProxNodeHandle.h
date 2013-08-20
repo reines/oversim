@@ -35,7 +35,7 @@ struct Prox
     static const Prox PROX_SELF;
     static const Prox PROX_UNKNOWN;
     static const Prox PROX_TIMEOUT;
-    //static const Prox PROX_WAITING;
+    static const Prox PROX_WAITING;
 
     double proximity; // [0 - INF)
     double accuracy;  // [0 - 1] 1: exact value, 0: no information available
@@ -69,13 +69,33 @@ class ProxNodeHandle : public NodeHandle
 
   public:
     static const ProxNodeHandle UNSPECIFIED_NODE; /**< the unspecified ProxNodeHandle */
-    ProxNodeHandle();
+    ProxNodeHandle() { };
     ProxNodeHandle(const NodeHandle& nodeHandle);
     ProxNodeHandle(const NodeHandle& nodeHandle, const Prox& prox);
-    virtual ~ProxNodeHandle();
+    virtual ~ProxNodeHandle() { };
 
     inline void setProx(Prox prox) { this->prox = prox; };
     inline Prox getProx() const { return prox; };
 };
+
+class ProxTransportAddress : public TransportAddress
+{
+  protected:
+    Prox prox;
+
+  public:
+    static const ProxTransportAddress UNSPECIFIED_ADDRESS; /**< the unspecified ProxNodeHandle */
+    ProxTransportAddress() { };
+    ProxTransportAddress(const TransportAddress& transportAddress);
+    ProxTransportAddress(const TransportAddress& transportAddress,
+                         const Prox& prox);
+    virtual ~ProxTransportAddress() { };
+
+    inline void setProx(Prox prox) { this->prox = prox; };
+    inline Prox getProx() const { return prox; };
+};
+
+std::ostream& operator<<(std::ostream& os,
+                         const ProxTransportAddress& address);
 
 #endif /* PROXNODEHANDLE_H_ */

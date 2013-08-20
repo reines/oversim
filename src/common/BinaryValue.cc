@@ -23,6 +23,7 @@
 
 #include <iterator>
 
+#include <cnetcommbuffer.h>
 #include "BinaryValue.h"
 
 using namespace std;
@@ -30,26 +31,34 @@ using namespace std;
 // predefined BinaryValue
 const BinaryValue BinaryValue::UNSPECIFIED_VALUE;
 
-BinaryValue::BinaryValue(const char* s): vector<char>(strlen(s))
+BinaryValue::BinaryValue()
 {
-    copy(s, s+strlen(s), begin());  // Inherits vector<char>::begin()
-}
+};
 
 BinaryValue::BinaryValue(size_t n): vector<char>(n)
 {
-}
+};
 
-BinaryValue::BinaryValue(const std::string& str)
+BinaryValue::BinaryValue(const std::string& str) : vector<char>(str.begin(), str.end())
 {
-    *this = BinaryValue(str.c_str());
-}
+};
 
 BinaryValue::BinaryValue(const std::vector<char>& v) : vector<char>(v)
 {
 };
 
-BinaryValue::BinaryValue(const char* b, const char* e) : vector<char>(b, e)
+BinaryValue::BinaryValue(const char* cStr)
 {
+    *this = BinaryValue(cStr, strlen(cStr));
+};
+
+BinaryValue::BinaryValue(const char* b, const size_t l) : vector<char>(b, b+l)
+{
+};
+
+BinaryValue::BinaryValue(cObject* obj)
+{
+    packObject(obj);
 };
 
 BinaryValue& BinaryValue::operator+=(const BinaryValue& rhs)
@@ -86,7 +95,7 @@ bool BinaryValue::operator<(const BinaryValue& rhs)
 void BinaryValue::netPack(cCommBuffer *b)
 {
     doPacking(b,(uint16_t)size());
-    doPacking(b, (const char*)(&(*begin())), size());
+    doPacking(b, data(), size());
 }
 
 void BinaryValue::netUnpack(cCommBuffer *b)
@@ -94,5 +103,32 @@ void BinaryValue::netUnpack(cCommBuffer *b)
     uint16_t size;
     doUnpacking(b, size);
     resize(size);
-    doUnpacking(b, (char*)(&(*begin())), size);
+    doUnpacking(b, data(), size);
+}
+
+void BinaryValue::packObject(cObject* obj)
+{
+    cNetCommBuffer* b = new cNetCommBuffer();
+    b->reset();
+    b->packObject(obj);
+    resize(b->getMessageSize());
+    memcpy(data(), b->getBuffer(), b->getMessageSize());
+    delete b;
+}
+
+cObject* BinaryValue::unpackObject()
+{
+    cNetCommBuffer* b = new cNetCommBuffer();
+    cObject* obj;
+
+    b->reset();
+    b->allocateAtLeast(size());
+    memcpy(b->getBuffer(), data(), size());
+    b->setMessageSize(size());
+
+    obj = b->unpackObject();
+
+    delete b;
+
+    return obj;
 }

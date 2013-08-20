@@ -427,10 +427,11 @@ protected:
     CompType thisCompType;
 
     virtual void sendMessageToUDP(const TransportAddress& addr,
-                                  cPacket* message)
+                                  cPacket* message,
+                                  simtime_t delay = SIMTIME_ZERO)
     {
         throw cRuntimeError("sendMessageToUDP() not implemented");
-    }
+    };
 
     virtual void pingResponse(PingResponse* pingResponse,
                               cPolymorphic* context, int rpcId,

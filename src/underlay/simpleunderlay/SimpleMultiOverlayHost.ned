@@ -39,7 +39,6 @@ module SimpleMultiOverlayHost
         string tier2Type;// tier 2 module to use
         string tier3Type; // tier 3 module to use
         int numTiers; // number of tiers
-        int supportTcp; // set to 1 to include a TCP module in each host
         double numOverlayModulesPerNode; // number of parallel overlays
         string routingFile = default("");
         bool IPForward = default(false);
@@ -76,7 +75,7 @@ module SimpleMultiOverlayHost
             parameters:
                 @display("p=370,318");
         }
-        tcp[supportTcp]: SimpleTCP {
+        tcp: SimpleTCP {
             parameters:
                 @display("p=309,318");
         }
@@ -106,29 +105,28 @@ module SimpleMultiOverlayHost
             tier1[i].from_lowerTier <-- overlay[i].appOut if numTiers>0;
             tier1[i].udpOut --> udp.appIn++ if numTiers>0;
             udp.appOut++ --> tier1[i].udpIn if numTiers>0;
-            tier1[i].tcpOut --> tcp[0].appIn++ if (numTiers>0 && supportTcp>0);
-            tcp[0].appOut++ --> tier1[i].tcpIn if (numTiers>0 && supportTcp>0);
-
+            tier1[i].tcpOut --> tcp.appIn++ if numTiers>0;
+            tcp.appOut++ --> tier1[i].tcpIn if numTiers>0;
 
             tier2[i].to_lowerTier --> tier1[i].from_upperTier if numTiers > 1;
             tier2[i].from_lowerTier <-- tier1[i].to_upperTier if numTiers > 1;
             tier2[i].udpOut --> udp.appIn++ if numTiers>1;
             udp.appOut++ --> tier2[i].udpIn if numTiers>1;
-            tier2[i].tcpOut --> tcp[0].appIn++ if (numTiers>1 && supportTcp>0);
-            tcp[0].appOut++ --> tier2[i].tcpIn if (numTiers>1 && supportTcp>0);
+            tier2[i].tcpOut --> tcp.appIn++ if numTiers>1;
+            tcp.appOut++ --> tier2[i].tcpIn if numTiers>1;
 
             tier3[i].to_lowerTier --> tier2[i].from_upperTier if numTiers > 2;
             tier3[i].from_lowerTier <-- tier2[i].to_upperTier if numTiers > 2;
             tier3[i].udpOut --> udp.appIn++ if numTiers>2;
             udp.appOut++ --> tier3[i].udpIn if numTiers>2;
-            tier3[i].tcpOut --> tcp[0].appIn++ if (numTiers>2 && supportTcp>0);
-            tcp[0].appOut++ --> tier3[i].tcpIn if (numTiers>2 && supportTcp>0);
+            tier3[i].tcpOut --> tcp.appIn++ if numTiers>2;
+            tcp.appOut++ --> tier3[i].tcpIn if numTiers>2;
 
             overlay[i].udpOut --> udp.appIn++;
             overlay[i].udpIn <-- udp.appOut++;
 
-            overlay[i].tcpOut --> tcp[0].appIn++ if supportTcp>0;
-            overlay[i].tcpIn <-- tcp[0].appOut++ if supportTcp>0;
+            overlay[i].tcpOut --> tcp.appIn++;
+            overlay[i].tcpIn <-- tcp.appOut++;
 
         }
 

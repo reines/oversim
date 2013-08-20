@@ -26,9 +26,13 @@
 #define __SIMPLEGAMECLIENT_H_
 
 #include <map>
+#include <string>
+
+#include <tunoutscheduler.h>
+#include <realtimescheduler.h>
+
 #include <Vector2D.h>
 #include <BaseApp.h>
-#include <string>
 
 #include <GlobalCoordinator.h>
 #include <GlobalStatisticsAccess.h>
@@ -42,8 +46,6 @@
 #include "SCPacket.h"
 #include "SimpleGameClient_m.h"
 
-#include <tunoutscheduler.h>
-#include <realtimescheduler.h>
 
 /// SimpleGameClient class
 /**
@@ -93,7 +95,7 @@ class SimpleGameClient : public BaseApp
         // realworld
         void handleRealworldPacket(char *buf, uint32_t len);
         cMessage* packetNotification; // used by TunOutScheduler to notify about new packets
-        RealtimeScheduler::PacketBuffer packetBuffer; // received packets are stored here
+        PacketBuffer packetBuffer; // received packets are stored here
         RealtimeScheduler* scheduler;
         unsigned int mtu;
         SOCKET appFd;

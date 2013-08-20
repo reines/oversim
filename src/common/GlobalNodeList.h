@@ -43,7 +43,7 @@ class GlobalStatistics;
 
 
 /**
- * Global module (formerly known as GlobalNodeList) that supports the node
+ * Global module (formerly known as BootstrapList) that supports the node
  * bootstrap process and contains node specific underlay parameters,
  * malicious node states, etc...
  *
@@ -94,10 +94,13 @@ public:
      * @param nodeType If != -1, return a node of that type
      * @param bootstrappedNeeded does the node need to be bootstrapped?
      * @param inoffensiveNeeded does the node need to be inoffensive?
+     * @param overlayId id of the overlay. Is used to support
+     *                  multiple disjoint overlays. -1 means any overlayId.
      *
      * @return NodeHandle of the node
      */
-    virtual const NodeHandle& getRandomNode(int32_t nodeType = -1,
+    virtual const NodeHandle& getRandomNode(int32_t overlayId = -1,
+                                            int32_t nodeType = -1,
                                             bool bootstrappedNeeded = true,
                                             bool inoffensiveNeeded = false);
 
@@ -110,39 +113,44 @@ public:
      * try to return a bootstrap node with the same TypeID.
      *
      * @param node Find a bootstrap node with the same TypeID (partition) as node
+     * @param overlayId id of the overlay. Is used to support
+     *                  multiple disjoint overlays. -1 means any overlayId.
      * @return NodeHandle of the bootstrap node
      */
-    virtual const NodeHandle& getBootstrapNode(const NodeHandle &node =
+    virtual const NodeHandle& getBootstrapNode(int32_t overlayId = -1,
+                                               const NodeHandle &node =
                                                NodeHandle::UNSPECIFIED_NODE);
 
     /**
      * Bootstraps peers in the peer set.
      *
      * @param peer node to register
+     * @param overlayId id of the overlay. Is used to support
+     *                  multiple disjoint overlays. Default is 0.
      */
-    virtual void registerPeer(const TransportAddress& peer);
-
-    /**
-     * Bootstraps peers in the peer set.
-     *
-     * @param peer node to register
-     */
-    virtual void registerPeer(const NodeHandle& peer);
+    virtual void registerPeer(const NodeHandle& peer,
+                              int32_t overlayId = 0);
 
 
     /**
      * Update entry to real port without having bootstrapped
      *
      * @param peer node to refresh
+     * @param overlayId id of the overlay. Is used to support
+     *                  multiple disjoint overlays. Default is 0.
      */
-    virtual void refreshEntry(const TransportAddress& peer);
+    virtual void refreshEntry(const TransportAddress& peer,
+                              int32_t overlayId = 0);
 
     /**
      * Debootstraps peers in the peer set
      *
      * @param peer node to remove
+     * @param overlayId id of the overlay. Is used to support
+     *                  multiple disjoint overlays. Default is 0.
      */
-    virtual void removePeer(const TransportAddress& peer);
+    virtual void removePeer(const TransportAddress& peer,
+                            int32_t overlayId = 0);
 
     /**
      * Returns a keylist
@@ -207,7 +215,8 @@ public:
      * @param nodeType If != -1, return a node of that type
      * @returns A pointer to the TransportAddress of a random alive node
      */
-     TransportAddress* getRandomAliveNode(int32_t nodeType = -1);
+     TransportAddress* getRandomAliveNode(int32_t overlayId = -1,
+                                          int32_t nodeType = -1);
 
     /**
      * Selects a random node from the peerSet
@@ -216,7 +225,8 @@ public:
      * @param bootstrapNeeded does the node need to be bootstrapped?
      * @returns The peerInfo of a random node
      */
-    virtual PeerInfo* getRandomPeerInfo(int32_t nodeType = -1,
+    virtual PeerInfo* getRandomPeerInfo(int32_t overlayId = -1,
+                                        int32_t nodeType = -1,
                                         bool bootstrapNeeded = false);
 
     /**
@@ -237,6 +247,9 @@ public:
     inline void incLandmarkPeerSize() { landmarkPeerSize++; }
     inline uint16_t getLandmarkPeerSize() { return landmarkPeerSize; }
     inline void incLandmarkPeerSizePerType(uint16_t type) { landmarkPeerSizePerType[type]++; }
+
+    std::vector<IPvXAddress>* getAllIps();
+    NodeHandle* getNodeHandle(const IPvXAddress& address);
 
 protected:
     /**

@@ -230,7 +230,7 @@ void Nice::initializeOverlay( int stage )
 void Nice::joinOverlay()
 {
     changeState(INIT);
-    changeState(BOOTSTRAP);
+    changeState(JOIN);
 } // joinOverlay
 
 void Nice::handleNodeLeaveNotification() {
@@ -259,9 +259,9 @@ void Nice::changeState( int toState )
 
         break;
 
-    case BOOTSTRAP:
+    case JOIN:
 
-        state = BOOTSTRAP;
+        state = JOIN;
 
         /* get rendevouz point */
         RendevouzPoint = bootstrapList->getBootstrapNode();
@@ -342,7 +342,7 @@ void Nice::handleTimerEvent( cMessage* msg )
     else if (msg->isName("queryTimer")) {
 
         RECORD_STATS(++numInconsistencies; ++numQueryTimeouts);
-        if (!tempResolver.isUnspecified() && 
+        if (!tempResolver.isUnspecified() &&
                 (tempResolver == RendevouzPoint ||
                  (!polledRendevouzPoint.isUnspecified() && tempResolver == polledRendevouzPoint))) {
             Query(RendevouzPoint, joinLayer);
@@ -504,7 +504,7 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
                 break;
 
             default:
-                
+
                 delete niceMsg;
         }
     }
@@ -977,7 +977,7 @@ void Nice::handleNiceLeaderHeartbeat(NiceLeaderHeartbeat* lhbMsg)
 
     }
 
-    if (!clusters[lhbMsg->getLayer()].getLeader().isUnspecified() && 
+    if (!clusters[lhbMsg->getLayer()].getLeader().isUnspecified() &&
             clusters[lhbMsg->getLayer()].getLeader() == thisNode) {
 
         if (debug_heartbeats)
@@ -1014,7 +1014,7 @@ void Nice::handleNiceLeaderHeartbeat(NiceLeaderHeartbeat* lhbMsg)
         if (debug_heartbeats)
             EV << "Possible multiple leaders detected... sending remove to " << clusters[lhbMsg->getLayer()].getLeader() << " leader.\n";
         sendRemoveTo(clusters[lhbMsg->getLayer()].getLeader(), lhbMsg->getLayer());
-        
+
     }
 
     /* Everything is in order. Process HB */
@@ -2151,7 +2151,7 @@ void Nice::cleanPeers()
 {
     // Clean tempPeers
     std::vector<TransportAddress> deadTempPeers;
-    
+
     std::map<TransportAddress, simtime_t>::iterator itTempPeer;
     for (itTempPeer = tempPeers.begin(); itTempPeer != tempPeers.end(); ++itTempPeer) {
         if (simTime() > (itTempPeer->second + 3 * heartbeatInterval)) {
@@ -2237,7 +2237,7 @@ bool Nice::mergeNeeded()
     // The layer at which we must merge
     int mergeLayer;
     int highestLeaderLayer = getHighestLeaderLayer();
-    
+
     // Find lowest layer that needs merging.
     // The node will disappear from all higher layers.
     for (mergeLayer= 0; mergeLayer <= highestLeaderLayer && mergeLayer < maxLayers - 1; ++mergeLayer) {
@@ -2253,7 +2253,7 @@ bool Nice::mergeNeeded()
             }
         }
     }
-    
+
     return false;
 }
 

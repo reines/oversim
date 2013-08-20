@@ -61,6 +61,7 @@ simple SimpleUDP extends UDP
                                         // according to "Network Coordinates in the Wild", Figure 7
                                         // possible values: empty, "live_all", "live_planetlab", "simulation"
         double jitter;                  // average amount of jitter in %
+        bool enableAccessRouterTxQueue; // model the tx queue of the access router of an destination node 
         @display("i=block/transport");
     gates:
 }

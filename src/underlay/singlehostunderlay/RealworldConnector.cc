@@ -21,10 +21,11 @@
  * @author Stephan Krause
  */
 
+#include "RealworldConnector.h"
+
 #include <string.h>
 #include <omnetpp.h>
 
-#include "RealworldConnector.h"
 
 RealworldConnector::RealworldConnector()
 {
@@ -89,7 +90,7 @@ void RealworldConnector::handleMessage(cMessage *msg)
         while( packetBuffer.size() > 0 ) {
             // get packet from buffer and parse it
 
-            RealtimeScheduler::PacketBufferEntry packet = *(packetBuffer.begin());
+            PacketBufferEntry packet = *(packetBuffer.begin());
             packetBuffer.pop_front();
             char* buf = packet.data;
             uint32_t len = packet.length;

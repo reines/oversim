@@ -32,6 +32,7 @@
 
 #include <Quon_m.h>
 #include <QuonHelper.h>
+#include "LoginCache.h"
 
 /**
  * QuON: An overlay network based on quadtrees.
@@ -76,6 +77,7 @@ class Quon : public BaseOverlay
         bool linearAdaption;
         double adaptionSensitivity;
         double gossipSensitivity;
+        bool nnOnlyBinding;
 
         // timers
         cMessage* join_timer;
@@ -128,6 +130,7 @@ class Quon : public BaseOverlay
         unsigned int secTimerCount;
         long rejoinCount;
         unsigned long avgAOI;
+        simtime_t joinTime;
 
         // quon functions
         bool addSite(Vector2D p, NodeHandle node, double AOI, bool isSoft = false, QUpdateType update = QFOREIGN);
@@ -146,6 +149,11 @@ class Quon : public BaseOverlay
         // node state
         QState qstate;
         bool aloneInOverlay;
+
+        // login cache
+        LoginCache* loginCache;
+        int cacheInterval;
+        int timeSinceCache;
 };
 
 #endif

@@ -181,7 +181,7 @@ for run in sorted(valuemap.keys()):
         bucketmean = bucketarray.mean()
         # determine coinfidence interval if desired
         if options.ci > 0:
-            bucketci = sp.stderr(bucketarray) * sp.t._ppf((1+options.ci)/2., len(bucketarray)) * options.scale
+            bucketci = sp.sem(bucketarray) * sp.t._ppf((1+options.ci)/2., len(bucketarray)) * options.scale
             ci[bucket] = bucketci
         bucketmean*=options.scale
         row[bucket] = bucketmean

@@ -24,15 +24,15 @@
 
 #include "ProxNodeHandle.h"
 
-// This is the usual value for SimTIme::getMaxTime(), may change with a different SimTime scale.
+// This is the usual value for SimTime::getMaxTime(), may change with a different SimTime scale.
 // This value is declared directly a constant, since SimTime::getMaxTime()
 // isn't set yet when the program starts.
-#define MAXTIME_DBL 9223372036.854775807
+#define MAXTIME_DBL 9223372036//.854775807
 
 const Prox Prox::PROX_SELF(0, 1);
 const Prox Prox::PROX_UNKNOWN(MAXTIME_DBL, 0);
 const Prox Prox::PROX_TIMEOUT(MAXTIME_DBL, 1);
-//const Prox Prox::PROX_WAITING = {MAXTIME_DBL, 0.6};
+const Prox Prox::PROX_WAITING(MAXTIME_DBL, 0.999);
 
 Prox::operator double() { return proximity; };
 Prox::operator simtime_t() { return (proximity >= MAXTIME_DBL)
@@ -50,17 +50,6 @@ bool Prox::operator!=(Prox p) const { return !(*this == p); }
 // predefined node handle
 const ProxNodeHandle ProxNodeHandle::UNSPECIFIED_NODE;
 
-ProxNodeHandle::ProxNodeHandle()
-{
-    // TODO Auto-generated constructor stub
-
-}
-
-ProxNodeHandle::~ProxNodeHandle()
-{
-    // TODO Auto-generated destructor stub
-}
-
 ProxNodeHandle::ProxNodeHandle(const NodeHandle& nodeHandle)
 : NodeHandle(nodeHandle), prox(prox)
 {
@@ -73,15 +62,42 @@ ProxNodeHandle::ProxNodeHandle(const NodeHandle& nodeHandle, const Prox& prox)
     //...
 }
 
+
+// predefined node handle
+const ProxTransportAddress ProxTransportAddress::UNSPECIFIED_ADDRESS;
+
+ProxTransportAddress::ProxTransportAddress(const TransportAddress& transportAddress)
+: TransportAddress(transportAddress), prox(prox)
+{
+    //...
+}
+
+ProxTransportAddress::ProxTransportAddress(const TransportAddress& transportAddress, const Prox& prox)
+: TransportAddress(transportAddress), prox(prox)
+{
+    //...
+}
+
+
 std::ostream& operator<<(std::ostream& os, const Prox& prox)
 {
     if (prox == Prox::PROX_SELF) os << "[self]";
     else if (prox == Prox::PROX_UNKNOWN) os << "[unknown]";
+    else if (prox == Prox::PROX_WAITING) os << "[waiting]";
     else if (prox == Prox::PROX_TIMEOUT) os << "[timeout]";
     else {
         os << prox.proximity;
         if (prox.accuracy != 1) os << " (a=" << prox.accuracy << ")";
     }
    return os;
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         const ProxTransportAddress& address)
+{
+    os << static_cast<const TransportAddress&>(address)
+       << ", rtt=" << address.getProx();
+
+    return os;
 }
 

@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+// Copyright (C) 2012 Institute of Telematics, Karlsruhe Institute of Technology (KIT)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 //
 
 //
-// @author Felix Palmen
+// @author Felix Palmen, Bernhard Heep
 //
 
 cplusplus {{
@@ -28,27 +28,36 @@ cplusplus {{
 
 // constants for message length in bit
 static const int PASTRYTYPE_L = 8;
-static const int PASTRYSTATETYPE_L = 8;
-static const int PASTRYREQUESTTYPE_L = 0;
 static const int LASTHOPFLAG_L = 8;
 static const int TIMESTAMP_L = 32;
+static const int ROWNUMBER_L = 16;
 static const int PASTRYFINDNODEEXTDATA_L = NODEHANDLE_L + HOPCOUNT_L;
 
 #define PASTRY_L(msg) (BASEOVERLAY_L(msg) + PASTRYTYPE_L)
-#define PASTRYJOIN_L(msg) (PASTRY_L(msg) + TRANSPORTADDRESS_L + HOPCOUNT_L)
-#define PASTRYREQ_L(msg) (PASTRY_L(msg) + TRANSPORTADDRESS_L + PASTRYREQUESTTYPE_L)
+
 #define PASTRYSTATE_L(msg) (PASTRY_L(msg) + TRANSPORTADDRESS_L \
-        + NODEHANDLE_L * \
-        (msg->getRoutingTableArraySize() + msg->getLeafSetArraySize() \
-        + msg->getNeighborhoodSetArraySize()) + ARRAYSIZE_L + HOPCOUNT_L + \
-        LASTHOPFLAG_L + TIMESTAMP_L)
+    + NODEHANDLE_L * \
+    (msg->getRoutingTableArraySize() + msg->getLeafSetArraySize() \
+    + msg->getNeighborhoodSetArraySize()) + 3 * ARRAYSIZE_L + HOPCOUNT_L + \
+    LASTHOPFLAG_L + TIMESTAMP_L)
+
 #define PASTRYNEWLEAFS_L(msg) (msg->getLeafsArraySize() * NODEHANDLE_L + \
         ARRAYSIZE_L)
-#define PASTRYLEAFSET_L(msg) (PASTRY_L(msg) + TRANSPORTADDRESS_L \
-        + NODEHANDLE_L * msg->getLeafSetArraySize() + ARRAYSIZE_L)
-#define PASTRYRTREQ_L(msg) (PASTRY_L(msg) + TRANSPORTADDRESS_L)
-#define PASTRYRTABLE_L(msg) (PASTRY_L(msg) + TRANSPORTADDRESS_L \
-        + NODEHANDLE_L * msg->getRoutingTableArraySize() + ARRAYSIZE_L)
+
+#define PASTRYJOINCALL_L(msg) PASTRY_L(msg)
+#define PASTRYJOINRESPONSE_L(msg) PASTRY_L(msg) 
+
+#define PASTRYREQUESTSTATECALL_L(msg) PASTRY_L(msg)
+#define PASTRYREQUESTSTATERESPONSE_L(msg) PASTRY_L(msg)
+
+#define PASTRYREQUESTREPAIRCALL_L(msg) PASTRY_L(msg)
+#define PASTRYREQUESTREPAIRRESPONSE_L(msg) PASTRY_L(msg)
+
+#define PASTRYREQUESTLEAFSETCALL_L(msg) PASTRY_L(msg)
+#define PASTRYREQUESTLEAFSETRESPONSE_L(msg) PASTRY_L(msg)
+
+#define PASTRYREQUESTROUTINGROWCALL_L(msg) (PASTRY_L(msg) + ROWNUMBER_L)
+#define PASTRYREQUESTROUTINGROWRESPONSE_L(msg) PASTRY_L(msg)
 }}
 
 
@@ -63,116 +72,106 @@ class BaseResponseMessage;
 class BaseAppDataMessage;
 
 
-enum PastryMsgType
-{
-    PASTRY_MSG_STD = 0;
-    PASTRY_MSG_JOIN = 1;
-    PASTRY_MSG_STATE = 2;
-    PASTRY_MSG_REQ = 3;
-    PASTRY_MSG_LEAFSET = 4;	
-    PASTRY_MSG_ROWREQ = 5;
-    PASTRY_MSG_RROW = 6;
-    PASTRY_MSG_LEAFSET_PULL = 7;
-    PASTRY_REQ_REPAIR = 8;
-    PASTRY_REQ_STATE = 9;
-    PASTRY_REQ_LEAFSET = 10;
-}
-
 enum PastryStateMsgType
 {
-    PASTRY_STATE_STD = 0;
-    PASTRY_STATE_JOIN = 1;
-    PASTRY_STATE_MINJOIN = 2;
-    PASTRY_STATE_UPDATE = 3;
-    PASTRY_STATE_REPAIR = 4;
-    PASTRY_STATE_JOINUPDATE = 5;
-}
-
-
-//
-// Base message for all messages used by Pastry
-//
-packet PastryMessage extends BaseOverlayMessage
-{
-        int pastryMsgType = PASTRY_MSG_STD;    // the PastryMsgType
-}
-
-//
-// Message used to join a pastry overlay
-//
-packet PastryJoinMessage extends PastryMessage
-{
-        TransportAddress sendStateTo = TransportAddress::UNSPECIFIED_NODE;    // TransportAddress of the node that wants to join
+    PASTRY_STATE_STD        = 0x01;
+    PASTRY_STATE_JOIN       = 0x02;
+    PASTRY_STATE_MINJOIN    = 0x04;
+    PASTRY_STATE_UPDATE     = 0x08;
+    PASTRY_STATE_REPAIR     = 0x10;
+    PASTRY_STATE_JOINUPDATE = 0x20;
+    PASTRY_STATE_LEAFSET    = 0x40;
+    PASTRY_STATE_ROUTINGROW = 0x80;
 }
 
 
 //
 // Message used to send a PastryState
 //
-packet PastryStateMessage extends PastryMessage
+packet PastryStateMessage extends BaseOverlayMessage
 {
-        int pastryStateMsgType = PASTRY_STATE_STD;    // the type of the PastryStateMessage
-        NodeHandle sender = NodeHandle::UNSPECIFIED_NODE;    // NodeHandle of the node sending this message
-        NodeHandle routingTable[];    // the routingTable of the sender
-        NodeHandle leafSet[];    // the leafSet of the sender
-        NodeHandle neighborhoodSet[];    // the neighborhoodSet of the sender
-        int joinHopCount = 0;    // counts the hops this message takes
-        bool lastHop = false;    // is this node the destination node?
-        simtime_t timestamp;    // simTime when sending this message
+    int pastryStateMsgType @enum(PastryStateMsgType) = PASTRY_STATE_STD;    // the type of the PastryStateMessage
+    NodeHandle sender = NodeHandle::UNSPECIFIED_NODE;    // NodeHandle of the node sending this message
+    NodeHandle routingTable[];    // the routingTable of the sender
+    NodeHandle leafSet[];         // the leafSet of the sender
+    NodeHandle neighborhoodSet[]; // the neighborhoodSet of the sender
+    int row = 0;                  // row or number of hops this message takes
+    bool lastHop = false;         // is this node the destination node?
+    simtime_t timestamp;          // simTime when sending this message
 }
+
 
 //
 // Message used to find a Pastry node
 //
 packet PastryFindNodeExtData
 {
-        TransportAddress sendStateTo = TransportAddress::UNSPECIFIED_NODE;    // the sender of this message
-        int joinHopCount = 0;    // counts the hops this message takes
+    TransportAddress sendStateTo = TransportAddress::UNSPECIFIED_NODE;    // the sender of this message
+    int joinHopCount = 0;    // counts the hops this message takes
 }
+
 
 //
 // Message used to inform about new PastryLeafs
 //
 packet PastryNewLeafsMessage
 {
-        NodeHandle leafs[];    // the new PastryLeafs
+    NodeHandle leafs[];    // the new PastryLeafs
 }
 
 
-packet PastrySendState
+message PastrySendState
 {
-        TransportAddress dest = TransportAddress::UNSPECIFIED_NODE;
+    TransportAddress dest = TransportAddress::UNSPECIFIED_NODE;
 }
 
-packet PastryLeafsetMessage extends PastryMessage
+
+packet PastryJoinCall extends BaseCallMessage
 {
-        NodeHandle sender = NodeHandle::UNSPECIFIED_NODE;
-        TransportAddress sendStateTo = TransportAddress::UNSPECIFIED_NODE;
-        NodeHandle leafSet[];
-        simtime_t timestamp = 0;
 }
 
-packet PastryRoutingRowRequestMessage extends PastryMessage
+
+packet PastryJoinResponse extends BaseResponseMessage
 {
-        TransportAddress sendStateTo = TransportAddress::UNSPECIFIED_NODE;
-        int row;
-
 }
-packet PastryRoutingRowMessage extends PastryMessage
+
+
+packet RequestStateCall extends BaseCallMessage
 {
-        NodeHandle sender = NodeHandle::UNSPECIFIED_NODE;
-        NodeHandle routingTable[];
-        int row;
-        simtime_t timestamp = 0;
 }
 
-//
-// Message used to request PastryState or a Leafset
-//
-packet PastryRequestMessage extends PastryMessage
+
+packet RequestStateResponse extends BaseResponseMessage
 {
-        TransportAddress sendStateTo = TransportAddress::UNSPECIFIED_NODE;    // TransportAddress of the node that requests the state
-        int pastryReqType = PASTRY_MSG_STD;    // the PastryMsgType
 }
 
 
+packet RequestRepairCall extends BaseCallMessage
+{
+}
+
+
+packet RequestRepairResponse extends BaseResponseMessage
+{
+}
+
+
+packet RequestLeafSetCall extends BaseCallMessage
+{
+}
+
+
+packet RequestLeafSetResponse extends BaseResponseMessage
+{
+}
+
+
+packet RequestRoutingRowCall extends BaseCallMessage
+{
+    int row;
+}
+
+
+packet RequestRoutingRowResponse extends BaseResponseMessage
+{
+}

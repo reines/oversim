@@ -227,21 +227,16 @@ IPvXAddress AccessNet::addOverlayNode(cModule* node, bool migrate)
     cGate* ipIn = firstUnusedGate(ipModule, "queueIn");
     netwInGate->connectTo(ipIn);
 
+    cModule* arpModule = NULL;
+
     if(useIPv6) {
-        cGate* ipOut = firstUnusedGate(ipModule, "queueOut");
-        ipOut->connectTo(netwOutGate);
+        arpModule = router.module->getSubmodule("networkLayer")->getSubmodule("neighbourDiscovery"); //comment out for speed-hack
+    } else {
+        arpModule = router.module->getSubmodule("networkLayer")->getSubmodule("arp"); //comment out for speed-hack
+        cGate* arpOut = firstUnusedGate(arpModule, "nicOut"); //comment out for speed-hack
+        arpOut->connectTo(netwOutGate);    //comment out for speed-hack
+
     }
-
-#ifdef _ORIG_INET
-    cModule* arpModule = router.module->getSubmodule("networkLayer")->getSubmodule("arp"); //comment out for speed-hack
-
-    cGate* arpOut = firstUnusedGate(arpModule, "nicOut"); //comment out for speed-hack
-
-    //cGate* ipOut = firstUnusedGate(ipModule, "queueOut"); //comment out for speed-hack
-    cGate* ipOut = ipModule->gate("queueOut");
-
-    arpOut->connectTo(netwOutGate);    //comment out for speed-hack
-#endif
 
     //
     // Start ppp interface modules
@@ -252,7 +247,7 @@ IPvXAddress AccessNet::addOverlayNode(cModule* node, bool migrate)
     terminal.remotePPPInterface->scheduleStart(simTime());
     terminal.remotePPPInterface->callInitialize();
 
-    if ( !migrate) {
+    if (!migrate) {
         // we are already in stage 4 and need to call initialize
     // for all previous stages manually
         for (int i=0; i < MAX_STAGE_UNDERLAY + 1; i++) {

@@ -554,7 +554,6 @@ void InetUnderlayConfigurator::setUpIPv6(cTopology &topo)
     // Fill in routing tables.
     for (int i = 0; i < topo.getNumNodes(); i++) {
         cTopology::Node* destNode = topo.getNode(i);
-        IPv6Words destAddr = nodeAddresses[i];
 
         // calculate shortest paths from everywhere towards destNode
         topo.calculateUnweightedSingleShortestPathsTo(destNode);
@@ -650,5 +649,5 @@ double intuniform2(double start, double end, double index, double new_calc)
     return value[(int)index];
 };
 
-Define_Function(uniform2, 4);
-Define_Function(intuniform2, 4);
+Define_NED_Math_Function(uniform2, 4);
+Define_NED_Math_Function(intuniform2, 4);

@@ -98,6 +98,7 @@ void BaseOverlay::initialize(int stage)
         appGate = gate("appIn");
 
         // fetch some parameters
+        overlayId = par ("overlayId");
         debugOutput = par("debugOutput");
         collectPerHopDelay = par("collectPerHopDelay");
         localPort = par("localPort");
@@ -474,9 +475,10 @@ void BaseOverlay::bindToPort(int port)
     // TODO UDPAppBase should be ported to use UDPSocket sometime, but for now
     // we just manage the UDP socket by hand...
     cMessage *msg = new cMessage("UDP_C_BIND", UDP_C_BIND);
+    socketId = UDPSocket::generateSocketId();
     UDPControlInfo *ctrl = new UDPControlInfo();
     ctrl->setSrcPort(port);
-    ctrl->setSockId(UDPSocket::generateSocketId());
+    ctrl->setSockId(socketId);
     msg->setControlInfo(ctrl);
     send(msg, "udpOut");
 }
@@ -577,6 +579,26 @@ NodeVector* BaseOverlay::local_lookup(const OverlayKey& key,
     return nodeVector;
 }
 
+OverlayKey BaseOverlay::estimateMeanDistance()
+{
+    throw cRuntimeError("BaseOverlays::estimate_mean_distance(): "
+            "Function not implemented for this Overlay!");
+}
+
+uint32_t BaseOverlay::estimateOverlaySize()
+{
+    OverlayKey mean = estimateMeanDistance();
+    OverlayKey start = mean;
+    OverlayKey count = mean;
+    uint32_t number = 1;
+
+    while (count >= start) {
+        number++;
+        count += mean;
+    }
+    return number;
+}
+
 void BaseOverlay::join(const OverlayKey& nodeID)
 {
     Enter_Method("join()");
@@ -605,8 +627,16 @@ void BaseOverlay::join(const OverlayKey& nodeID)
                 setOwnNodeID();
             }
         }
+    } else if (state == READY && !nodeID.isUnspecified()) { // TODO dCBR
+        cMessage *msg = new cMessage("UDP_C_UNBIND", UDP_C_UNBIND);
+        UDPControlInfo *ctrl = new UDPControlInfo();
+        ctrl->setSrcPort(thisNode.getPort());
+        ctrl->setSockId(socketId);
+        msg->setControlInfo(ctrl);
+        send(msg, "udpOut");
+        bindToPort((thisNode.getPort() + 10) % 0xFFFF); // test
+        thisNode.setKey(nodeID);
     }
-
     cObject** context = globalNodeList->getContext(getThisNode());
     if (restoreContext && context) {
         if (*context == NULL) {
@@ -825,10 +855,17 @@ void BaseOverlay::handleMessage(cMessage* msg)
                 globalNodeList->setMalicious(getThisNode(),
                                              overlayContext->malicious);
                 join(overlayContext->key);
+            } else if (!readyMsg->getNodeId().isUnspecified()) {
+                //std::cout << "readymsg at BO" << std::endl;
+                join(readyMsg->getNodeId());
             } else {
                 join();
             }
-        }
+        } /*else if (!readyMsg->getReady() &&
+            readyMsg->getComp() == NEIGHBORCACHE_COMP) {
+            //STATE =
+            setOverlayReady(false);
+        } */
         delete msg;
     } else {
         throw cRuntimeError("BaseOverlay::handleMessage(): Received msg with "
@@ -849,6 +886,7 @@ void BaseOverlay::handleBaseOverlayMessage(BaseOverlayMessage* msg,
         // process rpc-messages
         BaseRpcMessage* rpcMsg = check_and_cast<BaseRpcMessage*>(msg);
 
+        // TODO destKey -> overlayCtrlInfo
         internalHandleRpcMessage(rpcMsg);
         return;
     }
@@ -1079,9 +1117,9 @@ void BaseOverlay::setOverlayReady(bool ready)
     globalNodeList->setOverlayReadyIcon(getThisNode(), ready);
 
     if (ready) {
-        bootstrapList->registerBootstrapNode(thisNode);
+        bootstrapList->registerBootstrapNode(thisNode, overlayId);
     } else {
-        bootstrapList->removeBootstrapNode(thisNode);
+        bootstrapList->removeBootstrapNode(thisNode, overlayId);
     }
 
     if (globalParameters->getPrintStateToStdOut()) {
@@ -1143,8 +1181,10 @@ void BaseOverlay::sendRouteMessage(const TransportAddress& dest,
         sendUdpRpcCall(dest, nextHopCall, NULL, -1, routeRetries);
     }
 }
+
+
 void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
-                                   cPacket* msg)
+                                   cPacket* msg, simtime_t delay)
 {
     // if there's still a control info attached to the message, remove it
     cPolymorphic* ctrlInfo = msg->removeControlInfo();
@@ -1192,7 +1232,7 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
             RECORD_STATS(numInternalSent++; bytesInternalSent += msg->getByteLength());
         }
     }
-    send(msg, "udpOut");
+    sendDelayed(msg, delay, "udpOut");
 }
 
 //------------------------------------------------------------------------
@@ -1260,11 +1300,16 @@ public:
                 EV << "[SendToKeyListener::lookupFinished()]\n"
                    << "    Lookup failed - dropping message"
                    << endl;
-                //std::cout << simTime() << " "
-                //          << routeMsg->getSrcNode()
-                //          << " [SendToKeyListener::lookupFinished()]\n"
-                //          << "    Lookup failed - dropping message"
-                //          << std::endl;
+
+                /*
+                std::cout << simTime() << " "
+                          << routeMsg->getEncapsulatedPacket()->getName() << " "
+                          << routeMsg->getSrcNode()
+                          << " [SendToKeyListener::lookupFinished()]\n"
+                          << "    Lookup failed - dropping message"
+                          << std::endl;
+                 */
+
                 RECORD_STATS(overlay->numDropped++;
                              overlay->bytesDropped += routeMsg->getByteLength());
             }
@@ -1589,8 +1634,10 @@ bool BaseOverlay::checkFindNode(BaseRouteMessage* routeMsg)
         findNodeCall
             ->setControlInfo(check_and_cast<OverlayCtrlInfo*>
             (routeMsg->removeControlInfo()));
-        findNodeRpc(findNodeCall);
-        return true;
+        if (findNodeCall->getSrcNode() != thisNode) {
+            findNodeRpc(findNodeCall);
+            return true;
+        } //else std::cout << " autsch!! " << std::endl;
     }
     return false;
 }
@@ -1664,6 +1711,7 @@ void BaseOverlay::joinOverlay()
 
 bool BaseOverlay::handleFailedNode(const TransportAddress& failed)
 {
+    //std::cout << "Mooooo" << std::endl;
     return true;
 }
 
@@ -1718,7 +1766,9 @@ void BaseOverlay::internalHandleRpcTimeout(BaseCallMessage* msg,
             // + route message again if possible
             assert(!dest.isUnspecified() && destKey.isUnspecified());
             if (handleFailedNode(dest)) {
-                if (!tempMsg->getDestKey().isUnspecified()) {
+                if (!tempMsg->getDestKey().isUnspecified() &&
+                    tempMsg->getRoutingType() != ITERATIVE_ROUTING &&
+                    tempMsg->getRoutingType() != EXHAUSTIVE_ITERATIVE_ROUTING) {
                     // TODO: msg is resent only in recursive mode
                     EV << "[BaseOverlay::internalHandleRpcTimeout() @ "
                        << thisNode.getIp()
@@ -1751,6 +1801,7 @@ void BaseOverlay::internalHandleRpcTimeout(BaseCallMessage* msg,
             } else {
                 RECORD_STATS(numDropped++;
                              bytesDropped += tempMsg->getByteLength());
+                //std::cout << thisNode.getIp() << " BaseOverlay::internalHandleRpcTimeout() 2 " << msg->getName() << std::endl;
                 delete tempMsg;
                 join();
             }
@@ -1971,8 +2022,9 @@ void BaseOverlay::nextHopRpc(NextHopCall* call)
 {
     if (state != READY) {
         //TODO EV...
-        delete call;
-        return;
+        //std::cout << "BaseOverlay::nextHopRpc() (state != READY) " << state << " " << call->getName() << std::endl;
+        //delete call;
+        //return;
     }
 
     BaseRouteMessage* routeMsg
@@ -1990,12 +2042,12 @@ void BaseOverlay::nextHopRpc(NextHopCall* call)
     std::string temp("ACK: [");
     (temp += routeMsg->getName()) += "]";
 
+    handleBaseOverlayMessage(routeMsg, routeMsg->getDestKey());
+
     NextHopResponse* response
         = new NextHopResponse(temp.c_str());
     response->setBitLength(NEXTHOPRESPONSE_L(response));
     sendRpcResponse(call, response);
-
-    handleBaseOverlayMessage(routeMsg, routeMsg->getDestKey());
 }
 
 void BaseOverlay::registerComp(CompType compType, cModule *module)

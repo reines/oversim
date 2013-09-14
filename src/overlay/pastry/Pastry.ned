@@ -54,6 +54,7 @@ simple Pastry extends BasePastry
 
         bool partialJoinPath;             // allow join even with missing state
                                           // message along the routing path
+        bool useSecondStage;
         double secondStageWait @unit(s);  // how long to wait before starting
                                           // second stage of init phase
         bool pingBeforeSecondStage;
@@ -65,6 +66,8 @@ simple Pastry extends BasePastry
         bool sendStateAtLeafsetRepair;
         // how long to wait for leafset pings in discovery stage
         double discoveryTimeoutAmount @unit(s);
+
+        bool useRoutingTableMaintenance;
         // interval for periodic routing table maintenance
         double routingTableMaintenanceInterval @unit(s);
         // pastry configuration according to the original paper

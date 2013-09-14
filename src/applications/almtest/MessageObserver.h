@@ -23,102 +23,96 @@
 #define __MESSAGEOBSERVER_H__
 
 #include <stdint.h>
-#include <time.h>
-#include <ostream>
-#include <omnetpp.h>
 #include "OverlayKey.h"
 
 class ALMTestTracedMessage;
 
 class MessageObserver : public cSimpleModule {
+public:
+    MessageObserver();
+    ~MessageObserver();
 
-    public:
+    void initialize();
 
-        MessageObserver();
-        ~MessageObserver();
+    void finish();
 
-        void initialize();
+    void handleMessage(cMessage* msg);
 
-        void finish();
+    /**
+     * Adds one to node count for group.
+     */
+    void joinedGroup(int moduleId, OverlayKey groupId);
 
-        void handleMessage(cMessage* msg);
+    /**
+     * Subtracts one from node count for group.
+     */
+    void leftGroup(int moduleId, OverlayKey groupId);
 
-        /**
-         * Adds one to node count for group.
-         */
-        void joinedGroup(int moduleId, OverlayKey groupId);
+    /**
+     * Counts n - 1 messages pending reception, where n is the
+     * size of the group to which the message is sent.
+     */
+    void sentMessage(ALMTestTracedMessage* msg);
 
-        /**
-         * Subtracts one from node count for group.
-         */
-        void leftGroup(int moduleId, OverlayKey groupId);
+    /**
+     * Counts one received message for group.
+     */
+    void receivedMessage(ALMTestTracedMessage* msg);
 
-        /**
-         * Counts n - 1 messages pending reception, where n is the
-         * size of the group to which the message is sent.
-         */
-        void sentMessage(ALMTestTracedMessage* msg);
+    /**
+     * Notifies the observer that the node doesn't exist anymore.
+     */
+    void nodeDead(int moduleId);
 
-        /**
-         * Counts one received message for group.
-         */
-        void receivedMessage(ALMTestTracedMessage* msg);
+private:
+    /*
+     * Tracks data related to a single group
+     */
+    struct MulticastGroup {
+        MulticastGroup() : size(0), sent(0), received(0) {}
 
-        /**
-         * Notifies the observer that the node doesn't exist anymore.
-         */
-        void nodeDead(int moduleId);
+        // Number of nodes in the group
+        uint32_t size;
 
-    private:
+        // Number of messages that should have been received
+        uint64_t sent;
 
-        /*
-         * Tracks data related to a single group
-         */
-        struct MulticastGroup {
-            MulticastGroup() : size(0), sent(0), received(0) {}
+        // Number of messages recieved total by all nodes
+        uint64_t received;
 
-            // Number of nodes in the group
-            uint32_t size;
+    };
 
-            // Number of messages that should have been received
-            uint64_t sent;
+    simtime_t creationTime;
 
-            // Number of messages recieved total by all nodes
-            uint64_t received;
+    typedef std::pair<int, OverlayKey> NodeGroupPair;
 
-        };
+    typedef std::pair<int, long> NodeMessagePair;
 
-        simtime_t creationTime;
+    // Info about a specific group
+    std::map<OverlayKey, MulticastGroup> groups;
 
-        typedef std::pair<int, OverlayKey> NodeGroupPair;
+    // When a node joined a given group
+    std::map<NodeGroupPair, simtime_t> joinedAt;
 
-        typedef std::pair<int, long> NodeMessagePair;
+    // When a node received a given message
+    std::map<NodeMessagePair, simtime_t> receivedAt;
 
-        // Info about a specific group
-        std::map<OverlayKey, MulticastGroup> groups;
+    // Periodically clean up the above map. Set to 0 to disable.
+    cMessage* gcTimer;
 
-        // When a node joined a given group
-        std::map<NodeGroupPair, simtime_t> joinedAt;
+    // How often to clean up
+    double gcInterval;
 
-        // When a node received a given message
-        std::map<NodeMessagePair, simtime_t> receivedAt;
+    // How long data will be kept in the received cache
+    double cacheMaxAge;
 
-        // Periodically clean up the above map. Set to 0 to disable.
-        cMessage* gcTimer;
+    // How many messages have been received by their sender (have looped)
+    int numLooped;
 
-        // How often to clean up
-        double gcInterval;
+    GlobalStatistics* globalStatistics;
 
-        // How long data will be kept in the received cache
-        double cacheMaxAge;
-
-        // How many messages have been received by their sender (have looped)
-        int numLooped;
-
-        GlobalStatistics* globalStatistics;
-
-        friend std::ostream& operator<< (std::ostream& os, MessageObserver::MulticastGroup const & mg);
-        friend std::ostream& operator<< (std::ostream& os, MessageObserver::NodeGroupPair const & ngp);
+    friend std::ostream& operator<< (std::ostream& os, MessageObserver::MulticastGroup const & mg);
+    friend std::ostream& operator<< (std::ostream& os, MessageObserver::NodeGroupPair const & ngp);
 };
 
 std::ostream& operator<< (std::ostream& os, MessageObserver::MulticastGroup const & mg);

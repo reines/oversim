@@ -28,11 +28,16 @@
 #include <NodeHandle.h>
 #include <PeerInfo.h>
 #include <GlobalStatisticsAccess.h>
+#include <CoordBasedRoutingAccess.h>
 #include <CoordMessages_m.h>
 #include <GlobalNodeListAccess.h>
 #include <hashWatch.h>
+#include <BootstrapList.h>
+#include <DiscoveryMode.h>
 
 #include "NeighborCache.h"
+#include <GlobalViewBuilder.h>
+#include <UnderlayConfigurator.h>
 
 
 const std::vector<double> NeighborCache::coordsDummy;
@@ -50,9 +55,10 @@ std::ostream& operator<<(std::ostream& os,
     os << " (inserted: " << entry.insertTime;
 
     os << ", #contexts: "
-       << entry.waitingContexts.size();
+            << entry.waitingContexts.size();
 
     if (!entry.nodeRef.isUnspecified()) os <<  ", <KEY>";
+
 
     //TODO entry.coordsInfo
 
@@ -73,8 +79,10 @@ void NeighborCache::initializeApp(int stage)
         enableNeighborCache = par("enableNeighborCache");
         rttExpirationTime = par("rttExpirationTime");
         maxSize = par("maxSize");
-        doDiscovery = par("doDiscovery");
-        ncsSendBackOwnCoords = par("ncsSendBackOwnCoords");
+        //doDiscovery = par("doDiscovery");
+        collectClosestNodes = par("collectClosestNodes");
+        ncsPiggybackOwnCoords = par("ncsPiggybackOwnCoords");
+        useNcsForTimeout = par("useNcsForTimeout");
 
         // set default query types
         std::string temp = par("defaultQueryType").stdstringValue();
@@ -87,7 +95,7 @@ void NeighborCache::initializeApp(int stage)
         else if (temp == "estimated")
             defaultQueryType = NEIGHBORCACHE_ESTIMATED;
         else throw cRuntimeError((std::string("Wrong query type: ")
-            + temp).c_str());
+        + temp).c_str());
 
         temp = par("defaultQueryTypeI").stdstringValue();
         if (temp == "available")
@@ -95,7 +103,7 @@ void NeighborCache::initializeApp(int stage)
         else if (temp == "estimated")
             defaultQueryTypeI = NEIGHBORCACHE_ESTIMATED;
         else throw cRuntimeError((std::string("Wrong query type (I): ")
-            + temp).c_str());
+        + temp).c_str());
 
         temp = par("defaultQueryTypeQ").stdstringValue();
         if (temp == "exact")
@@ -114,10 +122,53 @@ void NeighborCache::initializeApp(int stage)
         else if (temp == "gnp") ncs = new Nps(); //TODO
         else if (temp == "nps") ncs = new Nps();
         else if (temp == "simple") ncs = new SimpleNcs();
+        else if (temp == "simpleunderlayncs") ncs = new SimpleUnderlayNCS(); //TODO
         else throw cRuntimeError((std::string("Wrong NCS type: ")
-            + temp).c_str());
+        + temp).c_str());
+
+        if (par("doDiscovery")) {
+            if (collectClosestNodes == 0) {
+                throw cRuntimeError("Discovery Mode with collectClosestNodes = 0");
+            }
+            discoveryMode = new DiscoveryMode();
+            discoveryMode->init(this);
+            discoveryFinished = false;
+        } else {
+            discoveryMode = NULL;
+        }
+        if (collectClosestNodes > 0) {
+            proxComparator = new StdProxComparator();
+            closestNodes = new ProxAddressVector(collectClosestNodes, NULL,
+                                                 proxComparator, NULL,
+                                                 collectClosestNodes, 0);
+            WATCH_VECTOR(*closestNodes);
+        } else {
+            proxComparator = NULL;
+            closestNodes = NULL;
+        }
+
+
+        globalViewBuilder = NULL;
+        treeManager = NULL;
+
+        if(par("treeMgmtEnableTreeManagement")) {
+            treeManager = new TreeManagement();
+            treeManager->init(this);
+
+            if(par("gvbEnableGlobalViewBuilder")) {
+                globalViewBuilder = new GlobalViewBuilder();
+                globalViewBuilder->initializeViewBuilder(this, overlay);
+                capReqFinished = false;
+            }
+
+            treeManager->addMsgClient("ViewBuilder", globalViewBuilder);
+        }
+
 
         globalStatistics = GlobalStatisticsAccess().get();
+        coordBasedRouting = CoordBasedRoutingAccess().get();
+
+        cbrTimer = new cMessage("cbrTimer");
 
         misses = 0;
         hits = 0;
@@ -144,9 +195,10 @@ void NeighborCache::finishApp()
 {
     if ((misses + hits) != 0) {
         globalStatistics
-            ->addStdDev("NeighborCache: Ping hit rate",
-                        ((double)hits / (double)(misses + hits)));
+        ->addStdDev("NeighborCache: Ping hit rate",
+                    ((double)hits / (double)(misses + hits)));
     }
+
 
     if (ncs && numMsg > 0) {
         globalStatistics->addStdDev("NeighborCache: NCS absolute RTT error",
@@ -160,18 +212,28 @@ void NeighborCache::finishApp()
         globalStatistics->addStdDev("NeighborCache: NCS percentage of RTT errors to low",
                                     (double)numRttErrorToLow / (double)numMsg);
     }
+
+    if(treeManager) {
+        treeManager->finishTreeManagement();
+    }
 }
 
 
 NeighborCache::~NeighborCache()
 {
     delete ncs;
+    delete treeManager;
+    delete globalViewBuilder;
+    delete discoveryMode;
+    delete closestNodes;
+    delete proxComparator;
+    cancelAndDelete(cbrTimer);
 }
 
 bool NeighborCache::insertNodeContext(const TransportAddress& handle,
-                                     cPolymorphic* context,
-                                     ProxListener* rpcListener,
-                                     int rpcId)
+                                      cPolymorphic* context,
+                                      ProxListener* rpcListener,
+                                      int rpcId)
 {
     if (!enableNeighborCache) return false;
     if (neighborCache.count(handle) == 0) {
@@ -199,7 +261,7 @@ bool NeighborCache::insertNodeContext(const TransportAddress& handle,
         } else {
             if (entry.waitingContexts.size() > 0) {
                 throw cRuntimeError("not waiting for response,"
-                                    " but additional contexts found!");
+                        " but additional contexts found!");
             }
 
             updateEntry(handle, entry.insertTime);
@@ -267,10 +329,12 @@ void NeighborCache::updateNode(const NodeHandle& add, simtime_t rtt,
 {
     Enter_Method_Silent();
 
+    thisNode = overlay->getThisNode(); // Daniel TODO
+
     EV << "[NeighborCache::updateNode() @ " << thisNode.getIp()
-           << " (" << thisNode.getKey().toString(16) << ")]\n"
-           << "    inserting rtt(" << rtt << ") of node " << add.getIp()
-           << endl;
+       << " (" << thisNode.getKey().toString(16) << ")]\n"
+       << "    inserting rtt(" << SIMTIME_DBL(rtt) << ") of node " << add.getIp()
+       << endl;
 
     if (rtt <= 0) {
         delete ncsInfo;
@@ -281,7 +345,13 @@ void NeighborCache::updateNode(const NodeHandle& add, simtime_t rtt,
 
     //if (enableNeighborCache) {
     if (neighborCache.count(add) == 0) {
+
         NeighborCacheEntry& entry = neighborCache[add];
+
+        if (closestNodes) {
+            //std::cout << "closestNodes->add(ProxTransportAddress(" << add << ", rtt));" << std::endl;
+            closestNodes->add(ProxTransportAddress(add, rtt));
+        }
 
         entry.insertTime = simTime();
         entry.rtt = rtt;
@@ -294,9 +364,15 @@ void NeighborCache::updateNode(const NodeHandle& add, simtime_t rtt,
 
         cleanupCache();
     } else {
+
         updateEntry(add, neighborCache[add].insertTime);
 
         NeighborCacheEntry& entry = neighborCache[add];
+
+        if (closestNodes) {
+            //std::cout << "closestNodes->add(ProxTransportAddress(" << add << ", rtt));" << std::endl;
+            closestNodes->add(ProxTransportAddress(add, rtt));
+        }
 
         entry.insertTime = simTime();
         if (entry.rttState != RTTSTATE_VALID || entry.rtt > rtt)
@@ -332,7 +408,8 @@ void NeighborCache::updateNode(const NodeHandle& add, simtime_t rtt,
     }
     assert(neighborCache.size() == neighborCacheExpireMap.size());
 
-    calcRttError(add, rtt);
+    recordNcsEstimationError(add, rtt);
+
 
     if (ncs) ncs->processCoordinates(rtt, *ncsInfo);
 
@@ -347,9 +424,9 @@ void NeighborCache::updateNcsInfo(const TransportAddress& node,
     Enter_Method_Silent();
 
     EV << "[NeighborCache::updateNcsInfo() @ " << thisNode.getIp()
-       << " (" << thisNode.getKey().toString(16) << ")]\n"
-       << "    inserting new NcsInfo of node " << node.getIp()
-       << endl;
+               << " (" << thisNode.getKey().toString(16) << ")]\n"
+               << "    inserting new NcsInfo of node " << node.getIp()
+               << endl;
 
     if (neighborCache.count(node) == 0) {
         NeighborCacheEntry& entry = neighborCache[node];
@@ -381,8 +458,8 @@ NeighborCache::Rtt NeighborCache::getNodeRtt(const TransportAddress &add)
 {
     // cache disabled or entry not there
     if (!enableNeighborCache ||
-        add.isUnspecified() ||
-        (neighborCache.count(add) == 0)) {
+            add.isUnspecified() ||
+            (neighborCache.count(add) == 0)) {
         misses++;
         return std::make_pair(0.0, RTTSTATE_UNKNOWN);
     }
@@ -390,7 +467,7 @@ NeighborCache::Rtt NeighborCache::getNodeRtt(const TransportAddress &add)
     NeighborCacheEntry &entry = neighborCache[add];
 
     if (entry.rttState == RTTSTATE_WAITING ||
-        entry.rttState == RTTSTATE_UNKNOWN)
+            entry.rttState == RTTSTATE_UNKNOWN)
         return std::make_pair(entry.rtt, entry.rttState);
     // entry expired
     if ((simTime() - entry.insertTime) >= rttExpirationTime) {
@@ -407,11 +484,19 @@ const NodeHandle& NeighborCache::getNodeHandle(const TransportAddress &add)
 {
     if (neighborCache.count(add) == 0) {
         throw cRuntimeError("NeighborCache.cc: getNodeHandle was asked for "
-                            "a non-existent node reference.");
+                "a non-existent node reference.");
     }
     return neighborCache[add].nodeRef;
 }
 
+simtime_t NeighborCache::getNodeAge(const TransportAddress &address)
+{
+    if (neighborCache.count(address) == 0) {
+        throw cRuntimeError("NeighborCache.cc: getNodeAge was asked for "
+                "a non-existent address.");
+    }
+    return neighborCache[address].insertTime;
+}
 
 bool NeighborCache::cleanupCache()
 {
@@ -423,7 +508,7 @@ bool NeighborCache::cleanupCache()
         for (uint32_t i = 0; i < (size - (maxSize / 2)); ++i) {
             it = neighborCacheExpireMap.begin();
             if ((neighborCache[it->second].rttState == RTTSTATE_WAITING) ||
-                (neighborCache[it->second].insertTime == simTime())) {
+                    (neighborCache[it->second].insertTime == simTime())) {
                 break;
             }
             neighborCache.erase(it->second);
@@ -440,7 +525,7 @@ void NeighborCache::updateEntry(const TransportAddress& address,
                                 simtime_t insertTime)
 {
     neighborCacheExpireMapIterator it =
-        neighborCacheExpireMap.lower_bound(insertTime);
+            neighborCacheExpireMap.lower_bound(insertTime);
     while (it->second != address) ++it;
     neighborCacheExpireMap.erase(it);
     neighborCacheExpireMap.insert(std::make_pair(simTime(),
@@ -457,7 +542,7 @@ TransportAddress NeighborCache::getNearestNode(uint8_t maxLayer)
 
     for(it = neighborCache.begin(); it != neighborCache.end(); it++ ) {
         if (it->second.rtt < nearestNodeRtt &&
-            it->second.rtt > 0 /*&&
+                it->second.rtt > 0 /*&&
             it->second.coordsInfo.npsLayer < maxLayer+1 &&
             it->second.coordsInfo.npsLayer > 0*/) {
             nearestNode.setIp(it->first.getIp());
@@ -467,6 +552,37 @@ TransportAddress NeighborCache::getNearestNode(uint8_t maxLayer)
     }
 
     return nearestNode;
+}
+
+
+std::vector<TransportAddress>* NeighborCache::getClosestNodes(uint8_t number)
+{
+    std::vector<TransportAddress>* nodes =
+            new std::vector<TransportAddress>();
+
+    for (uint8_t i = 0; (i < number && i < closestNodes->size()); ++i) {
+        nodes->push_back((*closestNodes)[i]);
+    }
+
+    return nodes;
+}
+
+std::vector<TransportAddress>* NeighborCache::getSpreadedNodes(uint8_t number)
+{
+    std::vector<TransportAddress>* nodes =
+            new std::vector<TransportAddress>;
+
+    NeighborCacheConstIterator it = neighborCache.begin();
+    for (uint8_t i = 0; (i < number && i < neighborCache.size()); ++i) {
+        nodes->push_back((it++)->first);
+    }
+
+    /*if (dynamic_cast<BasePastry*>(overlay)) {
+        BasePastry* pastry = static_cast<BasePastry*>(overlay);
+        std::vector<TransportAddress>* spreadedNodes = pastry->get
+    }*/
+
+    return nodes;
 }
 
 
@@ -505,13 +621,14 @@ double NeighborCache::getAvgAbsPredictionError()
 
     double absoluteDiff = 0;
     uint32_t numNeighbors = 0;
-    uint32_t sampleSize = 32; //test
+    uint32_t sampleSize = 10; //test
 
     for (std::map<simtime_t, TransportAddress>::reverse_iterator it =
-         neighborCacheExpireMap.rbegin();
-         it != neighborCacheExpireMap.rend() &&
-         numNeighbors < sampleSize; ++it) {
+            neighborCacheExpireMap.rbegin();
+            it != neighborCacheExpireMap.rend() &&
+                    numNeighbors < sampleSize; ++it) {
         NeighborCacheEntry& cacheEntry = neighborCache[it->second];
+
 
         double dist = ncs->getOwnNcsInfo().getDistance(*cacheEntry.coordsInfo);
 
@@ -540,56 +657,221 @@ double NeighborCache::getAvgAbsPredictionError()
 
 void NeighborCache::handleReadyMessage(CompReadyMessage* readyMsg)
 {
+    // bootstrap list is ready
     if (readyMsg->getReady() && readyMsg->getComp() == BOOTSTRAPLIST_COMP) {
-        if (doDiscovery) {
-            //TODO
-            // 1. ask bootstrap node for other nodes and his coordinates
-            // 2. probe other nodes and optionally ask them for more nodes
-            //    (try to get close as well as distant nodes)
-            // sendReadyMessage();
+        if (discoveryMode) {
+            discoveryMode->start(overlay->getBootstrapList().getBootstrapNode());
         } else {
-            sendReadyMessage();
+            // inform overlay
+            prepareOverlay();
         }
-    }
+    } else if (readyMsg->getReady() && readyMsg->getComp() == OVERLAY_COMP) {
+        // overlay is ready, build up tree
+        thisNode = overlay->getThisNode();
+        if(treeManager) {
+            //std::cout << thisNode << "treeManager->startTreeBuilding()" << std::endl;
+            treeManager->startTreeBuilding();
+            if (globalViewBuilder) {
+                globalViewBuilder->cleanup();
+                globalViewBuilder->start();
+            }
+        }
+    } //else {
+        //TODO
+    //}
     delete readyMsg;
+}
+/*
+void NeighborCache::callbackDiscoveryFinished(const TransportAddress& nearNode)
+{
+    // handle bootstrapNode
+    getParentModule()->bubble("Discovery Mode finished!");
+    discoveryFinished = true;
+    //sendReadyMessage();
+
+    RECORD_STATS(
+            globalStatistics->addStdDev("NeighborCache: Discovery Mode Improvement",
+                                        discoveryMode->getImprovement());
+    if (dynamic_cast<Vivaldi*>(ncs)) {
+        globalStatistics->addStdDev("NeighborCache: Vivaldi-Error after Discovery Mode",
+                                    static_cast<Vivaldi*>(ncs)->getOwnError());
+    }
+    );
+
+    prepareOverlay();
+}
+*/
+
+void NeighborCache::prepareOverlay()
+{
+    if ((!discoveryMode || discoveryMode->isFinished()) &&
+        (!globalViewBuilder || globalViewBuilder->isCapReady()) &&
+        (!ncs || ncs->isReady())) {
+        if (ncs && coordBasedRouting) {
+            if (!(coordBasedRouting->changeIdLater() && underlayConfigurator->isInInitPhase()) &&
+                (!globalViewBuilder || globalViewBuilder->isCapValid()) &&
+                ((dynamic_cast<Nps*>(ncs) || dynamic_cast<SimpleNcs*>(ncs) ||
+                 (dynamic_cast<SVivaldi*>(ncs) &&
+                  static_cast<SVivaldi*>(ncs)->getLoss() > 0.95)))) { //TODO
+                setCbrNodeId();
+                sendReadyMessage(true, thisNode.getKey());
+                return;
+            } else {
+                sendReadyMessage();
+                if (coordBasedRouting->changeIdLater() && underlayConfigurator->isInInitPhase()) {
+                    scheduleAt(uniform(coordBasedRouting->getChangeIdStart(),
+                                       coordBasedRouting->getChangeIdStop()),
+                                       cbrTimer); //TODO
+                }
+            }
+        }
+        sendReadyMessage();
+        return;
+    }
+    //std::cout << "nc" << std::endl;
+
+    if ((!discoveryMode || discoveryMode->isFinished()) &&
+        (globalViewBuilder && !globalViewBuilder->isCapReady()) &&
+        (ncs && ncs->isReady())) {
+        const TransportAddress& bootstrapNode =
+            overlay->getBootstrapList().getBootstrapNode();
+        if (globalViewBuilder && !bootstrapNode.isUnspecified() && true) { //TODO
+            globalViewBuilder->sendCapRequest(bootstrapNode);
+            return;
+        }
+        // first node
+        if (coordBasedRouting && coordBasedRouting->changeIdLater() && underlayConfigurator->isInInitPhase()) {
+            scheduleAt(uniform(coordBasedRouting->getChangeIdStart(),
+                               coordBasedRouting->getChangeIdStop()),
+                               cbrTimer); //TODO
+        }
+        sendReadyMessage();
+    }
+}
+
+
+void NeighborCache::setCbrNodeId()
+{
+    const std::vector<double>& coords = ncs->getOwnNcsInfo().getCoords();
+    const AP* cap = (globalViewBuilder ? globalViewBuilder->getCAP() : NULL);
+    thisNode.setKey(coordBasedRouting->getNodeId(coords,
+                                                 overlay->getBitsPerDigit(),
+                                                 OverlayKey::getLength(),
+                                                 cap));
+
+    EV << "[NeighborCache::setCbrNodeId() @ "
+            << thisNode.getIp()
+            << " (" << thisNode.getKey().toString(16) << ")]"
+            << "\n    -> nodeID ( 2): "
+            << thisNode.getKey().toString(2)
+            << "\n    -> nodeID (16): "
+            << thisNode.getKey().toString(16) << endl;
+    /*
+    std::cout << "[NeighborCache::setCbrNodeId() @ "
+              << thisNode.getIp()
+              << " (" << thisNode.getKey().toString(16) << ")]"
+              << "\n    -> nodeID ( 2): "
+              << thisNode.getKey().toString(2)
+              << "\n    -> nodeID (16): "
+              << thisNode.getKey().toString(16) << std::endl;*/
 }
 
 
 void NeighborCache::handleTimerEvent(cMessage* msg)
 {
+    if (msg == cbrTimer) {
+        // TODO duplicate code
+        if (globalViewBuilder->isCapValid() &&
+            (dynamic_cast<SimpleNcs*>(ncs) || (dynamic_cast<SVivaldi*>(ncs) &&
+            static_cast<SVivaldi*>(ncs)->getLoss() > 0.95 &&
+            static_cast<SVivaldi*>(ncs)->getOwnError() < 0.2))) { //TODO
+            setCbrNodeId();
+            //std::cout << thisNode.getIp() << " NeighborCache::handleTimerEvent(): setCbrNodeId(); overlay->join(thisNode.getKey())" << std::endl;
+            overlay->join(thisNode.getKey());
+            return;
+        } else {
+            //assert(false);
+            overlay->join();
+            return;
+            //scheduleAt(simTime() + uniform(0, 5000), cbrTimer); //TODO
+        }
+        return;
+    }
     if (ncs) {
         ncs->handleTimerEvent(msg);
+    }
+
+    if (treeManager) {
+        treeManager->handleTimerEvent(msg);
+    }
+
+    if (globalViewBuilder) {
+        globalViewBuilder->handleTimerEvent(msg);
     }
 }
 
 
 bool NeighborCache::handleRpcCall(BaseCallMessage* msg)
 {
-    if (ncs) {
-        return ncs->handleRpcCall(msg);
+    bool messageHandled = false;//TODO
+
+    if (ncs && !messageHandled) {
+        messageHandled = ncs->handleRpcCall(msg); //TODO
+    }
+    if (discoveryMode && !messageHandled) {
+        messageHandled = discoveryMode->handleRpcCall(msg);
     }
 
-    return false;
+    if (treeManager && !messageHandled) {
+        messageHandled = treeManager->handleRpcCall(msg);
+
+        if(globalViewBuilder && !messageHandled) {
+            messageHandled = globalViewBuilder->handleRpcCall(msg);
+        }
+    }
+
+    return messageHandled;
+}
+
+void NeighborCache::pingResponse(PingResponse* response, cPolymorphic* context,
+                                 int rpcId, simtime_t rtt) {
+    if(treeManager) {
+        //treeManager->pingResponse(response, context, rpcId, rtt);
+    }
+
+}
+
+void NeighborCache::pingTimeout(PingCall* call, const TransportAddress& dest,
+                                cPolymorphic* context, int rpcId) {
+    if(treeManager) {
+        //treeManager->pingTimeout(call, dest, context, rpcId);
+    }
 }
 
 
 // Prox stuff
 Prox NeighborCache::getProx(const TransportAddress &node,
-                              NeighborCacheQueryType type,
-                              int rpcId,
-                              ProxListener *listener,
-                              cPolymorphic *contextPointer)
+                            NeighborCacheQueryType type,
+                            int rpcId,
+                            ProxListener *listener,
+                            cPolymorphic *contextPointer)
 {
     Enter_Method("getProx()");
 
     if (!enableNeighborCache) {
         queryProx(node, rpcId, listener, contextPointer);
-        return Prox::PROX_UNKNOWN;
+        return Prox::PROX_WAITING;
     }
 
     if (node == overlay->getThisNode()) {
         delete contextPointer;
         return Prox::PROX_SELF;
+    }
+
+    if (node.isUnspecified()) {
+        throw cRuntimeError("Prox queried for undefined TransportAddress!");
+        delete contextPointer;
+        return Prox::PROX_TIMEOUT;
     }
 
     bool sendQuery = false;
@@ -602,70 +884,84 @@ Prox NeighborCache::getProx(const TransportAddress &node,
     else if (type == NEIGHBORCACHE_DEFAULT_QUERY) type = defaultQueryTypeQ;
 
     switch(type) {
-        case NEIGHBORCACHE_EXACT:
-            if (rtt.second == RTTSTATE_TIMEOUT) {
-                // if timeout, return unknown, and send a query!
-                sendQuery = true;
-            } else if (rtt.second == RTTSTATE_WAITING) {
-                // if a query was sent, return UNKNOWN
-                sendQuery = true; //just inserting a context, no real ping is sent
-            } else if (rtt.second == RTTSTATE_UNKNOWN) {
-                // if no entry known, send a query and return UNKNOWN
-                sendQuery = true;
-            } else {
-                // else, return whatever we have
-                result = rtt.first;
-            }
-            break;
-        case NEIGHBORCACHE_EXACT_TIMEOUT:
-            if (rtt.second == RTTSTATE_TIMEOUT) {
-                // if timeout, return that
+    case NEIGHBORCACHE_EXACT:
+        if (rtt.second == RTTSTATE_TIMEOUT) {
+            if (getNodeAge(node) == simTime()) {
+                // right now, we got a time-out, so no new ping is sent
                 result = Prox::PROX_TIMEOUT;
-            } else if (rtt.second == RTTSTATE_WAITING) {
-                // if a query was sent, return UNKNOWN
-                sendQuery = true; //just inserting a context, no real ping is sent
-            } else if (rtt.second == RTTSTATE_UNKNOWN) {
-                // if no entry known, send a query and return UNKNOWN
+            } else{
+                // if timeout, return unknown???, and send a query!
+                result = Prox::PROX_WAITING;
                 sendQuery = true;
-            } else {
-                // else, return whatever we have
-                result = rtt.first;
             }
-            break;
-        case NEIGHBORCACHE_ESTIMATED:
-            if (rtt.second == RTTSTATE_TIMEOUT) {
-                // if timeout, return that
-                result = Prox::PROX_TIMEOUT;
-            } else if (rtt.second == RTTSTATE_WAITING) {
-                // if a query was sent, return an estimate
-                result = estimateProx(node);
-            } else if (rtt.second == RTTSTATE_UNKNOWN) {
-                // if no entry known, return an estimate
-                result = estimateProx(node);
-            } else {
-                // else return whatever we have
-                result = rtt.first;
-            }
-            break;
-        case NEIGHBORCACHE_AVAILABLE:
-            if (rtt.second == RTTSTATE_TIMEOUT) {
-                // if timeout, return that.
-                result = Prox::PROX_TIMEOUT;
-            } else if ((rtt.second == RTTSTATE_WAITING) ||
-                       (rtt.second == RTTSTATE_UNKNOWN)) {
-                // if a query was sent or entry unknown, return UNKNOWN
-            } else {
-                // else return what we have
-                result = rtt.first;
-            }
-            break;
-        case NEIGHBORCACHE_QUERY:
-            // simply send a query and return UNKNOWN
+        } else if (rtt.second == RTTSTATE_WAITING) {
+            // if a query was sent, return WAITING
+            result = Prox::PROX_WAITING;
+            sendQuery = true; //just inserting a context, no real ping is sent
+        } else if (rtt.second == RTTSTATE_UNKNOWN) {
+            // if no entry known, send a query and return UNKNOWN
+            result = Prox::PROX_WAITING; //???
             sendQuery = true;
-            break;
-        default:
-            throw cRuntimeError("Unknown query type!");
-            break;
+        } else {
+            // else, return whatever we have
+            result = rtt.first;
+        }
+        break;
+    case NEIGHBORCACHE_EXACT_TIMEOUT:
+        if (rtt.second == RTTSTATE_TIMEOUT) {
+            // if timeout, return that
+            result = Prox::PROX_TIMEOUT;
+        } else if (rtt.second == RTTSTATE_WAITING) {
+            // if a query was sent, return WAITING;
+            result = Prox::PROX_WAITING;
+            sendQuery = true; //just inserting a context, no real ping is sent
+        } else if (rtt.second == RTTSTATE_UNKNOWN) {
+            // if no entry known, send a query and return UNKNOWN
+            result = Prox::PROX_WAITING; //???
+            sendQuery = true;
+        } else {
+            // else, return whatever we have
+            result = rtt.first;
+        }
+        break;
+    case NEIGHBORCACHE_ESTIMATED:
+        if (rtt.second == RTTSTATE_TIMEOUT) {
+            // if timeout, return that
+            result = Prox::PROX_TIMEOUT;
+        } else if (rtt.second == RTTSTATE_WAITING) {
+            // if a query was sent, return an estimate
+            result = estimateProx(node);
+        } else if (rtt.second == RTTSTATE_UNKNOWN) {
+            // if no entry known, return an estimate
+            result = estimateProx(node);
+        } else {
+            // else return whatever we have
+            result = rtt.first;
+        }
+        break;
+    case NEIGHBORCACHE_AVAILABLE:
+        if (rtt.second == RTTSTATE_TIMEOUT) {
+            // if timeout, return that.
+            result = Prox::PROX_TIMEOUT;
+        } else if (rtt.second == RTTSTATE_WAITING) {
+            // if a query was sent return WAITING
+            result = Prox::PROX_WAITING;
+        } else if (rtt.second == RTTSTATE_UNKNOWN) {
+            // if a query was sent return WAITING
+            result = Prox::PROX_UNKNOWN;
+        } else {
+            // else return what we have
+            result = rtt.first;
+        }
+        break;
+    case NEIGHBORCACHE_QUERY:
+        // simply send a query and return WAITING
+        result = Prox::PROX_WAITING;
+        sendQuery = true;
+        break;
+    default:
+        throw cRuntimeError("Unknown query type!");
+        break;
 
     }
     if (sendQuery) {
@@ -731,13 +1027,14 @@ const AbstractNcsNodeInfo* NeighborCache::getNodeCoordsInfo(const TransportAddre
 {
     if (neighborCache.count(node) == 0) {
         throw cRuntimeError("NeighborCache.cc: getNodeCoords was asked for "
-                            "a non-existent node reference.");
+                "a non-existent node reference.");
     }
     return neighborCache[node].coordsInfo;
 }
 
 
-void NeighborCache::calcRttError(const NodeHandle& handle, simtime_t rtt)
+void NeighborCache::recordNcsEstimationError(const NodeHandle& handle,
+                                             simtime_t rtt)
 {
     if (!ncs) return;
 
@@ -750,6 +1047,14 @@ void NeighborCache::calcRttError(const NodeHandle& handle, simtime_t rtt)
     //calculate absolute rtt error of the last message
     double tempRttError = prox.proximity - SIMTIME_DBL(rtt);
 
+    /*
+    std::cout << "prox.proximity = " << prox.proximity
+              << ", SIMTIME_DBL(rtt) = " << SIMTIME_DBL(rtt)
+              << ", error = " << tempRttError
+              << ", relativeError = " << (tempRttError / SIMTIME_DBL(rtt))
+              << std::endl;
+     */
+
     if (tempRttError < 0){
         tempRttError *= -1;
         ++numRttErrorToLow;
@@ -757,8 +1062,10 @@ void NeighborCache::calcRttError(const NodeHandle& handle, simtime_t rtt)
 
     numMsg++;
     absoluteError += tempRttError;
-    relativeError += tempRttError / SIMTIME_DBL(rtt);
+    relativeError += (tempRttError / SIMTIME_DBL(rtt));
 
+    globalStatistics->recordOutVector("NCS: measured RTTs",
+                                      SIMTIME_DBL(rtt));
     globalStatistics->recordOutVector("NCS: absolute Rtt Error",
                                       tempRttError);
     globalStatistics->recordOutVector("NCS: relative Rtt Error",
@@ -771,7 +1078,7 @@ std::pair<simtime_t, simtime_t> NeighborCache::getMeanVarRtt(const TransportAddr
 {
     if (neighborCache.count(node) == 0) {
         throw cRuntimeError("NeighborCache.cc: getMeanVarRtt was asked for"
-                            "a non-existent node reference.");
+                "a non-existent node reference.");
     }
 
     uint16_t size = neighborCache[node].lastRtts.size();
@@ -802,7 +1109,7 @@ std::pair<simtime_t, simtime_t> NeighborCache::getMeanVarRtt(const TransportAddr
 simtime_t NeighborCache::getNodeTimeout(const NodeHandle &node)
 {
     simtime_t timeout = getRttBasedTimeout(node);
-    if (timeout == -1 && ncs) return getNcsBasedTimeout(node);
+    if (timeout == -1 && useNcsForTimeout && ncs) return getNcsBasedTimeout(node);
     return timeout;
 }
 
@@ -845,7 +1152,7 @@ simtime_t NeighborCache::getNcsBasedTimeout(const NodeHandle &node)
         prox = getProx(node, NEIGHBORCACHE_ESTIMATED);
 
         if (prox != Prox::PROX_UNKNOWN  && prox != Prox::PROX_TIMEOUT &&
-            prox.proximity > 0 && prox.accuracy > timeoutAccuracyLimit) {
+                prox.proximity > 0 && prox.accuracy > timeoutAccuracyLimit) {
             timeout = prox.proximity + (6 * (1 - prox.accuracy));
             timeout += NCS_TIMEOUT_CONSTANT;
         } else return -1;
@@ -854,5 +1161,40 @@ simtime_t NeighborCache::getNcsBasedTimeout(const NodeHandle &node)
             return -1;
     }
     return timeout;
+}
+
+
+TreeManagement* NeighborCache::getTreeManager()
+{
+    return treeManager;
+}
+
+const TransportAddress& NeighborCache::getBootstrapNode()
+{
+    return TransportAddress::UNSPECIFIED_NODE;
+    //TODO failed bootstrap nodes are only detected and removed from nc
+    // if rpcs are used for joining
+
+    // return close node (discovery mode)
+    if (closestNodes) {
+        for (uint16_t i = 0; i < closestNodes->size(); ++i) {
+            if (neighborCache.count((*closestNodes)[i]) > 0 &&
+                    neighborCache[(*closestNodes)[i]].rttState == RTTSTATE_VALID) {
+                //std::cout << (*closestNodes)[i].getProx().proximity << "\n"<< std::endl;
+                return (*closestNodes)[i];
+            }
+        }
+    }
+
+    // return known alive node
+    if (neighborCache.size() > 0) {
+        NeighborCacheConstIterator it = neighborCache.begin();
+        while (it != neighborCache.end() &&
+                it->second.rttState != RTTSTATE_VALID) ++it;
+        if (it != neighborCache.end()) {
+            return neighborCache.begin()->first;
+        }
+    }
+    return TransportAddress::UNSPECIFIED_NODE;
 }
 

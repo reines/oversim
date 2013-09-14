@@ -31,4 +31,9 @@ Define_Module(GlobalParameters);
 void GlobalParameters::initialize()
 {
     printStateToStdOut = par("printStateToStdOut");
+
+    if (!ev.isDisabled()) {
+        ev.getOStream().setf(std::ios::fixed, std::ios::floatfield);
+        ev.getOStream().precision(3);
+    }
 }

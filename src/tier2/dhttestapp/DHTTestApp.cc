@@ -147,7 +147,7 @@ void DHTTestApp::handleRpcResponse(BaseResponseMessage* msg,
 void DHTTestApp::handlePutResponse(DHTputCAPIResponse* msg,
                                    DHTStatsContext* context)
 {
-    DHTEntry entry = {context->value, simTime() + ttl};
+    DHTEntry entry = {context->value, simTime() + ttl, simTime()};
 
     globalDhtTestMap->insertEntry(context->key, entry);
 
@@ -163,6 +163,7 @@ void DHTTestApp::handlePutResponse(DHTputCAPIResponse* msg,
         RECORD_STATS(globalStatistics->addStdDev("DHTTestApp: PUT Latency (s)",
                                SIMTIME_DBL(simTime() - context->requestTime)));
     } else {
+        //cout << "DHTTestApp: PUT failed" << endl;
         RECORD_STATS(numPutError++);
     }
 
@@ -216,17 +217,20 @@ void DHTTestApp::handleGetResponse(DHTgetCAPIResponse* msg,
         }
     } else {
         delete context;
-        if ((msg->getResultArraySize() > 0) && (msg->getResult(0).getValue() != entry->value)) {
-            RECORD_STATS(numGetError++);
-            //cout << "DHTTestApp: wrong value" << endl;
-            //cout << "value: " << msg->getResult(0).getValue() << endl;
-            return;
-        } else if (msg->getResultArraySize() == 0) {
-			RECORD_STATS(numGetError++);
-			// received a response with no value
-		} else {
+        if ((msg->getResultArraySize() > 0) &&
+                (msg->getResult(0).getValue() == entry->value)) {
             RECORD_STATS(numGetSuccess++);
             //cout << "DHTTestApp: success (2)" << endl;
+            return;
+        } else {
+            RECORD_STATS(numGetError++);
+#if 0
+            if (msg->getResultArraySize()) {
+                cout << "DHTTestApp: wrong value: " << msg->getResult(0).getValue() << endl;
+            } else {
+                cout << "DHTTestApp: no value" << endl;
+            }
+#endif
             return;
         }
     }
@@ -404,6 +408,13 @@ void DHTTestApp::handleTimerEvent(cMessage* msg)
 
         if (key.isUnspecified())
             return;
+#if 0
+        const DHTEntry* entry = globalDhtTestMap->findEntry(key);
+        if (entry->insertiontime + 10.0 > simTime()) {
+            std::cout << "avoided early get" << std::endl;
+            return;
+        }
+#endif
 
         DHTputCAPICall* dhtPutMsg = new DHTputCAPICall();
         dhtPutMsg->setKey(key);

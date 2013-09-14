@@ -29,6 +29,7 @@ simple BaseOverlay extends BaseRpc
         @class(BaseOverlay);
         @display("i=block/circle");
         int localPort; // UDP port for overlay messages
+        int overlayId; // identifies the overlay this node belongs to (used for multiple overlays)
         bool debugOutput; // enable debug output
         int keyLength; // overlay key length in bits
         string nodeId; // optional nodeId as string in hexadecimal notation 

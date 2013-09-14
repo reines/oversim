@@ -25,10 +25,11 @@
 #ifndef __CONNECTIVITYPROBEAPP_H__
 #define __CONNECTIVITYPROBEAPP_H__
 
-#include <omnetpp.h>
+
+#include <SimpleGameClient.h>
 #include <NodeHandle.h>
 #include <Vector2D.h>
-#include <SimpleGameClient.h>
+#include <omnetpp.h>
 #include "GlobalStatisticsAccess.h"
 
 class ConnectivityProbeApp : public cSimpleModule

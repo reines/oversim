@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+// Copyright (C) 2012 Institute of Telematics, Karlsruhe Institute of Technology (KIT)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 
 /**
  * @file Bamboo.h
- * @author Gerhard Petruschat
+ * @author Gerhard Petruschat, Bernhard Heep
  */
 
 #ifndef __BAMBOO_H_
@@ -65,7 +65,13 @@ class Bamboo : public BasePastry, public LookupListener
     virtual void handleTimerEvent(cMessage* msg);
 
     // see BaseOverlay.h
-    virtual void handleUDPMessage(BaseOverlayMessage* msg);
+    //virtual void handleUDPMessage(BaseOverlayMessage* msg);
+
+    void handleRpcResponse(BaseResponseMessage* msg,
+                           cPolymorphic* context, int rpcId,
+                           simtime_t rtt);
+
+    void handleRequestLeafSetResponse(RequestLeafSetResponse* response);
 
     void handleStateMessage(PastryStateMessage* msg);
 
@@ -80,6 +86,8 @@ class Bamboo : public BasePastry, public LookupListener
     virtual void changeState(int toState);
 
   private:
+
+    uint16_t rowToAsk;
 
     // local state tables
     simtime_t leafsetMaintenanceInterval;

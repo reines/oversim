@@ -27,6 +27,8 @@
 #define __PASTRY_TYPES_H_
 
 #include <map>
+#include <limits>
+
 #include <OverlayKey.h>
 #include <NodeHandle.h>
 
@@ -71,7 +73,7 @@ struct PastryStateMsgHandle
     PastryStateMsgHandle(PastryStateMessage* msg)
     : msg(msg), prox(NULL), outdatedUpdate(false)
     {
-        nonce = intuniform(0, 0x7FFFFF);
+        nonce = intuniform(0, std::numeric_limits<uint32_t>::max()); //0x7FFFFF ???
     };
 };
 

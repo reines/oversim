@@ -61,7 +61,7 @@ void NTree::initializeOverlay(int stage)
     pingTimer = new cMessage("pingTimer");
     pingInterval = par("pingInterval");
     scheduleAt( simTime() + pingInterval, pingTimer );
-    
+
     // FIXME: Use standard baseOverlay::join()
     changeState( INIT );
 
@@ -240,7 +240,7 @@ void NTree::handleAppMessage(cMessage* msg)
     if( GameAPIPositionMessage *posMsg = dynamic_cast<GameAPIPositionMessage*>(msg) ) {
         if( state == READY ) {
             handleMove( posMsg );
-        } else if ( state == JOINING ) {
+        } else if ( state == JOIN ) {
             // We are not connected to the overlay, inform app
             CompReadyMessage* msg = new CompReadyMessage("Overlay not READY!");
             msg->setReady(false);
@@ -254,7 +254,7 @@ void NTree::handleAppMessage(cMessage* msg)
                 grp.leader = thisNode;
                 grp.members.insert(thisNode);
                 groups.push_front(grp);
-                
+
                 NTreeScope initialScope(Vector2D(areaDimension/2,areaDimension/2), areaDimension);
                 NTreeNode root(initialScope);
                 root.group = &groups.front();
@@ -262,7 +262,7 @@ void NTree::handleAppMessage(cMessage* msg)
                 changeState( READY );
             } else {
                 // Trigger login
-                changeState( JOINING );
+                changeState( JOIN );
                 position = posMsg->getPosition();
                 NTreeJoinCall* joinMsg = new NTreeJoinCall("Login");
                 joinMsg->setPosition( position );
@@ -290,7 +290,7 @@ void NTree::handleJoinCall( NTreeJoinCall* joinCall )
             grpAdd->setPlayer( joinCall->getSrcNode() );
             grpAdd->setOrigin( grpIt->scope.origin );
             grpAdd->setBitLength( NTREEADD_L(grpAdd) );
-            
+
             RECORD_STATS(
                     treeMaintenanceMessages += grpIt->members.size();
                     treeMaintenanceBytes += grpIt->members.size()*grpAdd->getByteLength();
@@ -348,7 +348,7 @@ void NTree::handleJoinCall( NTreeJoinCall* joinCall )
                     unsigned int index = intuniform(0, upperbound);
                     std::set<NodeHandle>::iterator newChild = grpIt->members.begin();
                     std::advance( newChild, numbers[index] );
-                    
+
                     if( *newChild == thisNode ) { // don't select myself
                         --i;
                     } else {
@@ -670,7 +670,7 @@ void NTree::handlePingCall( NTreePingCall* pingCall )
                 nodeResp->setAggChildCount( it->second.group->members.size() );
                 nodeResp->setMembersArraySize( it->second.group->members.size() );
                 unsigned int i = 0;
-                for( std::set<NodeHandle>::iterator childIt = it->second.group->members.begin(); 
+                for( std::set<NodeHandle>::iterator childIt = it->second.group->members.begin();
                         childIt != it->second.group->members.end(); ++childIt ){
 
                     nodeResp->setMembers( i++, *childIt );
@@ -817,7 +817,7 @@ void NTree::handleDivideCall( NTreeDivideCall* divideCall )
     // Calculate new scope
     NTreeScope oldScope(divideCall->getOrigin(), divideCall->getSize() );
     NTreeScope newScope = oldScope.getSubScope( divideCall->getQuadrant() );
-    
+
     // If we own the node that is beeing divided, something went wrong
     // However, ther is nothing we can do about it except removing the offending node
     // Sombody obviously took over without us noticing
@@ -979,7 +979,7 @@ void NTree::handleTakeOverMessage( NTreeTakeOverMessage* takeMsg )
 
 void NTree::handleNodeGracefulLeaveNotification()
 {
-    for(std::map<NTreeScope,NTreeNode>::iterator it = ntreeNodes.begin(); it != ntreeNodes.end(); ++it ){ 
+    for(std::map<NTreeScope,NTreeNode>::iterator it = ntreeNodes.begin(); it != ntreeNodes.end(); ++it ){
         // Replace me on all nodes
         NTreeReplaceNodeMessage* replaceMsg = new NTreeReplaceNodeMessage("Replace me");
         replaceMsg->setOrigin( it->second.scope.origin );
@@ -1056,7 +1056,7 @@ void NTree::pingNodes()
                 pingCall->setSiblings(i, it->second.children[i] );
             }
             pingCall->setBitLength( NTREENODEPINGCALL_L(pingCall) );
-            
+
             for( i = 0; i < 4; ++i ){
                 pingCall->setQuadrant( i );
                 sendUdpRpcCall( it->second.children[i], pingCall->dup(), new NTreePingContext(it->second.scope, i) );
@@ -1328,19 +1328,19 @@ void NTree::changeState( int newState ) {
                 scheduleAt( ceil(simTime() + (simtime_t) par("joinDelay")), joinTimer );
             }
             break;
-        
+
         case READY:
             state = READY;
             setBootstrapedIcon();
             if( !currentGroup && groups.size() ) currentGroup = &groups.front();
             setOverlayReady( true );
             break;
-        
-        case JOINING:
-            state = JOINING;
+
+        case JOIN:
+            state = JOIN;
             setOverlayReady( false );
             break;
-        
+
         case SHUTDOWN:
             state = SHUTDOWN;
             cancelAndDelete( pingTimer );
@@ -1358,7 +1358,7 @@ void NTree::setBootstrapedIcon()
             getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "green");
             getDisplayString().setTagArg("i", 1, "green");
         }
-        else if(state == JOINING) {
+        else if(state == JOIN) {
             getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "yellow");
             getDisplayString().setTagArg("i", 1, "yellow");
         }

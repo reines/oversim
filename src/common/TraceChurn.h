@@ -41,11 +41,10 @@ class TraceChurn : public ChurnGenerator
     void createNode(int nodeId);
     void deleteNode(int nodeId);
     cGate* getAppGateById(int nodeId);
+    TransportAddress* getTransportAddressById(int nodeId);
 
   protected:
     void updateDisplayString();
-    TransportAddress* getTransportAddressById(int nodeId);
-
 
   private:
     char *maxTier;

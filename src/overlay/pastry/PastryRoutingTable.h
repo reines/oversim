@@ -34,6 +34,7 @@
 #include "PastryTypes.h"
 #include "PastryMessage_m.h"
 
+
 /**
  * Vector-type of a line in Pastry IRoutingTable
  */
@@ -127,13 +128,6 @@ class PastryRoutingTable : public PastryStateObject
     virtual void dumpToStateMessage(PastryStateMessage* msg) const;
 
     /**
-     * dump content of a single row of the routing table to a message
-     * @param msg the message to be filled with entries
-     * @param row the number of the row
-     */
-    virtual void dumpRowToMessage(PastryRoutingRowMessage* msg, int row) const;
-
-    /**
      * dump content of a single row of the routing table to a state message
      * @param msg the state message to be filled with entries
      * @param row the number of the row
@@ -145,6 +139,8 @@ class PastryRoutingTable : public PastryStateObject
      * @return the number of rows in the routing table
      */
     int getLastRow();
+
+    std::vector<TransportAddress>* getRow(uint8_t row) const;
 
      /**
      * returns a random node from the routing table
@@ -186,6 +182,7 @@ class PastryRoutingTable : public PastryStateObject
     uint32_t nodesPerRow; //TODO getter/setter + private
 
   private:
+
     double repairTimeout;
     std::vector<PRTRow> rows;
     std::vector<PRTTrackRepair> awaitingRepair;

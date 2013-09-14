@@ -42,22 +42,40 @@ packet KBRTestMessage
 }
 
 //
-// A basic find node rpc response
+// A basic find node rpc call
 //
 packet KbrTestCall extends BaseCallMessage
 {
 }
 
 //
-// A basic find node rpc call
+// A basic find node rpc response
 //
 packet KbrTestResponse extends BaseResponseMessage
 {
 }
 
+//
+// A basic rpc call for measuring underlay latencies 
+//
+packet UnderlayTestCall extends BaseCallMessage
+{
+    simtime_t sendTime;
+}
+
+
+//
+// A basic rpc response
+//
+packet UnderlayTestResponse extends BaseResponseMessage
+{
+    simtime_t oneWayLatency;
+}
+
+
 class KbrRpcContext
 {
-    OverlayKey destKey;     // the key to search for
-    TransportAddress destAddr; // the destination address of the node for node lookups
+    OverlayKey destKey = OverlayKey::UNSPECIFIED_KEY; // the key to search for
+    TransportAddress destAddr = TransportAddress::UNSPECIFIED_NODE; // the destination address of the node for node lookups
     bool measurementPhase;  // if false, this msg doesn't count for statistics
 }

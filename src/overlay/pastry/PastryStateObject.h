@@ -16,14 +16,15 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 
-
-#ifndef __PASTRYSTATEOBJECT_H
-#define __PASTRYSTATEOBJECT_H
-
 /**
  * @file PastryStateObject.h
  * @author Felix Palmen
  */
+
+
+#ifndef __PASTRYSTATEOBJECT_H
+#define __PASTRYSTATEOBJECT_H
+
 
 #include <vector>
 
@@ -113,8 +114,8 @@ class PastryStateObject : public cSimpleModule
      * @param prox record of proximity values matching the state message
      * @return true if leafSet was actually changed
      */
-    bool mergeState(const PastryStateMessage* msg,
-                    const PastryStateMsgProximity* prox);
+    virtual bool mergeState(const PastryStateMessage* msg,
+                            const PastryStateMsgProximity* prox);
 
     /**
      * append all entries to a given vector of TransportAddresses,
@@ -203,5 +204,6 @@ class PastryStateObject : public cSimpleModule
      */
     const OverlayKey* keyDist(const OverlayKey& a, const OverlayKey& b) const;
 };
+
 
 #endif

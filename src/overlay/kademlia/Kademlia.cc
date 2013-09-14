@@ -438,6 +438,16 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
         return false;
     }
 
+    EV << "[Kademlia::routingAdd()] @ " << thisNode.getIp()
+       << " (" << thisNode.getKey().toString(16) << ")]\n"
+       << "    inserting node " << handle << " (rtt = ";
+    if (rtt == MAXTIME) {
+        EV << "<unknown>";
+    } else {
+        EV << SIMTIME_DBL(rtt);
+    }
+    EV << ", isAlive = " << (isAlive?"true":"false")
+       << ") ..." << endl;
 
     // bucket index
     KademliaBucket::iterator i;
@@ -452,7 +462,7 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
     kadHandle.setLastSeen(simTime());
 
     /* check if node is already a sibling -----------------------------------*/
-    if ((i = siblingTable->findIterator(handle.getKey()))
+    if ((i = siblingTable->findIterator(kadHandle.getKey()))
          != siblingTable->end()) {
         // not alive? -> do not change routing information
         if (isAlive) {
@@ -467,22 +477,25 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
                     return false;
                 }
 
-                if ((i->getIp() != handle.getIp()) ||
-                    (i->getPort() != handle.getPort())) {
+                if ((i->getIp() != kadHandle.getIp()) ||
+                    (i->getPort() != kadHandle.getPort())) {
                     // sibling could have changed transport address
                     // ping new address for authentication
-                    pingNode(handle);
+                    pingNode(kadHandle);
                     return false;
                 }
             }
         }
         BUCKET_CONSISTENCY(routingAdd: node is sibling);
+        EV << "[Kademlia::routingAdd()] @ " << thisNode.getIp()
+           << " (" << thisNode.getKey().toString(16) << ")]\n"
+           << "    ... node is already in the sibling table." << endl;
         return true;
     }
 
     /* check if node is already in a bucket ---------------------------------*/
-    KademliaBucket* bucket = routingBucket(handle.getKey(), false);
-    if (bucket != NULL && (i = bucket->findIterator(handle.getKey() ) )
+    KademliaBucket* bucket = routingBucket(kadHandle.getKey(), false);
+    if (bucket != NULL && (i = bucket->findIterator(kadHandle.getKey() ) )
             != bucket->end() ) {
         // not alive? -> do not change routing information
         if (isAlive) {
@@ -494,10 +507,11 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
                 // R/Kademlia
                 if (needsRtt && (kadHandle.getRtt() == MAXTIME)) {
                     Prox prox =
-                        neighborCache->getProx(handle, NEIGHBORCACHE_DEFAULT, -1,
+                        neighborCache->getProx(kadHandle, NEIGHBORCACHE_DEFAULT, -1,
                                                this, NULL);
                     if (prox != Prox::PROX_SELF &&
                         prox != Prox::PROX_UNKNOWN &&
+                        prox != Prox::PROX_WAITING &&
                         prox != Prox::PROX_TIMEOUT) {
                         kadHandle.setProx(prox);
                         //routingAdd(handle, true, prox.proximity);//ctrlInfo->getSrcRoute() //TODO
@@ -507,6 +521,9 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
                         return false;
                     }*/ //TODO inform NC that node is alive
                     else {
+                        EV << "[Kademlia::routingAdd()] @ " << thisNode.getIp()
+                           << " (" << thisNode.getKey().toString(16) << ")]\n"
+                           "    ... node not added, but ping sent." << endl;
                         return false;
                     }
                 }
@@ -520,45 +537,48 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
                     return false;
                 }
 
-                if ((i->getIp() != handle.getIp()) ||
-                    (i->getPort() != handle.getPort())) {
+                if ((i->getIp() != kadHandle.getIp()) ||
+                    (i->getPort() != kadHandle.getPort())) {
                     // sibling could have changed transport address
                     // ping new address for authentication
-                    pingNode(handle);
+                    pingNode(kadHandle);
                     return false;
                 }
             }
         }
-
         BUCKET_CONSISTENCY(routingAdd: node is in bucket);
+        EV << "[Kademlia::routingAdd()] @ " << thisNode.getIp()
+           << " (" << thisNode.getKey().toString(16) << ")]\n"
+           << "    ... node is already in bucket "
+           << routingBucketIndex(kadHandle.getKey()) << "." << endl;
         return true;
     }
 
     /* check if node can be added to the sibling list -----------------------*/
-    if (siblingTable->isAddable(handle) ) {
+    if (siblingTable->isAddable(kadHandle) ) {
         if (secureMaintenance && !authenticated) {
             if (!maintenanceLookup || (isAlive && (rtt == MAXTIME))) {
                 // received a FindNodeCall or PingCall from a potential sibling
                 // or new nodes from a FindNodeResponse app lookup
-                pingNode(handle);
+                pingNode(kadHandle);
             } else if (newMaintenance) {
                 // new node from sibling table refresh
-                //sendSiblingFindNodeCall(handle);
-                pingNode(handle);
+                //sendSiblingFindNodeCall(kadHandle);
+                pingNode(kadHandle);
             }
             return false;
         }
 
         // ping new siblings
         if (pingNewSiblings && !isAlive) {
-            pingNode(handle);
+            pingNode(kadHandle);
         }
 
         // R/Kademlia
         else if (needsRtt) {
             // old version: pingNode(), now:
             Prox prox =
-                    neighborCache->getProx(handle, NEIGHBORCACHE_DEFAULT, -1,
+                    neighborCache->getProx(kadHandle, NEIGHBORCACHE_DEFAULT, -1,
                                            this, NULL);
             if (prox != Prox::PROX_SELF &&
                 prox != Prox::PROX_UNKNOWN &&
@@ -566,6 +586,9 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
                 kadHandle.setProx(prox);
             } else if (prox == Prox::PROX_TIMEOUT) {
                 // do not put handle into sibling table
+                EV << "[Kademlia::routingAdd()] @ " << thisNode.getIp()
+                   << " (" << thisNode.getKey().toString(16) << ")]\n"
+                   << "    ... node not added (node timeout)." << endl;
                 return false;
             }
         }
@@ -581,6 +604,10 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 
             // add handle to the sibling list
             siblingPos = siblingTable->add(kadHandle);
+            EV << "[Kademlia::routingAdd()] @ " << thisNode.getIp()
+               << " (" << thisNode.getKey().toString(16) << ")]\n"
+               << "    ... node added to sibling table, replacing "
+               << (NodeHandle)oldHandle << endl;
 
             // change, so that the preempted handle is added to a bucket
             kadHandle = oldHandle;
@@ -596,6 +623,9 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
         } else {
             // simply add the handle and stop
             siblingPos = siblingTable->add(kadHandle);
+            EV << "[Kademlia::routingAdd()] @ " << thisNode.getIp()
+               << " (" << thisNode.getKey().toString(16) << ")]\n"
+               << "    ... node added to sibling table." << endl;
 
             // don't need to add kadHandle also to regular buckets
             finished = true;
@@ -605,9 +635,9 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
         updateTooltip();
 
         // call update() for new sibling
-        showOverlayNeighborArrow(handle, false,
+        showOverlayNeighborArrow(siblingTable->at(siblingPos), false,
                                  "m=m,50,100,50,100;ls=green,1");
-        callUpdate(handle, true);
+        callUpdate(siblingTable->at(siblingPos), true);
 
         if (finished) {
             BUCKET_CONSISTENCY(routingAdd: node is now sibling);
@@ -673,16 +703,16 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
             return false;
         }
 
-        EV << "[Kademlia::routingAdd()]\n"
-           << "    Adding new node " << kadHandle
-           << " to bucket " << routingBucketIndex(kadHandle.getKey())
-           << endl;
+        //EV << "[Kademlia::routingAdd()]\n"
+        //   << "    Adding new node " << kadHandle
+        //   << " to bucket " << routingBucketIndex(kadHandle.getKey())
+        //   << endl;
 
         // PNS
         if (needsRtt || proximityNeighborSelection) {
              //pingNode(handle, -1, 0, NULL, NULL, NULL, -1, UDP_TRANSPORT, false);
              Prox prox =
-                 neighborCache->getProx(handle, NEIGHBORCACHE_DEFAULT, -1,
+                 neighborCache->getProx(kadHandle, NEIGHBORCACHE_DEFAULT, -1,
                                         this, NULL);
              if (prox != Prox::PROX_SELF &&
                  prox != Prox::PROX_UNKNOWN &&
@@ -699,6 +729,11 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
         	bucket->updateManagedConnections();
 
         result = true;
+        EV << "[Kademlia::routingAdd()] @ " << thisNode.getIp()
+           << " (" << thisNode.getKey().toString(16) << ")]\n"
+           << "    ... node added to bucket "
+           << routingBucketIndex(kadHandle.getKey())
+           << " which was not yet full." << endl;
     } else if (isAlive) {
         //PNS node replacement
         if (proximityNeighborSelection &&
@@ -723,6 +758,11 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
                 }
 
                 kadHandle = temp;
+                EV << "[Kademlia::routingAdd()] @ " << thisNode.getIp()
+                   << " (" << thisNode.getKey().toString(16) << ")]\n"
+                   << "    ... added to bucket "
+                   << routingBucketIndex(kadHandle.getKey())
+                   << " (PNS: replacing another node)." << endl;
             }
         }
 
@@ -747,8 +787,8 @@ bool Kademlia::routingAdd(const NodeHandle& handle, bool isAlive,
 
     // PNS
     else if (proximityNeighborSelection) {
-        neighborCache->getProx(handle, NEIGHBORCACHE_QUERY, -1, this, NULL);
-        //pingNode(handle);
+        neighborCache->getProx(kadHandle, NEIGHBORCACHE_QUERY, -1, this, NULL);
+        //pingNode(kadHandle);
     }
 
     BUCKET_CONSISTENCY(routingAdd: end);
@@ -1047,7 +1087,7 @@ bool Kademlia::recursiveRoutingHook(const TransportAddress& dest,
             delete nextHops;
 
             if (!altRecMode) {
-                sendMessageToUDP(msg->getSrcNode(), kadRoutingInfoMsg);
+                sendMessageToUDP(msg->getSrcNode(), kadRoutingInfoMsg, 0.000001);
             } else {
                 // alternative maintenance mode
                 std::vector<TransportAddress> sourceRoute;
@@ -1231,14 +1271,16 @@ NodeVector* Kademlia::findNode(const OverlayKey& key, int numRedundantNodes,
         }
     }
 
-    if (returnProxNodes) {
+    if (returnProxNodes && resultProx->size() && result->size() &&
+        (KeyPrefixMetric().distance(key, (*resultProx)[0].getKey()) <
+         KeyPrefixMetric().distance(key, (*result)[0].getKey()))) {
         result->clear();
         for (uint32_t i = 0; i < resultProx->size(); ++i) {
             result->push_back((*resultProx)[i]/*.first*/);
         }
-        delete compProx;
-        delete resultProx;
     }
+    delete compProx;
+    delete resultProx;
 
     delete comp;
 

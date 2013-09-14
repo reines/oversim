@@ -36,6 +36,9 @@ simple CoordBasedRouting
         string areaCoordinateSource;        // XML filename
         int CBRstartAtDigit;                // start at this digit using CBR
         int CBRstopAtDigit;                 // stop at this digit using CBR
+        bool CBRchangeIdLater;
+        double CBRchangeIdStart @unit(s);
+        double CBRchangeIdStop @unit(s);
         //int coordCalcRuns;                  // How many runs will be started with random coordinates when calculating a node's coordinates?
         //double waitForLandmarks @unit(s);   // If not enough landmarks are available yet: Wait how long until next try?
         //bool onlyCoordFault;                // only coord measuring RTTs should be manipulated

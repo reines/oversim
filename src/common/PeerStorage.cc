@@ -32,7 +32,6 @@ PeerStorage::~PeerStorage()
     PeerHashMap::iterator it;
     for (it = peerHashMap.begin(); it != peerHashMap.end(); it++) {
         delete it->second.info;
-        delete it->second.node;
     }
 }
 
@@ -69,10 +68,18 @@ uint8_t PeerStorage::calcOffset(bool bootstrapped, bool malicious)
     return offset;
 }
 
-void PeerStorage::insertMapIteratorIntoVector(PeerHashMap::iterator it)
+void PeerStorage::insertMapIteratorIntoVector(PeerVector& peerVector,
+                                              PeerHashMap::iterator it)
 {
     PeerInfo* peerInfo = it->second.info;
-    bool bootstrapped = peerInfo->isBootstrapped();
+
+    bool bootstrapped = false;
+    for (AddrPerOverlayVector::iterator oit = it->second.addrVector.begin();
+            oit != it->second.addrVector.end(); oit++) {
+
+        bootstrapped |= oit->bootstrapped;
+    }
+
     bool malicious = peerInfo->isMalicious();
     size_t partition = peerInfo->getTypeID();
     size_t offset = calcOffset(bootstrapped, malicious);
@@ -113,10 +120,18 @@ void PeerStorage::insertMapIteratorIntoVector(PeerHashMap::iterator it)
     it->second.peerVectorIndex = index;
 }
 
-void PeerStorage::removeMapIteratorFromVector(PeerHashMap::iterator it)
+void PeerStorage::removeMapIteratorFromVector(PeerVector& peerVector,
+                                              PeerHashMap::iterator it)
 {
     PeerInfo* peerInfo = it->second.info;
-    bool bootstrapped = peerInfo->isBootstrapped();
+
+    bool bootstrapped = false;
+    for (AddrPerOverlayVector::iterator oit = it->second.addrVector.begin();
+            oit != it->second.addrVector.end(); oit++) {
+
+        bootstrapped |= oit->bootstrapped;
+    }
+
     bool malicious = peerInfo->isMalicious();
     size_t partition = peerInfo->getTypeID();
     size_t offset = calcOffset(bootstrapped, malicious);
@@ -140,7 +155,7 @@ std::pair<const PeerHashMap::iterator, bool> PeerStorage::insert(const std::pair
     ret = peerHashMap.insert(element);
 
     if (ret.second) {
-        insertMapIteratorIntoVector(ret.first);
+        insertMapIteratorIntoVector(globalPeerVector, ret.first);
     }
 
     return ret;
@@ -148,10 +163,24 @@ std::pair<const PeerHashMap::iterator, bool> PeerStorage::insert(const std::pair
 
 void PeerStorage::erase(const PeerHashMap::iterator it)
 {
-    removeMapIteratorFromVector(it);
+    removeMapIteratorFromVector(globalPeerVector, it);
     delete it->second.info;
-    delete it->second.node;
     peerHashMap.erase(it);
+}
+
+void PeerStorage::registerOverlay(const PeerHashMap::iterator it,
+                                  const NodeHandle& peer,
+                                  int32_t overlayId)
+{
+    it->second.addrVector.setAddrForOverlayId(new NodeHandle(peer),
+                                              overlayId);
+    //if (!overlayPeerVectorMap.count(overlayId)) {
+    //    PeerVector vector;
+    //    overlayPeerVectorMap.insert(std::make_pair(overlayId,
+    //                                               vector));
+    //}
+
+    // insertMapIteratorIntoVector(overlayPeerVectorMap[overlayId], it);
 }
 
 void PeerStorage::setMalicious(const PeerHashMap::iterator it, bool malicious)
@@ -160,24 +189,36 @@ void PeerStorage::setMalicious(const PeerHashMap::iterator it, bool malicious)
         throw cRuntimeError("GlobalNodeList::setMalicious(): Node not found!");
     }
 
-    removeMapIteratorFromVector(it);
+    removeMapIteratorFromVector(globalPeerVector, it);
     it->second.info->setMalicious(malicious);
-    insertMapIteratorIntoVector(it);
+    insertMapIteratorIntoVector(globalPeerVector, it);
 }
 
-void PeerStorage::setBootstrapped(const PeerHashMap::iterator it, bool bootstrapped)
+void PeerStorage::setBootstrapped(const PeerHashMap::iterator it,
+                                  int32_t overlayId, bool bootstrapped)
 {
     if (it == peerHashMap.end()) {
-        throw cRuntimeError("GlobalNodeList::setMalicious(): Node not found!");
+        throw cRuntimeError("GlobalNodeList::setBootstrapped(): Node not found!");
     }
 
-    removeMapIteratorFromVector(it);
-    //std::cout << "setBootstrapped: " << bootstrapped << std::endl;
-    it->second.info->setBootstrapped(bootstrapped);
-    insertMapIteratorIntoVector(it);
+    removeMapIteratorFromVector(globalPeerVector, it);
+    //std::cout << "setBootstrapped: " << bootstrapped << " overlayId: "
+    //          << overlayId << std::endl;
+
+    AddrPerOverlayVector::iterator oit = it->
+            second.addrVector.getIterForOverlayId(overlayId);
+
+    if (oit != it->second.addrVector.end()) {
+        oit->bootstrapped = bootstrapped;
+    } else if (bootstrapped) {
+        throw cRuntimeError("PeerStorage::setBootstrapped: No valid entry found!");
+    }
+
+    insertMapIteratorIntoVector(globalPeerVector, it);
 }
 
-const PeerHashMap::iterator PeerStorage::getRandomNode(int32_t nodeType,
+const PeerHashMap::iterator PeerStorage::getRandomNode(int32_t overlayId,
+                                                       int32_t nodeType,
                                                        bool bootstrappedNeeded,
                                                        bool inoffensiveNeeded)
 {
@@ -185,6 +226,8 @@ const PeerHashMap::iterator PeerStorage::getRandomNode(int32_t nodeType,
         std::cout << "getRandomNode: empty!" << std::endl;
         return peerHashMap.end();
     }
+
+    PeerVector& peerVector = globalPeerVector;
 
     size_t sum = 0;
 

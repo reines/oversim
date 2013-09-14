@@ -45,7 +45,7 @@ protected:
     GlobalNodeList* globalNodeList;
 
     void initVis(cModule* terminal);
-
+public:
     /**
      * Draws an arrow from this node to neighbor
      *

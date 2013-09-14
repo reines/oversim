@@ -32,6 +32,7 @@
 
 class KBRTestMessage;
 class KbrTestCall;
+class UnderlayTestCall;
 
 /**
  * Test application for KBR interface
@@ -105,6 +106,7 @@ private:
 
     bool handleRpcCall(BaseCallMessage* msg);
     void kbrTestCall(KbrTestCall* call);
+    void underlayTestCall(UnderlayTestCall* call);
 
     void handleRpcResponse(BaseResponseMessage* msg, cPolymorphic* context,
                            int rpcId, simtime_t rtt);
@@ -128,6 +130,7 @@ private:
     bool kbrOneWayTest;
     bool kbrRpcTest;
     bool kbrLookupTest;
+    bool underlayTest;
 
     int testMsgSize;
     double mean; //!< mean time interval between sending test messages
@@ -136,6 +139,9 @@ private:
     bool lookupNodeIds;  //!< lookup only existing nodeIDs
     bool nodeIsLeavingSoon; //!< true if the node is going to be killed shortly
     bool onlyLookupInoffensiveNodes; //!< if true only search for inoffensive nodes (use together with lookupNodeIds)
+
+    //simtime_t rpcTimeout;
+    int rpcRetries;
 
     uint32_t numSent;
     uint32_t bytesSent;
@@ -161,11 +167,17 @@ private:
     uint32_t numLookupSuccess;
     uint32_t numLookupFailed;
 
+    uint32_t numUnderlaySent;
+    uint32_t bytesUnderlaySent;
+    uint32_t numUnderlayDelivered; //!< number of delivered packets
+    uint32_t bytesUnderlayDelivered; //!< number of delivered bytes
+
     // TODO lookup stats
 
     cMessage* onewayTimer;
     cMessage* rpcTimer;
     cMessage* lookupTimer;
+    cMessage* underlayTimer;
 
     simtime_t failureLatency; /**< this latency is recorded for failed lookups and RPCs */
 

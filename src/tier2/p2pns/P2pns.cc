@@ -21,8 +21,8 @@
  * @author Ingmar Baumgart
  */
 
-#include <IPAddressResolver.h>
 #include <XmlRpcInterface.h>
+#include <IPAddressResolver.h>
 #include <P2pnsMessage_m.h>
 
 #include "P2pns.h"

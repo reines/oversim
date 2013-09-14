@@ -19,12 +19,14 @@
 /**
  * @file CoordBasedRouting.cc
  * @author Fabian Hartmann
+ * @author Bernhard Heep
  */
 
 
 #include <fstream>
 #include <string>
 #include <cassert>
+#include <algorithm>
 
 #include <omnetpp.h>
 
@@ -43,12 +45,24 @@ void CoordBasedRouting::initialize()
     areaCoordinateSource = par("areaCoordinateSource");
     cbrStartAtDigit = par("CBRstartAtDigit");
     cbrStopAtDigit = par("CBRstopAtDigit");
+    cbrChangeIdLater = par("CBRchangeIdLater");
+    cbrChangeIdStart = par("CBRchangeIdStart");
+    cbrChangeIdStop = par("CBRchangeIdStop");
     globalNodeList = GlobalNodeListAccess().get();
 
+    gap = new AP;
+
     // XML file found?
+    if (std::string(areaCoordinateSource) == "") {
+        EV << "[CoordBasedRouting::initialize()]\n    No CBR area file found."
+           << " Using dCBR." << endl;
+        return;
+    }
+
     std::ifstream check_for_xml_file(areaCoordinateSource);
     if (!check_for_xml_file) {
         check_for_xml_file.close();
+        //TODO
         throw cRuntimeError("CBR area file not found!");
         return;
     }
@@ -62,12 +76,10 @@ void CoordBasedRouting::initialize()
     parseSource(areaCoordinateSource);
 }
 
+
 void CoordBasedRouting::finish()
 {
-    for (uint32_t i = 0; i < CBRAreaPool.size(); i++) {
-        delete CBRAreaPool[i];
-    }
-    CBRAreaPool.clear();
+    gap->clear();
 }
 
 
@@ -79,43 +91,175 @@ void CoordBasedRouting::parseSource(const char* areaCoordinateSource)
 
     for (cXMLElement *area = rootElement->getFirstChildWithTag("area"); area;
          area = area->getNextSiblingWithTag("area") ) {
-        CBRArea* tmpArea = new CBRArea(xmlDimensions);
+        CBRArea tmpArea(xmlDimensions);
         for (cXMLElement *areavals = area->getFirstChild(); areavals;
              areavals = areavals->getNextSibling() ) {
             std::string tagname = std::string(areavals->getTagName());
             if (tagname == "min") {
                 uint8_t currentdim = atoi(areavals->getAttribute("dimension"));
                 double value = atof(areavals->getNodeValue());
-                tmpArea->min[currentdim] = value;
+                tmpArea.min[currentdim] = value;
             }
 
             else if (tagname == "max") {
                 uint8_t currentdim = atoi(areavals->getAttribute("dimension"));
                 double value = atof(areavals->getNodeValue());
-                tmpArea->max[currentdim] = value;
+                tmpArea.max[currentdim] = value;
             }
 
             else if (tagname == "prefix") {
-                tmpArea->prefix = areavals->getNodeValue();
+                tmpArea.prefix = areavals->getNodeValue();
             }
         }
-        CBRAreaPool.push_back(tmpArea);
+        gap->push_back(tmpArea);
     }
 
     EV << "[CoordBasedRouting::parseSource()]" << endl;
-    EV << "    " << CBRAreaPool.size() << " prefix areas detected." << endl;
+    EV << "    " << gap->size() << " prefix areas detected." << endl;
 }
 
-OverlayKey CoordBasedRouting::getNodeId(const std::vector<double>& coords,
-                                        uint8_t bpd, uint8_t length) const
+
+void CoordBasedRouting::splitNodes(CD& nodes,
+                                   const std::string& prefix,
+                                   const Coords& bottoms,
+                                   const Coords& tops,
+                                   uint8_t depth,
+                                   AP* cap)
 {
-    std::string prefix = getPrefix(coords);
+    // check
+    if (nodes.size() < 2 || prefix.length() >= maxPrefix) {
+        //std::cout << "nodes: " << nodes.size() << ", prefix.length(): " << prefix.length() << std::endl;
+        CBRArea temp(bottoms, tops, prefix);
+        //std::cout << temp << std::endl;
+        cap->push_back(temp);
+        return;
+    }
+
+    // sort
+    uint8_t splitDim = depth % ccdDim;
+    sort(nodes.begin(), nodes.end(), leqDim(splitDim));
+
+    // new vectors for two halfs
+    uint32_t newSize = nodes.size() / 2;
+    CD lnodes(newSize), rnodes(nodes.size() - newSize);
+
+    // split
+    CD::iterator halfIt = nodes.begin();
+    for (uint32_t i = 0; i < newSize; ++i, ++halfIt);
+    assert(halfIt != nodes.end());
+    double splitCoord = (nodes[newSize - 1][splitDim] + nodes[newSize][splitDim]) / 2;
+
+    std::copy(nodes.begin(), halfIt, lnodes.begin());
+    std::copy(halfIt, nodes.end(), rnodes.begin());
+
+    // set area borders
+    Coords newBottoms, newTops;
+    newBottoms = bottoms;
+    newTops = tops;
+    newBottoms[splitDim] = newTops[splitDim] = splitCoord;
+
+    // recursive calls
+    splitNodes(lnodes, prefix + '0', bottoms, newTops, ++depth, cap);
+    splitNodes(rnodes, prefix + '1', newBottoms, tops, depth, cap);
+
+
+    /*
+
+         def splitByNodes(returnval)
+            #returnval = 0: return lower half node set
+            #returnval = 1: return upper half node set
+            #returnval = 2: return split coordinate
+            num = @nodes.length
+            half = (num / 2).floor
+            splitcoord = (@nodes[half-1][@thisdim] + @nodes[half][@thisdim]) / 2
+            case returnval
+                when 0
+                    return @nodes[0..half-1]
+                when 1
+                    return @nodes[half..num-1]
+                when 2
+                    return splitcoord
+            end
+        end
+        */
+}
+
+
+const AP* CoordBasedRouting::calculateCapFromCcd(const CD& ccd, uint8_t bpd)
+{
+    if (ccd.size() == 0) return NULL;
+
+    AP* cap = new AP();
+    maxPrefix = bpd * cbrStopAtDigit; //TODO
+
+    ccdDim = ccd[0].size();
+
+    Coords bottoms(ccdDim, -1500), tops(ccdDim, 1500);
+    std::string prefix;
+
+    CD nodes = ccd;
+    splitNodes(nodes, prefix, bottoms, tops, 0, cap);
+
+    return cap;
+
+
+    /*
+
+    def split()
+        # split unless no more nodes left or maximum prefix length is reached
+        unless @nodes == nil || @depth >= MAXPREFIX
+            lnodes = splitByNodes(0)
+            unodes = splitByNodes(1)
+            splitcoord = splitByNodes(2);
+
+            lnodes = nil    if lnodes.length <= MINNODES
+            unodes = nil    if unodes.length <= MINNODES
+
+            newbottoms = []
+            @bottoms.each do |bottom|
+                newbottoms << bottom
+            end
+            newbottoms[@thisdim] = splitcoord
+
+            newtops = []
+            @tops.each do |top|
+                newtops << top
+            end
+            newtops[@thisdim] = splitcoord
+
+            addChild(lnodes, @prefix+"0", @bottoms, newtops);
+            addChild(unodes, @prefix+"1", newbottoms, @tops);
+
+            @children.each do |child|
+                child.split
+            end
+        end
+    end
+ */
+}
+
+
+OverlayKey CoordBasedRouting::getNodeId(const Coords& coords,
+                                        uint8_t bpd, uint8_t length,
+                                        const AP* cap) const
+{
+    std::string prefix = getPrefix(coords, cap);
 
     // if no prefix is returned, something is seriously wrong with the Area Source XML
     if (prefix == NOPREFIX) {
-        opp_error("[CoordBasedRouting::getNodeId()]: "
-                  "No prefix for given coords found. "
-                  "Check your area source file!");
+        std::stringstream ss;
+        ss << "[CoordBasedRouting::getNodeId()]: No prefix for given coords (";
+        for (uint8_t i = 0; i < coords.size(); ++i) {
+            ss << coords[i];
+            if (i != (coords.size() - 1)) {
+                ss << ", ";
+            }
+        }
+        ss << ") found. Check your area source file!";
+
+        EV << ss.str() << endl;
+        //std::cout << ss.str() << std::endl;
+        return OverlayKey::random();
     }
     std::string idString;
 
@@ -166,23 +310,46 @@ OverlayKey CoordBasedRouting::getNodeId(const std::vector<double>& coords,
     return nodeId;
 }
 
-std::string CoordBasedRouting::getPrefix(const std::vector<double>& coords) const
+std::string CoordBasedRouting::getPrefix(const Coords& coords,
+                                         const AP* cap) const
 {
+    //for (uint8_t i = 0; i < coords.size(); ++i) {
+    //    std::cout << coords[i] << ", ";
+    //}
+    //std::cout << std::endl;
+
     bool areaFound = false;
     uint32_t iter = 0;
 
+    // TODO dimension in dCBR
+    /*
     // Return no prefix if coords dimensions don't match area file dimensions
-    if (!checkDimensions(coords.size()))
+    if (!checkDimensions(coords.size())) {
+        //std::cout << "dim" << std::endl;
         return NOPREFIX;
+    }
+    */
 
-    while (!areaFound && iter < CBRAreaPool.size()) {
-        CBRArea* thisArea = CBRAreaPool[iter];
+    const AP* ap = ((cap != NULL) ? cap : gap);
+    //assert(ap && (ap->size() > 0));
+
+    /*
+    for (uint i = 0; i < ap->size(); ++i) {
+        for (uint j = 0; i < ap->at(i).min.size(); ++j) {
+            std::cout << ap->at(i).min[j] << " - " << ap->at(i).max[j] << std::endl;
+        }
+    }
+    */
+
+    while (!areaFound && iter < ap->size()) {
+        //std::cout << (*ap)[iter].min.size() << std::endl;
+        CBRArea thisArea = (*ap)[iter];
 
         // assume we're in the correct area unless any dimension tells us otherwise
         areaFound = true;
         for (uint8_t thisdim = 0; thisdim < coords.size(); thisdim++) {
-            if (coords[thisdim] < thisArea->min[thisdim] ||
-                coords[thisdim] > thisArea->max[thisdim]) {
+            if (coords[thisdim] < thisArea.min[thisdim] ||
+                coords[thisdim] > thisArea.max[thisdim]) {
                 areaFound = false;
                 break;
             }
@@ -192,8 +359,10 @@ std::string CoordBasedRouting::getPrefix(const std::vector<double>& coords) cons
         // return corresponding prefix
         if (areaFound) {
             EV << "[CoordBasedRouting::getPrefix()]\n"
-               <<"    calculated prefix: " << thisArea->prefix << endl;
-            return thisArea->prefix;
+               <<"    calculated prefix: " << thisArea.prefix << endl;
+            //std::cout << "[CoordBasedRouting::getPrefix()]\n"
+            //           <<"    calculated prefix: " << thisArea.prefix << std::endl;
+            return thisArea.prefix;
         }
         iter++;
     }
@@ -207,29 +376,33 @@ std::string CoordBasedRouting::getPrefix(const std::vector<double>& coords) cons
 }
 
 double CoordBasedRouting::getEuclidianDistanceByKeyAndCoords(const OverlayKey& destKey,
-                                                             const std::vector<double>& coords,
-                                                             uint8_t bpd) const
+                                                             const Coords& coords,
+                                                             uint8_t bpd,
+                                                             const AP* cap) const
 {
     assert(!destKey.isUnspecified());
     uint32_t iter = 0;
-    while (iter < CBRAreaPool.size()) {
-        CBRArea* thisArea = CBRAreaPool[iter];
+    const AP* ap = ((cap != NULL) ? cap : gap);
+    assert(ap);
+
+    while (iter < ap->size()) {
+        CBRArea thisArea = (*ap)[iter];
 
         // Take CBR Start/Stop Digit into account
         uint8_t startbit = bpd * cbrStartAtDigit;
         uint8_t length = (bpd * cbrStopAtDigit - bpd * cbrStartAtDigit <
-                (uint8_t)thisArea->prefix.length() - bpd * cbrStartAtDigit)
+                (uint8_t)thisArea.prefix.length() - bpd * cbrStartAtDigit)
                 ? (bpd * cbrStopAtDigit - bpd * cbrStartAtDigit)
-                : (thisArea->prefix.length() - bpd * cbrStartAtDigit);
+                : (thisArea.prefix.length() - bpd * cbrStartAtDigit);
         if (destKey.toString(2).substr(startbit, length) ==
-            thisArea->prefix.substr(startbit, length)) {
+            thisArea.prefix.substr(startbit, length)) {
             // Get euclidian distance of area center to given coords
-            std::vector<double> areaCenterCoords;
+            Coords areaCenterCoords;
             areaCenterCoords.resize(getXmlDimensions());
             double sumofsquares = 0;
             for (uint8_t dim = 0; dim < getXmlDimensions(); dim++) {
                 areaCenterCoords[dim] =
-                    (thisArea->min[dim] + thisArea->max[dim]) / 2;
+                    (thisArea.min[dim] + thisArea.max[dim]) / 2;
                 sumofsquares += pow((coords[dim] - areaCenterCoords[dim]), 2);
             }
             return sqrt(sumofsquares);
@@ -263,8 +436,18 @@ bool CoordBasedRouting::checkDimensions(uint8_t dims) const
  * CBRArea Constructor, reserves space for min & max vectors
  */
 CBRArea::CBRArea(uint8_t dim)
+: min(dim, 0.0), max(dim, 0.0)
 {
-    min.reserve(dim);
-    max.reserve(dim);
+    //min.reserve(dim);
+    //max.reserve(dim);
 }
 
+std::ostream& operator<<(std::ostream& os, const CBRArea& area)
+{
+    for (uint i = 0; i < area.min.size(); ++i) {
+        os << "|" << area.min[i] << " - " << area.max[i] << "|";
+    }
+    os << " -> \"" << area.prefix << "\"";
+
+    return os;
+}

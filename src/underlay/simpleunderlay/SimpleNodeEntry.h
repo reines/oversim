@@ -33,8 +33,10 @@
 #include "UDPPacket_m.h"
 #include "TCPSegment.h"
 
+#include "BaseLocation.h"
 
-class NodeRecord
+
+class NodeRecord: public BaseLocation
 {
   public:
     //NodeRecord(uint32_t dim);
@@ -42,6 +44,7 @@ class NodeRecord
     ~NodeRecord();
     NodeRecord(const NodeRecord& nodeRecord);
     NodeRecord& operator=(const NodeRecord& nodeRecord);
+    bool operator==(const BaseLocation& rhs);
     void debugOutput(int dim);
 
     double* coords;
@@ -146,6 +149,14 @@ public:
                           bool faultyDelay = false);
 
     /**
+     * Calculates delay introduced by send queue at the access router of the destination node
+     *
+     * @param msg pointer to message to get its length for delay calculation and set bit error flag
+     * @return delay in s and boolean value that is false if message should be deleted
+     */
+    SimpleDelay calcAccessRouterDelay(cPacket* msg);
+
+    /**
      * OMNeT++ info method
      *
      * @return infostring
@@ -174,6 +185,8 @@ public:
 
     float getErrorRate() const { return tx.errorRate; };
 
+    inline void setX(float x) { nodeRecord->coords[0] = x; };
+    inline void setY(float y) { nodeRecord->coords[1] = y; };
     inline float getX() const { return nodeRecord->coords[0]; };
     inline float getY() const { return nodeRecord->coords[1]; };
     inline float getCoords(int dim) const { return nodeRecord->coords[dim]; };
@@ -206,7 +219,7 @@ protected:
     cGate* TcpIPv6ingate; //!< IPv6 ingate of the SimpleTCP module of this terminal
 
     struct Channel {
-        simtime_t finished; //!< send queue finished
+        simtime_t finished; //!< node send queue nodeTxfinished
         simtime_t maxQueueTime; //!< maximum time for packets to be queued
         simtime_t accessDelay; //!< first hop delay
         double bandwidth; //!< bandwidth in access net

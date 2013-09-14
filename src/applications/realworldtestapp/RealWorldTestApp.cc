@@ -93,7 +93,7 @@ void RealWorldTestApp::handleUpperMessage(cMessage* msg)
 {
     RealWorldTestMessage* callMsg = check_and_cast<RealWorldTestMessage*>(msg);
     callMsg->setName("CALL");
-    callRoute(OverlayKey::sha1(const_cast<char*>(callMsg->getMsg())), callMsg);
+    callRoute(OverlayKey::sha1(std::string(callMsg->getMsg())), callMsg);
 }
 
 void RealWorldTestApp::handleTimerEvent(cMessage* msg)

@@ -34,6 +34,14 @@ channel simple_dsl_lossy extends ned.DatarateChannel
         ber = 1e-5;
 }
 
+// 56k modem channel for SimpleUnderlay
+channel simple_dialup_56k extends ned.DatarateChannel
+{
+    parameters:
+        delay = 0ms;
+        datarate = 56kbps;
+}
+
 // Fiberline channel for InetUnderlay
 channel inet_fiberline extends ned.DatarateChannel
 {
@@ -81,5 +89,5 @@ channel inet_dialup_56k extends ned.DatarateChannel
 {
     parameters:
         delay = 220ms;
-        datarate = 56Kbps;
+        datarate = 56kbps;
 }

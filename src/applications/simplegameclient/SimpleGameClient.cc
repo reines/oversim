@@ -168,16 +168,16 @@ void SimpleGameClient::handleTimerEvent(cMessage* msg)
     else if(msg->isName("packetNotification")) {
         while(packetBuffer.size() > 0) {
             // get packet from buffer and parse it
-            RealtimeScheduler::PacketBufferEntry packet = *(packetBuffer.begin());
+            PacketBufferEntry packet = *(packetBuffer.begin());
             packetBuffer.pop_front();
             switch (packet.func) {
-                case RealtimeScheduler::PacketBufferEntry::PACKET_DATA: {
+                case PacketBufferEntry::PACKET_DATA: {
                     if(packet.fd != appFd) {
                         error("SimpleClient::handleMessage(): Received packet from unknown socket!");
                     }
                     handleRealworldPacket(packet.data, packet.length);
                 } break;
-                case RealtimeScheduler::PacketBufferEntry::PACKET_FD_NEW: {
+                case PacketBufferEntry::PACKET_FD_NEW: {
                     if(appFd != INVALID_SOCKET) {
                         error("SimpleClient::handleMessage(): Multiple connections not supported yet!");
                     }
@@ -187,7 +187,7 @@ void SimpleGameClient::handleTimerEvent(cMessage* msg)
                     }
                     appFd = packet.fd;
                 } break;
-                case RealtimeScheduler::PacketBufferEntry::PACKET_FD_CLOSE: {
+                case PacketBufferEntry::PACKET_FD_CLOSE: {
                     if(packet.fd != appFd) {
                         error("SimpleClient::handleMessage(): Trying to close unknown connection!");
                     }

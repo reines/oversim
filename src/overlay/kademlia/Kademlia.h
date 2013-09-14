@@ -200,6 +200,13 @@ protected:
 
     void handleDataReceived(TransportAddress address, cPacket* msg, bool urgent);
 
+#ifdef PAIL
+    AbstractProxKeyComparator* getProxKeyComparator(const OverlayKey& relativeKey,
+                                                    uint8_t bitsPerDigit,
+                                                    const AdjustableProxComparator* apc) {
+        return new KademliaPRComparator(relativeKey, bitsPerDigit);
+    };
+#endif
 private:
     uint32_t bucketRefreshCount; /*< statistics: total number of bucket refreshes */
     uint32_t siblingTableRefreshCount; /*< statistics: total number of sibling table refreshes */

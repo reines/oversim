@@ -309,8 +309,8 @@ void SimMud::handleOtherPlayerMove( SimMudMoveMessage* msg )
         player.pos = Vector2D( msg->getPosX(), msg->getPosY() );
         player.update = true;
 
-        pair< map<NodeHandle, PlayerInfo>::iterator, bool> inserter =
-            playerMap.insert( make_pair(src, player) );
+        // pair< map<NodeHandle, PlayerInfo>::iterator, bool> inserter =
+        playerMap.insert( make_pair(src, player) );
 
         /*    if( inserter.second ) {
             // new player

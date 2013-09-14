@@ -222,22 +222,6 @@ public:
     OverlayKey& operator-=( const OverlayKey& rhs );
 
     /**
-     * multiplies rhs->key by this->key
-     *
-     * @param rhs the OverlayKey with the defined key
-     * @return this OverlayKey object
-     */
-    OverlayKey& operator*=( const OverlayKey& rhs );
-
-    /**
-     * divides rhs->key by this->key
-     *
-     * @param rhs the OverlayKey with the defined key
-     * @return this OverlayKey object
-     */
-    OverlayKey& operator/=( const OverlayKey& rhs );
-
-    /**
      * adds rhs->key to this->key
      *
      * @param rhs the OverlayKey with the defined key
@@ -252,22 +236,6 @@ public:
      * @return this OverlayKey object
      */
     OverlayKey  operator- ( const OverlayKey& rhs ) const;
-
-    /**
-     * multiples rhs->key by this->key
-     *
-     * @param rhs the OverlayKey with the defined key
-     * @return this OverlayKey object
-     */
-    OverlayKey  operator* ( const OverlayKey& rhs ) const;
-
-    /**
-     * divides rhs->key by this->key
-     *
-     * @param rhs the OverlayKey with the defined key
-     * @return this OverlayKey object
-     */
-    OverlayKey  operator/ ( const OverlayKey& rhs ) const;
 
     /**
      * substracts 1 from this->key

@@ -98,19 +98,23 @@ class Nps : public RpcListener, public AbstractNcs
 
     cMessage* landmarkTimer;
 
+    bool ready;
+
   public:
     Nps() {};
     void init(NeighborCache* neighborCache);
+
+    bool isReady() { return ready; };
 
     void handleTimerEvent(cMessage* msg);
     virtual bool handleRpcCall(BaseCallMessage* msg);
 
     Prox getCoordinateBasedProx(const AbstractNcsNodeInfo& info) const;
-    AbstractNcsNodeInfo* getUnvalidNcsInfo() const {return new GnpNpsCoordsInfo; };
-    AbstractNcsNodeInfo* createNcsInfo(const std::vector<double>& coords) const;
+    AbstractNcsNodeInfo* getUnvalidNcsInfo() const { return new GnpNpsCoordsInfo; };
+    AbstractNcsNodeInfo* createNcsInfo(const Coords& coords) const;
     virtual const AbstractNcsNodeInfo& getOwnNcsInfo() const { return *ownCoords; };
 
-    const std::vector<double>& getOwnCoordinates() const { return ownCoords->getCoords(); };
+    const Coords& getOwnCoordinates() const { return ownCoords->getCoords(); };
     double getOwnCoordinates(uint8_t i) const { return ownCoords->getCoords(i); };
     uint8_t getOwnLayer() const { return ownCoords->getLayer(); };
 
@@ -118,18 +122,18 @@ class Nps : public RpcListener, public AbstractNcs
     /**
      *  computes this node's NPS layer (max of reference points' layers + 1)
      */
-    void computeOwnLayer (const std::vector<LandmarkDataEntry>& landmarks);
+    uint8_t computeOwnLayer (const std::vector<LandmarkDataEntry>& landmarks);
 
     /**
      *  methods for computing own coordinates with the received data
      */
-    void computeOwnCoordinates (const std::vector<LandmarkDataEntry>& landmarks);
+    Coords computeOwnCoordinates (const std::vector<LandmarkDataEntry>& landmarks);
 
     /**
      *  announces node's NPS layer to Bootstrap Oracle and Neighbor Cache
      */
     void setOwnLayer(int8_t layer);
-    void setOwnCoordinates(const std::vector<double>& coords) {
+    void setOwnCoordinates(const Coords& coords) {
         for (uint8_t i = 0; i < coords.size(); ++i) {
             ownCoords->setCoords(i, coords[i]);
         }

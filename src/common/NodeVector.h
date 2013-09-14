@@ -405,6 +405,10 @@ public://methods: sorted add support
      */
     bool isFull() const
     {
+        if (maxSize == 0) {
+            return false;
+        }
+
         return(std::vector<T>::size() == maxSize);
     };
 

@@ -35,17 +35,26 @@
 #include <BaseApp.h>
 #include <NodeHandle.h>
 #include <CoordinateSystem.h>
+
 #include <Nps.h>
+
+#include <TreeManagement.h>
+#include <TreeManagementMessage_m.h>
+#include <SimpleUnderlayNCS.h>
+
 #include <Vivaldi.h>
 #include <SVivaldi.h>
 #include <SimpleNcs.h>
 #include <ProxNodeHandle.h>
 #include <HashFunc.h>
 
+
 class GlobalStatistics;
 class TransportAddress;
 class RpcListener;
-
+class TreeManagement;
+class GlobalViewBuilder;
+class DiscoveryMode;
 
 // Prox stuff
 enum NeighborCacheQueryType {
@@ -69,13 +78,19 @@ public:
 class NeighborCache : public BaseApp
 {
     friend class Nps;
+    friend class SimpleUnderlayNCS;
+    friend class TreeManagement;
+    friend class GlobalViewBuilder;
+    friend class DiscoveryMode;
 
 private:
     // parameters
     bool enableNeighborCache;
-    bool doDiscovery;
+    //bool doDiscovery;
+    uint8_t collectClosestNodes;
     simtime_t rttExpirationTime;
     uint32_t maxSize;
+    bool discoveryFinished;
 
     uint32_t misses;
     uint32_t hits;
@@ -86,7 +101,18 @@ private:
                      simtime_t insertTime);
 
     AbstractNcs* ncs;
-    bool ncsSendBackOwnCoords;
+    TreeManagement* treeManager;
+    GlobalViewBuilder* globalViewBuilder;
+    bool capReqFinished;
+
+    bool ncsPiggybackOwnCoords;
+
+    bool useNcsForTimeout;
+
+    StdProxComparator* proxComparator;
+
+    DiscoveryMode* discoveryMode;
+    CoordBasedRouting* coordBasedRouting;
 
     NeighborCacheQueryType defaultQueryType;
     NeighborCacheQueryType defaultQueryTypeI;
@@ -95,11 +121,12 @@ private:
     Prox getCoordinateBasedProx(const TransportAddress& node);
 
     cMessage* landmarkTimer;
+    cMessage* cbrTimer;
 
     static const std::vector<double> coordsDummy;
 
     //Stuff needed to calculate a mean RTT to a specific node
-    void calcRttError(const NodeHandle &handle, simtime_t rtt);
+    void recordNcsEstimationError(const NodeHandle &handle, simtime_t rtt);
     std::map<TransportAddress, std::vector<double> > lastAbsoluteErrorPerNode;
     uint32_t numMsg;
     double absoluteError;
@@ -109,12 +136,14 @@ private:
     uint32_t rttHistory;
     double timeoutAccuracyLimit;
 
+
     struct WaitingContext
     {
         WaitingContext() { proxListener = NULL; proxContext = NULL; };
         WaitingContext(ProxListener* listener,
                        cPolymorphic* context,
                        uint32_t id)
+
             : proxListener(listener), proxContext(context), id(id) { };
         ProxListener* proxListener;
         cPolymorphic* proxContext;
@@ -141,8 +170,17 @@ private:
 
     Rtt getNodeRtt(const TransportAddress& add);
 
+    void pingResponse(PingResponse* response, cPolymorphic* context,
+                          int rpcId, simtime_t rtt);
+
+    void pingTimeout(PingCall* call, const TransportAddress& dest,
+                              cPolymorphic* context, int rpcId);
+
     static const double RTT_TIMEOUT_ADJUSTMENT = 1.3;
-    static const double NCS_TIMEOUT_CONSTANT = 0.25;
+    static const double NCS_TIMEOUT_CONSTANT = 0.350;
+
+    void prepareOverlay();
+    void setCbrNodeId();
 
 protected:
     GlobalStatistics* globalStatistics;
@@ -151,6 +189,7 @@ protected:
         NeighborCacheEntry() { insertTime = simTime();
                                rttState = RTTSTATE_UNKNOWN;
                                coordsInfo = NULL; };
+
 
         ~NeighborCacheEntry() {
             delete coordsInfo;
@@ -177,13 +216,13 @@ protected:
     std::multimap<simtime_t, TransportAddress> neighborCacheExpireMap;
     typedef std::multimap<simtime_t, TransportAddress>::iterator neighborCacheExpireMapIterator;
 
+    ProxAddressVector* closestNodes;
+
     void initializeApp(int stage);
 
     void finishApp();
 
     virtual CompType getThisCompType() { return NEIGHBORCACHE_COMP; };
-
-    void handleReadyMessage(CompReadyMessage* readyMsg);
 
     void handleTimerEvent(cMessage* msg);
 
@@ -203,15 +242,24 @@ protected:
      */
     bool handleRpcCall(BaseCallMessage* msg);
 
+    /**
+     * handle ready message - build tree topology
+     */
+    void handleReadyMessage(CompReadyMessage* msg);
+
     simtime_t getRttBasedTimeout(const NodeHandle &node);
     simtime_t getNcsBasedTimeout(const NodeHandle &node);
+
+    void callbackDiscoveryFinished(const TransportAddress& nearNode);
 
 public:
     ~NeighborCache();
 
     inline bool isEnabled() { return enableNeighborCache; };
 
-    bool sendBackOwnCoords() { return (ncsSendBackOwnCoords && ncs != NULL); };
+    const TransportAddress& getBootstrapNode();
+
+    bool piggybackOwnCoords() { return (ncsPiggybackOwnCoords && ncs != NULL); };
 
     const AbstractNcs& getNcsAccess() const {
         if (!ncs) throw cRuntimeError("No NCS activated");
@@ -238,6 +286,9 @@ public:
     // getter for general node information
     TransportAddress getNearestNode(uint8_t maxLayer);
     double getAvgAbsPredictionError();
+
+    std::vector<TransportAddress>* getClosestNodes(uint8_t number);
+    std::vector<TransportAddress>* getSpreadedNodes(uint8_t number);
 
     // setter for specific node information
     void updateNode(const NodeHandle &add, simtime_t rtt,
@@ -291,10 +342,12 @@ public:
      */
     const AbstractNcsNodeInfo* getNodeCoordsInfo(const TransportAddress &node);
 
-    //calculate mean RTT to a specific node
-    //simtime_t getMeanRtt(const TransportAddress &node);
-    //calculate variance of the RTT to a specific node
-    //double getVarRtt(const TransportAddress &node, simtime_t &meanRtt);
+    /**
+     * Returns a pointer to the treeManager Module
+     *
+     * @returns treeManager Module
+     */
+    TreeManagement* getTreeManager();
 
     std::pair<simtime_t, simtime_t> getMeanVarRtt(const TransportAddress &node,
                                                   bool returnVar);

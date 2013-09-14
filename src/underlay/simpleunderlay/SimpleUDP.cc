@@ -45,6 +45,9 @@
 #include "IPDatagram_m.h"
 #include "IPv6Datagram_m.h"
 
+#include "ICMPMessage_m.h"
+#include "ICMPv6Message_m.h"
+
 
 #define EPHEMERAL_PORTRANGE_START 1024
 #define EPHEMERAL_PORTRANGE_END   5000
@@ -54,6 +57,7 @@ Define_Module( SimpleUDP );
 
 std::string SimpleUDP::delayFaultTypeString;
 std::map<std::string, SimpleUDP::delayFaultTypeNum> SimpleUDP::delayFaultTypeMap;
+
 
 static std::ostream & operator<<(std::ostream & os,
                                  const SimpleUDP::SockDesc& sd)
@@ -82,6 +86,7 @@ static std::ostream & operator<<(std::ostream & os,
         os << "sockId=" << (*i)->sockId << " ";
     return os;
 }
+
 
 //--------
 
@@ -138,9 +143,11 @@ void SimpleUDP::initialize(int stage)
             break;
         default:
             faultyDelay = false;
+            break;
         }
 
         jitter = par("jitter");
+        enableAccessRouterTxQueue = par("enableAccessRouterTxQueue");
         nodeEntry = NULL;
         WATCH_PTR(nodeEntry);
     }
@@ -175,7 +182,18 @@ void SimpleUDP::updateDisplayString()
     getDisplayString().setTagArg("t",0,buf);
 }
 
-void SimpleUDP::processUndeliverablePacket(UDPPacket *udpPacket, cPolymorphic *ctrl)
+void SimpleUDP::sendUp(cPacket *payload, UDPControlInfo *udpCtrl, SockDesc *sd)
+{
+    // send payload with UDPControlInfo up to the application
+    udpCtrl->setSockId(sd->sockId);
+    udpCtrl->setUserId(sd->userId);
+    payload->setControlInfo(udpCtrl);
+
+    send(payload, "appOut", sd->appGateIndex);
+    numPassedUp++;
+}
+
+void SimpleUDP::processUndeliverablePacket(cPacket *udpPacket, cPolymorphic *ctrl)
 {
     numDroppedWrongPort++;
     EV << "[SimpleUDP::processUndeliverablePacket()]\n"
@@ -183,12 +201,24 @@ void SimpleUDP::processUndeliverablePacket(UDPPacket *udpPacket, cPolymorphic *c
        << endl;
 
     delete udpPacket;
+    delete ctrl;
 }
 
-void SimpleUDP::processUDPPacket(UDPPacket *udpPacket)
+void SimpleUDP::processUDPPacket(cPacket *udpPacket)
 {
+    int srcPort, destPort;
+    IPvXAddress srcAddr, destAddr;
+
+    UDPControlInfo *ctrl = check_and_cast<UDPControlInfo *>(udpPacket->removeControlInfo());
+
+    srcPort = ctrl->getSrcPort();
+    destPort = ctrl->getDestPort();
+
+	srcAddr = ctrl->getSrcAddr();
+	destAddr = ctrl->getDestAddr();
+
     // simulate checksum: discard packet if it has bit error
-    EV << "Packet " << udpPacket->getName() << " received from network, dest port " << udpPacket->getDestinationPort() << "\n";
+    EV << "Packet " << udpPacket->getName() << " received from network, dest port " << destPort << "\n";
     if (udpPacket->hasBitError())
     {
         EV << "Packet has bit error, discarding\n";
@@ -196,9 +226,6 @@ void SimpleUDP::processUDPPacket(UDPPacket *udpPacket)
         numDroppedBadChecksum++;
         return;
     }
-
-    int destPort = udpPacket->getDestinationPort();
-    cPolymorphic *ctrl = udpPacket->removeControlInfo();
 
     // send back ICMP error if no socket is bound to that port
     SocketsByPortMap::iterator it = socketsByPortMap.find(destPort);
@@ -208,56 +235,34 @@ void SimpleUDP::processUDPPacket(UDPPacket *udpPacket)
         processUndeliverablePacket(udpPacket, ctrl);
         return;
     }
-    SockDescList& list = it->second;
 
+    SockDescList& list = it->second;
     int matches = 0;
 
     // deliver a copy of the packet to each matching socket
-    cPacket *payload = udpPacket->decapsulate();
-    if (dynamic_cast<IPControlInfo *>(ctrl)!=NULL)
+
+    if (destAddr.isIPv6())
     {
-        IPControlInfo *ctrl4 = (IPControlInfo *)ctrl;
-        for (SockDescList::iterator it=list.begin(); it!=list.end(); ++it)
-        {
-            SockDesc *sd = *it;
-            if (sd->onlyLocalPortIsSet || matchesSocket(sd, udpPacket, ctrl4))
-            {
-                //EV << "Socket sockId=" << sd->sockId << " matches, sending up a copy.\n";
-                //sendUp((cPacket*)payload->dup(), udpPacket, ctrl4, sd);
-                // ib: speed hack
-                if (matches == 0) {
-                    sendUp((cPacket*)payload, udpPacket, ctrl4, sd);
-                } else {
-                    opp_error("Edit SimpleUDP.cc to support multibinding.");
-                }
-                matches++;
-            }
-        }
-    }
-    else if (dynamic_cast<IPv6ControlInfo *>(ctrl)!=NULL)
-    {
-        IPv6ControlInfo *ctrl6 = (IPv6ControlInfo *)ctrl;
-        for (SockDescList::iterator it=list.begin(); it!=list.end(); ++it)
-        {
-            SockDesc *sd = *it;
-            if (sd->onlyLocalPortIsSet || matchesSocket(sd, udpPacket, ctrl6))
-            {
-                //EV << "Socket sockId=" << sd->sockId << " matches, sending up a copy.\n";
-                //sendUp((cPacket*)payload->dup(), udpPacket, ctrl6, sd);
-                // ib: speed hack
-                if (matches == 0) {
-                    sendUp((cPacket*)payload, udpPacket, ctrl6, sd);
-                } else {
-                    opp_error("Edit SimpleUDP.cc to support multibinding.");
-                }
-                matches++;
-            }
-        }
+        // packet size is increased in processMsgFromApp
+    	udpPacket->setByteLength(udpPacket->getByteLength() - UDP_HEADER_BYTES - IPv6_HEADER_BYTES);
     }
     else
     {
-        error("(%s)%s arrived from lower layer without control info", udpPacket->getClassName(), udpPacket->getName());
+    	udpPacket->setByteLength(udpPacket->getByteLength() - UDP_HEADER_BYTES - IP_HEADER_BYTES);
     }
+    for (SockDescList::iterator it=list.begin(); it!=list.end(); ++it)
+	{
+		SockDesc *sd = *it;
+		if (sd->onlyLocalPortIsSet || matchesSocket(sd, destAddr, srcAddr, srcPort))
+		{
+			if (matches == 0) {
+				sendUp(udpPacket, ctrl, sd);
+			} else {
+				opp_error("Edit SimpleUDP.cc to support multibinding.");
+			}
+			matches++;
+		}
+	}
 
     // send back ICMP error if there is no matching socket
     if (matches==0)
@@ -266,40 +271,27 @@ void SimpleUDP::processUDPPacket(UDPPacket *udpPacket)
         processUndeliverablePacket(udpPacket, ctrl);
         return;
     }
-
-    delete udpPacket;
-    delete ctrl;
 }
 
 void SimpleUDP::processMsgFromApp(cPacket *appData)
 {
     cModule *node = getParentModule();
-//    IPvXAddress ip = IPAddressResolver().addressOf(node);
-//    Speedhack SK
 
     IPvXAddress srcAddr, destAddr;
-    //cGate* destGate;
 
-    UDPControlInfo *udpCtrl = check_and_cast<UDPControlInfo *>(appData->removeControlInfo());
-
-    UDPPacket *udpPacket = createUDPPacket(appData->getName());
-
-    // add header byte length for the skipped IP header
-    if (udpCtrl->getDestAddr().isIPv6()) {
-        udpPacket->setByteLength(UDP_HEADER_BYTES + IPv6_HEADER_BYTES);
-    } else {
-        udpPacket->setByteLength(UDP_HEADER_BYTES + IP_HEADER_BYTES);
-    }
-    udpPacket->encapsulate(appData);
-
-    // set source and destination port
-    udpPacket->setSourcePort(udpCtrl->getSrcPort());
-    udpPacket->setDestinationPort(udpCtrl->getDestPort());
-
-    /* main modifications for SimpleUDP start here */
+    UDPControlInfo *udpCtrl = check_and_cast<UDPControlInfo *>(appData->getControlInfo());
 
     srcAddr = udpCtrl->getSrcAddr();
     destAddr = udpCtrl->getDestAddr();
+
+    // add header byte length for the skipped IP and UDP headers (decreased in processUDPPacket)
+    if (destAddr.isIPv6()) {
+        appData->setByteLength(appData->getByteLength() + UDP_HEADER_BYTES + IPv6_HEADER_BYTES);
+    } else {
+        appData->setByteLength(appData->getByteLength() + UDP_HEADER_BYTES + IP_HEADER_BYTES);
+    }
+
+    /* main modifications for SimpleUDP start here */
 
     SimpleInfo* info = dynamic_cast<SimpleInfo*>(globalNodeList->getPeerInfo(destAddr));
     numSent++;
@@ -309,8 +301,7 @@ void SimpleUDP::processMsgFromApp(cPacket *appData)
            << "    No route to host " << destAddr
            << endl;
 
-        delete udpPacket;
-        delete udpCtrl;
+        delete appData;
         numDestUnavailableLost++;
         return;
     }
@@ -323,20 +314,20 @@ void SimpleUDP::processMsgFromApp(cPacket *appData)
         SimpleNodeEntry::SimpleDelay temp;
         if (faultyDelay) {
             SimpleInfo* thisInfo = static_cast<SimpleInfo*>(globalNodeList->getPeerInfo(srcAddr));
-            temp = nodeEntry->calcDelay(udpPacket, *destEntry,
+            temp = nodeEntry->calcDelay(appData, *destEntry,
                                         !(thisInfo->getNpsLayer() == 0 ||
                                           info->getNpsLayer() == 0)); //TODO
         } else {
-            temp = nodeEntry->calcDelay(udpPacket, *destEntry);
+            temp = nodeEntry->calcDelay(appData, *destEntry);
         }
         if (useCoordinateBasedDelay == false) {
             totalDelay = constantDelay;
         } else if (temp.second == false) {
             EV << "[SimpleUDP::processMsgFromApp() @ " << IPAddressResolver().addressOf(node) << "]\n"
-               << "    Send queue full: packet " << udpPacket << " dropped"
+               << "    Send queue full: packet " << appData << " dropped"
                << endl;
-            delete udpCtrl;
-            delete udpPacket;
+
+            delete appData;
             numQueueLost++;
             return;
         } else {
@@ -351,8 +342,8 @@ void SimpleUDP::processMsgFromApp(cPacket *appData)
                    << "    Partition " << thisInfo->getTypeID() << "->" << info->getTypeID()
                    << " is not connected"
                    << endl;
-        delete udpCtrl;
-        delete udpPacket;
+
+        delete appData;
         numPartitionLost++;
         return;
     }
@@ -374,66 +365,84 @@ void SimpleUDP::processMsgFromApp(cPacket *appData)
 
     BaseOverlayMessage* temp = NULL;
 
-    if (ev.isGUI() && udpPacket->getEncapsulatedPacket()) {
-        if ((temp = dynamic_cast<BaseOverlayMessage*>(udpPacket
-                ->getEncapsulatedPacket()))) {
+    if (ev.isGUI() && appData) {
+        if ((temp = dynamic_cast<BaseOverlayMessage*>(appData))) {
             switch (temp->getStatType()) {
             case APP_DATA_STAT:
-                udpPacket->setKind(1);
+                appData->setKind(1);
                 break;
             case APP_LOOKUP_STAT:
-                udpPacket->setKind(2);
+                appData->setKind(2);
                 break;
             case MAINTENANCE_STAT:
             default:
-                udpPacket->setKind(3);
+                appData->setKind(3);
+                break;
             }
         } else {
-            udpPacket->setKind(1);
+            appData->setKind(1);
         }
     }
 
     EV << "[SimpleUDP::processMsgFromApp() @ " << IPAddressResolver().addressOf(node) << "]\n"
-       << "    Packet " << udpPacket << " sent with delay = " << totalDelay
+       << "    Packet " << appData << " sent with delay = " << SIMTIME_DBL(totalDelay)
        << endl;
 
     //RECORD_STATS(globalStatistics->addStdDev("SimpleUDP: delay", totalDelay));
 
     /* main modifications for SimpleUDP end here */
 
-    if (!udpCtrl->getDestAddr().isIPv6()) {
-        // send to IPv4
-        //EV << "[SimpleUDP::processMsgFromApp() @ " << IPAddressResolver().addressOf(node) << "]\n"
-        //<< "    Sending app packet " << appData->getName() << " over IPv4"
-        //<< endl;
-        IPControlInfo *ipControlInfo = new IPControlInfo();
-        ipControlInfo->setProtocol(IP_PROT_UDP);
-        ipControlInfo->setSrcAddr(srcAddr.get4());
-        ipControlInfo->setDestAddr(destAddr.get4());
-        ipControlInfo->setInterfaceId(udpCtrl->getInterfaceId());
-        udpPacket->setControlInfo(ipControlInfo);
-        delete udpCtrl;
-
+    if (!destAddr.isIPv6()) {
         // send directly to IPv4 gate of the destination node
-        sendDirect(udpPacket, totalDelay, 0, destEntry->getUdpIPv4Gate());
+        sendDirect(appData, totalDelay, 0, destEntry->getUdpIPv4Gate());
 
     } else {
-        // send to IPv6
-        //EV << "[SimpleUDP::processMsgFromApp() @ " << IPAddressResolver().addressOf(node) << "]\n"
-        //<< "    Sending app packet " << appData->getName() << " over IPv6"
-        //<< endl;
-        IPv6ControlInfo *ipControlInfo = new IPv6ControlInfo();
-        ipControlInfo->setProtocol(IP_PROT_UDP);
-        ipControlInfo->setSrcAddr(srcAddr.get6());
-        ipControlInfo->setDestAddr(destAddr.get6());
-        ipControlInfo->setInterfaceId(udpCtrl->getInterfaceId()); //FIXME extend IPv6 with this!!!
-        udpPacket->setControlInfo(ipControlInfo);
-        delete udpCtrl;
+        sendDirect(appData, totalDelay, 0, destEntry->getUdpIPv6Gate());
+    }
+}
 
-        // send directly to IPv4 gate of the destination node
-        sendDirect(udpPacket, totalDelay, 0, destEntry->getUdpIPv6Gate());
+
+void SimpleUDP::handleMessage(cMessage *msg)
+{
+    // received from IP layer
+    if (msg->arrivedOn("ipIn") || msg->arrivedOn("ipv6In"))
+    {
+        SimpleNodeEntry::SimpleDelay temp = std::make_pair(0, true);
+
+        if (enableAccessRouterTxQueue) {
+            nodeEntry->calcAccessRouterDelay(PK(msg));
+        }
+
+        if (temp.second == false) {
+            delete msg;
+            return;
+        }
+
+        if (temp.first > 0) {
+            scheduleAt(simTime() + temp.first, msg);
+        } else if (dynamic_cast<ICMPMessage *>(msg) || dynamic_cast<ICMPv6Message *>(msg))
+            processICMPError(PK(msg));
+        else
+            processUDPPacket(PK(msg));
+    }
+    else if (msg->isSelfMessage())
+    {
+        if (dynamic_cast<ICMPMessage *>(msg) || dynamic_cast<ICMPv6Message *>(msg))
+            processICMPError(PK(msg));
+        else
+            processUDPPacket(PK(msg));
+
+    }
+    else // received from application layer
+    {
+        if (msg->getKind()==UDP_C_DATA)
+            processMsgFromApp(PK(msg));
+        else
+            processCommandFromApp(msg);
     }
 
+    if (ev.isGUI())
+        updateDisplayString();
 }
 
 

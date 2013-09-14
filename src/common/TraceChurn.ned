@@ -26,6 +26,5 @@ simple TraceChurn extends ChurnGenerator
 {
     parameters:
         @class(TraceChurn);
-        string traceFile;    // file name of the trace file
         int numTiers;    // number of tiers used
 }

@@ -49,13 +49,6 @@ public:
     virtual ~PeerInfo() {};
 
     /**
-     * has the peer bootstrapped yet?
-     *
-     * @return true if the peer has bootstrapped, false otherwise
-     */
-    bool isBootstrapped() { return bootstrapped; };
-
-    /**
      * returns the moduleId of the peer
      *
      * @return the moduleId
@@ -125,14 +118,6 @@ private:
      */
     void setMalicious(bool malic = true) { malicious = malic; };
 
-    /**
-     * sets or deletes the bootstrapped parameter
-     *
-     * @param bootstrap true or () if peer has bootstrapped, false otherwise
-     * */
-    void setBootstrapped(bool bootstrap = true) { bootstrapped = bootstrap; };
-
-    bool bootstrapped; /**< true if node has bootstrapped */
     bool malicious; /**< true if the node is malicious */
     bool preKilled; /**< true, if the node is marked for deletion */
     int moduleId;  /**< the moduleId of the peer */

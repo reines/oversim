@@ -50,9 +50,11 @@ void Nps::init(NeighborCache* neighborCache)
     GnpNpsCoordsInfo::setDimension(dimensions);
     ownCoords = new GnpNpsCoordsInfo();
 
+    ready = false;
+
     receivedCalls = 0;
     pendingRequests = 0;
-    coordCalcRuns = neighborCache->par("npsCoordCalcRuns");
+    coordCalcRuns = neighborCache->par("gnpCoordCalcRuns");
 
     WATCH(*ownCoords);
     WATCH_VECTOR(landmarkSet);
@@ -119,7 +121,7 @@ void Nps::handleRpcTimeout(BaseCallMessage* msg,
                     RttToNodeResponse* rttRes = new RttToNodeResponse("RttToNodeXRes");
                     rttRes->setPingedNode(dest);
                     rttRes->setRttToNode(0);
-                    std::vector<double> tempOwnCoords;
+                    Coords tempOwnCoords;
                     tempOwnCoords = getOwnCoordinates();
                     rttRes->setOwnCoordinatesArraySize(tempOwnCoords.size());
                     for (uint i = 0; i < tempOwnCoords.size(); i++) {
@@ -167,7 +169,7 @@ void Nps::coordsReqRpc(CoordsReqCall* msg)
     //if (getOwnLayer() != 0) {
     // ordinary node
 
-    const std::vector<double>& ownCoordinates = getOwnCoordinates();
+    const Coords& ownCoordinates = getOwnCoordinates();
 
     uint8_t i;
     for (i = 0; i < ownCoordinates.size(); ++i) {
@@ -180,7 +182,7 @@ void Nps::coordsReqRpc(CoordsReqCall* msg)
         Landmark* landmark = check_and_cast<Landmark*>(neighborCache->getParentModule()
             ->getModuleByRelativePath("tier1.landmark"));
         assert(landmark);
-        const std::vector<double>& ownCoordinates = landmark->getOwnNpsCoords();
+        const Coords& ownCoordinates = landmark->getOwnNpsCoords();
 
         uint8_t i;
         for (i = 0; i < ownCoordinates.size(); ++i) {
@@ -210,7 +212,7 @@ void Nps::coordsReqRpcResponse(CoordsReqResponse* response,
     pendingRequests--;
     NodeHandle& srcNode = response->getSrcNode();
 
-    std::vector<double> tempCoords;
+    Coords tempCoords;
     for (uint8_t i = 0; i < response->getNcsInfoArraySize(); i++) {
         tempCoords.push_back(response->getNcsInfo(i));
     }
@@ -248,7 +250,7 @@ void Nps::coordsReqRpcResponse(CoordsReqResponse* response,
             RttToNodeResponse* rttRes = new RttToNodeResponse("RttToNodeXRes");
             rttRes->setPingedNode(srcNode);
             rttRes->setRttToNode(rtt);
-            std::vector<double> tempOwnCoords;
+            Coords tempOwnCoords;
             tempOwnCoords = getOwnCoordinates();
             rttRes->setOwnCoordinatesArraySize(tempOwnCoords.size());
             for (uint i = 0; i < tempOwnCoords.size(); i++) {
@@ -299,10 +301,10 @@ void Nps::coordsReqRpcResponse(CoordsReqResponse* response,
         }
         assert(probedLandmarks.size() > 0);
 
-        computeOwnCoordinates(probedLandmarks);
-        computeOwnLayer(probedLandmarks);
+        setOwnCoordinates(computeOwnCoordinates(probedLandmarks));
+        setOwnLayer(computeOwnLayer(probedLandmarks));
 
-        std::vector<double> coords = getOwnCoordinates();
+        Coords coords = getOwnCoordinates();
         EV << "[Nps::coordsReqRpcResponse() @ " << neighborCache->thisNode.getIp()
            << " (" << neighborCache->thisNode.getKey().toString(16) << ")]\n    setting own coords: "
            << coords[0];
@@ -310,6 +312,8 @@ void Nps::coordsReqRpcResponse(CoordsReqResponse* response,
             EV << ", " << coords[i];
         }
         EV << endl;
+
+        ready = true;
 
         //test
         /*
@@ -332,6 +336,7 @@ void Nps::coordsReqRpcResponse(CoordsReqResponse* response,
             error += pow(coords[i] - entry->getCoords(i), 2);
         }
         error = sqrt(error);
+        //std::cout << "error = " << error << std::endl;
 
         neighborCache->globalStatistics
           ->addStdDev("NPS: Coordinate difference", error);
@@ -342,26 +347,7 @@ void Nps::coordsReqRpcResponse(CoordsReqResponse* response,
         neighborCache->getParentModule()
             ->bubble("GNP/NPS coordinates calculated -> JOIN overlay!");
 
-        if (coordBasedRouting) {
-            int bitsPerDigit = neighborCache->overlay->getBitsPerDigit();
-            neighborCache->thisNode.setKey(
-                coordBasedRouting->getNodeId(coords, bitsPerDigit,
-                                             OverlayKey::getLength()));
-
-            EV << "[Nps::coordsReqRpcResponse() @ "
-               << neighborCache->thisNode.getIp()
-               << " (" << neighborCache->thisNode.getKey().toString(16) << ")]"
-               << "\n    -> nodeID ( 2): "
-               << neighborCache->thisNode.getKey().toString(2)
-               << "\n    -> nodeID (16): "
-               << neighborCache->thisNode.getKey().toString(16) << endl;
-
-            // returning to BaseOverlay
-            neighborCache->overlay->join(neighborCache->thisNode.getKey());
-        } else {
-            // returning to BaseOverlay
-            neighborCache->overlay->join();
-        }
+        neighborCache->prepareOverlay();
     } else {
         neighborCache->updateNode(srcNode, rtt, NodeHandle::UNSPECIFIED_NODE,
                                   coordsInfo);
@@ -374,7 +360,7 @@ void Nps::rttToNodeRpcResponse(RttToNodeResponse* response,
 {
     uint dim = coordBasedRouting->getXmlDimensions();
     TransportAddress nodeToCheck = response->getPingedNode();
-    std::vector<double> tempCoords;
+    Coords tempCoords;
     tempCoords.resize(dim);
     for (uint i = 0; i < dim; i++) {
         tempCoords[i] = response->getOwnCoordinates(i);
@@ -446,7 +432,7 @@ void Nps::sendCoordsReqCall(const TransportAddress& dest,
     pendingRequests++;
 }
 
-void Nps::computeOwnLayer(const std::vector<LandmarkDataEntry>& landmarks)
+uint8_t Nps::computeOwnLayer(const std::vector<LandmarkDataEntry>& landmarks)
 {
     int8_t computedLayer = getOwnLayer();
     for (uint i = 0; i < landmarks.size(); i++) {
@@ -454,7 +440,8 @@ void Nps::computeOwnLayer(const std::vector<LandmarkDataEntry>& landmarks)
             computedLayer = landmarks[i].layer + 1;
         }
     }
-    setOwnLayer(computedLayer);
+    //setOwnLayer(computedLayer);
+    return computedLayer;
 }
 
 void Nps::setOwnLayer(int8_t layer)
@@ -474,7 +461,7 @@ void Nps::setOwnLayer(int8_t layer)
 }
 
 #ifdef EXTJOIN_DISCOVERY
-bool Nps::checkCoordinates(std::vector<double> coordsOK, std::vector<double> coordsToCheck, simtime_t dist)
+bool Nps::checkCoordinates(Coords coordsOK, Coords coordsToCheck, simtime_t dist)
 {
     simtime_t predDist = 0.0;
 
@@ -492,13 +479,13 @@ bool Nps::checkCoordinates(std::vector<double> coordsOK, std::vector<double> coo
 }
 #endif
 
-void Nps::computeOwnCoordinates(const std::vector<LandmarkDataEntry>& landmarks)
+Coords Nps::computeOwnCoordinates(const std::vector<LandmarkDataEntry>& landmarks)
 {
     CoordCalcFunction coordcalcf(landmarks);
 
     Vec_DP initCoordinates(dimensions);
     Vec_DP bestCoordinates(dimensions);
-    std::vector<double> computedCoordinatesStdVector(dimensions);
+    Coords computedCoordinatesStdVector(dimensions);
 
     double bestval;
     double resval;
@@ -506,7 +493,7 @@ void Nps::computeOwnCoordinates(const std::vector<LandmarkDataEntry>& landmarks)
     for (uint runs = 0; runs < coordCalcRuns; runs++) {
         // start with random coordinates (-100..100 in each dim)
         for (uint i = 0; i < dimensions; i++) {
-            initCoordinates[i] = uniform(-100, 100);
+            initCoordinates[i] = uniform(-300, 300);
         }
         // compute minimum coordinates via Simplex-Downhill minimum
         // function value is returned, coords are written into initCoordinates
@@ -522,7 +509,8 @@ void Nps::computeOwnCoordinates(const std::vector<LandmarkDataEntry>& landmarks)
         computedCoordinatesStdVector[i] = bestCoordinates[i];
     }
 
-    setOwnCoordinates(computedCoordinatesStdVector);
+    //setOwnCoordinates(computedCoordinatesStdVector);
+    return computedCoordinatesStdVector;
 }
 
 std::vector<TransportAddress> Nps::getLandmarks(uint8_t howmany)
@@ -560,26 +548,10 @@ bool Nps::enoughLandmarks()
 
 Prox Nps::getCoordinateBasedProx(const AbstractNcsNodeInfo& abstractInfo) const
 {
-    return ownCoords->getDistance(abstractInfo);
-
-    /*
-    if (!dynamic_cast<const GnpNpsCoordsInfo*>(&abstractInfo)) {
-            throw cRuntimeError("GNP/NPS coords needed!");
-    }
-
-    const GnpNpsCoordsInfo& info =
-        *(static_cast<const GnpNpsCoordsInfo*>(&abstractInfo));
-
-    double dist = 0.0;
-    uint32_t size = info.getDimension();
-
-    for (uint32_t i = 0; i < size; i++) {
-        dist += pow(ownCoords->getCoords(i) - info.getCoords(i), 2);
-    }
-    dist = sqrt(dist);
-
-    return Prox(dist, 0.0); //TODO accuracy
-    */
+    // TODO hack: coords (and so their distances) are based on one-way latencies
+    Prox temp = ownCoords->getDistance(abstractInfo);
+    temp.proximity *= 2;
+    return temp;
 }
 
 void Nps::updateNodeMeasurement(const TransportAddress& node,
@@ -630,7 +602,7 @@ void Nps::deleteNodeMeasurement(const TransportAddress& node)
 }
 
 
-AbstractNcsNodeInfo* Nps::createNcsInfo(const std::vector<double>& coords) const
+AbstractNcsNodeInfo* Nps::createNcsInfo(const Coords& coords) const
 {
     assert(coords.size() > 1);
     GnpNpsCoordsInfo* info = new GnpNpsCoordsInfo();

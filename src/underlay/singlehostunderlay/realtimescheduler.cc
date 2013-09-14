@@ -101,6 +101,23 @@ void RealtimeScheduler::setInterfaceModule(cModule *mod, cMessage *notifMsg,
     }
 }
 
+void RealtimeScheduler::registerSocket(SOCKET fd, cModule *mod,
+                                       cMessage *notifMsg, PacketBuffer* buffer,
+                                       int mtu)
+{
+    if (socketContextMap.find(fd) != socketContextMap.end()) {
+        throw cRuntimeError("RealtimeScheduler::registerSocket(): Socket"
+                            "already registered!");
+    }
+
+    socketContextMap[fd] = SocketContext(mod, notifMsg, buffer, mtu);
+
+    FD_SET(fd, &all_fds);
+    if (fd > maxfd) {
+        maxfd = fd;
+    }
+}
+
 bool RealtimeScheduler::receiveWithTimeout(long usec)
 {
     bool newEvent = false;
@@ -198,6 +215,51 @@ bool RealtimeScheduler::receiveWithTimeout(long usec)
                     // Data on additional FD
                     additionalFD();
                     newEvent = true;
+                } else if (socketContextMap.find(fd) != socketContextMap.end()){
+                    // Data on socket in socketContextMap
+                    SocketContext& fdContext = socketContextMap.at(fd);
+                    char* buf = new char[fdContext.mtu];
+
+                    int error;
+                    socklen_t size = sizeof(error);
+                    if (getsockopt(fd, SOL_SOCKET, SO_ERROR, (char*)&error, &size) < 0) {
+                        perror("getsockopt()");
+                    }
+
+                    int nBytes = recv(fd, buf, fdContext.mtu, 0);
+#if 0
+                    if (nBytes < 0) {
+                        delete[] buf;
+                        buf = NULL;
+                        ev << "[RealtimeScheduler::receiveWithTimeout()]\n"
+                            << "    Read error from socket in socketContextMap: "
+                            << strerror(sock_errno()) << endl;
+                        // opp_error("Read from network device returned an error (App)");
+                        } else if (nBytes == 0) {
+                        // Application closed Socket
+                        ev << "[RealtimeScheduler::receiveWithTimeout()]\n"
+                            << "    Application closed socket"
+                            << endl;
+                        delete[] buf;
+                        buf = NULL;
+                        closeAppSocket(fd);
+                        newEvent = true;
+                    } else {
+#endif
+                        // write data to buffer
+                        ev << "[RealtimeScheduler::receiveWithTimeout()]\n"
+                            << "    Received " << nBytes << " bytes"
+                            << endl;
+
+                        fdContext.buffer->push_back(PacketBufferEntry(
+                                buf, nBytes, PacketBufferEntry::PACKET_DATA, fd));
+
+                        // schedule notificationMsg for the interface module
+                        sendNotificationMsg(fdContext.notifMsg, fdContext.mod);
+                        newEvent = true;
+#if 0
+                    }
+#endif
                 } else {
                     // Data on app FD
                     char* buf = new char[appBuffersize];
@@ -208,7 +270,7 @@ bool RealtimeScheduler::receiveWithTimeout(long usec)
                         ev << "[RealtimeScheduler::receiveWithTimeout()]\n"
                             << "    Read error from application socket: "
                             << strerror(sock_errno()) << endl;
-                        opp_error("Read from network device returned an error (App)");
+                        // opp_error("Read from network device returned an error (App)");
                     } else if (nBytes == 0) {
                         // Application closed Socket
                         ev << "[RealtimeScheduler::receiveWithTimeout()]\n"
@@ -314,8 +376,16 @@ void RealtimeScheduler::closeAppSocket(SOCKET fd)
 #endif
     FD_CLR(fd, &all_fds);
 
-    appPacketBuffer->push_back(PacketBufferEntry(0, 0, PacketBufferEntry::PACKET_FD_CLOSE, fd));
-    sendNotificationMsg(appNotificationMsg, appModule);
+    std::map<SOCKET, SocketContext>::iterator it = socketContextMap.find(fd);
+    if (it != socketContextMap.end()) {
+        it->second.buffer->push_back(PacketBufferEntry(
+                0, 0, PacketBufferEntry::PACKET_FD_CLOSE, fd));
+        sendNotificationMsg(it->second.notifMsg, it->second.mod);
+        socketContextMap.erase(fd);
+    } else {
+        appPacketBuffer->push_back(PacketBufferEntry(0, 0, PacketBufferEntry::PACKET_FD_CLOSE, fd));
+        sendNotificationMsg(appNotificationMsg, appModule);
+    }
 }
 
 void RealtimeScheduler::sendNotificationMsg(cMessage* msg, cModule* mod)
@@ -377,6 +447,17 @@ ssize_t RealtimeScheduler::sendBytes(const char *buf,
         }
         return nBytes;
 
+    } else if (socketContextMap.find(fd) != socketContextMap.end()){
+        // Data on socket in socketContextMap
+        SocketContext& fdContext = socketContextMap.at(fd);
+        if (numBytes > fdContext.mtu) {
+            ev << "[RealtimeScheduler::sendBytes()]\n"
+               << "    Trying to send oversized packet: size " << numBytes << "\n"
+               << "    mtu " << fdContext.mtu
+               << endl;
+               opp_error("Can't send packet: too large"); //FIXME: Throw exception instead
+        }
+        return send(fd, buf, numBytes, 0 /*MSG_NOSIGNAL*/);
     } else {
         if (numBytes > appBuffersize) {
             ev << "[RealtimeScheduler::sendBytes()]\n"
@@ -404,5 +485,6 @@ ssize_t RealtimeScheduler::sendBytes(const char *buf,
         }
     }
     // TBD check for errors
+    return -1;
 }
 

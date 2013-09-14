@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+// Copyright (C) 2012 Institute of Telematics, Karlsruhe Institute of Technology (KIT)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -45,20 +45,12 @@
 
 class PastryLeafSet;
 
-#define DISCOVERY JOINING_1
 
 class BasePastry : public BaseOverlay, public ProxListener
 {
 public:
 
     virtual ~BasePastry();
-
-    virtual void pingResponse(PingResponse* pingResponse,
-                              cPolymorphic* context, int rpcId,
-                              simtime_t rtt);
-
-    void pingTimeout(PingCall* call, const TransportAddress& dest,
-                     cPolymorphic* context, int rpcId);
 
     // see BaseOverlay.h
     int getMaxNumSiblings();
@@ -94,31 +86,6 @@ public:
     // see BaseOverlay.h
     virtual void finishOverlay();
 
-    /**
-     * send a PastryStateMessage directly to a node
-     *
-     * @param destination destination node
-     * @param type the type of the state message to be sent
-     * @param ... additional arguments for some types: @n
-     *        PASTRY_STATE_JOIN: @c int @a hops number of hops to
-     *        destination node @n
-     *        PASTRY_STATE_JOIN: @c bool @a last mark the state
-     *        message to originate from closest node found @n
-     *        PASTRY_STATE_UPDATE: @c simtime_t* @a timestamp pointer use
-     *        this timestamp for the uptade message
-     */
-    // Note: simtime_t cannot be passes as '...' param, it's non-POD type.
-    void sendStateTables(const TransportAddress& destination,
-                         int type = PASTRY_STATE_STD, ...);
-
-    /**
-     * send a standard state message with a small delay
-     *
-     * @param destination destination node
-     */
-    void sendStateDelayed(const TransportAddress& destination);
-
-
     // see BaseOverlay.h
     virtual bool isSiblingFor(const NodeHandle& node,
                               const OverlayKey& key,
@@ -128,7 +95,7 @@ public:
     // see BaseOverlay.h
     virtual AbstractLookup* createLookup(RoutingType routingType = DEFAULT_ROUTING,
                                          const BaseOverlayMessage* msg = NULL,
-                                         const cObject* dummy = NULL,
+                                         const cPacket* dummy = NULL,
                                          bool appLookup = false);
 
     uint8_t getBitsPerDigit() { return bitsPerDigit; };
@@ -170,18 +137,20 @@ public:
     int leafsetReceived;
     int leafsetBytesReceived;
 
-    int routingTableReqSent;
-    int routingTableReqBytesSent;
-    int routingTableReqReceived;
-    int routingTableReqBytesReceived;
-    int routingTableSent;
-    int routingTableBytesSent;
-    int routingTableReceived;
-    int routingTableBytesReceived;
-    uint32_t rowToAsk;
+    int routingTableRowReqSent;
+    int routingTableRowReqBytesSent;
+    int routingTableRowReqReceived;
+    int routingTableRowReqBytesReceived;
+    int routingTableRowSent;
+    int routingTableRowBytesSent;
+    int routingTableRowReceived;
+    int routingTableRowBytesReceived;
 
     void proxCallback(const TransportAddress& node, int rpcId,
                       cPolymorphic *contextPointer, Prox prox);
+
+    // see BaseOverlay.h
+    virtual OverlayKey estimateMeanDistance();
 
   protected:
 
@@ -190,7 +159,31 @@ public:
      *
      * @param toState state to change to
      */
-    virtual void changeState(int toState);
+    virtual void changeState(int toState) { };
+
+    virtual bool handleRpcCall(BaseCallMessage* msg);
+
+    virtual void handleRpcResponse(BaseResponseMessage* msg,
+                                   cPolymorphic* context, int rpcId,
+                                   simtime_t rtt);
+
+    virtual void handleRpcTimeout(BaseCallMessage* call,
+                                  const TransportAddress& dest,
+                                  cPolymorphic* context, int rpcId,
+                                  const OverlayKey& key);
+
+    void handleRequestLeafSetCall(RequestLeafSetCall* call);
+
+    void handleRequestRoutingRowCall(RequestRoutingRowCall* call);
+
+    virtual void handleRequestLeafSetResponse(RequestLeafSetResponse* response);
+
+    virtual void handleRequestRoutingRowResponse(RequestRoutingRowResponse* response);
+
+    PastryStateMessage* createStateMessage(enum PastryStateMsgType type = PASTRY_STATE_STD,
+                                           simtime_t timestamp = -1,
+                                           int16_t row = -1,
+                                           bool lastHop = false);
 
      // parameters
     uint32_t bitsPerDigit;
@@ -207,7 +200,6 @@ public:
 
     simtime_t nearNodeRtt;
 
-    uint32_t pingedNodes;
     bool nearNodeImproved;
 
     bool periodicMaintenance;
@@ -215,7 +207,7 @@ public:
     TransportAddress* leaf2ask;
 
     TransportAddress bootstrapNode;
-    NodeHandle nearNode;
+    TransportAddress nearNode;
 
     simtime_t lastStateChange;
 
@@ -241,10 +233,8 @@ public:
     virtual void checkProxCache(void) = 0;
 
     uint32_t joinHopCount;
-    cMessage* joinTimeout;
     cMessage* readyWait;
     cMessage* joinUpdateWait;
-    std::vector<PastrySendState*> sendStateWait;
 
     PastryRoutingTable* routingTable;
     PastryLeafSet* leafSet;
@@ -295,9 +285,9 @@ public:
     enum
     {
         PING_RECEIVED_STATE = 1,
-        PING_NEXT_HOP = 2,
-        PING_SINGLE_NODE = 3,
-        PING_DISCOVERY
+        PING_NEXT_HOP       = 2,
+        PING_SINGLE_NODE    = 3,
+        PING_DISCOVERY      = 4
     };
 
      /**
@@ -321,47 +311,16 @@ public:
      */
     void determineAliveTable(const PastryStateMessage* stateMsg);
 
-     /**
-     * send a request to a given node
-     * @param ask request from this node
-     * @param type specifies the data requested
-     */
-    void sendRequest(const TransportAddress& ask, int type);
-
-    /**
-     *	send the leafset to a node
-     * @param tell the node to send to
-     * @param pull true requests his leafset
-     */
-    void sendLeafset(const TransportAddress& tell, bool pull = false);
-
-    /**
-     *	send a row of the routing table to a node
-     * @param tell the node to send to
-     * @param row the number of the row
-     */
-    void sendRoutingRow(const TransportAddress& tell, int row);
-
-
-     /**
-     * processes state messages, merging with own state tables
-     *
-     * @param msg the pastry state message
-     */
-    void handleRequestMessage(PastryRequestMessage* msg);
-
-     /**
-      * processes leafset messages, merging with own state tables
-      *
-      * @param msg the pastry state message
-      * @param mergeSender should the sender also be merged
-     */
-    void handleLeafsetMessage(PastryLeafsetMessage* msg, bool mergeSender = false);
-
     /**
      * Pastry API: send newLeafs() to application if enabled
      */
     void newLeafs(void);
+
+  public:
+    // neighborCache discovery support
+    uint8_t getRTLastRow() const;
+    std::vector<TransportAddress>* getRTRow(uint8_t index) const;
+    std::vector<TransportAddress>* getLeafSet() const;
 
     friend class PastryLeafSet;
 };

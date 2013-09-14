@@ -375,7 +375,8 @@ void BaseRpc::internalHandleRpcMessage(BaseRpcMessage* msg)
         }
         EV << "[BaseRpc::internalHandleRpcMessage() @ " << thisNode.getIp()
            << " " << thisNode.getKey().toString(16) << ")]\n"
-           << "    RPC timeout (" << state.callMsg->getName() << ")"
+           << "    RPC to " << state.dest->getIp()
+           << " timeout (" << state.callMsg->getName() << ")"
            << endl;
 
         // inform neighborcache
@@ -540,7 +541,7 @@ void BaseRpc::sendRpcResponse(TransportType transportType,
     }
 
     // vivaldi: set coordinates and error estimation in response
-    if (neighborCache->sendBackOwnCoords()) { //TODO only for directly sent msgs
+    if (neighborCache->piggybackOwnCoords()) { //TODO only for directly sent msgs
         std::vector<double> nodeCoord =
             neighborCache->getNcsAccess().getOwnNcsInfo();
 

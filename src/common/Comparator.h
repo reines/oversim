@@ -133,13 +133,13 @@ public:
 
 
 /**
- * OverlayKey Unidirectional Ring Metric
+ * OverlayKey Clockwise Unidirectional Ring Metric
  */
-class KeyUniRingMetric
+class KeyCwRingMetric
 {
 public:
     /**
-     * calculates the distance from x to y on a unidirectional ring
+     * calculates the distance from x to y on a clockwise unidirectional ring
      *
      * @param x origination key
      * @param y destination key
@@ -151,6 +151,27 @@ public:
         return y-x;
     }
 };
+
+/**
+ * OverlayKey Counterclockwise Unidirectional Ring Metric
+ */
+class KeyCcwRingMetric
+{
+public:
+    /**
+     * calculates the distance from x to y on a counterclockwise unidirectional ring
+     *
+     * @param x origination key
+     * @param y destination key
+     * @return distance from x to y on a unidirectional ring
+     */
+    inline OverlayKey distance(const OverlayKey& x,
+                               const OverlayKey& y) const
+    {
+        return x-y;
+    }
+};
+
 
 
 /**
@@ -353,5 +374,20 @@ class KademliaPRComparator : public ProxKeyComparator<KeyPrefixMetric>
     }
 };
 
+class AccordionPRComparator : public ProxKeyComparator<KeyPrefixMetric>
+{
+  public:
+    AccordionPRComparator(const OverlayKey& relativeKey, uint32_t bitsPerDigit = 1)
+    : ProxKeyComparator<KeyPrefixMetric, StdProxComparator>(relativeKey, bitsPerDigit) { }
+
+    int compare(const ProxKey& lhs, const ProxKey& rhs) const
+    {
+        int temp = m.distance(lhs.key, key).compareTo(m.distance(rhs.key, key));
+        if (temp != 0) {
+            return temp;
+        }
+        return pc.compare(lhs.prox, rhs.prox);
+    }
+};
 #endif
 

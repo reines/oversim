@@ -37,14 +37,17 @@ simple Quon extends BaseOverlay
         double aliveTimeout @unit(s); // ping neighbor status in seconds
         double contactBackupIntervall @unit(s); // contact backup neighbors every # seconds
         int numBackups; // the number of binding beackups per quadrant
+        int cacheInterval @unit(s); // interval to cache position in login cache
         double connectionLimit; // maximum # of neighbor connections (for use with dynamic AOI)
         double minAOIWidth; // minimum area of interest size (for use with dynamic AOI)
         double AOIWidth; // this nodes area of interest (maximum area of interest when dynamic AOI is used)
         double AOIBuffer; // increase AOI by fixed amount
         double AOIAdaptionSensitivity; // how much the AOI can be adapted in one step (for use with dynamic AOI) (max=1)
         double AOIGossipSensitivity; // how much the AOI adaption can be influenced by neighbors (for use with dynamic AOI) (max=1)
+        double addJoinDelay @unit(s);
         bool AOIAdaptLinear; // use linear AOI adaption? (for use with dynamic AOI)
         bool useSquareMetric; // use max(|a.x - b.x|, |a.y - b.y|) as distance metric instead of euclidean distance
+        bool newNeighborsOnlyBinding; // notify only binding and softstate neighbors over new neighbors
 }
 
 module OverlayQuon like IOverlay

@@ -38,7 +38,7 @@ Landmark::~Landmark() {
 
 void Landmark::initializeApp(int stage)
 {
-    if (stage != MIN_STAGE_APP)
+    if (stage != MAX_STAGE_APP)
         return;
 
     SimpleNodeEntry* entry =

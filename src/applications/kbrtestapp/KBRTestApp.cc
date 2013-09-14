@@ -35,6 +35,9 @@ Define_Module(KBRTestApp);
 KBRTestApp::KBRTestApp()
 {
     onewayTimer = NULL;
+    rpcTimer = NULL;
+    lookupTimer = NULL;
+    underlayTimer = NULL;
 }
 
 KBRTestApp::~KBRTestApp()
@@ -42,6 +45,7 @@ KBRTestApp::~KBRTestApp()
     cancelAndDelete(onewayTimer);
     cancelAndDelete(rpcTimer);
     cancelAndDelete(lookupTimer);
+    cancelAndDelete(underlayTimer);
 }
 
 void KBRTestApp::initializeApp(int stage)
@@ -53,8 +57,9 @@ void KBRTestApp::initializeApp(int stage)
     kbrOneWayTest = par("kbrOneWayTest");
     kbrRpcTest = par("kbrRpcTest");
     kbrLookupTest = par("kbrLookupTest");
+    underlayTest = par("underlayTest");
 
-    if (!kbrOneWayTest && !kbrRpcTest && !kbrLookupTest) {
+    if (!kbrOneWayTest && !kbrRpcTest && !kbrLookupTest && !underlayTest) {
         throw cRuntimeError("KBRTestApp::initializeApp(): "
                             "no tests are configured!");
     }
@@ -68,6 +73,9 @@ void KBRTestApp::initializeApp(int stage)
     activeNetwInitPhase = par("activeNetwInitPhase");
     msgHandleBufSize = par("msgHandleBufSize");
     onlyLookupInoffensiveNodes = par("onlyLookupInoffensiveNodes");
+
+    //rpcTimeout = par("rpcTimeout");
+    rpcRetries = par("rpcRetries");
 
     numSent = 0;
     bytesSent = 0;
@@ -106,6 +114,15 @@ void KBRTestApp::initializeApp(int stage)
     WATCH(numLookupSuccess);
     WATCH(numLookupFailed);
 
+    numUnderlaySent = 0;
+    bytesUnderlaySent = 0;
+    numUnderlayDelivered = 0;
+    bytesUnderlayDelivered = 0;
+    WATCH(numUnderlaySent);
+    WATCH(bytesUnderlaySent);
+    WATCH(numUnderlayDelivered);
+    WATCH(bytesUnderlayDelivered);
+
     sequenceNumber = 0;
 
     nodeIsLeavingSoon = false;
@@ -118,24 +135,25 @@ void KBRTestApp::initializeApp(int stage)
         mhBufNext = mhBufBegin;
     }
 
-#if 0
     bindToPort(1025);
     thisNode.setPort(1025);
-#endif
 
     // start periodic timer
-    onewayTimer = new cMessage("onewayTimer");
-    rpcTimer = new cMessage("rpcTimer");
-    lookupTimer = new cMessage("lookupTimer");
-
     if (kbrOneWayTest) {
+        onewayTimer = new cMessage("onewayTimer");
         scheduleAt(simTime() + truncnormal(mean, deviation), onewayTimer);
     }
     if (kbrRpcTest) {
+        rpcTimer = new cMessage("rpcTimer");
         scheduleAt(simTime() + truncnormal(mean, deviation), rpcTimer);
     }
     if (kbrLookupTest) {
+        lookupTimer = new cMessage("lookupTimer");
         scheduleAt(simTime() + truncnormal(mean, deviation), lookupTimer);
+    }
+    if (underlayTest) {
+        underlayTimer = new cMessage("underlayTimer");
+        scheduleAt(simTime() + truncnormal(mean, deviation), underlayTimer);
     }
 }
 
@@ -151,11 +169,10 @@ void KBRTestApp::handleTimerEvent(cMessage* msg)
         return;
     }
 
-    std::pair<OverlayKey,TransportAddress> dest = createDestKey();
-
     if (msg == onewayTimer) {
         // TEST 1: route a test message to a key (one-way)
         // do nothing if there are currently no nodes in the network
+        std::pair<OverlayKey,TransportAddress> dest = createDestKey();
         if (!dest.first.isUnspecified()) {
             // create a 100 byte test message
             KBRTestMessage* testMsg = new KBRTestMessage("KBRTestMessage");
@@ -172,6 +189,7 @@ void KBRTestApp::handleTimerEvent(cMessage* msg)
     } else if (msg == rpcTimer) {
         // TEST 2: send a remote procedure call to a specific key and wait for a response
         // do nothing if there are currently no nodes in the network
+        std::pair<OverlayKey,TransportAddress> dest = createDestKey();
         if (!dest.first.isUnspecified()) {
             KbrTestCall* call = new KbrTestCall;
             call->setByteLength(testMsgSize);
@@ -185,11 +203,13 @@ void KBRTestApp::handleTimerEvent(cMessage* msg)
             RECORD_STATS(numRpcSent++;
                          bytesRpcSent += call->getByteLength());
 
-            sendRouteRpcCall(TIER1_COMP, dest.first, call, context);
+            sendRouteRpcCall(TIER1_COMP, dest.first, call, context,
+                             DEFAULT_ROUTING, -1, rpcRetries);
         }
-    } else /*if (msg == lookupTimer &&)*/ {
+    } else if (msg == lookupTimer) {
         // TEST 3: perform a lookup of a specific key
         // do nothing if there are currently no nodes in the network
+        std::pair<OverlayKey,TransportAddress> dest = createDestKey();
         if (!dest.first.isUnspecified()) {
             LookupCall* call = new LookupCall();
             call->setKey(dest.first);
@@ -204,8 +224,35 @@ void KBRTestApp::handleTimerEvent(cMessage* msg)
 
             RECORD_STATS(numLookupSent++);
         }
-    }
+    } else /*if (msg == underlayRpcTimer)*/ {
+        // TEST 4: send a remote procedure call to a specific transportAddress
+        // and wait for a response, do nothing if there are currently no nodes
+        // in the network
+        TransportAddress* address =
+            globalNodeList->getRandomAliveNode(-1); //TODO
 
+        if (address == NULL) {
+            EV << "no node!!!" << std::endl;
+            return;
+        }
+
+        address->setPort(thisNode.getPort());
+        if (!address->isUnspecified()) {
+            UnderlayTestCall* call = new UnderlayTestCall;
+            call->setByteLength(testMsgSize);
+            call->setSendTime(simTime());
+
+            KbrRpcContext* context = new KbrRpcContext;
+            context->setMeasurementPhase(globalStatistics->isMeasuring());
+
+            RECORD_STATS(numUnderlaySent++;
+                         bytesUnderlaySent += call->getByteLength());
+
+            //dest.second.setPort(thisNode.getPort());
+            sendUdpRpcCall(*address, call, context,
+                           NO_OVERLAY_ROUTING, -1, rpcRetries);
+        }
+    }
 #if 0
     thisNode.setPort(1025);
     NodeHandle handle = globalNodeList->getBootstrapNode();
@@ -214,25 +261,42 @@ void KBRTestApp::handleTimerEvent(cMessage* msg)
 #endif
 
 }
+
+
 void KBRTestApp::pingResponse(PingResponse* response, cPolymorphic* context,
                               int rpcId, simtime_t rtt)
 {
     //std::cout << rtt << std::endl;
 }
+
+
 bool KBRTestApp::handleRpcCall(BaseCallMessage* msg)
 {
     RPC_SWITCH_START( msg );
         RPC_DELEGATE( KbrTest, kbrTestCall );
+        RPC_DELEGATE( UnderlayTest, underlayTestCall );
     RPC_SWITCH_END( );
 
     return RPC_HANDLED;
 }
+
+
 void KBRTestApp::kbrTestCall(KbrTestCall* call)
 {
     KbrTestResponse* response = new KbrTestResponse;
     response->setByteLength(call->getByteLength());
     sendRpcResponse(call, response);
 }
+
+
+void KBRTestApp::underlayTestCall(UnderlayTestCall* call)
+{
+    UnderlayTestResponse* response = new UnderlayTestResponse;
+    response->setByteLength(call->getByteLength());
+    response->setOneWayLatency(simTime() - call->getSendTime());
+    sendRpcResponse(call, response);
+}
+
 
 void KBRTestApp::handleRpcResponse(BaseResponseMessage* msg,
                                    cPolymorphic* context, int rpcId,
@@ -275,6 +339,9 @@ void KBRTestApp::handleRpcResponse(BaseResponseMessage* msg,
 //              RECORD_STATS(globalStatistics->recordHistogram(
 //                      "KBRTestApp: RPC Hop Count Histogram", hopSum));
             } else {
+                //std::cout << simTime() << " " << thisNode.getAddress()
+                //          << " " << msg->getSrcNode().getAddress()
+                //          << " " << kbrRpcContext->getDestKey() << std::endl;
                 RECORD_STATS(numRpcDropped++;
                              bytesRpcDropped += msg->getByteLength());
                 // for failed RPCs add failureLatency to latency statistics vector
@@ -284,6 +351,20 @@ void KBRTestApp::handleRpcResponse(BaseResponseMessage* msg,
                 RECORD_STATS(rpcTotalLatencyCount++;
                              rpcTotalLatencySum += SIMTIME_DBL(failureLatency));
             }
+        }
+        delete kbrRpcContext;
+        break;
+    }
+    RPC_ON_RESPONSE(UnderlayTest) {
+        KbrRpcContext* kbrRpcContext = check_and_cast<KbrRpcContext*>(context);
+        if (kbrRpcContext->getMeasurementPhase() == true) {
+            RECORD_STATS(numUnderlayDelivered++;
+                bytesUnderlayDelivered += msg->getByteLength());
+            RECORD_STATS(globalStatistics->recordOutVector(
+                "KBRTestApp: Underlay RTT", SIMTIME_DBL(rtt)));
+            RECORD_STATS(globalStatistics->recordOutVector(
+                "KBRTestApp: Underlay One-way Latency",
+                SIMTIME_DBL(_UnderlayTestResponse->getOneWayLatency())));
         }
         delete kbrRpcContext;
         break;
@@ -298,6 +379,20 @@ void KBRTestApp::handleRpcTimeout(BaseCallMessage* msg,
 {
     RPC_SWITCH_START(msg)
     RPC_ON_CALL(KbrTest) {
+        EV << "[KBRTestApp::handleRpcTimeout() @ "
+           << overlay->getThisNode().getIp()
+           << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+           << "    KBR-Test RPC Response timeout: id=" << rpcId
+           << endl;
+
+        /*
+        std::cout << simTime() << ": [KBRTestApp::handleRpcTimeout() @ "
+                  << overlay->getThisNode().getIp()
+                  << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+                  << "    KBR-Test RPC Response (" << *msg << ") timeout: id=" << rpcId
+                  << std::endl;
+         */
+
         KbrRpcContext* kbrRpcContext = check_and_cast<KbrRpcContext*>(context);
         if (kbrRpcContext->getMeasurementPhase() == true) {
              RECORD_STATS(numRpcDropped++;
@@ -447,7 +542,9 @@ void KBRTestApp::forward(OverlayKey* key, cPacket** msg,
 std::pair<OverlayKey, TransportAddress> KBRTestApp::createDestKey()
 {
     if (lookupNodeIds) {
-        const NodeHandle& handle = globalNodeList->getRandomNode(0, true,
+        // TODO parameter to choose only nodes with own nodeType
+        // getPeerInfo(getThisNode())->getTypeID()
+        const NodeHandle& handle = globalNodeList->getRandomNode(-1, -1, true,
                                                    onlyLookupInoffensiveNodes);
         return std::make_pair(handle.getKey(), handle);
     }
@@ -513,6 +610,9 @@ void KBRTestApp::finishApp()
                 globalStatistics->addStdDev("KBRTestApp: One-way Delivery Ratio",
                                             (float)numDelivered /
                                             (float)numSent);
+/*                globalStatistics->addStdDev("KBRTestApp: One-way Total Latency",
+                                             globalStatistics->getv * (1 - ((float)numDelivered /
+                                                     (float)numSent)));*/
             }
         }
 
@@ -553,6 +653,13 @@ void KBRTestApp::finishApp()
                 globalStatistics->addStdDev("KBRTestApp: Lookup Success Ratio",
                                             (float)numLookupSuccess /
                                             (float)numLookupSent);
+            }
+        }
+        if (underlayTest) {
+            if (numUnderlaySent > 0) {
+                globalStatistics->addStdDev("KBRTestApp: Underlay Delivery Ratio",
+                                            (float)numUnderlayDelivered /
+                                            (float)numUnderlaySent);
             }
         }
     }

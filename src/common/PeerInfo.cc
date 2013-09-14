@@ -25,7 +25,6 @@
 
 PeerInfo::PeerInfo(uint32_t type, int moduleId, cObject** context)
 {
-    bootstrapped = false;
     malicious = false;
     this->moduleId = moduleId;
     this->type = type;
@@ -39,10 +38,10 @@ void PeerInfo::dummy() {}
 
 std::ostream& operator<<(std::ostream& os, const PeerInfo info)
 {
-    os  << "ModuleId: " << info.moduleId << "Bootstrapped: "
-        << (info.bootstrapped ? "true" : "false");
+    os << "ModuleId: " << info.moduleId;
+    os << " TypeID: " << info.type;
 
-    if (info.npsLayer >= 0) os << "; NPS Layer: " << info.npsLayer;
+    if (info.npsLayer >= 0) os << " NPS Layer: " << info.npsLayer;
     return os;
 }
 

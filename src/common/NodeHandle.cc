@@ -23,6 +23,7 @@
  */
 
 #include "NodeHandle.h"
+#include <cassert>
 
 // predefined node handle
 const NodeHandle NodeHandle::UNSPECIFIED_NODE;

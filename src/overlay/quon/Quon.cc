@@ -51,8 +51,13 @@ void Quon::initializeOverlay(int stage)
     adaptionSensitivity = par("AOIAdaptionSensitivity");
     gossipSensitivity = par("AOIGossipSensitivity");
     useSquareMetric = par("useSquareMetric");
+    nnOnlyBinding = par("newNeighborsOnlyBinding");
 
     bindingBackup = new NodeHandle[numBackups][4];
+
+    loginCache = dynamic_cast<LoginCache*>(simulation.getModuleByPath("globalObserver.globalFunctions[0].function.loginCache"));
+    cacheInterval = par("cacheInterval");
+    timeSinceCache = 0;
 
     // determine wether we want dynamic AOI or not
     useDynamicAOI = connectionLimit > 0 && minAOI < maxAOI;
@@ -85,6 +90,7 @@ void Quon::initializeOverlay(int stage)
     secTimerCount = 0;
     //rejoinCount = 0;
     avgAOI= 0 ;
+    joinTime = 0;
 
     // watch some variables
     WATCH(thisSite->address);
@@ -124,12 +130,21 @@ void Quon::changeState(QState qstate)
             cancelEvent(backup_timer);
             break;
         case QJOINING:
+            if( joinTime == 0 ) joinTime = simTime();
             scheduleAt(simTime(), join_timer);
             scheduleAt(simTime() + 1.0, sec_timer);
             break;
         case QREADY:
             cancelEvent(join_timer);
+            RECORD_STATS(
+                globalStatistics->addStdDev(
+                    "QuON: JoinTime",
+                    SIMTIME_DBL(simTime()) - SIMTIME_DBL(joinTime) + par("addJoinDelay").doubleValue()
+                    );
+            );
+            joinTime = 0;
             globalNodeList->registerPeer(thisSite->address);
+            if( loginCache ) loginCache->registerPos( thisSite->address, thisSite->position );
             // tell the application we are ready unless we are rejoining the overlay
             //if(rejoinCount == 0) {
             CompReadyMessage* readyMsg = new CompReadyMessage("OVERLAY_READY");
@@ -582,6 +597,13 @@ void Quon::processSecTimer()
         }
         ++secTimerCount;
     );
+    if( loginCache ) {
+        ++timeSinceCache;
+        if( qstate == QREADY && timeSinceCache >= cacheInterval ){
+            loginCache->registerPos( thisSite->address, thisSite->position );
+            timeSinceCache = 0;
+        }
+    }
     bytesPerSecond = 0.0;
 }
 
@@ -650,7 +672,12 @@ void Quon::processBackupTimer()
 
 void Quon::handleJoin(GameAPIPositionMessage* gameMsg)
 {
-    TransportAddress joinNode = bootstrapList->getBootstrapNode();
+    TransportAddress joinNode;
+    if( loginCache ) {
+        joinNode = loginCache->getLoginNode( gameMsg->getPosition() );
+    } else {
+        joinNode = bootstrapList->getBootstrapNode();
+    }
     thisSite->position = gameMsg->getPosition();
     // check if this is the only node in the overlay
     if(joinNode.isUnspecified()) {
@@ -857,6 +884,10 @@ void Quon::handleNodeMove(QuonMoveMessage* quonMoveMsg)
     purgeSites();
 
     // send new neighbors
+    if( nnOnlyBinding && !quonMoveMsg->getIsBinding() ) return; //{
+        //QuonSiteMap::iterator itSites = Sites.find(quonMoveMsg->getSender().getKey());
+        //if (itSites->second->type != QBINDING && ! itSites->second->softNeighbor ) return;
+    //}
     QuonListMessage* quonListMsg = new QuonListMessage("NEW_NEIGHBORS");
     quonListMsg->setCommand(NEW_NEIGHBORS);
     quonListMsg->setSender(thisSite->address);

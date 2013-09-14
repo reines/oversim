@@ -21,7 +21,11 @@
  */
 
 #include <omnetpp.h>
+
+#if !defined(__APPLE__) &&  !defined(_WIN32) && !defined(__ANDROID__)
 #include <malloc.h>
+#endif
+
 #include <vector>
 #include <map>
 
@@ -162,6 +166,8 @@ TransportAddress* SimpleUnderlayConfigurator::createNode(NodeType type,
         entry = new SimpleNodeEntry(node, rxChan, txChan, sendQueueLength, fieldSize);
     } else {
         // get random unused node
+        // Changed to "predictable" volunteer start value 0 by Daniel Lienert, 05/2010 to get the same coord-sequence in every run
+        //uint32_t volunteer = 0;
         uint32_t volunteer = intuniform(0, nodeRecordPool.size() - 1);
         uint32_t temp = volunteer;
         while (nodeRecordPool[volunteer].second == false) {
@@ -303,9 +309,11 @@ uint32_t SimpleUnderlayConfigurator::parseCoordFile(const char* nodeCoordinateSo
 #if OMNETPP_VERSION>=0x0401
     // free memory used for xml document
     ev.forgetXMLDocument(nodeCoordinateSource);
+#if !defined(__APPLE__) &&  !defined(_WIN32) && !defined(__ANDROID__)
     malloc_trim(0);
 #endif
-    
+#endif
+
     return (uint32_t)ceil(max_coord);
 }
 
@@ -524,4 +532,131 @@ void SimpleUnderlayConfigurator::finishUnderlay()
         timersub(&now, &initFinishedTime, &diff);
         printf("Simulation time: %li.%06li\n", diff.tv_sec, diff.tv_usec);
     }
+}
+
+// new functions for behaviour generator:
+
+IPvXAddress SimpleUnderlayConfigurator::migrateNode(NodeType type, IPvXAddress addr,
+                                                    const BaseLocation& locID)
+{
+    Enter_Method_Silent();
+
+    SimpleNodeEntry* entry = NULL;
+
+        SimpleInfo* info =
+              dynamic_cast<SimpleInfo*> (globalNodeList->getPeerInfo(addr));
+        if (info != NULL) {
+            entry = info->getEntry();
+        } else {
+            opp_error("SimpleNetConfigurator: Trying to migrate node with "
+                      "nonexistent TransportAddress!");
+        }
+
+    const NodeRecord* location = dynamic_cast<const NodeRecord*>(&locID);
+    entry->setX(location->coords[0]);
+    entry->setY(location->coords[1]);
+
+    cGate* gate = entry->getUdpIPv4Gate();
+    cModule* node = gate->getOwnerModule()->getParentModule();
+
+    // do not migrate node that is already scheduled
+    if (scheduledID.count(node->getId()))
+        return addr;
+
+    // FIXME use only IPv4?
+    IPvXAddress address = IPAddress(nextFreeAddress++);
+    EV << addr << " migrates to ";
+    EV << address << "!" << endl;
+
+    SimpleNodeEntry* newentry;
+
+    int chanIndex = intuniform(0, type.channelTypesRx.size() - 1);
+    cChannelType* rxChan = cChannelType::find(type.channelTypesRx[chanIndex].c_str());
+    cChannelType* txChan = cChannelType::find(type.channelTypesTx[chanIndex].c_str());
+
+    if (!txChan || !rxChan)
+         opp_error("Could not find Channel Type. Most likely parameter "
+            "channelTypesRx or channelTypes does not match the channels defined in "
+             "channels.ned");
+
+    if (useXmlCoords) {
+       newentry = new SimpleNodeEntry(node,
+                                      rxChan,
+                                      txChan,
+                                      sendQueueLength,
+                                      entry->getNodeRecord(), entry->getRecordIndex());
+    } else {
+        newentry = new SimpleNodeEntry(node, rxChan, txChan, fieldSize, sendQueueLength);
+    }
+
+    node->bubble("I am migrating!");
+
+    //remove node from bootstrap oracle
+    NodeHandle* peer = globalNodeList->getNodeHandle(addr);
+    NodeHandle registrationPeer;
+
+    if (peer != NULL) {
+        registrationPeer = *peer;
+    }
+
+    globalNodeList->killPeer(addr);
+
+    SimpleUDP* simple = check_and_cast<SimpleUDP*> (gate->getOwnerModule());
+    simple->setNodeEntry(newentry);
+
+    InterfaceEntry* ie = IPAddressResolver().interfaceTableOf(node)->
+                                      getInterfaceByName("dummy interface");
+    delete ie->ipv4Data();
+
+    // Add pseudo-Interface to node's interfaceTable
+    IPv4InterfaceData* ifdata = new IPv4InterfaceData;
+    ifdata->setIPAddress(address.get4());
+    ifdata->setNetmask(IPAddress("255.255.255.255"));
+    ie->setIPv4Data(ifdata);
+
+    // create meta information
+    SimpleInfo* newinfo = new SimpleInfo(type.typeID, node->getId(),
+                                         type.context);
+    newinfo->setEntry(newentry);
+
+    //add node to bootstrap oracle
+    globalNodeList->addPeer(address, newinfo);
+
+    if (peer != NULL){
+        registrationPeer.setIp(address);
+        globalNodeList->registerPeer(registrationPeer);
+    }
+
+//    check_and_cast<>BaseRpc>(simulation.getModule(newinfo->getModuleID())->getSubmodule("tier1"));
+    // inform the notification board about the migration
+    NotificationBoard* nb = check_and_cast<NotificationBoard*> (
+                                      node->getSubmodule("notificationBoard"));
+    nb->fireChangeNotification(NF_OVERLAY_TRANSPORTADDRESS_CHANGED);
+
+    return address;
+}
+
+double SimpleUnderlayConfigurator::getDistance(const BaseLocation& IDa, const BaseLocation& IDb){
+    NodeRecord a = dynamic_cast<const NodeRecord&>(IDa);
+    NodeRecord b = dynamic_cast<const NodeRecord&>(IDb);
+    return sqrt( pow((a.coords[0] - b.coords[0]), 2)
+                 + pow((a.coords[1] - b.coords[1]), 2) );
+}
+
+BaseLocation* SimpleUnderlayConfigurator::getNearLocation(const BaseLocation& ID, double radius){
+    const NodeRecord* tempLoc = dynamic_cast<const NodeRecord*>(&ID);
+    NodeRecord* ret = new NodeRecord();
+
+    radius = uniform (0.3, 1, 0) * radius;  // scales the radius randomly
+    double angle = uniform (0, 2 *M_PI, 0);  // random angle
+
+    ret->coords[0] = cos(angle)*radius + tempLoc->coords[0];
+    ret->coords[1] = sin(angle)*radius + tempLoc->coords[1];
+    return ret;
+}
+
+BaseLocation* SimpleUnderlayConfigurator::getLocation(IPvXAddress addr){
+    SimpleInfo* info = dynamic_cast<SimpleInfo*> (globalNodeList->getPeerInfo(addr));
+    BaseLocation* ret = info->getEntry()->getNodeRecord();
+    return ret;
 }

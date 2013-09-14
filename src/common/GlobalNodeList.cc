@@ -18,7 +18,7 @@
 
 /**
  * @file GlobalNodeList.cc
- * @author Markus Mauch, Robert Palmer
+ * @author Markus Mauch, Robert Palmer, Ingmar Baumgart
  */
 
 #include <iostream>
@@ -38,22 +38,25 @@
 
 Define_Module(GlobalNodeList);
 
-std::ostream& operator<<(std::ostream& os, const BootstrapEntry entry)
+std::ostream& operator<<(std::ostream& os, const BootstrapEntry& entry)
 {
-    NodeHandle* nodeHandle = dynamic_cast<NodeHandle*>(entry.node);
+    for (AddrPerOverlayVector::const_iterator it2 = entry.addrVector.begin();
+            it2 != entry.addrVector.end(); it2++) {
 
-    os << "Address: " << entry.node->getIp()
-       << " Port: " << entry.node->getPort();
+        NodeHandle* nodeHandle = dynamic_cast<NodeHandle*>(it2->ta);
 
-    if (nodeHandle) {
-        os << " NodeId: " << nodeHandle->getKey();
+        os << "Overlay " << it2->overlayId << ": " << *(it2->ta);
+
+        if (nodeHandle) {
+            os << " (" << nodeHandle->getKey() << ")";
+        }
+
+        if (it2->bootstrapped == false) {
+            os << " [NOT BOOTSTRAPPED]";
+        }
     }
 
-    os << " ModuleID: "
-       << entry.info->getModuleID() << " Bootstrapped: "
-       << (entry.info->isBootstrapped() ? "true" : "false")
-       << " NPS Layer: " << ((int) entry.info->getNpsLayer())
-       << " TypeID: " << (entry.info->getTypeID());
+    os << " " << *(entry.info);
 
     return os;
 }
@@ -119,7 +122,7 @@ void GlobalNodeList::handleMessage(cMessage* msg)
             // search a node that is not yet malicious
             NodeHandle node;
             do {
-                node = getRandomNode(0, false);
+                node = getRandomNode(-1, -1, false, true);
             } while (isMalicious(node));
 
             setMalicious(node, true);
@@ -140,7 +143,8 @@ void GlobalNodeList::handleMessage(cMessage* msg)
     }
 }
 
-const NodeHandle& GlobalNodeList::getBootstrapNode(const NodeHandle &node)
+const NodeHandle& GlobalNodeList::getBootstrapNode(int32_t overlayId,
+                                                   const NodeHandle &node)
 {
     uint32_t nodeType;
     PeerHashMap::iterator it;
@@ -153,11 +157,11 @@ const NodeHandle& GlobalNodeList::getBootstrapNode(const NodeHandle &node)
 
         // this should never happen
         if (it == peerStorage.end()) {
-           return getRandomNode(0, true);
+           return getRandomNode(overlayId);
         }
 
         nodeType = it->second.info->getTypeID();
-        const NodeHandle &tempNode1 = getRandomNode(nodeType, true);
+        const NodeHandle &tempNode1 = getRandomNode(overlayId, nodeType);
 
         if (tempNode1.isUnspecified()) {
             for (uint32_t i = 0; i < MAX_NODETYPES; i++) {
@@ -165,7 +169,8 @@ const NodeHandle& GlobalNodeList::getBootstrapNode(const NodeHandle &node)
                     continue;
 
                 if (connectionMatrix[nodeType][i]) {
-                    const NodeHandle &tempNode2 = getRandomNode(i, true);
+                    const NodeHandle &tempNode2 = getRandomNode(overlayId, i);
+
                     if (!tempNode2.isUnspecified())
                         return tempNode2;
                 }
@@ -175,23 +180,35 @@ const NodeHandle& GlobalNodeList::getBootstrapNode(const NodeHandle &node)
             return tempNode1;
         }
     } else {
-        return getRandomNode(0, true);
+        return getRandomNode(overlayId);
     }
 }
 
-const NodeHandle& GlobalNodeList::getRandomNode(int32_t nodeType,
+const NodeHandle& GlobalNodeList::getRandomNode(int32_t overlayId,
+                                                int32_t nodeType,
                                                 bool bootstrappedNeeded,
                                                 bool inoffensiveNeeded)
 {
-    PeerHashMap::iterator it = peerStorage.getRandomNode(nodeType,
+    PeerHashMap::iterator it = peerStorage.getRandomNode(overlayId,
+                                                         nodeType,
                                                          bootstrappedNeeded,
                                                          inoffensiveNeeded);
     if (it == peerStorage.end()) {
         return NodeHandle::UNSPECIFIED_NODE;
     }
 
-    if (dynamic_cast<NodeHandle*>(it->second.node)) {
-        return *dynamic_cast<NodeHandle*>(it->second.node);
+    TransportAddress* addr = NULL;
+
+    if (overlayId >= 0) {
+        addr = it->second.addrVector.getAddrForOverlayId(overlayId);
+    } else {
+        // std::cout << "Info: " << *(it->second.info) << std::endl;
+        // std::cout << "Size: " << it->second.addrVector.size() << std::endl;
+        addr = it->second.addrVector[0].ta;
+    }
+
+    if (dynamic_cast<NodeHandle*>(addr)) {
+        return *dynamic_cast<NodeHandle*>(addr);
     } else {
         return NodeHandle::UNSPECIFIED_NODE;
     }
@@ -212,24 +229,24 @@ void GlobalNodeList::sendNotificationToAllPeers(int category)
 void GlobalNodeList::addPeer(const IPvXAddress& ip, PeerInfo* info)
 {
     BootstrapEntry temp;
-    temp.node = new TransportAddress(ip);
     temp.info = info;
     temp.info->setPreKilled(false);
 
-    peerStorage.insert(std::make_pair(temp.node->getIp(), temp));
+    peerStorage.insert(std::make_pair(ip, temp));
 
     if (uniform(0, 1) < (double) par("maliciousNodeProbability") ||
             (par("maliciousNodeChange") && uniform(0, 1) < maliciousNodeRatio)) {
-        setMalicious(*temp.node, true);
+        setMalicious(TransportAddress(ip), true);
     }
 
     if (peerStorage.size() == 1) {
         // we need at least one inoffensive bootstrap node
-        setMalicious(*temp.node, false);
+        setMalicious(TransportAddress(ip), false);
     }
 }
 
-void GlobalNodeList::registerPeer(const TransportAddress& peer)
+void GlobalNodeList::registerPeer(const NodeHandle& peer,
+                                  int32_t overlayId)
 {
     PeerHashMap::iterator it = peerStorage.find(peer.getIp());
 
@@ -237,27 +254,13 @@ void GlobalNodeList::registerPeer(const TransportAddress& peer)
         throw cRuntimeError("GlobalNodeList::registerPeer(): "
                 "Peer is not in peer set");
     } else {
-        delete it->second.node;
-        it->second.node = new TransportAddress(peer);
-        peerStorage.setBootstrapped(it, true);
+        peerStorage.registerOverlay(it, peer, overlayId);
+        peerStorage.setBootstrapped(it, overlayId, true);
     }
 }
 
-void GlobalNodeList::registerPeer(const NodeHandle& peer)
-{
-    PeerHashMap::iterator it = peerStorage.find(peer.getIp());
-
-    if (it == peerStorage.end()) {
-        throw cRuntimeError("GlobalNodeList::registerPeer(): "
-                "Peer is not in peer set");
-    } else {
-        delete it->second.node;
-        it->second.node = new NodeHandle(peer);
-        peerStorage.setBootstrapped(it, true);
-    }
-}
-
-void GlobalNodeList::refreshEntry(const TransportAddress& peer)
+void GlobalNodeList::refreshEntry(const TransportAddress& peer,
+                                  int32_t overlayId)
 {
     PeerHashMap::iterator it = peerStorage.find(peer.getIp());
 
@@ -265,17 +268,18 @@ void GlobalNodeList::refreshEntry(const TransportAddress& peer)
         throw cRuntimeError("GlobalNodeList::refreshEntry(): "
                 "Peer is not in peer set");
     } else {
-        delete it->second.node;
-        it->second.node = new TransportAddress(peer);
+        it->second.addrVector.setAddrForOverlayId(new TransportAddress(peer),
+                                                  overlayId);
     }
 }
 
-void GlobalNodeList::removePeer(const TransportAddress& peer)
+void GlobalNodeList::removePeer(const TransportAddress& peer,
+                                int32_t overlayId)
 {
     PeerHashMap::iterator it = peerStorage.find(peer.getIp());
 
     if (it != peerStorage.end()) {
-        peerStorage.setBootstrapped(it, false);
+        peerStorage.setBootstrapped(it, overlayId, false);
     }
 }
 
@@ -314,10 +318,12 @@ PeerInfo* GlobalNodeList::getPeerInfo(const IPvXAddress& ip)
         return it->second.info;
 }
 
-PeerInfo* GlobalNodeList::getRandomPeerInfo(int32_t nodeType,
+PeerInfo* GlobalNodeList::getRandomPeerInfo(int32_t overlayId,
+                                            int32_t nodeType,
                                             bool bootstrappedNeeded)
 {
-    PeerHashMap::iterator it = peerStorage.getRandomNode(nodeType,
+    PeerHashMap::iterator it = peerStorage.getRandomNode(overlayId,
+                                                         nodeType,
                                                          bootstrappedNeeded,
                                                          false);
     if (it == peerStorage.end()) {
@@ -338,19 +344,27 @@ void GlobalNodeList::setPreKilled(const TransportAddress& address)
 }
 
 // TODO: this method should be removed in the future
-TransportAddress* GlobalNodeList::getRandomAliveNode(int32_t nodeType)
+TransportAddress* GlobalNodeList::getRandomAliveNode(int32_t overlayId,
+                                                     int32_t nodeType)
 {
     if (peerStorage.size() <= preKilledNodes) {
         // all nodes are already marked for deletion;
         return NULL;
     } else {
-        PeerHashMap::iterator it = peerStorage.getRandomNode(nodeType, false,
+        PeerHashMap::iterator it = peerStorage.getRandomNode(overlayId,
+                                                             nodeType, false,
                                                              false);
         while (it != peerStorage.end()) {
             if (!it->second.info->isPreKilled()) {
-                return it->second.node;
+                // TODO: returns always the first node from addrVector
+                if (it->second.addrVector.size()) {
+                    return it->second.addrVector[0].ta;
+                } else {
+                    return NULL;
+                }
             } else {
-                it = peerStorage.getRandomNode(nodeType, false, false);
+                it = peerStorage.getRandomNode(overlayId, nodeType, false,
+                                               false);
             }
         }
         return NULL;
@@ -454,8 +468,9 @@ void GlobalNodeList::mergeBootstrapNodes(int toPartition, int fromPartition,
             getRandomPeerInfo(toPartition, false)->getModuleID())->
             getSubmodule("bootstrapList"));
 
-    bootstrapList->insertBootstrapCandidate(getRandomNode(fromPartition, true),
-                                       DNSSD);
+    bootstrapList->insertBootstrapCandidate(getRandomNode(-1, fromPartition,
+                                                          true, false),
+                                                          DNSSD);
 }
 
 
@@ -493,6 +508,40 @@ GlobalNodeList::KeyList* GlobalNodeList::getKeyList(uint32_t maximumKeys)
 
 const OverlayKey& GlobalNodeList::getRandomKeyListItem()
 {
-    if( !isKeyListInitialized ) createKeyList(maxNumberOfKeys);
+    if (!isKeyListInitialized)
+        createKeyList(maxNumberOfKeys);
+
     return keyList[intuniform(0,keyList.size()-1)];
 }
+
+std::vector<IPvXAddress>* GlobalNodeList::getAllIps()
+{
+    std::vector<IPvXAddress>* ips = new std::vector<IPvXAddress>;
+
+    const PeerHashMap::iterator it = peerStorage.begin();
+
+    while (it != peerStorage.end()) {
+        ips->push_back(it->first);
+    }
+
+    return ips;
+}
+
+NodeHandle* GlobalNodeList::getNodeHandle(const IPvXAddress& address){
+    PeerHashMap::iterator it = peerStorage.find(address);
+    if (it == peerStorage.end()) {
+        throw cRuntimeError("GlobalNodeList::getNodeHandle(const IPvXAddress& address): "
+                            "Peer is not in peer set");
+    }
+
+    BootstrapEntry* tempEntry = &(it->second);
+
+    if ((tempEntry == NULL) || (tempEntry->addrVector.empty()) ||
+            (tempEntry->addrVector[0].ta == NULL)) {
+        return NULL;
+    }
+
+    NodeHandle* ret = dynamic_cast<NodeHandle*> (tempEntry->addrVector[0].ta);
+    return ret;
+}
+

@@ -35,6 +35,64 @@
 #include <PeerInfo.h>
 
 /**
+ * AddrPerOverlay contains the
+ * TransportAddress and bootstrap status
+ * for every overlay this node is part of
+ */
+struct AddrPerOverlay
+{
+    int32_t overlayId;
+    TransportAddress* ta;
+    bool bootstrapped; /**< true if node has bootstrapped in this overlay */
+    uint32_t overlayPeerVectorIndex;
+};
+
+class AddrPerOverlayVector : public std::vector<AddrPerOverlay>
+{
+public:
+    ~AddrPerOverlayVector() {
+        for (iterator it = begin(); it != end(); it++) {
+            delete it->ta;
+        }
+    }
+
+    const AddrPerOverlayVector::iterator getIterForOverlayId(int32_t overlayId) {
+        iterator it;
+        for (it = begin(); it != end(); it++) {
+            if (it->overlayId == overlayId) return it;
+        }
+
+        return it;
+    };
+
+    TransportAddress* getAddrForOverlayId(int32_t overlayId) {
+        iterator it = getIterForOverlayId(overlayId);
+
+        if (it != end()) {
+            return it->ta;
+        }
+
+        return NULL;
+    };
+
+    void setAddrForOverlayId(TransportAddress* addr, int32_t overlayId) {
+        for (iterator it = begin(); it != end(); it++) {
+            if (it->overlayId == overlayId) {
+                delete it->ta;
+                it->ta = addr;
+                return;
+            }
+        }
+
+        AddrPerOverlay apo;
+        apo.overlayId = overlayId;
+        apo.bootstrapped = false;
+        apo.ta = addr;
+        push_back(apo);
+    };
+};
+
+/**
  * BootstrapEntry consists of
  * TransportAddress and PeerInfo
  * and is used (together with
@@ -42,10 +100,10 @@
  */
 struct BootstrapEntry
 {
-    TransportAddress* node;
+    AddrPerOverlayVector addrVector;
     PeerInfo* info;
     uint32_t peerVectorIndex;
-    friend std::ostream& operator<<(std::ostream& Stream, const BootstrapEntry entry);
+    friend std::ostream& operator<<(std::ostream& Stream, const BootstrapEntry& entry);
 };
 
 typedef UNORDERED_MAP<IPvXAddress, BootstrapEntry> PeerHashMap;
@@ -59,27 +117,46 @@ class PeerStorage
 {
 public:
     ~PeerStorage();
+
     size_t size();
     const PeerHashMap::iterator find(const IPvXAddress& ip);
     const PeerHashMap::iterator begin();
     const PeerHashMap::iterator end();
+
     std::pair<const PeerHashMap::iterator, bool> insert(const std::pair<IPvXAddress, BootstrapEntry>& element);
     void erase(const PeerHashMap::iterator it);
-    const PeerHashMap::iterator getRandomNode(int32_t nodeType,
+
+    void registerOverlay(const PeerHashMap::iterator it,
+                         const NodeHandle& peer,
+                         int32_t overlayId);
+
+    const PeerHashMap::iterator getRandomNode(int32_t overlayId,
+                                              int32_t nodeType,
                                               bool bootstrappedNeeded,
                                               bool inoffensiveNeeded);
+
     void setMalicious(const PeerHashMap::iterator it, bool malicious);
-    void setBootstrapped(const PeerHashMap::iterator it, bool bootstrapped);
+
+    void setBootstrapped(const PeerHashMap::iterator it, int32_t overlayId,
+                         bool bootstrapped);
+
     const PeerHashMap& getPeerHashMap() { return peerHashMap; };
 
 private:
-    void insertMapIteratorIntoVector(PeerHashMap::iterator it);
-    void removeMapIteratorFromVector(PeerHashMap::iterator it);
+    typedef std::vector<std::vector<PeerHashMap::iterator> > PeerVector;
+
+    void insertMapIteratorIntoVector(PeerVector& peerVector,
+                                     PeerHashMap::iterator it);
+
+    void removeMapIteratorFromVector(PeerVector& peerVector,
+                                     PeerHashMap::iterator it);
+
     inline size_t offsetSize();
     inline uint8_t calcOffset(bool bootstrapped, bool malicious);
 
-    PeerHashMap peerHashMap;
-    std::vector<std::vector<PeerHashMap::iterator> > peerVector;
+    PeerHashMap peerHashMap; /* hashmap contain all nodes */
+    PeerVector globalPeerVector; /* vector with iterators to peerHashMap */
+    std::map<int32_t, PeerVector> overlayPeerVectorMap; /* vector of vectors (for each overlayId) with iterators to peerHashMap */
     std::vector<std::vector<uint32_t> >freeVector;
 };
 

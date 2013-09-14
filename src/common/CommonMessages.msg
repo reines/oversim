@@ -61,8 +61,7 @@ static const int NCSINFO_L = 32;
                           TRANSPORTADDRESS_L) +\
                           ARRAYSIZE_L + (msg->getNextHopsArraySize() *\
                           TRANSPORTADDRESS_L) +\
-                          ARRAYSIZE_L + (msg->getHintsArraySize() *\
-                          NODEHANDLE_L))
+                          ARRAYSIZE_L)
 #define BASEAPPDATA_L(msg) (BASEOVERLAY_L(msg) + 2*COMP_L)
 #define BASERPC_L(msg) (BASEOVERLAY_L(msg) + NONCE_L + NODEHANDLE_L + \
 	                TIER_L)
@@ -191,7 +190,6 @@ packet BaseRouteMessage extends BaseOverlayMessage
     int hopCount = 0;               // hop count, increased by BaseOverlay
     TransportAddress visitedHops[]; // hops for source routing
     TransportAddress nextHops[];    // hops for source routing
-    NodeHandle hints[];             // hints for next hop (optional)
     simtime_t hopStamp;             // timestamp of processing at last hop
     simtime_t hopDelay[];           // vector of single-hop latency (for stats)
 }
@@ -293,6 +291,7 @@ packet CompReadyMessage
 {
     bool ready;              // true, if the component is ready
     int comp enum(CompType); // the component, which is ready 
+    OverlayKey nodeId = OverlayKey::UNSPECIFIED_KEY;
 }
 
 //
@@ -321,6 +320,20 @@ packet NextHopResponse extends BaseResponseMessage
 // -------------------------------------------------------------
 // Common API messages (internal messages)
 // -------------------------------------------------------------
+
+//
+// Used to notify about received packets on a real socket (SingleHostUnderlay)
+//
+// @author Ingmar Baumgart
+//
+message SingleHostUnderlayPacketNotification
+{
+}
+
+message TcpDataMessage
+{
+    BinaryValue data;
+}
 
 
 //
@@ -540,9 +553,8 @@ packet P2pnsResolveResponse extends BaseResponseMessage
     bool isSuccess;       // true, if the name was successfully resolved
 }
 
-
 //
-// Control info for internal handling BaseOverlaMessages.
+// Control info for internal handling BaseOverlayMessages.
 //
 // @author Bernhard Heep
 //
@@ -557,6 +569,16 @@ class OverlayCtrlInfo
     int destComp enum(CompType); // destination component
     int transportType enum(TransportType) = INVALID_TRANSPORT; // transport type of the received message
     int routingType enum(RoutingType);
+}
+
+//
+// Support class to store multiple BinaryValues
+//
+// @author Ingmar Baumgart
+//
+class BinaryValueArray
+{
+    BinaryValue values[] @sizetype(uint16_t);
 }
 
 //

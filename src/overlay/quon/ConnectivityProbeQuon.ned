@@ -24,6 +24,12 @@ package oversim.overlay.quon;
 import oversim.applications.simplegameclient.GlobalCoordinator;
 import oversim.common.IGlobalFunctions;
 
+simple LoginCache
+{
+    parameters:
+        double movementSpeed @unit(mps);
+}
+
 simple ConnectivityProbeQuon
 {
     parameters:
@@ -64,6 +70,43 @@ module GlobalQuonModules like IGlobalFunctions
                 plotConnections = plotConnections;
                 plotBindings = plotBindings;
                 plotMissing = plotMissing;
+                @display("i=block/network2");
+        }
+}
+
+module GlobalQuonModulesLC like IGlobalFunctions
+{
+    parameters:
+        double connectivityProbeIntervall @unit(s);    // interval after which to check connectivity
+        double visualizeNetworkIntervall @unit(s);
+        double startPlotTime @unit(s);                 // when to start plotting graphs, 0 = accross the whole simulation
+        double plotPeriod @unit(s);                    // how long graphs are plotted from startPlotTime on, 0 = until simulation ends
+        double movementSpeed @unit(mps);
+        bool plotConnections;
+        bool plotBindings;
+        bool plotMissing;
+        double seed;
+
+    submodules:
+        coordinator: GlobalCoordinator {
+            parameters:
+                seed = seed;
+                @display("i=block/app");
+        }
+        probe: ConnectivityProbeQuon {
+            parameters:
+                connectivityProbeIntervall = connectivityProbeIntervall;
+                visualizeNetworkIntervall = visualizeNetworkIntervall;
+                startPlotTime = startPlotTime;
+                plotPeriod = plotPeriod;
+                plotConnections = plotConnections;
+                plotBindings = plotBindings;
+                plotMissing = plotMissing;
+                @display("i=block/network2");
+        }
+        loginCache: LoginCache{
+            parameters:
+                movementSpeed = movementSpeed;
                 @display("i=block/network2");
         }
 }

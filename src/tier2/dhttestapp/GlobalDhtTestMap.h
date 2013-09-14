@@ -37,6 +37,7 @@ struct DHTEntry
 {
     BinaryValue value;
     simtime_t endtime;
+    simtime_t insertiontime;
     friend std::ostream& operator<<(std::ostream& Stream, const DHTEntry entry);
 };
 

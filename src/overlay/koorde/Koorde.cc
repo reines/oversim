@@ -91,7 +91,7 @@ void Koorde::changeState(int toState)
 
         updateTooltip();
         break;
-    case BOOTSTRAP:
+    case JOIN:
         if (setupDeBruijnBeforeJoin) {
             // setup de bruijn node before joining the ring
             cancelEvent(join_timer);
@@ -207,7 +207,7 @@ void Koorde::handleDeBruijnTimerExpired()
             call->setDestKey(lookup);
             call->setBitLength(DEBRUIJNCALL_L(call));
 
-            sendRouteRpcCall(OVERLAY_COMP, deBruijnNode,
+            sendRouteRpcCall(OVERLAY_COMP, TransportAddress(deBruijnNode),
                              call->getDestKey(), call, NULL,
                              DEFAULT_ROUTING);
         }
@@ -381,7 +381,7 @@ void Koorde::handleRpcDeBruijnResponse(DeBruijnResponse* deBruijnResponse)
 
     updateTooltip();
 
-    if (setupDeBruijnBeforeJoin && (state == BOOTSTRAP)) {
+    if (setupDeBruijnBeforeJoin && (state == JOIN)) {
         // now that we have a valid de bruijn node it's time to join the ring
         if (!join_timer->isScheduled()) {
             scheduleAt(simTime(), join_timer);
@@ -391,10 +391,10 @@ void Koorde::handleRpcDeBruijnResponse(DeBruijnResponse* deBruijnResponse)
 
 void Koorde::handleDeBruijnTimeout(DeBruijnCall* deBruijnCall)
 {
-    if (setupDeBruijnBeforeJoin && (state == BOOTSTRAP)) {
+    if (setupDeBruijnBeforeJoin && (state == JOIN)) {
         // failed to set initial de bruijn node
         // -> get a new bootstrap node and try again
-        changeState(BOOTSTRAP);
+        changeState(JOIN);
         return;
     }
 

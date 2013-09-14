@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 
+
 #
 # Copyright (C) 2009 Institut fuer Telematik, Universitaet Karlsruhe (TH)
 #
@@ -17,7 +18,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
-
 # == Synopsis
 #
 # Coordinates to Areas (c2a): Calculates node bisecting borders for a given n-dim coordinate XML file and maps an ID-prefix on each area.
@@ -43,11 +43,11 @@
 #
 # nodefile.xml: The XML file to be processed
 
+#require 'pathname'
 require 'getoptlong'
-#require 'xml/libxml_so'
-#requires libxml-ruby
-#require 'rdoc/usage'
-require 'xml'
+require 'xml/libxml'       # requires libxml-ruby
+require 'rdoc/usage'
+#require 'xml'
 
 opts = GetoptLong.new(
     [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
@@ -89,8 +89,12 @@ unless ARGV.length == 1
     puts "Missing file argument (try --help)"
     exit 0
 end
-nodefile = ARGV.shift
 
+nodeFile = ARGV.shift
+nodeFileDir = File.dirname(nodeFile)
+nodeFileBase = File.basename(nodeFile)
+
+puts nodeFileDir + "/" + nodeFileBase
 
 ########################### Constants ################################
 MAXPREFIX = maxprefix
@@ -286,9 +290,8 @@ puts "Maximum prefix length wanted: #{MAXPREFIX}"
 puts "Minimum number of nodes per section wanted: #{MINNODES}"
 puts
 puts "Loading XML file into memory... "
-xmlfile = File.read(nodefile)
-parser = XML::Parser.new
-parser.string = xmlfile
+xmlfile = File.read(nodeFileDir + "/" + nodeFileBase)
+parser = XML::Parser.string(xmlfile)
 xmldoc = parser.parse
 puts "...done!"
 
@@ -335,8 +338,8 @@ end
 if PLOTOUTPUT
     if (DIMENSIONS == 2 || DIMENSIONS == 3)
       puts "Writing coords and areas into Gnuplot compatible files..."
-      borderfile = File.open("plot_areas_"+nodefile, "w");
-      coordsfile = File.open("plot_coords_"+nodefile, "w");
+      borderfile = File.open(nodeFileDir + "/" + "plot_areas_" + nodeFileBase, "w");
+      coordsfile = File.open(nodeFileDir + "/" + "plot_coords_" +  nodeFileBase, "w");
       root.saveDataToPlotfile(borderfile)
       root.saveRawCoordsToPlotfile(coordsfile)
       puts "...done"
@@ -347,7 +350,8 @@ end
 
 # XML Output
 if XMLOUTPUT
-  outputname = "areas_"+nodefile
+  outputname = nodeFileDir + "/" + "areas_" + nodeFileBase
+  File.delete(outputname);
   outputxml = File.open(outputname, "w");
   puts "Writing calculated areas to " << outputname << "..."
   root.saveToXml(outputxml)

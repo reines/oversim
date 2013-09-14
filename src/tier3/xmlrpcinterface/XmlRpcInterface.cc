@@ -30,9 +30,11 @@
 #include <netinet/ip6.h>
 #endif
 
+#include <sstream>
+
 #include <NodeVector.h>
 #include <P2pns.h>
-#include <sstream>
+
 #include "XmlRpcInterface.h"
 
 using namespace XmlRpc;
@@ -253,6 +255,7 @@ void XmlRpcInterface::p2pnsResolve(XmlRpcValue& params, XmlRpcValue& result)
     sendInternalRpcWithTimeout(TIER2_COMP, resolveCall);
 }
 
+
 void XmlRpcInterface::localLookup(XmlRpcValue& params, XmlRpcValue& result)
 {
     if ((params.size() != 3)
@@ -421,6 +424,7 @@ void XmlRpcInterface::dumpDht(XmlRpcValue& params, XmlRpcValue& result)
     sendInternalRpcWithTimeout(TIER1_COMP, call);
 }
 
+
 bool XmlRpcInterface::isPrivileged()
 {
     if (limitAccess) {
@@ -476,6 +480,14 @@ XmlRpcInterface::XmlRpcInterface()
     _get = NULL;
     _dumpDht = NULL;
     _joinOverlay = NULL;
+    _addContact = NULL;
+    _removeContact = NULL;
+    _getContacts = NULL;
+    _getUserId = NULL;
+    _searchContact = NULL;
+    _subscribe = NULL;
+    _publish = NULL;
+    _pull_notification = NULL;
 
     packetNotification = NULL;
 }
@@ -490,6 +502,14 @@ XmlRpcInterface::~XmlRpcInterface()
     delete _get;
     delete _dumpDht;
     delete _joinOverlay;
+    delete _addContact;
+    delete _removeContact;
+    delete _getContacts;
+    delete _getUserId;
+    delete _searchContact;
+    delete _publish;
+    delete _subscribe;
+    delete _pull_notification;
 
     cancelAndDelete(packetNotification);
 }
@@ -534,17 +554,17 @@ void XmlRpcInterface::handleMessage(cMessage *msg)
         << endl;
         while (packetBuffer.size() > 0) {
             // get packet from buffer and parse it
-            RealtimeScheduler::PacketBufferEntry packet =
+            PacketBufferEntry packet =
                     *(packetBuffer.begin());
             packetBuffer.pop_front();
             curAppFd = packet.fd;
 
             switch (packet.func) {
-            case RealtimeScheduler::PacketBufferEntry::PACKET_APPTUN_DATA:
+            case PacketBufferEntry::PACKET_APPTUN_DATA:
                 handleAppTunPacket(packet.data, packet.length);
                 break;
 
-            case RealtimeScheduler::PacketBufferEntry::PACKET_DATA:
+            case PacketBufferEntry::PACKET_DATA:
                 if (state.count(curAppFd) == 0) {
                     throw cRuntimeError("XmlRpcInterface::handleMessage(): "
                                             "Received packet "
@@ -554,7 +574,7 @@ void XmlRpcInterface::handleMessage(cMessage *msg)
                 handleRealworldPacket(packet.data, packet.length);
                 break;
 
-            case RealtimeScheduler::PacketBufferEntry::PACKET_FD_NEW:
+            case PacketBufferEntry::PACKET_FD_NEW:
                 if (state.count(curAppFd)) {
                     throw cRuntimeError("XmlRpcInterface::handleMessage(): "
                                             "Connection state table corrupt!");
@@ -572,7 +592,7 @@ void XmlRpcInterface::handleMessage(cMessage *msg)
                 }
                 break;
 
-            case RealtimeScheduler::PacketBufferEntry::PACKET_FD_CLOSE:
+            case PacketBufferEntry::PACKET_FD_CLOSE:
                 if (state.count(curAppFd) == 0) {
                     throw cRuntimeError("XmlRpcInterface::handleMessage(): "
                                             "Trying to close unknown "
@@ -715,7 +735,7 @@ void XmlRpcInterface::handleAppTunPacket(char *buf, uint32_t length)
     }
     destKey = destKey << (OverlayKey::getLength() - 100);
 
-    p2pns->tunnel(destKey, BinaryValue(buf, buf + length));
+    p2pns->tunnel(destKey, BinaryValue(buf, length));
 #endif
 }
 
@@ -890,9 +910,6 @@ void XmlRpcInterface::handleRpcResponse(BaseResponseMessage* msg,
             }
             resultValue[1] = std::string();
 
-//            resultValue[0][0] = XmlRpcValue(
-//                      &(*(_DHTgetCAPIResponse->getValue().begin())),
-//                      _DHTgetCAPIResponse->getValue().size());
             state[curAppFd]._response = generateResponse(resultValue.toXml());
         } else {
             std::cout << "XmlRpcInterface(): get() failed!" << endl;

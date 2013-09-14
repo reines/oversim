@@ -24,7 +24,6 @@
 #ifndef __SIMPLEUNDERLAYCONFIGURATOR_H__
 #define __SIMPLEUNDERLAYCONFIGURATOR_H__
 
-
 #include <omnetpp.h>
 #include <BasicModule.h>
 #include <deque>
@@ -33,7 +32,7 @@
 #include <UnderlayConfigurator.h>
 #include <InitStages.h>
 #include <SimpleInfo.h>
-
+#include <BaseLocation.h>
 
 /**
  * Sets up a SimpleNetwork.
@@ -73,6 +72,12 @@ public:
     uint32_t getFieldDimension() { return dimensions; };
     uint32_t getSendQueueLenghth() { return sendQueueLength; };
 
+    // new functions for working day model
+    IPvXAddress migrateNode(NodeType type, IPvXAddress addr, const BaseLocation& locID);
+    double getDistance(const BaseLocation& IDa, const BaseLocation& IDb);
+    BaseLocation* getNearLocation(const BaseLocation& ID, double radius);
+    BaseLocation* getLocation(IPvXAddress addr);
+
 protected:
 
     /**
@@ -96,7 +101,7 @@ protected:
     void setDisplayString();
     uint32_t parseCoordFile(const char * nodeCoordinateSource);
 
-    uint32 nextFreeAddress; /**< adress of the node that will be created next */
+    uint32 nextFreeAddress; /**< address of the node that will be created next */
     std::deque<IPvXAddress> killList; //!< stores nodes scheduled to be killed
     std::set<int> scheduledID; //!< stores nodeIds to prevent migration of prekilled nodes
 

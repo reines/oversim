@@ -37,8 +37,11 @@ simple KBRTestApp extends BaseApp
         bool kbrOneWayTest;  // enable sending of one way test messages
         bool kbrRpcTest;     // enable sending of RPC test calls
         bool kbrLookupTest;  // enable periodic test lookups
+        bool underlayTest;  // enable periodic RPCs (sent directly)
         double failureLatency @unit(s); // this latency is recorded for failed lookups and RPCs 
         bool onlyLookupInoffensiveNodes; // if true only search for inoffensive nodes (use together with lookupNodeIds)
+        //double rpcTimeout @unit(s);
+        int rpcRetries;
 }
 
 //

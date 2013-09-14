@@ -26,14 +26,14 @@
 #define __NODEHANDLE_H_
 
 //#include <stdint.h>
-#include <oversim_mapset.h>
+//#include <oversim_mapset.h>
 
 #include <omnetpp.h>
 
 #include <OverlayKey.h>
 #include <TransportAddress.h>
 
-class hashFcn;
+//class hashFcn;
 class IPvXAddress;
 
 /**
@@ -50,7 +50,7 @@ class IPvXAddress;
 class NodeHandle : public TransportAddress
 {
 public://collection typedefs
-    typedef UNORDERED_SET<NodeHandle, hashFcn> Set; /**< a hash_set of NodeHandles */
+    //typedef UNORDERED_SET<NodeHandle, hashFcn> Set; /**< a hash_set of NodeHandles */
 
 protected://fields
     OverlayKey key; /**< the OverlayKey of this NodeHandle */

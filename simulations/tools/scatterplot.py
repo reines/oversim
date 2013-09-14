@@ -34,6 +34,13 @@ import re
 from matplotlib.widgets import Slider, Button, RadioButtons, CheckButtons
 import itertools
 
+def sorted_alphanum( l ): 
+    """ Sort the given iterable in the way that humans expect (idea by Jeff Atwood).""" 
+    convert = lambda text: int(text) if text.isdigit() else text 
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key[0].get_label()) ] 
+    return sorted(l, key = alphanum_key)
+                
+
 #colorcycler = itertools.cycle(['b', 'g', 'r', 'c', 'm', 'y', 'k']).next
 colorcycler = itertools.cycle(['b', 'g', 'r', 'm', 'k']).next
 #colorcycler = itertools.cycle(['black']).next
@@ -111,6 +118,7 @@ parser.add_option("-v", "--itervars", dest="itervars", default="", help="Use -vv
 parser.add_option("-f", "--configs", dest="configs", action="store_true", default=False, help="Plot a convex hull for every configuration")
 parser.add_option("-d", "--dict-label", dest="dictList", default=[], action="append", help="Use with -d oldlabel=newlabel to replace configname labels (may be used multiple times)")
 parser.add_option("-c", "--confidence-intervall", type="float", default=0, dest="ci", help="Plots the confidence intervals with confidence level LEVEL (work in progress)", metavar="LEVEL")
+parser.add_option("-m", "--mono", dest="mono", action="store_true", default=False, help="Don't use colors for Gnuplot output ")
 parser.add_option("-z", "--zoom", type="string", dest="zoom", help="Use -zx1,x2,y1,y2 to select cropping pane")
 parser.add_option("-x", "--xlabel", type="string", dest="xlabel", help="Label for the x-axis")
 parser.add_option("-y", "--ylabel", type="string", dest="ylabel", help="Label for the y-axis")
@@ -216,7 +224,7 @@ for run in sorted(valuemap.keys()):
         row[bucket] = bucketarray.mean()
         # determine coinfidence interval if desired
         if options.ci > 0:
-            ci[bucket] = stats.stderr(bucketarray) * stats.t._ppf((1+options.ci)/2., len(bucketarray))                            
+            ci[bucket] = stats.sem(bucketarray) * stats.t._ppf((1+options.ci)/2., len(bucketarray))                            
 
     if xParRegex.pattern not in row:
         print "Error: x scalar \"" + args[0] + "\" not found, or all runs ignored due to the given include and exclude regexp!"
@@ -352,7 +360,10 @@ if options.outfile:
 #    fig.savefig(options.outfile)
     # Write gnuplot script
     outfile = open(options.outfile+".plot", "w")
-    outfile.write("set terminal postscript enhanced color eps lw 5 \"Helvetica-Bold\" 20 solid\n")
+    if options.mono:
+      outfile.write("set terminal postscript enhanced eps dl 3 lw 4 \"Helvetica-Bold\" 20\n")
+    else:
+      outfile.write("set terminal postscript enhanced color eps lw 5 \"Helvetica-Bold\" 20 solid\n")
     outfile.write("set border 31 linewidth 0.3\n")
     if options.ci == 0:
       outfile.write("set style data linespoints\n")
@@ -363,9 +374,14 @@ if options.outfile:
     outfile.write("set style line 2 pt 5\n")
     outfile.write("set style line 3 pt 6\n")
     outfile.write("set style line 4 pt 11\n")
-    outfile.write("set style line 5 pt 4 lc 9\n")
-    outfile.write("set style line 6 pt 2 lc 8\n")
-    outfile.write("set style line 7 pt 8 lc 5\n")
+    if options.mono:
+      outfile.write("set style line 5 pt 4\n")
+      outfile.write("set style line 6 pt 2\n")
+      outfile.write("set style line 7 pt 8\n")
+    else:
+      outfile.write("set style line 5 pt 4 lc 9\n")
+      outfile.write("set style line 6 pt 2 lc 8\n")
+      outfile.write("set style line 7 pt 8 lc 5\n")
     outfile.write("set style increment user\n")
     outfile.write("set datafile separator \",\"\n")
     if options.xlabel:
@@ -381,7 +397,7 @@ if options.outfile:
     # Write data to gnuplot readable file
     datfile = open(options.outfile+".dat", "w")
     plotidx = 0
-    for h in configHulls:
+    for h in sorted_alphanum(configHulls):
         if h[0].get_visible():
             outfile.write("\"" + options.outfile+".dat\" index "+str(plotidx)+" title \""+h[0].get_label()+"\",")
             datfile.write("# " + h[0].get_label() + "\n")
@@ -392,7 +408,7 @@ if options.outfile:
             datfile.write("\n\n")
             plotidx += 1
     for i in iterHulls:
-        for j in iterHulls[i]:
+        for j in sorted_alphanum(iterHulls[i]):
             if j[0].get_visible():
                 outfile.write("\"" + options.outfile+".dat\" index "+str(plotidx)+" title \""+j[0].get_label()+"\",")
                 datfile.write("# " + j[0].get_label() + "\n")

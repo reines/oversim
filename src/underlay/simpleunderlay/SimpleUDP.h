@@ -81,6 +81,7 @@ protected:
     simtime_t constantDelay; /**< constant delay between two peers */
     bool useCoordinateBasedDelay; /**< delay should be calculated from euklidean distance between two peers */
     double jitter; /**< amount of jitter in % of total delay */
+    bool enableAccessRouterTxQueue; /* model the tx queue of the access router of an destination node */
     bool faultyDelay; /** violate the triangle inequality?*/
     GlobalNodeList* globalNodeList; /**< pointer to GlobalNodeList */
     GlobalStatistics* globalStatistics; /**< pointer to GlobalStatistics */
@@ -108,9 +109,10 @@ protected:
     virtual void processMsgFromApp(cPacket *appData);
 
     // process UDP packets coming from IP
-    virtual void processUDPPacket(UDPPacket *udpPacket);
+    virtual void processUDPPacket(cPacket *udpPacket);
 
-    virtual void processUndeliverablePacket(UDPPacket *udpPacket, cPolymorphic *ctrl);
+    virtual void processUndeliverablePacket(cPacket *udpPacket, cPolymorphic *ctrl);
+    virtual void sendUp(cPacket *payload, UDPControlInfo *ctrl, SockDesc *sd);
 
 public:
     SimpleUDP();
@@ -125,6 +127,8 @@ protected:
      * @param stage stage of initialisation phase
      */
     virtual void initialize(int stage);
+
+    virtual void handleMessage(cMessage *msg);
 
     /**
      * returns the number of init stages

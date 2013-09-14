@@ -639,9 +639,9 @@ void DHT::handleGetResponse(DHTGetResponse* dhtMsg, int rpcId)
             // we'll try to ask some other nodes
             if (it->second.replica.size() > 0) {
                 DHTGetCall* getCall = new DHTGetCall();
-                getCall->setKey(dhtMsg->getKey());
-                getCall->setKind(dhtMsg->getKind());
-                getCall->setId(dhtMsg->getId());
+                getCall->setKey(it->second.getCallMsg->getKey());
+                getCall->setKind(it->second.getCallMsg->getKind());
+                getCall->setId(it->second.getCallMsg->getId());
                 getCall->setIsHash(true);
                 getCall->setBitLength(GETCALL_L(getCall));
                 RECORD_STATS(normalMessages++;
@@ -701,12 +701,7 @@ void DHT::handleGetResponse(DHTGetResponse* dhtMsg, int rpcId)
             it->second.state = GET_VALUE_SENT;
         } else { // we don't have anyone else to ask
             DHTgetCAPIResponse* capiGetRespMsg = new DHTgetCAPIResponse();
-            DhtDumpEntry result;
-            result.setKey(dhtMsg->getKey());
-            result.setValue(BinaryValue::UNSPECIFIED_VALUE);
-            capiGetRespMsg->setResultArraySize(1);
-            capiGetRespMsg->setResult(0, result);
-            capiGetRespMsg->setIsSuccess(false);
+            capiGetRespMsg->setResultArraySize(0);
             sendRpcResponse(it->second.getCallMsg, capiGetRespMsg);
             //cout << "DHT: GET failed: hash2 (no one else)" << endl;
             pendingRpcs.erase(rpcId);

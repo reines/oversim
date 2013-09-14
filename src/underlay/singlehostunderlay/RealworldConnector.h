@@ -24,9 +24,9 @@
 #ifndef _REALWORLDCONNECTOR_H_
 #define _REALWORLDCONNECTOR_H_
 
+#include "realtimescheduler.h"
 #include <omnetpp.h>
 #include "INETDefs.h"
-#include "realtimescheduler.h"
 #include "PacketParser.h"
 
 /**
@@ -78,7 +78,7 @@ protected:
     long numRcvError;
 
     cMessage* packetNotification; // used by TunOutScheduler to notify about new packets
-    RealtimeScheduler::PacketBuffer packetBuffer; // received packets are stored here
+    PacketBuffer packetBuffer; // received packets are stored here
     RealtimeScheduler* scheduler;
     PacketParser* parser;
 

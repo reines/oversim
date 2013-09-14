@@ -91,8 +91,13 @@ void CBRDHT::initializeApp(int stage)
     numReplicaTeams = par("numReplicaTeams");
 
     if (numReplica > numReplicaTeams * overlay->getMaxNumSiblings()) {
-        opp_error("DHT::initialize(): numReplica bigger than what this "
-                  "overlay can handle (%d)", numReplicaTeams*overlay->getMaxNumSiblings());
+        throw cRuntimeError("DHT::initialize(): numReplica bigger than what this "
+                "overlay can handle (%d)", numReplicaTeams*overlay->getMaxNumSiblings());
+    }
+
+    if (numReplica < numReplicaTeams) {
+        throw cRuntimeError("DHT::initialize(): numReplica (%d) smaller than numReplicaTeam (%d)",
+                            numReplica, numReplicaTeams);
     }
 
     maintenanceMessages = 0;
@@ -585,8 +590,6 @@ void CBRDHT::handlePutResponse(DHTPutResponse* dhtMsg, int rpcId)
 
 void CBRDHT::handleGetResponse(CBRDHTGetResponse* dhtMsg, int rpcId)
 {
-	std::map<unsigned int, BaseCallMessage*>::iterator it =
-            rpcIdMap.find(dhtMsg->getNonce());
     std::map<int, GetMapEntry>::iterator it2 =
             getMap.find(rpcId);
 

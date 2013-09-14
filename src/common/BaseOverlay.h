@@ -84,21 +84,20 @@ public:
     virtual ~BaseOverlay();
 
     enum States {
-        INIT = 0,
-        JOINING_1 = 1,
-        JOINING_2 = 2,
-        JOINING_3 = 3,
-        READY = 4,
-        REFRESH = 5,
-        SHUTDOWN = 6,
-        FAILED = 7,
+        INIT      = 0,
+        BOOTSTRAP = 1,
+        DISCOVERY = 2,
+        PREJOIN   = 3,
+        JOIN      = 4,
+        POSTJOIN  = 5,
+        READY     = 6,
+        REFRESH   = 7,
+        SHUTDOWN  = 8,
+        FAILED    = 9,
 
         //some aliases for compatibility
-        JOINING = JOINING_1,
-        JOIN = JOINING_1,
-        BOOTSTRAP = JOINING_1,
-        RSET = JOINING_2,
-        BSET = JOINING_3
+        RSET      = JOIN,
+        BSET      = POSTJOIN
     };
 
     States getState() { return state; };
@@ -189,6 +188,7 @@ protected://fields: overlay attributes
     GlobalParameters* globalParameters; /**< pointer to the GlobalParameters module */
 
     // overlay common parameters
+    uint32_t overlayId;              /**< identifies the overlay this node belongs to (used for multiple overlays) */
     bool debugOutput;           /**< debug output ? */
     RoutingType defaultRoutingType;
     bool useCommonAPIforward;   /**< forward messages to applications? */
@@ -553,7 +553,8 @@ public:
      * @param dest destination node
      * @param msg message to send
      */
-    void sendMessageToUDP(const TransportAddress& dest, cPacket* msg);
+    void sendMessageToUDP(const TransportAddress& dest, cPacket* msg,
+                          simtime_t delay = SIMTIME_ZERO);
 
     //------------------------------------------------------------------------
     //--- Basic Routing ------------------------------------------------------
@@ -819,6 +820,20 @@ public:
 
     BootstrapList& getBootstrapList() const { return *bootstrapList;}
 
+    /**
+     * returns mean distance between OverlayKeys in the network
+     *
+     * @return mean distance
+     */
+    virtual OverlayKey estimateMeanDistance();
+
+    /**
+     * estimates the current number of nodes online
+     *
+     * @return estimated number current nodes
+     */
+    virtual uint32_t estimateOverlaySize();
+
 private:
     void findNodeRpc( FindNodeCall* call );
     void failedNodeRpc( FailedNodeCall* call );
@@ -826,6 +841,8 @@ private:
     typedef std::map<CompType, std::pair<cModule*, cGate*> > CompModuleList;
     CompModuleList compModuleList;
     bool internalReadyState; /**< internal overlay state used for setOverlayReady() */
+
+    int socketId;
 };
 
 #endif

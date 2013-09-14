@@ -26,12 +26,15 @@
 #include "PastryStateObject.h"
 #include "PastryTypes.h"
 
+
 const PastryExtendedNode* PastryStateObject::_unspecNode = NULL;
+
 
 int PastryStateObject::numInitStages() const
 {
     return MAX_STAGE_OVERLAY;
 }
+
 
 void PastryStateObject::initialize(int stage)
 {
@@ -40,10 +43,12 @@ void PastryStateObject::initialize(int stage)
     earlyInit();
 }
 
+
 void PastryStateObject::handleMessage(cMessage* msg)
 {
-    throw "a PastryStateObject should never receive a message.";
+    throw cRuntimeError("A PastryStateObject should never receive a message!");
 }
+
 
 const NodeHandle& PastryStateObject::getDestinationNode(const OverlayKey&
                                                             destination)
@@ -51,12 +56,14 @@ const NodeHandle& PastryStateObject::getDestinationNode(const OverlayKey&
     return NodeHandle::UNSPECIFIED_NODE;
 }
 
+
 const TransportAddress& PastryStateObject::repair(const PastryStateMessage* msg,
                                                   const PastryStateMsgProximity&
                                                       prox)
 {
     return TransportAddress::UNSPECIFIED_NODE;
 }
+
 
 bool PastryStateObject::mergeState(const PastryStateMessage* msg,
                                    const PastryStateMsgProximity* prox)
@@ -74,7 +81,8 @@ bool PastryStateObject::mergeState(const PastryStateMessage* msg,
         rtt = prox ? (*(prox->pr_ls.begin() + i)) : SimTime::getMaxTime();
 
         // unspecified nodes, own node and dead nodes not considered
-        if (!(rtt < 0 || node->isUnspecified() || *node == owner)) {
+        if (!(rtt < 0 || node->isUnspecified() || *node == owner ||
+              static_cast<TransportAddress>(*node) == owner)) {
             if (mergeNode(*node, rtt)) ret = true;
         }
     }
@@ -85,7 +93,8 @@ bool PastryStateObject::mergeState(const PastryStateMessage* msg,
         rtt = prox ? (*(prox->pr_rt.begin() + i)) : SimTime::getMaxTime();
 
         // unspecified nodes, own node and dead nodes not considered
-        if (!(rtt < 0 || node->isUnspecified() || *node == owner)) {
+        if (!(rtt < 0 || node->isUnspecified() || *node == owner ||
+              static_cast<TransportAddress>(*node) == owner)) {
             if (mergeNode(*node, rtt)) ret = true;
         }
     }
@@ -96,13 +105,15 @@ bool PastryStateObject::mergeState(const PastryStateMessage* msg,
         rtt = prox ? (*(prox->pr_ns.begin() + i)) : SimTime::getMaxTime();
 
         // unspecified nodes, own node and dead nodes not considered
-        if (!(rtt < 0 || node->isUnspecified() || *node == owner)) {
+        if (!(rtt < 0 || node->isUnspecified() || *node == owner ||
+              static_cast<TransportAddress>(*node) == owner)) {
             if (mergeNode(*node, rtt)) ret = true;
         }
     }
 
     return ret;
 }
+
 
 const OverlayKey* PastryStateObject::keyDist(const OverlayKey& a,
                                              const OverlayKey& b) const
@@ -131,12 +142,11 @@ const OverlayKey* PastryStateObject::keyDist(const OverlayKey& a,
     return dist;
 }
 
+
 bool PastryStateObject::isCloser(const NodeHandle& test,
                                  const OverlayKey& destination,
                                  const NodeHandle& reference) const
 {
-    // assert: (! test.isUnspecified()) && (! owner.isUnspecified())
-
     const NodeHandle* ref = &reference;
     if (ref->isUnspecified()) ref = &owner;
 
@@ -154,16 +164,12 @@ bool PastryStateObject::isCloser(const NodeHandle& test,
     return closer;
 }
 
+
 bool PastryStateObject::specialCloserCondition(const NodeHandle& test,
                                                const OverlayKey& destination,
                                                const NodeHandle& reference)
                                                const
 {
-//    std::cout << ((test.getKey().sharedPrefixLength(destination, bitsPerDigit)
-//                  < owner.getKey().sharedPrefixLength(destination, bitsPerDigit))
-//                  != (test.getKey().sharedPrefixLength(destination)
-//                      < owner.getKey().sharedPrefixLength(destination)) ? "X\n" : "");
-
     if (test.getKey().sharedPrefixLength(destination, bitsPerDigit)
             < owner.getKey().sharedPrefixLength(destination, bitsPerDigit)) {
         return false;

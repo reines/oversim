@@ -1,6 +1,3 @@
-#ifndef __PASTRYNEIGHBORHOODSET_H
-#define __PASTRYNEIGHBORHOODSET_H
-
 //
 // Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
 //
@@ -23,6 +20,10 @@
  * @file PastryNeighborhoodSet.h
  * @author Felix Palmen
  */
+
+#ifndef __PASTRYNEIGHBORHOODSET_H
+#define __PASTRYNEIGHBORHOODSET_H
+
 
 #include <vector>
 
@@ -107,6 +108,7 @@ class PastryNeighborhoodSet : public PastryStateObject
     virtual const TransportAddress& failedNode(const TransportAddress& failed);
 
   private:
+
     uint32_t numberOfNeighbors;
     std::vector<PastryExtendedNode> neighbors;
     virtual void earlyInit(void);
@@ -117,5 +119,6 @@ class PastryNeighborhoodSet : public PastryStateObject
  * neighborhood set
  */
 std::ostream& operator<<(std::ostream& os, const PastryExtendedNode& n);
+
 
 #endif

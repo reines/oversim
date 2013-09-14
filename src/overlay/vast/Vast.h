@@ -76,6 +76,7 @@ class Vast : public BaseOverlay
         long pingBytesSent;
         long pongBytesSent;
         long discardNodeBytesSent;
+        long backupBytesSent;
 
         long maxBytesPerSecondSent, averageBytesPerSecondSent, bytesPerSecond;
         unsigned int secTimerCount;

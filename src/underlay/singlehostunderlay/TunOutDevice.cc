@@ -21,10 +21,9 @@
  * @author Stephan Krause
  */
 
+#include "TunOutDevice.h"
 #include "IPDatagram_m.h"
 #include "UDPPacket.h"
-
-#include "TunOutDevice.h"
 
 Define_Module(TunOutDevice);
 

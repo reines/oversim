@@ -100,12 +100,12 @@ appLookup(appLookup)
                                 "config.merge must be enabled for "
                                 "using majority decision for sibling selection!");
     }
-
+/*
     if (config.useAllParallelResponses && (!config.merge)) {
         throw cRuntimeError("IterativeLookup::IterativeLookup(): "
                                 "config.merge must be enabled if "
                                 "config.useAllParallelResponses is true!");
-    }
+    }*/
 }
 
 IterativeLookup::~IterativeLookup()
@@ -113,8 +113,6 @@ IterativeLookup::~IterativeLookup()
     stop();
     delete firstCallExt;
     overlay->removeLookup(this);
-
-//    std::cout << "time: " << simTime() << "deleting " << this << endl;
 }
 
 void IterativeLookup::abortLookup()
@@ -123,13 +121,15 @@ void IterativeLookup::abortLookup()
         delete listener;
         listener = NULL;
     }
+    for (RpcInfoMap::iterator i = rpcs.begin(); i != rpcs.end(); i++) {
+        overlay->cancelRpcMessage(i->second.nonce);
+    }
+    rpcs.clear();
     delete this;
 }
 
 void IterativeLookup::start()
 {
-//    std::cout << "time: " << simTime() << " start(): node: " << overlay->getThisNode() << " this: " << this  << " key: " << key << endl;
-
     // init params
     successfulPaths = 0;
     finishedPaths   = 0;
@@ -249,7 +249,6 @@ void IterativeLookup::stop()
 
     // cancel pending rpcs
     for (RpcInfoMap::iterator i = rpcs.begin(); i != rpcs.end(); i++) {
-//	std::cout << "time: " << simTime()     << " node: " << overlay->thisNode 	  << " this: " << this << " first: " << i->first  << " nonce: " << i->second.nonce << endl;
         overlay->cancelRpcMessage(i->second.nonce);
     }
     rpcs.clear();
@@ -261,7 +260,7 @@ void IterativeLookup::stop()
     pendingPings.clear();
 
     // delete path lookups
-    for (uint32_t i=0; i<paths.size(); i++) {
+    for (uint32_t i = 0; i < paths.size(); ++i) {
         delete paths[i];
     }
     paths.clear();
@@ -286,7 +285,8 @@ void IterativeLookup::stop()
     }
 }
 
-inline void IterativeLookup::checkStop()
+//inline
+void IterativeLookup::checkStop()
 {
     bool finishLookup = false;
 
@@ -307,7 +307,15 @@ inline void IterativeLookup::checkStop()
     if (((successfulPaths >= 1) && (numSiblings == 0) && (siblings.size() >= 1)) ||
         ((finishedPaths == (uint32_t)config.parallelPaths) &&
                 (numSiblings > 0) && (pendingPings.size() == 0))) {
-
+        /*
+        std::cout << "successfulPaths: " << successfulPaths
+                  << ", numSiblings: " << numSiblings
+                  << ", siblings.size(): " << siblings.size()
+                  << ", finishedPaths: " << finishedPaths
+                  << ", config.parallelPaths: " << config.parallelPaths
+                  << ", pendingPings.size(): " << pendingPings.size()
+                  << std::endl;
+         */
         for (uint32_t i=0; i<paths.size(); i++) {
             success |= paths[i]->success;
         }
@@ -325,11 +333,11 @@ inline void IterativeLookup::checkStop()
         }
 
         if (success == false) {
-            //cout << "failed: hops :" << accumulatedHops << endl;
+            //std::cout << overlay->getThisNode().getKey() << " lookup of " << key << " failed: hops :" << accumulatedHops << endl;
         }
 
         if (success == false && retries > 0) {
-            // std::cout << "IterativeLookup::checkStop(): Retry..." << endl;
+            //std::cout << "IterativeLookup::checkStop(): Retry..." << endl;
             retries--;
             LookupListener* oldListener = listener;
             listener = NULL;
@@ -337,6 +345,11 @@ inline void IterativeLookup::checkStop()
             listener = oldListener;
             start();
         } else {
+            //std::cout << "IterativeLookup::checkStop(): No retry!" << endl;
+            for (RpcInfoMap::iterator i = rpcs.begin(); i != rpcs.end(); i++) {
+                overlay->cancelRpcMessage(i->second.nonce);
+            }
+            rpcs.clear();
             delete this;
         }
     }
@@ -388,9 +401,12 @@ FindNodeCall* IterativeLookup::createFindNodeCall(cPacket* findNodeExt)
 //- Base configuration and state ---------------------------------------------
 //----------------------------------------------------------------------------
 //virtual public
-int IterativeLookup::compare(const OverlayKey& lhs, const OverlayKey& rhs) const
+int IterativeLookup::compare(const OverlayKey& lhs,
+                             const OverlayKey& rhs /*,
+                             bool useAlternativeMetric*/) const
 {
-    return overlay->distance(lhs, key).compareTo(overlay->distance(rhs, key));
+    //std::cout << key << ": l=" << lhs << ", r=" << rhs << std::endl;
+    return overlay->distance(lhs, key/*, useAlternativeMetric*/).compareTo(overlay->distance(rhs, key/*, useAlternativeMetric*/));
 }
 
 
@@ -594,8 +610,8 @@ void IterativeLookup::handleRpcTimeout(BaseCallMessage* msg,
 
     // check if rpc info is available
     if (rpcs.count(dest)==0) {
-        cout << "IterativeLookup::handleRpcTimeout(): RPC Timeout, but node"
-	         << " is not in rpcs structure!" << endl;
+        //std::cout << "IterativeLookup::handleRpcTimeout(): RPC Timeout, but node"
+        //          << " is not in rpcs structure!" << endl;
         return;
     }
 
@@ -1053,7 +1069,6 @@ void IterativePathLookup::sendRpc(int num, cPacket* findNodeExt)
     }
 
     // send rpc messages
-    LookupVector::iterator it = nextHops.begin();
     int i = 0;
     for (LookupVector::iterator it = nextHops.begin();
          ((num > 0) && (i < lookup->config.redundantNodes)
@@ -1122,7 +1137,6 @@ void IterativePathLookup::sendRpc(int num, cPacket* findNodeExt)
 
         finished = true;
     }
-    //cout << endl;
 }
 
 int IterativePathLookup::add(const NodeHandle& handle, const NodeHandle& source)

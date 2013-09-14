@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+// Copyright (C) 2012 Institute of Telematics, Karlsruhe Institute of Technology (KIT)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 
 /**
  * @file PastryLeafSet.cc
- * @author Felix Palmen
+ * @author Felix Palmen, Bernhard Heep
  */
 
 #include "PastryLeafSet.h"
@@ -48,12 +48,15 @@
 #define LEAF_TEST() {}
 #endif
 
+
 Define_Module(PastryLeafSet);
 
-void PastryLeafSet::earlyInit(void)
+
+void PastryLeafSet::earlyInit()
 {
     WATCH_VECTOR(leaves);
 }
+
 
 void PastryLeafSet::initializeSet(uint32_t numberOfLeaves,
                                   uint32_t bitsPerDigit,
@@ -88,23 +91,26 @@ void PastryLeafSet::initializeSet(uint32_t numberOfLeaves,
     wasFull = false;
 }
 
-const NodeHandle& PastryLeafSet::getSuccessor(void) const
+
+const NodeHandle& PastryLeafSet::getSuccessor() const
 {
     return *bigger;
 }
 
-const NodeHandle& PastryLeafSet::getPredecessor(void) const
+
+const NodeHandle& PastryLeafSet::getPredecessor() const
 {
     return *smaller;
 }
 
-bool PastryLeafSet::isValid(void) const
+
+bool PastryLeafSet::isValid() const
 {
     return (!(smaller->isUnspecified() || bigger->isUnspecified()));
 }
 
-const NodeHandle& PastryLeafSet::getDestinationNode(
-    const OverlayKey& destination)
+
+const NodeHandle& PastryLeafSet::getDestinationNode(const OverlayKey& destination)
 {
     std::vector<NodeHandle>::const_iterator i;
     const OverlayKey* smallest;
@@ -133,6 +139,7 @@ const NodeHandle& PastryLeafSet::getDestinationNode(
     return *ret;
 }
 
+
 bool PastryLeafSet::isClosestNode(const OverlayKey& destination) const
 {
     // check for simple cases first
@@ -160,6 +167,7 @@ bool PastryLeafSet::isClosestNode(const OverlayKey& destination) const
     return ((!biggerIsCloser) && (!smallerIsCloser));
 }
 
+
 void PastryLeafSet::dumpToStateMessage(PastryStateMessage* msg) const
 {
     uint32_t i = 0;
@@ -176,35 +184,18 @@ void PastryLeafSet::dumpToStateMessage(PastryStateMessage* msg) const
     msg->setLeafSetArraySize(size);
 }
 
-//TODO ugly duplication of code
-void PastryLeafSet::dumpToStateMessage(PastryLeafsetMessage* msg) const
-{
-    uint32_t i = 0;
-    uint32_t size = 0;
-    std::vector<NodeHandle>::const_iterator it;
-
-    msg->setLeafSetArraySize(numberOfLeaves);
-    for (it = leaves.begin(); it != leaves.end(); it++) {
-        if (!it->isUnspecified()) {
-            ++size;
-            msg->setLeafSet(i++, *it);
-        }
-    }
-    msg->setLeafSetArraySize(size);
-}
 
 const TransportAddress& PastryLeafSet::getRandomNode()
 {
-    //std::vector<NodeHandle>::iterator i;
     uint32_t rnd;
     int i;
 
     rnd = intuniform(0, numberOfLeaves - 1, 0);
     i = rnd;
-    //while (rnd < leaves.size()) {
+
     while (i < (int)leaves.size()) {
         if (!leaves[i].isUnspecified()) return leaves[i];
-        else i++;//rnd++;
+        else i++;
     }
     i = rnd;
     while (i >= 0) {
@@ -213,12 +204,13 @@ const TransportAddress& PastryLeafSet::getRandomNode()
     }
     EV << "Leafset::getRandomNode() returns UNSPECIFIED_NODE"
           "Leafset empty??" << endl;
-    return TransportAddress::UNSPECIFIED_NODE;
 
+    return TransportAddress::UNSPECIFIED_NODE;
 }
 
+
 NodeVector* PastryLeafSet::createSiblingVector(const OverlayKey& key,
-        int numSiblings) const
+                                               int numSiblings) const
 {
     std::vector<NodeHandle>::const_iterator it;
 
@@ -257,6 +249,7 @@ NodeVector* PastryLeafSet::createSiblingVector(const OverlayKey& key,
 
     return result;
 }
+
 
 bool PastryLeafSet::mergeNode(const NodeHandle& node, simtime_t prox)
 {
@@ -326,6 +319,7 @@ bool PastryLeafSet::mergeNode(const NodeHandle& node, simtime_t prox)
     return false;
 }
 
+
 void PastryLeafSet::insertLeaf(std::vector<NodeHandle>::iterator& it,
                                const NodeHandle& node)
 {
@@ -334,37 +328,69 @@ void PastryLeafSet::insertLeaf(std::vector<NodeHandle>::iterator& it,
     LEAF_TEST();
     bool issmaller = (it <= smaller);
     if (issmaller) {
-        if (!leaves.front().isUnspecified())  {
-            overlay->callUpdate(leaves.front(), false);
-        }
-        overlay->callUpdate(node, true);
-
         leaves.insert(++it, node);
-        NodeHandle& temp = leaves.front();
-        if (!temp.isUnspecified() && leaves.back().isUnspecified()) {
-            leaves.back() = temp;
+
+        if (!leaves.front().isUnspecified())  {
+            assert(leaves.front() != node);
+
+            if (leaves.back().isUnspecified()) {
+                leaves.back() = leaves.front();
+                EV << "[PastryLeafSet::insertLeaf() @ " << overlay->getThisNode().getIp()
+                   << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+                   << "    " << leaves.front().getIp() << " switched sides"
+                   << endl;
+            } else {
+                EV << "[PastryLeafSet::insertLeaf() @ " << overlay->getThisNode().getIp()
+                   << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+                   << "    " << leaves.front().getIp() << " replaced with " << node.getIp()
+                   << endl;
+            }
+        } else {
+            EV << "[PastryLeafSet::insertLeaf() @ " << overlay->getThisNode().getIp()
+               << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+               << "    " << node.getIp() << " added"
+               << endl;
         }
+
         leaves.erase(leaves.begin());
 
 
     } else {
-        if (!leaves.back().isUnspecified())  {
-            overlay->callUpdate(leaves.back(), false);
-        }
-        overlay->callUpdate(node, true);
-
         leaves.insert(it, node);
-        NodeHandle& temp = leaves.back();
-        if (!temp.isUnspecified() && leaves.front().isUnspecified()) {
-            leaves.front() = temp;
+
+        if (!leaves.back().isUnspecified())  {
+            assert(leaves.back() != node);
+
+            if (leaves.front().isUnspecified()) {
+                leaves.front() = leaves.back();
+
+                EV << "[PastryLeafSet::insertLeaf() @ " << overlay->getThisNode().getIp()
+                   << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+                   << "    " << leaves.back().getIp() << " switched sides"
+                   << endl;
+            } else {
+
+                EV << " [PastryLeafSet::insertLeaf() @ " << overlay->getThisNode().getIp()
+                   << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+                   << "    " << leaves.back().getIp() << " replaced with " << node.getIp()
+                   << endl;
+            }
+        } else {
+            EV << "[PastryLeafSet::insertLeaf() @ " << overlay->getThisNode().getIp()
+               << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
+               << "    " << node.getIp() << " added"
+               << endl;
         }
+
         leaves.pop_back();
     }
 
     if (!leaves.front().isUnspecified() &&
         !leaves.back().isUnspecified()) {
         isFull = true;
-    } else isFull = false;
+    } else {
+        isFull = false;
+    }
 
     newLeafs = true;
     bigger = leaves.begin() + (numberOfLeaves >> 1);
@@ -376,6 +402,7 @@ void PastryLeafSet::insertLeaf(std::vector<NodeHandle>::iterator& it,
     }
     LEAF_TEST();
 }
+
 
 bool PastryLeafSet::balanceLeafSet()
 {
@@ -406,8 +433,10 @@ bool PastryLeafSet::balanceLeafSet()
             return true;
         }
     }
-    return false; // should not happen
+    throw cRuntimeError("This should not happen!");
+    return false;
 }
+
 
 void PastryLeafSet::dumpToVector(std::vector<TransportAddress>& affected) const
 {
@@ -418,6 +447,7 @@ void PastryLeafSet::dumpToVector(std::vector<TransportAddress>& affected) const
             affected.push_back(*it);
 }
 
+
 const NodeHandle& PastryLeafSet::getSmallestNode(void) const
 {
     std::vector<NodeHandle>::const_iterator i = leaves.begin();
@@ -426,10 +456,12 @@ const NodeHandle& PastryLeafSet::getSmallestNode(void) const
     return *i;
 }
 
+
 const OverlayKey& PastryLeafSet::getSmallestKey(void) const
 {
     return getSmallestNode().getKey();
 }
+
 
 const NodeHandle& PastryLeafSet::getBiggestNode(void) const
 {
@@ -439,10 +471,12 @@ const NodeHandle& PastryLeafSet::getBiggestNode(void) const
     return *i;
 }
 
+
 const OverlayKey& PastryLeafSet::getBiggestKey(void) const
 {
     return getBiggestNode().getKey();
 }
+
 
 void PastryLeafSet::findCloserNodes(const OverlayKey& destination,
                                     NodeVector* nodes)
@@ -452,8 +486,8 @@ void PastryLeafSet::findCloserNodes(const OverlayKey& destination,
     for (it = leaves.begin(); it != leaves.end(); it++)
         if (!it->isUnspecified())
             nodes->add(*it);
-
 }
+
 
 const NodeHandle& PastryLeafSet::findCloserNode(const OverlayKey& destination,
                                                 bool optimize)
@@ -482,6 +516,7 @@ const NodeHandle& PastryLeafSet::findCloserNode(const OverlayKey& destination,
 
     return *ret;
 }
+
 
 const TransportAddress& PastryLeafSet::failedNode(const TransportAddress& failed)
 {
@@ -534,6 +569,7 @@ const TransportAddress& PastryLeafSet::failedNode(const TransportAddress& failed
     return *ask;
 }
 
+
 const TransportAddress& PastryLeafSet::repair(const PastryStateMessage* msg,
                                               const PastryStateMsgProximity* prox)
 {
@@ -585,6 +621,7 @@ const TransportAddress& PastryLeafSet::repair(const PastryStateMessage* msg,
     }
 }
 
+
 PastryNewLeafsMessage* PastryLeafSet::getNewLeafsMessage(void)
 {
     std::vector<NodeHandle>::const_iterator it;
@@ -612,4 +649,82 @@ std::vector<NodeHandle>::iterator PastryLeafSet::begin()
 std::vector<NodeHandle>::iterator PastryLeafSet::end()
 {
     return leaves.end();
+}
+
+OverlayKey PastryLeafSet::estimateMeanDistance()
+{
+    std::vector<OverlayKey> temp;
+    for (uint8_t i = 0; i < leaves.size() / 2; ++i) {
+        if (!leaves[i].isUnspecified()) {
+            temp.push_back(leaves[i].getKey());
+        }
+    }
+    temp.push_back(owner.getKey());
+    for (uint8_t i = leaves.size() / 2; i < leaves.size(); ++i) {
+        if (!leaves[i].isUnspecified()) {
+            temp.push_back(leaves[i].getKey());
+        }
+    }
+
+    uint8_t num = 2;
+    uint8_t l = 1;
+    while (num < temp.size()) {
+        num *= 2;
+        ++l;
+    }
+    num /= 2;
+    --l;
+
+
+    OverlayKey mean = OverlayKey::ZERO;
+    for (uint8_t i = 0; i < num; ++i) {
+        //distances.push_back(KeyRingMetric().distance(temp[i], temp[i+1]));
+        mean += (KeyRingMetric().distance(temp[i], temp[i+1]) >> l);
+    }
+
+    return mean;
+}
+
+
+bool PastryLeafSet::mergeState(const PastryStateMessage* msg,
+                               const PastryStateMsgProximity* prox)
+{
+    // LS to temp vector
+    std::vector<NodeHandle> temp = leaves; //getNodeHandleVector();
+
+    bool result = PastryStateObject::mergeState(msg, prox);
+
+    // nothing changed -> return without sending updates
+    if (!result) return false;
+
+    // compare modified vector with temp
+    const std::vector<NodeHandle>& current = leaves; //getNodeHandleVector();
+
+    // send updates (first "left", then "joined")
+    for (std::vector<NodeHandle>::const_iterator it = temp.begin();
+         it != temp.end(); ++it) {
+        if (it->isUnspecified()) continue;
+        std::vector<NodeHandle>::const_iterator it2;
+        for (it2 = current.begin(); it2 != current.end(); ++it2) {
+            if (it2->isUnspecified()) continue;
+            if (*it2 == *it) break;
+        }
+        if (it2 == current.end()) {
+            overlay->callUpdate(*it, false);
+        }
+    }
+    for (std::vector<NodeHandle>::const_iterator it = current.begin();
+         it != current.end(); ++it) {
+        if (it->isUnspecified()) continue;
+        std::vector<NodeHandle>::const_iterator it2;
+        for (it2 = temp.begin(); it2 != temp.end(); ++it2) {
+            if (it2->isUnspecified()) continue;
+            if (*it2 == *it) break;
+        }
+        if (it2 == temp.end()) {
+            overlay->callUpdate(*it, true);
+        }
+    }
+
+    return result;
 }

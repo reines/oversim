@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2006 Institut fuer Telematik, Universitaet Karlsruhe (TH)
+// Copyright (C) 2012 Institute of Telematics, Karlsruhe Institute of Technology (KIT)
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 
 /**
  * @file Pastry.h
- * @author Felix Palmen
+ * @author Felix Palmen, Bernhard Heep
  */
 
 #ifndef __PASTRY_H_
@@ -42,7 +42,6 @@
 #include "PastryRoutingTable.h"
 #include "PastryLeafSet.h"
 #include "PastryNeighborhoodSet.h"
-
 
 
 /**
@@ -78,6 +77,33 @@ class Pastry : public BasePastry
 
     virtual void purgeVectors(void);
 
+    bool handleRpcCall(BaseCallMessage* msg);
+
+    void handlePastryJoinCall(PastryJoinCall* call);
+
+    void handleRequestStateCall(RequestStateCall* call);
+
+    void handleRequestRepairCall(RequestRepairCall* call);
+
+    void handleRpcResponse(BaseResponseMessage* msg,
+                           cPolymorphic* context, int rpcId,
+                           simtime_t rtt);
+
+    void handlePastryJoinResponse(PastryJoinResponse* response);
+
+    void handleRequestStateResponse(RequestStateResponse* response);
+
+    void handleRequestRepairResponse(RequestRepairResponse* response);
+
+    void handleRequestLeafSetResponse(RequestLeafSetResponse* response);
+
+    void handleRequestRoutingRowResponse(RequestRoutingRowResponse* response);
+
+    void handleRpcTimeout(BaseCallMessage* call,
+                          const TransportAddress& dest,
+                          cPolymorphic* context, int rpcId,
+                          const OverlayKey& key);
+
     /**
      * changes node state
      *
@@ -101,6 +127,8 @@ class Pastry : public BasePastry
      */
     std::vector<TransportAddress> notifyList;
 
+    std::vector<PastrySendState*> sendStateWait;
+
   private:
 
     void clearVectors();
@@ -110,6 +138,7 @@ class Pastry : public BasePastry
     simtime_t discoveryTimeoutAmount;
     bool partialJoinPath;
 
+    uint16_t discoveryModeProbedNodes;
     int depth;
 
     int updateCounter;
@@ -117,6 +146,7 @@ class Pastry : public BasePastry
     bool minimalJoinState;
     bool useDiscovery;
     bool useSecondStage;
+    bool useRoutingTableMaintenance;
     bool sendStateAtLeafsetRepair;
     bool pingBeforeSecondStage;
 
@@ -169,10 +199,16 @@ class Pastry : public BasePastry
     void doJoinUpdate(void);
 
     // see BaseOverlay.h
+
     virtual void joinOverlay();
 
+    /**
+     * send a standard state message with a small delay
+     *
+     * @param destination destination node
+     */
+    void sendStateDelayed(const TransportAddress& destination);
 };
-
 
 
 #endif

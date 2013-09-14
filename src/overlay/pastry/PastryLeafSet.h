@@ -54,7 +54,7 @@ struct PLSRepairData
  *
  * This module contains the LeafSet of the Pastry implementation.
  *
- * @author Felix Palmen
+ * @author Felix Palmen, Bernhard Heep
  * @see Pastry
  */
 class PastryLeafSet : public PastryStateObject
@@ -135,13 +135,6 @@ class PastryLeafSet : public PastryStateObject
      */
     virtual void dumpToStateMessage(PastryStateMessage* msg) const;
 
-     /**
-     * dump content of the set to a PastryLeafsetMessage
-     *
-     * @param msg the PastryLeafsetMessage to be filled with entries
-     */
-    virtual void dumpToStateMessage(PastryLeafsetMessage* msg) const;
-
     /**
      * returns a random node from the leafset
      *
@@ -157,6 +150,9 @@ class PastryLeafSet : public PastryStateObject
      * @return true if node was merged
      */
     bool mergeNode(const NodeHandle& node, simtime_t prox);
+
+    virtual bool mergeState(const PastryStateMessage* msg,
+                            const PastryStateMsgProximity* prox);
 
     /**
      * return predecessor node for visualizing
@@ -183,7 +179,6 @@ class PastryLeafSet : public PastryStateObject
 
     NodeVector* createSiblingVector(const OverlayKey& key, int numSiblings) const;
 
-
     /**
      * generates a newLeafs-message if LeafSet changed since last call
      * to this method.
@@ -195,7 +190,10 @@ class PastryLeafSet : public PastryStateObject
     std::vector<NodeHandle>::iterator begin();
     std::vector<NodeHandle>::iterator end();
 
+    OverlayKey estimateMeanDistance();
+
   private:
+
     uint32_t numberOfLeaves;
     simtime_t repairTimeout;
     BasePastry* overlay; /**< pointer to the main pastry module */
@@ -260,9 +258,10 @@ class PastryLeafSet : public PastryStateObject
      * @param node NodeHandle of new leaf
      */
     void insertLeaf(std::vector<NodeHandle>::iterator& it,
-	    const NodeHandle& node);
+                    const NodeHandle& node);
 
     bool balanceLeafSet();
 };
+
 
 #endif

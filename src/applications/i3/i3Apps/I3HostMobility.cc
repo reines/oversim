@@ -166,6 +166,7 @@ void I3HostMobility::handleTimerEvent(cMessage *msg) {
     case MSG_TIMER_REDISCOVER:
         checkedPartners = false;
         scheduleAt(simTime() + 60, msg);
+        break;
     default:
         break;
     }

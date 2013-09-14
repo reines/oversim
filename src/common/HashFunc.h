@@ -50,10 +50,10 @@ template<> struct hash<IPvXAddress> : std::unary_function<IPvXAddress, std::size
     std::size_t operator()(const IPvXAddress& addr) const
     {
         if (addr.isIPv6()) {
-            return bswap_32(addr.get6().words()[0]) ^
-                   bswap_32(addr.get6().words()[1]) ^
-                   bswap_32(addr.get6().words()[2]) ^
-                   bswap_32(addr.get6().words()[3]);
+            return ((bswap_32(addr.get6().words()[0])) ^
+                   (bswap_32(addr.get6().words()[1])) ^
+                   (bswap_32(addr.get6().words()[2])) ^
+                   (bswap_32(addr.get6().words()[3])));
         } else {
             return bswap_32(addr.get4().getInt());
         }
@@ -75,13 +75,13 @@ template<> struct hash<TransportAddress> : std::unary_function<TransportAddress,
     std::size_t operator()(const TransportAddress& addr) const
     {
         if (addr.getIp().isIPv6()) {
-            return ((bswap_32(addr.getIp().get6().words()[0]) ^
-                     bswap_32(addr.getIp().get6().words()[1]) ^
-                     bswap_32(addr.getIp().get6().words()[2]) ^
-                     bswap_32(addr.getIp().get6().words()[3])) ^
+            return (((bswap_32(addr.getIp().get6().words()[0])) ^
+                     (bswap_32(addr.getIp().get6().words()[1])) ^
+                     (bswap_32(addr.getIp().get6().words()[2])) ^
+                     (bswap_32(addr.getIp().get6().words()[3]))) ^
                       addr.getPort());
         } else {
-            return (bswap_32(addr.getIp().get4().getInt()) ^
+            return ((bswap_32(addr.getIp().get4().getInt())) ^
                     addr.getPort());
         }
     }

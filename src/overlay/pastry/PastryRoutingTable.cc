@@ -23,12 +23,14 @@
 
 #include "PastryRoutingTable.h"
 
+
 Define_Module(PastryRoutingTable);
 
 uint32_t PastryRoutingTable::digitAt(uint32_t n,
                                      const OverlayKey& key) const
 {
-    return key.getBitRange(OverlayKey::getLength() - ++n * bitsPerDigit, bitsPerDigit);
+    return key.getBitRange(OverlayKey::getLength() - ++n * bitsPerDigit,
+                           bitsPerDigit);
 }
 
 OverlayKey PastryRoutingTable::getPrefix(int row, int col)
@@ -47,6 +49,7 @@ void PastryRoutingTable::earlyInit(void)
 {
     WATCH_VECTOR(rows);
 }
+
 
 void PastryRoutingTable::initializeTable(uint32_t bitsPerDigit,
                                          double repairTimeout,
@@ -67,13 +70,16 @@ void PastryRoutingTable::initializeTable(uint32_t bitsPerDigit,
     addRow();
 }
 
-const PastryExtendedNode& PastryRoutingTable::nodeAt(uint32_t row, uint32_t col) const
+
+const PastryExtendedNode& PastryRoutingTable::nodeAt(uint32_t row,
+                                                     uint32_t col) const
 {
     if (rows.size() <= row) return unspecNode();
     if (col >= nodesPerRow) return unspecNode();
 
     return *((rows.begin()+row)->begin()+col);
 }
+
 
 const NodeHandle& PastryRoutingTable::lookupNextHop(const OverlayKey& destination)
 {
@@ -84,18 +90,19 @@ const NodeHandle& PastryRoutingTable::lookupNextHop(const OverlayKey& destinatio
 
     if (shl >= rows.size()) {
         EV << "Pastry: Unable to find next hop for " << destination
-        << ", row is empty." << endl;
+           << ", row is empty." << endl;
         return NodeHandle::UNSPECIFIED_NODE;
     }
 
     const PastryExtendedNode& next = nodeAt(shl, digit);
 
     if (next.node.isUnspecified()) {
-        EV << "Pastry: Unable to find next hop for " << destination <<
-        ", routing table entry is empty." << endl;
+        EV << "Pastry: Unable to find next hop for " << destination
+           << ", routing table entry is empty." << endl;
     }
     return next.node;
 }
+
 
 const NodeHandle& PastryRoutingTable::findCloserNode(const OverlayKey& destination,
                                                      bool optimize)
@@ -179,6 +186,7 @@ const NodeHandle& PastryRoutingTable::findCloserNode(const OverlayKey& destinati
     }
 }
 
+
 void PastryRoutingTable::findCloserNodes(const OverlayKey& destination,
                                          NodeVector* nodes)
 {
@@ -194,6 +202,7 @@ void PastryRoutingTable::findCloserNodes(const OverlayKey& destination,
         }
     }
 }
+
 
 void PastryRoutingTable::dumpToStateMessage(PastryStateMessage* msg) const
 {
@@ -213,38 +222,9 @@ void PastryRoutingTable::dumpToStateMessage(PastryStateMessage* msg) const
         }
     }
     msg->setRoutingTableArraySize(size);
-
 }
 
-void PastryRoutingTable::dumpRowToMessage(PastryRoutingRowMessage* msg,
-                                          int row) const
-{
-    uint32_t i = 0;
-    uint32_t size = 0;
-    std::vector<PRTRow>::const_iterator itRows;
-    PRTRow::const_iterator itCols;
 
-    msg->setRoutingTableArraySize(nodesPerRow);
-    if (row == -1) {
-        itRows = rows.end() - 1;
-    } else if (row > (int)rows.size()) {
-        EV << "asked for nonexistent row";
-        // TODO: verify this - added by ib
-        msg->setRoutingTableArraySize(0);
-        return;
-    } else {
-        itRows = rows.begin() + row - 1;
-    }
-    for (itCols = itRows->begin(); itCols != itRows->end(); itCols++) {
-        if (!itCols->node.isUnspecified()) {
-            ++size;
-            msg->setRoutingTable(i++, itCols->node);
-        }
-    }
-    msg->setRoutingTableArraySize(size);
-}
-
-//TODO ugly duplication of code
 void PastryRoutingTable::dumpRowToMessage(PastryStateMessage* msg,
                                           int row) const
 {
@@ -274,10 +254,29 @@ void PastryRoutingTable::dumpRowToMessage(PastryStateMessage* msg,
     msg->setRoutingTableArraySize(size);
 }
 
+
+std::vector<TransportAddress>* PastryRoutingTable::getRow(uint8_t row) const
+{
+    std::vector<TransportAddress>* temp = new std::vector<TransportAddress>;
+    if ((row < 1) || (row > (int)rows.size())) return temp;
+
+    std::vector<PRTRow>::const_iterator itRows = rows.begin() + row - 1;
+
+    for (PRTRow::const_iterator itCols = itRows->begin();
+         itCols != itRows->end(); ++itCols) {
+        if (itCols != itRows->end() && !itCols->node.isUnspecified()) {
+            temp->push_back(itCols->node);
+        }
+    }
+    return temp;
+}
+
+
 int PastryRoutingTable::getLastRow()
 {
     return rows.size();
 }
+
 
 const TransportAddress& PastryRoutingTable::getRandomNode(int row)
 {
@@ -304,6 +303,7 @@ const TransportAddress& PastryRoutingTable::getRandomNode(int row)
     }
     return TransportAddress::UNSPECIFIED_NODE;
 }
+
 
 bool PastryRoutingTable::mergeNode(const NodeHandle& node, simtime_t prox)
 {
@@ -336,29 +336,31 @@ bool PastryRoutingTable::mergeNode(const NodeHandle& node, simtime_t prox)
     return false;
 }
 
+
 bool PastryRoutingTable::initStateFromHandleVector(const std::vector<PastryStateMsgHandle>& handles)
 {
     std::vector<PastryStateMsgHandle>::const_iterator it;
     int hopCheck = 0;
 
     for (it = handles.begin(); it != handles.end(); ++it) {
-        if (it->msg->getJoinHopCount() != ++hopCheck) return false;
+        if (it->msg->getRow() != ++hopCheck) return false;
         mergeState(it->msg, it->prox);
     }
     return true;
 }
 
-void PastryRoutingTable::dumpToVector(std::vector<TransportAddress>& affected)
-const
+
+void PastryRoutingTable::dumpToVector(std::vector<TransportAddress>& affected) const
 {
     std::vector<PRTRow>::const_iterator itRows;
     PRTRow::const_iterator itCols;
 
-    for (itRows = rows.begin(); itRows != rows.end(); itRows++)
-        for (itCols = itRows->begin(); itCols != itRows->end(); itCols++)
+    for (itRows = rows.begin(); itRows != rows.end(); ++itRows)
+        for (itCols = itRows->begin(); itCols != itRows->end(); ++itCols)
             if (!itCols->node.isUnspecified())
                 affected.push_back(itCols->node);
 }
+
 
 void PastryRoutingTable::addRow(void)
 {
@@ -368,6 +370,7 @@ void PastryRoutingTable::addRow(void)
     (row.begin() + digitAt(rows.size(), owner.getKey()))->node = owner;
     rows.push_back(row);
 }
+
 
 std::ostream& operator<<(std::ostream& os, const PRTRow& row)
 {
@@ -381,6 +384,7 @@ std::ostream& operator<<(std::ostream& os, const PRTRow& row)
     os << "    }";
     return os;
 }
+
 
 const TransportAddress& PastryRoutingTable::failedNode(const TransportAddress& failed)
 {
@@ -419,6 +423,7 @@ const TransportAddress& PastryRoutingTable::failedNode(const TransportAddress& f
     awaitingRepair.push_back(tmpTrack);
     return awaitingRepair.back().node;
 }
+
 
 const TransportAddress& PastryRoutingTable::repair(const PastryStateMessage* msg,
                                                    const PastryStateMsgProximity* prox)
@@ -468,6 +473,7 @@ const TransportAddress& PastryRoutingTable::repair(const PastryStateMessage* msg
     return TransportAddress::UNSPECIFIED_NODE;
 }
 
+
 void PastryRoutingTable::findNextNodeToAsk(PRTTrackRepair& track) const
 {
     const TransportAddress* ask;
@@ -505,12 +511,6 @@ void PastryRoutingTable::findNextNodeToAsk(PRTTrackRepair& track) const
         ask = static_cast<const TransportAddress*>(
                 &(nodeAt(track.askedRow, track.askedCol).node));
 
-//        if (!ask->isUnspecified() && !track.node.isUnspecified() && track.node == *ask)
-//            std::cout << "burp! " << owner.getKey() << " " << (static_cast<const NodeHandle*>(ask))->key << "\n("
-//            << track.failedRow << ", " << track.failedCol << ") -> ("
-//            << track.askedRow << ", " << track.askedCol << ")"
-//            << std::endl;
-
         if (track.node.isUnspecified() ||
             (!ask->isUnspecified() && track.node != *ask))
             track.node = *ask; //only happens if track.node == owner
@@ -518,4 +518,3 @@ void PastryRoutingTable::findNextNodeToAsk(PRTTrackRepair& track) const
     }
     while (track.node.isUnspecified() || (track.node == owner) );
 }
-

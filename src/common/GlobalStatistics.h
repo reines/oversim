@@ -113,6 +113,7 @@ public:
     void startMeasuring();
 
     inline bool isMeasuring() { return measuring; };
+    inline bool getMeasureNetwInitPhase() { return measureNetwInitPhase; };
     inline simtime_t getMeasureStartTime() { return measureStartTime; };
 
     simtime_t calcMeasuredLifetime(simtime_t creationTime);
@@ -154,6 +155,7 @@ protected:
     virtual void finish();
 
     bool measuring;
+    bool measureNetwInitPhase;
     simtime_t measureStartTime;
 };
 

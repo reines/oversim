@@ -31,6 +31,8 @@
 
 namespace oversim {
 
+using namespace std;
+
 Define_Module(ChordFingerTable);
 
 void ChordFingerTable::initialize(int stage)

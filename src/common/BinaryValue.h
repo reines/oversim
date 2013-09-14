@@ -30,20 +30,25 @@ class BinaryValue : public std::vector<char>, public cPolymorphic {
   public:
     static const BinaryValue UNSPECIFIED_VALUE;
 
-    BinaryValue(const char* s="");
+    BinaryValue();
+    BinaryValue(size_t n);
     BinaryValue(const std::string& str);
     BinaryValue(const std::vector<char>& v);
-    BinaryValue(size_t n);
-    BinaryValue(const char *b, const char *e);
+    BinaryValue(const char *b, const size_t l);
+    BinaryValue(const char* cStr);
+    BinaryValue(cObject* obj);
+    virtual ~BinaryValue() {};
+
     bool operator<(const BinaryValue& rhs);
     BinaryValue& operator+=(const BinaryValue& rhs);
-
-    virtual ~BinaryValue() {};
 
     friend std::ostream& operator<< (std::ostream& os, const BinaryValue& v);
 
     virtual void netPack(cCommBuffer *b);
     virtual void netUnpack(cCommBuffer *b);
+
+    void packObject(cObject* obj);
+    cObject* unpackObject();
 
     bool isUnspecified() const;
 };

@@ -68,7 +68,7 @@ void SimpleNcs::init(NeighborCache* neighborCache)
     ownCoords = new SimpleCoordsInfo();
 
     for (uint8_t i = 0; i < entry->getDim(); i++) {
-        ownCoords->setCoords(i, entry->getCoords(i) * 0.001);
+        ownCoords->setCoords(i, entry->getCoords(i));
     }
     ownCoords->setAccessDelay((entry->getRxAccessDelay() +
                                800 / entry->getRxBandwidth() +

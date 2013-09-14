@@ -33,6 +33,7 @@
 #include <tr1/unordered_set>
 
 #define UNORDERED_MAP std::tr1::unordered_map
+#define UNORDERED_MULTIMAP std::tr1::unordered_multimap
 #define UNORDERED_SET std::tr1::unordered_set
 #define HASH_NAMESPACE std::tr1
 
@@ -42,6 +43,7 @@
 #include <tr1/unordered_set>
 
 #define UNORDERED_MAP std::tr1::unordered_map
+#define UNORDERED_MULTIMAP std::tr1::unordered_multimap
 #define UNORDERED_SET std::tr1::unordered_set
 #define HASH_NAMESPACE std::tr1
 
@@ -51,6 +53,7 @@
 #include <hash_map>
 
 #define UNORDERED_MAP stdext::hash_map
+#define UNORDERED_MULTIMAP stdext::hash_multimap
 #define UNORDERED_SET stdext::hash_set
 #define HASH_NAMESPACE stdext
 
@@ -60,6 +63,7 @@
 #include <ext/hash_set>
 
 #define UNORDERED_MAP __gnu_cxx::hash_map
+#define UNORDERED_MULTIMAP __gnu_cxx::hash_multimap
 #define UNORDERED_SET __gnu_cxx::hash_set
 #define HASH_NAMESPACE __gnu_cxx
 

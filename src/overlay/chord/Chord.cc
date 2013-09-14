@@ -34,6 +34,8 @@
 
 namespace oversim {
 
+using namespace std;
+
 Define_Module(Chord);
 
 Chord::Chord()
@@ -128,7 +130,7 @@ Chord::~Chord()
 void Chord::joinOverlay()
 {
     changeState(INIT);
-    changeState(BOOTSTRAP);
+    changeState(JOIN);
 }
 
 
@@ -180,10 +182,10 @@ void Chord::changeState(int toState)
         getParentModule()->getParentModule()->bubble("Enter INIT state.");
         break;
 
-    case BOOTSTRAP:
-        state = BOOTSTRAP;
+    case JOIN:
+        state = JOIN;
 
-        // initiate bootstrap process
+        // initiate join process
         cancelEvent(join_timer);
         // workaround: prevent notificationBoard from taking
         // ownership of join_timer message
@@ -194,13 +196,13 @@ void Chord::changeState(int toState)
         if (debugOutput) {
             EV << "[Chord::changeState() @ " << thisNode.getIp()
             << " (" << thisNode.getKey().toString(16) << ")]\n"
-            << "    Entered BOOTSTRAP stage"
+            << "    Entered JOIN stage"
             << endl;
         }
-        getParentModule()->getParentModule()->bubble("Enter BOOTSTRAP state.");
+        getParentModule()->getParentModule()->bubble("Enter JOIN state.");
 
         // find a new bootstrap node and enroll to the bootstrap list
-        bootstrapNode = bootstrapList->getBootstrapNode();
+        bootstrapNode = bootstrapList->getBootstrapNode(overlayId);
 
         // is this the first node?
         if (bootstrapNode.isUnspecified()) {
@@ -757,19 +759,19 @@ void Chord::finishOverlay()
 
 void Chord::handleJoinTimerExpired(cMessage* msg)
 {
-    // only process timer, if node is not bootstrapped yet
+    // only process timer, if node is not joined yet
     if (state == READY)
         return;
 
-    // enter state BOOTSTRAP
-    if (state != BOOTSTRAP)
-        changeState(BOOTSTRAP);
+    // enter state JOIN
+    if (state != JOIN)
+        changeState(JOIN);
 
     // change bootstrap node from time to time
     joinRetry--;
     if (joinRetry == 0) {
         joinRetry = par("joinRetry");
-        changeState(BOOTSTRAP);
+        changeState(JOIN);
         return;
     }
 
@@ -784,7 +786,7 @@ void Chord::handleJoinTimerExpired(cMessage* msg)
     sendRouteRpcCall(OVERLAY_COMP, bootstrapNode, thisNode.getKey(),
                      call, NULL, routingType, joinDelay);
 
-    // schedule next bootstrap process in the case this one fails
+    // schedule next join process in the case this one fails
     cancelEvent(join_timer);
     scheduleAt(simTime() + joinDelay, msg);
 }
@@ -1309,6 +1311,7 @@ void Chord::handleRpcFixfingersResponse(FixfingersResponse* fixfingersResponse,
                 if (prox == Prox::PROX_TIMEOUT) {
                     fingerTable->removeFinger(fixfingersResponse->getFinger());
                 } else if (prox != Prox::PROX_UNKNOWN &&
+                           prox != Prox::PROX_WAITING &&
                            prox != Prox::PROX_SELF) {
                     fingerTable->updateFinger(fixfingersResponse->getFinger(),
                                               fixfingersResponse->getSucNode(i),
@@ -1404,7 +1407,7 @@ OverlayKey Chord::distance(const OverlayKey& x,
                            const OverlayKey& y,
                            bool useAlternative) const
 {
-    return KeyUniRingMetric().distance(x, y);
+    return KeyCwRingMetric().distance(x, y);
 }
 
 std::list<const BroadcastInfo*> Chord::forwardBroadcast(BroadcastRequestCall* call)

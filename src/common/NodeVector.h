@@ -33,15 +33,18 @@
 #include <ProxNodeHandle.h>
 
 
-template <class T> class KeyExtractor;
-template <class T> class ProxExtractor;
+template < class T > class KeyExtractor;
+template < class T > class ProxExtractor;
+template < class T > class AddressExtractor;
 
-template <class T,
-          class T_key = KeyExtractor<T>,
-          class T_prox = ProxExtractor<T> > class BaseKeySortedVector;
+template < class T,
+           class T_key = KeyExtractor<T>,
+           class T_prox = ProxExtractor<T>,
+           class T_address = AddressExtractor<T> > class BaseKeySortedVector;
 
 typedef BaseKeySortedVector< NodeHandle > NodeVector;
 typedef BaseKeySortedVector< ProxNodeHandle > ProxNodeVector;
+typedef BaseKeySortedVector< ProxTransportAddress > ProxAddressVector;
 
 /**
  * Class for extracting the relevant OverlayKey from a type used as template
@@ -108,6 +111,39 @@ struct ProxExtractor< ProxNodeHandle >{
     static Prox prox(const ProxNodeHandle& node)
     {
         return node.getProx();
+    };
+};
+
+template <>
+struct ProxExtractor< ProxTransportAddress >{
+    static Prox prox(const ProxTransportAddress& address)
+    {
+        return address.getProx();
+    };
+};
+
+
+template <class T>
+struct AddressExtractor {
+    static TransportAddress address(const T&)
+    {
+        return TransportAddress::UNSPECIFIED_NODE;
+    };
+};
+
+template <>
+struct AddressExtractor< NodeHandle >{
+    static TransportAddress address(const NodeHandle& node)
+    {
+        return node;
+    };
+};
+
+template <>
+struct AddressExtractor< ProxTransportAddress >{
+    static TransportAddress address(const ProxTransportAddress& address)
+    {
+        return address;
     };
 };
 
@@ -323,7 +359,7 @@ struct ProxExtractor< ProxNodeHandle >{
 //    }
 //};
 
-template <class T, class T_key, class T_prox>
+template <class T, class T_key, class T_prox, class T_address>
 class BaseKeySortedVector : public std::vector<T> {
 
 private://fields: comparator
@@ -405,10 +441,6 @@ public://methods: sorted add support
      */
     bool isFull() const
     {
-        if (maxSize == 0) {
-            return false;
-        }
-
         return(std::vector<T>::size() == maxSize);
     };
 
@@ -444,8 +476,14 @@ public://methods: sorted add support
                      i != std::vector<T>::end(); i++, pos++) {
 
                     // don't add node with same key twice
-                    if (T_key::key(element) == T_key::key(*i)) {
-                        return -1;
+                    if (!T_key::key(element).isUnspecified()) {
+                        if (T_key::key(element) == T_key::key(*i)) {
+                            return -1;
+                        }
+                    } else {
+                        if (T_address::address(element) == T_address::address(*i)) {
+                            return -1;
+                        }
                     }
 
                     if (pos < sizeProx) {
@@ -457,10 +495,26 @@ public://methods: sorted add support
                         //if (T_prox::prox(element).compareTo(T_prox::prox(*i))) {
                         if (compResult < 0) {
                             iterator temp_it = std::vector<T>::insert(i, element);
-                            T temp = *(temp_it++);
-                            std::vector<T>::erase(temp_it);
-                            //re-insert replaced entry into other 2 ranges
-                            add(temp);
+                            int tempPos = pos;
+
+                            //std::cout << std::vector<T>::size() << std::endl;
+                            while ((tempPos < sizeProx) && (temp_it != std::vector<T>::end())) {
+                                ++temp_it;
+                                ++tempPos;
+                                //std::cout << pos << " " << sizeProx << std::endl;
+                            }
+
+                            //std::cout << pos << " " << sizeProx
+                            //          << " " << maxSize << std::endl;
+
+                            if ((tempPos >= sizeProx) && (tempPos < maxSize) &&
+                                (temp_it != std::vector<T>::end())) {
+                                T temp = *temp_it;
+                                std::vector<T>::erase(temp_it);
+
+                                //re-insert replaced entry into other 2 ranges
+                                add(temp);
+                            }
                             break;
                         }
                     } else if (pos < sizeProx + sizeComb) {
@@ -470,10 +524,22 @@ public://methods: sorted add support
                                                                     ProxKey(T_prox::prox(*i), T_key::key(*i)));
                         if (compResult < 0) {
                             iterator temp_it = std::vector<T>::insert(i, element);
-                            T temp = *(temp_it++);
-                            std::vector<T>::erase(temp_it);
-                            //re-insert replaced entry into last range
-                            add(temp);
+                            int tempPos = pos;
+
+                            while ((tempPos < sizeProx + sizeComb) &&
+                                   (temp_it != std::vector<T>::end())) {
+                                ++temp_it;
+                                ++tempPos;
+                            }
+
+                            if ((tempPos >= sizeProx + sizeComb) && (pos < maxSize) &&
+                                (temp_it != std::vector<T>::end())) {
+                                T temp = *temp_it;
+                                std::vector<T>::erase(temp_it);
+
+                                //re-insert replaced entry into other 2 ranges
+                                add(temp);
+                            }
                             break;
                         }
                     } else {
@@ -489,18 +555,20 @@ public://methods: sorted add support
                 }
                 if (i == std::vector<T>::end()) {
                     pos = std::vector<T>::size();
-                    push_back(element);
+                    this->push_back(element);
                 }
             } else {
                 for (iterator i = std::vector<T>::begin(); i != std::vector<T>::end();
                      i++) {
+                    std::cout << "should not happen" << std::endl;
                     // don't add node with same key twice
                     if (T_key::key(element) == T_key::key(*i)) {
                         return -1;
                     }
                 }
                 pos = std::vector<T>::size();
-                push_back(element);
+                assert(pos == 0);
+                this->push_back(element);
             }
 
             // adjust size
@@ -575,7 +643,7 @@ public://methods: sorted add support
         this->comparator = comparator;
     }
 };
-template <class T, class T_key, class T_rtt>
-const T BaseKeySortedVector<T, T_key, T_rtt>::UNSPECIFIED_ELEMENT; /**< an unspecified element of the NodeVector */
+template <class T, class T_key, class T_rtt, class T_address>
+const T BaseKeySortedVector<T, T_key, T_rtt, T_address>::UNSPECIFIED_ELEMENT; /**< an unspecified element of the NodeVector */
 
 #endif

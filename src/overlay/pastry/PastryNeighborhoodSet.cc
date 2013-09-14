@@ -24,12 +24,15 @@
 #include "PastryNeighborhoodSet.h"
 #include "PastryTypes.h"
 
+
 Define_Module(PastryNeighborhoodSet);
+
 
 void PastryNeighborhoodSet::earlyInit(void)
 {
     WATCH_VECTOR(neighbors);
 }
+
 
 void PastryNeighborhoodSet::initializeSet(uint32_t numberOfNeighbors,
                                           uint32_t bitsPerDigit,
@@ -44,6 +47,7 @@ void PastryNeighborhoodSet::initializeSet(uint32_t numberOfNeighbors,
     for (uint32_t i = numberOfNeighbors; i>0; i--)
 	neighbors.push_back(unspecNode());
 }
+
 
 void PastryNeighborhoodSet::dumpToStateMessage(PastryStateMessage* msg) const
 {
@@ -60,6 +64,7 @@ void PastryNeighborhoodSet::dumpToStateMessage(PastryStateMessage* msg) const
     }
     msg->setNeighborhoodSetArraySize(size);
 }
+
 
 const NodeHandle& PastryNeighborhoodSet::findCloserNode(const OverlayKey& destination,
                                                         bool optimize)
@@ -88,6 +93,7 @@ const NodeHandle& PastryNeighborhoodSet::findCloserNode(const OverlayKey& destin
     }
 }
 
+
 void PastryNeighborhoodSet::findCloserNodes(const OverlayKey& destination,
                                             NodeVector* nodes)
 {
@@ -97,6 +103,7 @@ void PastryNeighborhoodSet::findCloserNodes(const OverlayKey& destination,
         if (! it->node.isUnspecified())
             nodes->add(it->node);
 }
+
 
 bool PastryNeighborhoodSet::mergeNode(const NodeHandle& node, simtime_t prox)
 {
@@ -125,6 +132,7 @@ bool PastryNeighborhoodSet::mergeNode(const NodeHandle& node, simtime_t prox)
     return !nodeAlreadyInVector && nodeValueWasChanged; // return whether a new entry was added
 }
 
+
 void PastryNeighborhoodSet::dumpToVector(std::vector<TransportAddress>& affected) const
 {
     std::vector<PastryExtendedNode>::const_iterator it;
@@ -133,6 +141,7 @@ void PastryNeighborhoodSet::dumpToVector(std::vector<TransportAddress>& affected
         if (! it->node.isUnspecified())
             affected.push_back(it->node);
 }
+
 
 const TransportAddress& PastryNeighborhoodSet::failedNode(const TransportAddress& failed)
 {
@@ -151,6 +160,7 @@ const TransportAddress& PastryNeighborhoodSet::failedNode(const TransportAddress
     return TransportAddress::UNSPECIFIED_NODE;
 }
 
+
 std::ostream& operator<<(std::ostream& os, const PastryExtendedNode& n)
 {
     os << n.node << ";";
@@ -159,4 +169,3 @@ std::ostream& operator<<(std::ostream& os, const PastryExtendedNode& n)
 
     return os;
 }
-

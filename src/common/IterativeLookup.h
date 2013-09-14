@@ -138,7 +138,9 @@ public://virtual methods: comparator induced by distance in BaseOverlay
      * @return -1 if rhs is closer, 0 if lhs and rhs are
      *         equal and 1 if rhs is farther away to the key to lookup
      */
-    int compare( const OverlayKey& lhs, const OverlayKey& rhs ) const;
+    virtual int compare(const OverlayKey& lhs,
+                        const OverlayKey& rhs/*,
+                        bool useAlternativeMetric = false*/) const;
 
     //-------------------------------------------------------------------------
     //- Siblings and visited nodes management---------------------------------
@@ -219,6 +221,8 @@ protected://fields and classes: rpc distribution
     class RpcInfo
     {
     public:
+        //RpcInfo() { vrpcId = 0; proxVectorId = 0; path = NULL; };
+        //~RpcInfo() { path = NULL;};
         int vrpcId;
         uint8_t proxVectorId;
         IterativePathLookup* path;
@@ -259,7 +263,7 @@ public://construction & destruction
     virtual ~IterativeLookup();
 
 protected:
-    void start();
+    virtual void start();
     void stop();
     void checkStop();
 
@@ -316,6 +320,7 @@ private:
 
 protected:
     IterativePathLookup(IterativeLookup* lookup);
+
     virtual ~IterativePathLookup();
 
     /**

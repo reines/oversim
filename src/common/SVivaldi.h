@@ -45,6 +45,8 @@ class SVivaldi : public Vivaldi
 
   public:
     virtual void init(NeighborCache* neighborCache);
+    double getLoss() const { return loss; };
+    void stopAdaptation() { loss = 1; };
 };
 
 #endif

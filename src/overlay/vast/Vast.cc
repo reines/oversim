@@ -72,6 +72,7 @@ void Vast::initializeOverlay(int stage)
     pingBytesSent = 0;
     pongBytesSent = 0;
     discardNodeBytesSent = 0;
+    backupBytesSent = 0;
 
     maxBytesPerSecondSent = 0;
     averageBytesPerSecondSent = 0;
@@ -99,7 +100,7 @@ void Vast::initializeOverlay(int stage)
 
     // set initial state
     changeState(INIT);
-    changeState(JOINING);
+    changeState(JOIN);
 }
 
 void Vast::changeState(int state)
@@ -114,8 +115,8 @@ void Vast::changeState(int state)
             cancelEvent(discovery_timer);
             cancelEvent(checkcritical_timer);
         } break;
-        case JOINING: {
-            this->state = JOINING;
+        case JOIN: {
+            this->state = JOIN;
             scheduleAt(simTime(), join_timer);
             scheduleAt(simTime() + 1.0, sec_timer);
         } break;
@@ -147,7 +148,7 @@ void Vast::changeState(int state)
            << "VAST: Node " << thisSite.addr.getIp() << " entered ";
         switch(state) {
             case INIT: ev << "INIT"; break;
-            case JOINING: ev << "JOINING"; break;
+            case JOIN: ev << "JOIN"; break;
             case READY: ev << "READY"; break;
         }
         ev << " state." << endl;
@@ -205,7 +206,7 @@ void Vast::handleAppMessage(cMessage* msg)
         switch(gameAPIMsg->getCommand()) {
             case MOVEMENT_INDICATION: {
                 GameAPIPositionMessage* gameAPIPosMsg = check_and_cast<GameAPIPositionMessage*>(msg);
-                if(state == JOINING) {
+                if(state == JOIN) {
                     handleJoin(gameAPIPosMsg);
                     delete msg;
                 }
@@ -236,7 +237,7 @@ void Vast::handleUDPMessage(BaseOverlayMessage* msg)
     }
     if(dynamic_cast<VastMessage*>(msg)) {
         VastMessage* vastMsg = check_and_cast<VastMessage*>(msg);
-        if(vastMsg->getDestKey().isUnspecified() || 
+        if(vastMsg->getDestKey().isUnspecified() ||
            thisSite.addr.getKey().isUnspecified() ||
            vastMsg->getDestKey() == thisSite.addr.getKey()) {
             // debug output
@@ -295,7 +296,7 @@ void Vast::handleUDPMessage(BaseOverlayMessage* msg)
                     delete msg;
                 }
             }
-            else if(state == JOINING && vastMsg->getCommand() == JOIN_ACKNOWLEDGE) {
+            else if(state == JOIN && vastMsg->getCommand() == JOIN_ACKNOWLEDGE) {
                 VastListMessage* vastListMsg = check_and_cast<VastListMessage*>(msg);
                 handleJoinAcknowledge(vastListMsg);
                 delete msg;
@@ -700,6 +701,9 @@ void Vast::processCheckCriticalTimer()
         vastListMsg->setBitLength(VASTLIST_L(vastListMsg));
         for(SiteMap::iterator itSites = Sites.begin(); itSites != Sites.end(); ++itSites) {
             VastListMessage *vastCopyMsg = new VastListMessage(*vastListMsg);
+            RECORD_STATS(
+                backupBytesSent += vastCopyMsg->getByteLength();
+            );
             sendMessage(vastCopyMsg, itSites->second->addr);
         }
         delete vastListMsg;
@@ -714,6 +718,9 @@ void Vast::processDiscoveryTimer()
         vastMoveMsg->setNewPos(thisSite.coord);
         vastMoveMsg->setRequest_list(true);
         vastMoveMsg->setBitLength(VASTMOVE_L(vastMoveMsg));
+        RECORD_STATS(
+            backupBytesSent += vastMoveMsg->getByteLength();
+        );
         sendMessage(vastMoveMsg, *itStock);
     }
 }
@@ -888,6 +895,9 @@ void Vast::handleNodeMove(VastMoveMessage *vastMoveMsg)
 
         vastListMsg->setBitLength(VASTLIST_L(vastListMsg));
         if(vastListMsg->getNeighborNodeArraySize() > 0) {
+            RECORD_STATS(
+                if( vastMoveMsg->getRequest_list() ) backupBytesSent += vastListMsg->getByteLength();
+            );
             sendMessage(vastListMsg, vastMoveMsg->getSourceNode());
         }
         else {
@@ -1133,7 +1143,7 @@ void Vast::setBootstrapedIcon()
             getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "green");
             getDisplayString().setTagArg("i", 1, "green");
         }
-        else if(state == JOINING) {
+        else if(state == JOIN) {
             getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "yellow");
             getDisplayString().setTagArg("i", 1, "yellow");
         }
@@ -1163,7 +1173,7 @@ void Vast::finishOverlay()
     globalStatistics->addStdDev("Vast: PING bytes sent/s", pingBytesSent/(double) secTimerCount);
     globalStatistics->addStdDev("Vast: PONG bytes sent/s", pongBytesSent/(double) secTimerCount);
     globalStatistics->addStdDev("Vast: DISCARD_NODE bytes sent/s", discardNodeBytesSent/(double) secTimerCount);
-
+    globalStatistics->addStdDev("Vast: BACKUP bytes sent/s", backupBytesSent/(double) secTimerCount);
     globalStatistics->addStdDev("Vast: max bytes/second sent", maxBytesPerSecondSent);
     globalStatistics->addStdDev("Vast: average bytes/second sent", averageBytesPerSecondSent / (double) secTimerCount);
 }

@@ -314,7 +314,9 @@ protected:
     /**
      * Sends a packet over UDP
      */
-    virtual void sendMessageToUDP(const TransportAddress& destAddr, cPacket *msg);
+    virtual void sendMessageToUDP(const TransportAddress& destAddr,
+                                  cPacket *msg,
+                                  simtime_t delay = SIMTIME_ZERO);
 
     /**
      * handleTraceMessage gets called of handleMessage(cMessage* msg)
@@ -383,7 +385,9 @@ protected://methods: rpc handling
                               RoutingType routingType);
 
     virtual CompType getThisCompType();
-    void sendReadyMessage(bool ready = true);
+    void sendReadyMessage(bool ready = true,
+                          const OverlayKey& nodeId =
+                              OverlayKey::UNSPECIFIED_KEY);
 
 private:
     void internalSendRpcResponse(BaseCallMessage* call,

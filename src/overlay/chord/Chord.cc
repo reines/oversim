@@ -733,6 +733,8 @@ void Chord::finishOverlay()
     simtime_t time = globalStatistics->calcMeasuredLifetime(creationTime);
     if (time < GlobalStatistics::MIN_MEASURED) return;
 
+    globalStatistics->addStdDev("Chord: Finger table size",
+                                fingerTable->getSize());
     globalStatistics->addStdDev("Chord: Sent JOIN Messages/s",
                                 joinCount / time);
     globalStatistics->addStdDev("Chord: Sent NEWSUCCESSORHINT Messages/s",

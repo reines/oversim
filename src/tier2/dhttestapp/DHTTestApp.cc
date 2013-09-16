@@ -160,7 +160,7 @@ void DHTTestApp::handlePutResponse(DHTputCAPIResponse* msg,
 
     if (msg->getIsSuccess()) {
         RECORD_STATS(numPutSuccess++);
-        RECORD_STATS(globalStatistics->recordOutVector("DHTTestApp: PUT Hop Count",
+        RECORD_STATS(globalStatistics->addStdDev("DHTTestApp: PUT Hop Count",
                                msg->getCallHopCount()));
         RECORD_STATS(globalStatistics->addStdDev("DHTTestApp: PUT Latency (s)",
                                SIMTIME_DBL(simTime() - context->requestTime)));
@@ -182,7 +182,7 @@ void DHTTestApp::handleGetResponse(DHTgetCAPIResponse* msg,
         return;
     }
 
-    RECORD_STATS(globalStatistics->recordOutVector("DHTTestApp: GET Hop Count",
+    RECORD_STATS(globalStatistics->addStdDev("DHTTestApp: GET Hop Count",
                                msg->getCallHopCount()));
     RECORD_STATS(globalStatistics->addStdDev("DHTTestApp: GET Latency (s)",
                                SIMTIME_DBL(simTime() - context->requestTime)));

@@ -60,6 +60,11 @@ void ChordFingerTable::initializeTable(uint32_t size, const NodeHandle& owner,
     fingerTable.clear();
 }
 
+uint32_t ChordFingerTable::getCurrentSize()
+{
+    return fingerTable.size();
+}
+
 uint32_t ChordFingerTable::getSize()
 {
     return maxSize;

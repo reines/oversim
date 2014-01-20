@@ -114,6 +114,7 @@ class ChordFingerTable : public cSimpleModule
      * @return number of fingers
      */
     virtual uint32_t getSize();
+    virtual uint32_t getCurrentSize();
 
 private:
 

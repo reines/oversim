@@ -65,6 +65,7 @@ private:
             putCallMsg = NULL;
             state = INIT;
             hashVector = NULL;
+            hopSum = 0;
             numSent = 0;
             numAvailableReplica = 0;
             numFailed = 0;
@@ -77,6 +78,7 @@ private:
         NodeVector replica;
         NodeVector* hashVector;
         std::map<BinaryValue, NodeVector> hashes;
+        uint16_t hopSum;
         int numSent;
         int numAvailableReplica;
         int numFailed;

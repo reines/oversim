@@ -352,12 +352,14 @@ void BaseOverlay::finish()
         globalStatistics->addStdDev("BaseOverlay: Sent Maintenance Bytes/s",
                                     bytesMaintenanceSent / time);
 
-        globalStatistics->addStdDev("BaseOverlay: Sent Total Messages/s",
-                                    (numAppDataSent + numAppLookupSent +
-                                        numMaintenanceSent) / time);
-        globalStatistics->addStdDev("BaseOverlay: Sent Total Bytes/s",
-                                    (bytesAppDataSent + bytesAppLookupSent +
-                                            bytesMaintenanceSent) / time);
+        double sentTotalMessagesPerSec = (numAppDataSent + numAppLookupSent + numMaintenanceSent) / time;
+        globalStatistics->addStdDev("BaseOverlay: Sent Total Messages/s", sentTotalMessagesPerSec);
+        RECORD_STATS(globalStatistics->recordOutVector("BaseOverlay: Sent Total Messages/s", sentTotalMessagesPerSec));
+
+        double sentTotalBytesPerSec = (bytesAppDataSent + bytesAppLookupSent + bytesMaintenanceSent) / time;
+        globalStatistics->addStdDev("BaseOverlay: Sent Total Bytes/s", sentTotalBytesPerSec);
+        RECORD_STATS(globalStatistics->recordOutVector("BaseOverlay: Sent Total Bytes/s", sentTotalBytesPerSec));
+
         globalStatistics->addStdDev("BaseOverlay: Sent FindNode Messages/s",
                                     numFindNodeSent / time);
         globalStatistics->addStdDev("BaseOverlay: Sent FindNode Bytes/s",
@@ -394,12 +396,14 @@ void BaseOverlay::finish()
         globalStatistics->addStdDev("BaseOverlay: Received Maintenance Bytes/s",
                                     bytesMaintenanceReceived / time);
 
-        globalStatistics->addStdDev("BaseOverlay: Received Total Messages/s",
-                                    (numAppDataReceived + numAppLookupReceived +
-                                            numMaintenanceReceived)/time);
-        globalStatistics->addStdDev("BaseOverlay: Received Total Bytes/s",
-                                    (bytesAppDataReceived + bytesAppLookupReceived +
-                                            bytesMaintenanceReceived)/time);
+        double receivedTotalMessagesPerSec = (numAppDataReceived + numAppLookupReceived + numMaintenanceReceived) / time;
+        globalStatistics->addStdDev("BaseOverlay: Received Total Messages/s", receivedTotalMessagesPerSec);
+        RECORD_STATS(globalStatistics->recordOutVector("BaseOverlay: Received Total Messages/s", receivedTotalMessagesPerSec));
+
+        double receivedTotalBytesPerSec = (bytesAppDataReceived + bytesAppLookupReceived + bytesMaintenanceReceived) / time;
+        globalStatistics->addStdDev("BaseOverlay: Received Total Bytes/s", receivedTotalBytesPerSec);
+        RECORD_STATS(globalStatistics->recordOutVector("BaseOverlay: Received Total Bytes/s", receivedTotalBytesPerSec));
+
         globalStatistics->addStdDev("BaseOverlay: Forwarded App Data Messages/s",
                                     numAppDataForwarded / time);
         globalStatistics->addStdDev("BaseOverlay: Forwarded App Data Bytes/s",

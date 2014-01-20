@@ -563,6 +563,11 @@ void DHT::handlePutResponse(DHTPutResponse* dhtMsg, int rpcId)
         it->second.numFailed++;
     }
 
+    OverlayCtrlInfo* overlayCtrlInfo = dynamic_cast<OverlayCtrlInfo*>(dhtMsg->getControlInfo());
+    uint16_t hopSum = dhtMsg->getCallHopCount();
+    hopSum += (overlayCtrlInfo ? overlayCtrlInfo->getHopCount() : 1);
+    hopSum += it->second.hopSum; // count for the original lookup request
+    RECORD_STATS(globalStatistics->recordOutVector("DHT: PUT Hop Count", hopSum));
 
 //    if ((it->second.numFailed + it->second.numResponses) == it->second.numSent) {
     if (it->second.numResponses / (double)it->second.numSent > 0.5) {
@@ -581,6 +586,12 @@ void DHT::handleGetResponse(DHTGetResponse* dhtMsg, int rpcId)
 
     if (it == pendingRpcs.end()) // unknown request
         return;
+
+    OverlayCtrlInfo* overlayCtrlInfo = dynamic_cast<OverlayCtrlInfo*>(dhtMsg->getControlInfo());
+    uint16_t hopSum = dhtMsg->getCallHopCount();
+    hopSum += (overlayCtrlInfo ? overlayCtrlInfo->getHopCount() : 1);
+    hopSum += it->second.hopSum; // count for the original lookup request
+    RECORD_STATS(globalStatistics->recordOutVector("DHT: GET Hop Count", hopSum));
 
     if (it->second.state == GET_VALUE_SENT) {
         // we have sent a 'real' get request
@@ -832,6 +843,10 @@ void DHT::handleLookupResponse(LookupResponse* lookupMsg, int rpcId)
         return;
     }
 
+    OverlayCtrlInfo* overlayCtrlInfo = dynamic_cast<OverlayCtrlInfo*>(lookupMsg->getControlInfo());
+    uint16_t hopSum = lookupMsg->getCallHopCount();
+    hopSum += (overlayCtrlInfo ? overlayCtrlInfo->getHopCount() : 1);
+
     if (it->second.putCallMsg != NULL) {
 
 #if 0
@@ -885,6 +900,7 @@ void DHT::handleLookupResponse(LookupResponse* lookupMsg, int rpcId)
                              0, rpcId);
         }
 
+        it->second.hopSum = hopSum;
         it->second.state = PUT_SENT;
         it->second.numResponses = 0;
         it->second.numFailed = 0;
@@ -945,6 +961,7 @@ void DHT::handleLookupResponse(LookupResponse* lookupMsg, int rpcId)
             }
         }
 
+        it->second.hopSum = hopSum;
         it->second.numAvailableReplica = lookupMsg->getSiblingsArraySize();
         it->second.numResponses = 0;
         it->second.hashVector = NULL;

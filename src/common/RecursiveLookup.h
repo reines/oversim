@@ -109,6 +109,7 @@ public:
     int redundantNodes;
     int numRetries;
     bool appLookup;
+    uint32_t accumulatedHops;
 };
 
 #endif //__RECURSIVE_LOOKUP_H

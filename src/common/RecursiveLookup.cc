@@ -93,8 +93,7 @@ void RecursiveLookup::abortLookup()
 
 uint32_t RecursiveLookup::getAccumulatedHops() const
 {
-    //throw new cRuntimeError("RecursiveLookup is asked for # accumulated hops!");
-    return 0; //TODO hopCount in findNodeCall/Response ?
+    return accumulatedHops;
 }
 
 void RecursiveLookup::handleRpcTimeout(BaseCallMessage* msg,
@@ -104,6 +103,7 @@ void RecursiveLookup::handleRpcTimeout(BaseCallMessage* msg,
 {
     //TODO retry
     valid = false;
+    accumulatedHops = 0;
 
     // inform listener
     if (listener != NULL) {
@@ -129,6 +129,7 @@ void RecursiveLookup::handleRpcResponse(BaseResponseMessage* msg,
         }
     }
 
+    accumulatedHops = findNodeResponse->getCallHopCount();
 //    std::cout << "RecursiveLookup::handleRpcResponse() "
 //              << findNodeResponse->getClosestNodesArraySize() << std::endl;
 

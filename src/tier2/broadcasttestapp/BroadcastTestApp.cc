@@ -208,7 +208,9 @@ void BroadcastTestApp::initBroadcast()
 	call->setTTL(ttl);
 	call->setBitLength(BROADCASTREQUESTCALL_L(call));
 
-//	std::cout << overlay->getThisNode().getKey() << ": Searching '" << globalStatistics->bcastSearch[id].query << "' (" << id << ") at " << simTime() << endl;
+    EV<< "[BroadcastTestApp::initBroadcast()]\n"
+    << "    Searching '" << globalStatistics->bcastSearch[id].query
+    << "' at " << simTime() << endl;
 
 	sendInternalRpcCall(TIER2_COMP, call);
 }

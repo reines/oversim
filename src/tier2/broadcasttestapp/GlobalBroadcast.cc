@@ -171,7 +171,7 @@ void GlobalBroadcast::handleMessage(cMessage *msg)
 			return;
 		}
 
-		int moduleID = globalNodeList->getRandomPeerInfo(-1, true)->getModuleID();
+		int moduleID = globalNodeList->getRandomPeerInfo(-1, -1, true)->getModuleID();
 
 		// inform the notification board about the removal
 		NotificationBoard* nb = check_and_cast<NotificationBoard*>(simulation.getModule(moduleID)->getSubmodule("notificationBoard"));

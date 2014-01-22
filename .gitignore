@@ -7,6 +7,7 @@
 /doc
 /src/Makefile
 /src/OverSim
+/src/out
 *_m.cc
 *_m.h
 .tkenvrc

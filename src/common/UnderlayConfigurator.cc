@@ -73,6 +73,7 @@ void UnderlayConfigurator::initialize(int stage)
 
         gettimeofday(&initStartTime, NULL);
         init = true;
+        transitionTimeFinished = false;
         simulationEndingSoon = false;
         initCounter = 0;
 
@@ -191,6 +192,7 @@ void UnderlayConfigurator::handleMessage(cMessage* msg)
         endSimulation();
     } else if (msg == endTransitionTimer) {
         consoleOut("transition time finished");
+        transitionTimeFinished = true;
         globalStatistics->startMeasuring();
     } else {
         handleTimerEvent(msg);

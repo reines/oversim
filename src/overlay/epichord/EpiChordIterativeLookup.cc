@@ -46,22 +46,26 @@ EpiChordIterativePathLookup::EpiChordIterativePathLookup(EpiChordIterativeLookup
 void EpiChordIterativePathLookup::checkFalseNegative()
 {
 	// If we have success then we don't have a negative at all :)
-	if (success)
+	if (success) {
 		return;
+	}
 
-	if (bestPredecessor.isUnspecified() || bestSuccessor.isUnspecified())
+	if (bestPredecessor.isUnspecified() || bestSuccessor.isUnspecified()) {
 		return;
+	}
 
 	// Get the surrounding non-dead nodes
 	LookupEntry* preceedingEntry = this->getPreceedingEntry(false, true);
 	LookupEntry* succeedingEntry = this->getSucceedingEntry(false, true);
 
-	if (preceedingEntry == NULL || succeedingEntry == NULL)
+	if (preceedingEntry == NULL || succeedingEntry == NULL) {
 		return;
+	}
 
 	// Check that we have visited the surrounding nodes
-	if (!lookup->getVisited(preceedingEntry->handle) || !lookup->getVisited(succeedingEntry->handle))
+	if (!lookup->getVisited(preceedingEntry->handle) || !lookup->getVisited(succeedingEntry->handle)) {
 		return;
+	}
 
 	bool assumeSuccess = success;
 	bool assumeFinished = finished;
@@ -78,20 +82,23 @@ void EpiChordIterativePathLookup::checkFalseNegative()
 	}
 
 	// If this isn't a false negative or we haven't finished yet, do nothing
-	if (!assumeSuccess || !assumeFinished)
+	if (!assumeSuccess || !assumeFinished) {
 		return;
+	}
 
 	NodeVector* deadNodes = new NodeVector();
 
 	// Find all dead nodes
 	for (LookupVector::iterator it = nextHops.begin();it != nextHops.end();it++) {
-		if (lookup->getDead(it->handle))
+		if (lookup->getDead(it->handle)) {
 			deadNodes->push_back(it->handle);
+		}
 	}
 
 	// There are dead nodes inbetween the 2 best options - alert their successor/predecessor
-	if (!deadNodes->isEmpty())
+	if (!deadNodes->isEmpty()) {
 		epichord->sendFalseNegWarning(bestPredecessor, bestSuccessor, deadNodes);
+	}
 
 	delete deadNodes;
 
@@ -103,8 +110,9 @@ void EpiChordIterativePathLookup::checkFalseNegative()
 
 void EpiChordIterativePathLookup::handleResponse(FindNodeResponse* msg)
 {
-	if (finished)
+	if (finished) {
 		return;
+	}
 
 	NodeHandle source = msg->getSrcNode();
 	if (!source.isUnspecified() && msg->getClosestNodesArraySize() > 0) {
@@ -116,10 +124,12 @@ void EpiChordIterativePathLookup::handleResponse(FindNodeResponse* msg)
 			bestPredecessor = source;
 			// If position 0 is the node itself then it thinks it is
 			// responsible, it's successor is returned in position 2
-			if (msg->getClosestNodes(0) == source && msg->getClosestNodesArraySize() > 2)
+			if (msg->getClosestNodes(0) == source && msg->getClosestNodesArraySize() > 2) {
 				bestPredecessorsSuccessor = msg->getClosestNodes(2);
-			else
+			}
+			else {
 				bestPredecessorsSuccessor = msg->getClosestNodes(0);
+			}
 		}
 		// This is the best successor so far
 		//   ---- (destination) ---- (source) ---- (best successor) ----
@@ -129,10 +139,12 @@ void EpiChordIterativePathLookup::handleResponse(FindNodeResponse* msg)
 			bestSuccessor = source;
 			// If position 0 is the node itself then it thinks it is
 			// responsible, it's predecessor is returned in position 1
-			if (msg->getClosestNodes(0) == source && msg->getClosestNodesArraySize() > 1)
+			if (msg->getClosestNodes(0) == source && msg->getClosestNodesArraySize() > 1) {
 				bestSuccessorsPredecessor = msg->getClosestNodes(1);
-			else
+			}
+			else {
 				bestSuccessorsPredecessor = msg->getClosestNodes(0);
+			}
 		}
 	}
 

@@ -809,8 +809,9 @@ void EpiChord::handleRpcTimeout(BaseCallMessage* msg, const TransportAddress& de
 	nodeTimeouts++;
 
 	// Handle failed node
-	if (!dest.isUnspecified() && !handleFailedNode(dest))
+	if (!dest.isUnspecified() && !handleFailedNode(dest)) {
 		join();
+	}
 }
 
 bool EpiChord::handleFailedNode(const TransportAddress& failed)
@@ -831,8 +832,9 @@ bool EpiChord::handleFailedNode(const TransportAddress& failed)
 		updateTooltip();
 	}
 
-	if (state != READY)
+	if (state != READY) {
 		return true;
+	}
 
 	// lost our last successor - cancel periodic stabilize tasks and wait for rejoin
 	if (successorList->isEmpty() || predecessorList->isEmpty()) {
@@ -849,20 +851,23 @@ void EpiChord::sendFalseNegWarning(NodeHandle bestPredecessor, NodeHandle bestSu
 {
 	Enter_Method_Silent();
 
-	if (state != READY)
+	if (state != READY) {
 		return;
+	}
 
 	// If we aren't to send warnings then stop
-	if (!sendFalseNegWarnings)
+	if (!sendFalseNegWarnings) {
 		return;
+	}
 
 	EpiChordFalseNegWarningCall* warning = new EpiChordFalseNegWarningCall("EpiChordFalseNegWarningCall");
 
 	warning->setBestPredecessor(bestPredecessor);
 
 	warning->setDeadNodeArraySize(deadNodes->size());
-	for (uint i = 0;i < deadNodes->size();i++)
+	for (uint i = 0;i < deadNodes->size();i++) {
 		warning->setDeadNode(i, (*deadNodes)[i]);
+	}
 
 	warning->setBitLength(EPICHORD_FALSENEGWARNINGCALL_L(warning));
 	sendUdpRpcCall(bestSuccessor, warning);
@@ -876,15 +881,17 @@ void EpiChord::rpcJoin(EpiChordJoinCall* joinCall)
 	int sucNum = successorList->getSize();
 	joinResponse->setSucNodeArraySize(sucNum);
 
-	for (int k = 0; k < sucNum; k++)
+	for (int k = 0; k < sucNum; k++) {
 		joinResponse->setSucNode(k, successorList->getNode(k));
+	}
 
 	// Add predecessor list
 	int preNum = predecessorList->getSize();
 	joinResponse->setPreNodeArraySize(preNum);
 
-	for (int k = 0; k < preNum; k++)
+	for (int k = 0; k < preNum; k++) {
 		joinResponse->setPreNode(k, predecessorList->getNode(k));
+	}
 
 	// Add finger cache
 	int cacheNum = fingerCache->getSize();
@@ -893,8 +900,9 @@ void EpiChord::rpcJoin(EpiChordJoinCall* joinCall)
 
 	for (int k = 0;k < cacheNum;k++) {
 		EpiChordFingerCacheEntry* entry = fingerCache->getNode(k);
-		if (entry == NULL)
+		if (entry == NULL) {
 			continue;
+		}
 
 		joinResponse->setCacheNode(k, entry->nodeHandle);
 		joinResponse->setCacheLastUpdate(k, entry->lastUpdate);
@@ -911,32 +919,38 @@ void EpiChord::handleRpcJoinResponse(EpiChordJoinResponse* joinResponse)
 {
 	// determine the number of successor nodes to add
 	uint sucNum = successorListSize;
-	if (joinResponse->getSucNodeArraySize() < sucNum)
+	if (joinResponse->getSucNodeArraySize() < sucNum) {
 		sucNum = joinResponse->getSucNodeArraySize();
+	}
 
 	// add successor getNode(s)
-	for (uint k = 0; k < sucNum; k++)
+	for (uint k = 0; k < sucNum; k++) {
 		successorList->addNode(joinResponse->getSucNode(k));
+	}
 
 	// the sender of this message is our new successor
 	successorList->addNode(joinResponse->getSrcNode());
 
 	// determine the number of predecessor nodes to add
 	uint preNum = successorListSize;
-	if (joinResponse->getPreNodeArraySize() < preNum)
+	if (joinResponse->getPreNodeArraySize() < preNum) {
 		preNum = joinResponse->getPreNodeArraySize();
+	}
 
 	// add predecessor getNode(s)
-	for (uint k = 0; k < preNum; k++)
+	for (uint k = 0; k < preNum; k++) {
 		predecessorList->addNode(joinResponse->getPreNode(k));
+	}
 
 	// if we don't have any predecessors, the requestor is also our new predecessor
-	if (predecessorList->isEmpty())
+	if (predecessorList->isEmpty()) {
 		predecessorList->addNode(joinResponse->getSrcNode());
+	}
 
 	int cacheNum = joinResponse->getCacheNodeArraySize();
-	for (int k = 0;k < cacheNum; k++)
+	for (int k = 0;k < cacheNum; k++) {
 		this->receiveNewNode(joinResponse->getCacheNode(k), false, CACHE_TRANSFER, joinResponse->getCacheLastUpdate(k));
+	}
 
 	updateTooltip();
 
@@ -951,8 +965,9 @@ void EpiChord::handleRpcJoinResponse(EpiChordJoinResponse* joinResponse)
 void EpiChord::rpcJoinAck(EpiChordJoinAckCall* joinAck)
 {
 	// if we don't have a successor, the requestor is also our new successor
-	if (successorList->isEmpty())
+	if (successorList->isEmpty()) {
 		successorList->addNode(joinAck->getSrcNode());
+	}
 
 	// he is now our predecessor
 	predecessorList->addNode(joinAck->getSrcNode());
@@ -973,8 +988,9 @@ void EpiChord::rpcFalseNegWarning(EpiChordFalseNegWarningCall* warning)
 	if (oldPredecessor != bestPredecessor) {
 		// Remove all dead nodes
 		int deadNum = warning->getDeadNodeArraySize();
-		for (int i = 0;i < deadNum;i++)
+		for (int i = 0;i < deadNum;i++) {
 			handleFailedNode(warning->getDeadNode(i));
+		}
 
 		// Ensure the predecessor is known to us
 		predecessorList->addNode(bestPredecessor);
@@ -1006,23 +1022,27 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 	switch (call->getNodeType()) {
 		// the call is from a predecessor
 		case PREDECESSOR: {
-			if (!predecessorList->contains(requestor))
+			if (!predecessorList->contains(requestor)) {
 				predecessorList->addNode(requestor);
+			}
 
 			int numAdditions = call->getAdditionsArraySize();
-			for (int i = 0;i < numAdditions;i++)
+			for (int i = 0;i < numAdditions;i++) {
 				predecessorList->addNode(call->getAdditions(i));
+			}
 
 			break;
 		}
 
 		case SUCCESSOR: {
-			if (!successorList->contains(requestor))
+			if (!successorList->contains(requestor)) {
 				successorList->addNode(requestor);
+			}
 
 			int numAdditions = call->getAdditionsArraySize();
-			for (int i = 0;i < numAdditions;i++)
+			for (int i = 0;i < numAdditions;i++) {
 				successorList->addNode(call->getAdditions(i));
+			}
 
 			break;
 		}
@@ -1079,8 +1099,9 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 		// Add dead neighbouring nodes
 		std::vector<EpiChordFingerCacheEntry> dead = fingerCache->getDeadRange(predecessorList->getNode(predecessorList->getSize() - 1).getKey(), successorList->getNode(successorList->getSize() - 1).getKey());
 		stabilizeResponse->setDeadArraySize(dead.size());
-		for (uint k = 0;k < dead.size();k++)
+		for (uint k = 0;k < dead.size();k++) {
 			stabilizeResponse->setDead(k, dead.at(k).nodeHandle);
+		}
 	}
 	// Partial stabilize response
 	else {
@@ -1091,10 +1112,12 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 
 			EpiChordFingerCacheEntry* entry = fingerCache->getNode(predecessorList->getNode());
 			stabilizeResponse->setPredecessors(0, predecessorList->getNode());
-			if (entry != NULL)
+			if (entry != NULL) {
 				stabilizeResponse->setPredecessorsLastUpdate(0, entry->lastUpdate);
-			else
+			}
+			else {
 				stabilizeResponse->setPredecessorsLastUpdate(0, now);
+			}
 		}
 
 		// Successors
@@ -1104,10 +1127,12 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 
 			EpiChordFingerCacheEntry* entry = fingerCache->getNode(successorList->getNode());
 			stabilizeResponse->setSuccessors(0, successorList->getNode());
-			if (entry != NULL)
+			if (entry != NULL) {
 				stabilizeResponse->setSuccessorsLastUpdate(0, entry->lastUpdate);
-			else
+			}
+			else {
 				stabilizeResponse->setSuccessorsLastUpdate(0, now);
+			}
 		}
 
 		stabilizeResponse->setDeadArraySize(0);
@@ -1119,22 +1144,26 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 
 void EpiChord::handleRpcStabilizeResponse(EpiChordStabilizeResponse* stabilizeResponse)
 {
-	if (state != READY)
+	if (state != READY) {
 		return;
+	}
 
 	// Update the finger cache with them all
 	int preNum = stabilizeResponse->getPredecessorsArraySize();
-	for (int i = 0;i < preNum;i++)
+	for (int i = 0;i < preNum;i++) {
 		this->receiveNewNode(stabilizeResponse->getPredecessors(i), false, MAINTENANCE, stabilizeResponse->getPredecessorsLastUpdate(i));
+	}
 
 	int sucNum = stabilizeResponse->getSuccessorsArraySize();
-	for (int i = 0;i < sucNum;i++)
+	for (int i = 0;i < sucNum;i++) {
 		this->receiveNewNode(stabilizeResponse->getSuccessors(i), false, MAINTENANCE, stabilizeResponse->getSuccessorsLastUpdate(i));
+	}
 
 	// Handle any dead nodes
 	int deadNum = stabilizeResponse->getDeadArraySize();
-	for (int i = 0;i < deadNum;i++)
+	for (int i = 0;i < deadNum;i++) {
 		this->handleFailedNode(stabilizeResponse->getDead(i));
+	}
 
 	// If there were any changes, and they effected us
 	if (activePropagation && (predecessorList->hasChanged() || successorList->hasChanged())) {
@@ -1171,29 +1200,33 @@ void EpiChord::handleRpcFindNodeResponse(FindNodeResponse* response)
 
 	// Take a note of all nodes returned in this FindNodeResponse
 	int nodeNum = response->getClosestNodesArraySize();
-	for (int i = 0;i < nodeNum;i++)
+	for (int i = 0;i < nodeNum;i++) {
 		this->receiveNewNode(response->getClosestNodes(i), false, OBSERVED, findNodeExt->getLastUpdates(i));
+	}
 }
 
 void EpiChord::receiveNewNode(const NodeHandle& node, bool direct, NodeSource source, simtime_t lastUpdate)
 {
-	if (node.isUnspecified())
+	if (node.isUnspecified()) {
 		return;
+	}
 
 	fingerCache->updateFinger(node, direct, lastUpdate, cacheTTL, source);
 
 	// Attempt to add to successor list
 	if (!successorList->contains(node) && (!successorList->isFull() || node.getKey().isBetween(thisNode.getKey(), successorList->getNode(successorList->getSize() - 1).getKey()))) {
-		if (direct)
+		if (direct) {
 			successorList->addNode(node, true);
+		}
 //		else
 //			this->pingNode(node);
 	}
 
 	// Attempt to add to predecessor list
 	if (!predecessorList->contains(node) && (!predecessorList->isFull() || node.getKey().isBetween(predecessorList->getNode(predecessorList->getSize() - 1).getKey(), thisNode.getKey()))) {
-		if (direct)
+		if (direct) {
 			predecessorList->addNode(node, true);
+		}
 //		else
 //			this->pingNode(node);
 	}

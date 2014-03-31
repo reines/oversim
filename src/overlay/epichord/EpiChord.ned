@@ -49,6 +49,7 @@ simple EpiChord extends BaseOverlay
         bool activePropagation; // should we call stabilization routines as soon as our neighbour lists are changed?
         bool sendFalseNegWarnings; // should we send warnings to fix false negatives?
 		bool fibonacci; // use regular (logarithmic) finger spacing, or fibonacci finger spacing as with F-Chord
+        bool downlists; // use downlists
 }
 
 //

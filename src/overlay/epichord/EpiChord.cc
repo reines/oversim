@@ -78,6 +78,7 @@ void EpiChord::initializeOverlay(int stage)
 	activePropagation = par("activePropagation");
 	sendFalseNegWarnings = par("sendFalseNegWarnings");
 	fibonacci = par("fibonacci");
+	downlists = par("downlists");
 
 	// statistics
 	joinCount = 0;
@@ -1097,10 +1098,15 @@ void EpiChord::rpcStabilize(EpiChordStabilizeCall* call)
 		}
 
 		// Add dead neighbouring nodes
-		std::vector<EpiChordFingerCacheEntry> dead = fingerCache->getDeadRange(predecessorList->getNode(predecessorList->getSize() - 1).getKey(), successorList->getNode(successorList->getSize() - 1).getKey());
-		stabilizeResponse->setDeadArraySize(dead.size());
-		for (uint k = 0;k < dead.size();k++) {
-			stabilizeResponse->setDead(k, dead.at(k).nodeHandle);
+		if (downlists) {
+			std::vector<EpiChordFingerCacheEntry> dead = fingerCache->getDeadRange(predecessorList->getNode(predecessorList->getSize() - 1).getKey(), successorList->getNode(successorList->getSize() - 1).getKey());
+			stabilizeResponse->setDeadArraySize(dead.size());
+			for (uint k = 0;k < dead.size();k++) {
+				stabilizeResponse->setDead(k, dead.at(k).nodeHandle);
+			}
+		}
+		else {
+			stabilizeResponse->setDeadArraySize(0);
 		}
 	}
 	// Partial stabilize response
@@ -1160,9 +1166,11 @@ void EpiChord::handleRpcStabilizeResponse(EpiChordStabilizeResponse* stabilizeRe
 	}
 
 	// Handle any dead nodes
-	int deadNum = stabilizeResponse->getDeadArraySize();
-	for (int i = 0;i < deadNum;i++) {
-		this->handleFailedNode(stabilizeResponse->getDead(i));
+	if (downlists) {
+		int deadNum = stabilizeResponse->getDeadArraySize();
+		for (int i = 0;i < deadNum;i++) {
+			this->handleFailedNode(stabilizeResponse->getDead(i));
+		}
 	}
 
 	// If there were any changes, and they effected us

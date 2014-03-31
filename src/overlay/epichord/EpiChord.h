@@ -85,6 +85,7 @@ protected:
 	bool activePropagation;
 	bool sendFalseNegWarnings;
 	bool fibonacci;
+	bool downlists;
 
 	// timer messages
 	cMessage* join_timer;

@@ -1472,6 +1472,8 @@ std::list<const BroadcastInfo*> Pastry::forwardBroadcast(BroadcastRequestCall* c
     int limit = 0;
     PastryBroadcastInfo* limitInfo;
     OverlayKey midpoint;
+    int branchingFactor = call->getBranchingFactor();
+    // TODO: handle branching
 
     if (call->hasObject("BroadcastInfo")) {
         PastryBroadcastInfo* info = (PastryBroadcastInfo*) call->getObject("BroadcastInfo");
@@ -1482,13 +1484,15 @@ std::list<const BroadcastInfo*> Pastry::forwardBroadcast(BroadcastRequestCall* c
         for (uint col = 0;col < routingTable->nodesPerRow;col++) {
             finger = &(routingTable->nodeAt(row, col).node);
             // If the entry is ourself then do nothing
-            if (!finger->isUnspecified() && *finger == thisNode)
+            if (!finger->isUnspecified() && *finger == thisNode) {
                 continue;
+            }
 
             // If there is no entry
             // TODO: but the domain lies within the leaf set do nothing
-            if (finger->isUnspecified())
+            if (finger->isUnspecified()) {
                 continue;
+            }
 
             limitInfo = new PastryBroadcastInfo("BroadcastInfo");
             limitInfo->setLimit(row + 1);

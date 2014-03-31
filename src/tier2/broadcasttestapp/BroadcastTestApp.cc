@@ -53,6 +53,7 @@ void BroadcastTestApp::initializeApp(int stage)
 
 	ttl = par("ttl");
 	perNode = par("itemsPerNode");
+	branchingFactor = par("branchingFactor");
 
 	// subscribe to the notification board
 	notificationBoard->subscribe(this, NF_OVERLAY_BROADCAST_INIT);
@@ -206,6 +207,7 @@ void BroadcastTestApp::initBroadcast()
 	call->setQuery(globalStatistics->bcastSearch[id].query);
 	call->setRequestID(id);
 	call->setTTL(ttl);
+	call->setBranchingFactor(branchingFactor);
 	call->setBitLength(BROADCASTREQUESTCALL_L(call));
 
     EV<< "[BroadcastTestApp::initBroadcast()]\n"

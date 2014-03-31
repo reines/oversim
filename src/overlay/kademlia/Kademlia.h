@@ -120,6 +120,8 @@ public:
     virtual void proxCallback(const TransportAddress& node, int rpcId,
                               cPolymorphic *contextPointer, Prox prox);
 
+    std::list<const BroadcastInfo*> forwardBroadcast(BroadcastRequestCall* call);
+
 protected:
     NodeVector* findNode(const OverlayKey& key,
                          int numRedundantNodes,
@@ -153,6 +155,8 @@ protected:
     virtual void handleNodeGracefulLeaveNotification();
 
     friend class KademliaLookupListener;
+
+    BroadcastInfo* forwardBroadcastToNodeIfAppropriate(const NodeHandle* finger, uint32_t height);
 
 #ifdef PAIL
     AbstractProxKeyComparator* getProxKeyComparator(const OverlayKey& relativeKey,

@@ -32,6 +32,7 @@ static const int ALIVEFLAG_L = 8;
                                     KEY_L + \
                                     msg->getNextHopsArraySize() * \
                                     MARKEDNODEHANDLE_L)
+#define KADEMLIABROADCASTINFO_L(msg) (4)
 }}
 
 class noncobject MarkedNodeHandle;
@@ -48,4 +49,9 @@ packet KademliaRoutingInfoMessage extends BaseOverlayMessage
         NodeHandle srcNode;
         OverlayKey destKey = OverlayKey::UNSPECIFIED_KEY;
         MarkedNodeHandle nextHops[];
+}
+
+packet KademliaBroadcastInfo
+{
+    uint32_t height;
 }

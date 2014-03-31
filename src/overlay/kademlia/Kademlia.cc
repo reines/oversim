@@ -1443,3 +1443,62 @@ void Kademlia::updateTooltip()
     }
 }
 
+std::list<const BroadcastInfo*> Kademlia::forwardBroadcast(BroadcastRequestCall* call)
+{
+    Enter_Method_Silent();
+    std::list<const BroadcastInfo*> requests;
+
+    uint32_t numBuckets = routingTable.size();
+    uint32_t height = 0;
+
+    // We're receiving a broadcast from another node, forward it to my subtree
+    if (call->hasObject("BroadcastInfo")) {
+        KademliaBroadcastInfo* info = (KademliaBroadcastInfo*) call->getObject("BroadcastInfo");
+        height = info->getHeight();
+    }
+
+    if (height >= numBuckets) {
+        return requests;
+    }
+
+    for (KademliaBucket::iterator i=siblingTable->begin(); i != siblingTable->end(); i++) {
+        BroadcastInfo* broadcastInfo = forwardBroadcastToNodeIfAppropriate(&(*i), height);
+        if (broadcastInfo != NULL) {
+            requests.push_back(broadcastInfo);
+        }
+    }
+
+    for (uint32_t i = height;i < numBuckets; i++) {
+        KademliaBucket* bucket = routingTable[i];
+        if (bucket == NULL || !bucket->size()) {
+            continue;
+        }
+
+        for (KademliaBucket::iterator j=bucket->begin(); j != bucket->end(); j++) {
+            BroadcastInfo* broadcastInfo = forwardBroadcastToNodeIfAppropriate(&(*j), i);
+            if (broadcastInfo != NULL) {
+                requests.push_back(broadcastInfo);
+            }
+        }
+    }
+
+    return requests;
+}
+
+BroadcastInfo* Kademlia::forwardBroadcastToNodeIfAppropriate(const NodeHandle* finger, uint32_t height)
+{
+    uint32_t sharedPrefixLength = thisNode.getKey().sharedPrefixLength(finger->getKey(), b);
+    int32_t diff = OverlayKey::getLength() - b*(sharedPrefixLength + 1);
+    if (diff < height) {
+        return NULL;
+    }
+
+    uint32_t numBuckets = routingTable.size();
+
+    KademliaBroadcastInfo* limitInfo = new KademliaBroadcastInfo("BroadcastInfo");
+    limitInfo->setHeight(height + 1);
+    limitInfo->setBitLength(KADEMLIABROADCASTINFO_L(limitInfo));
+
+    std::cout << thisNode.getKey() << " sending to " << finger->getKey() << " at height " << height << "/" << numBuckets << " (diff = " << diff << ")" << std::endl;
+    return new BroadcastInfo(*finger, OverlayKey::UNSPECIFIED_KEY, limitInfo);
+}

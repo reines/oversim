@@ -80,6 +80,7 @@ protected:
 	NotificationBoard* notificationBoard;	   /**< pointer to NotificationBoard in this node */
 	int ttl;
 	int perNode;
+	int branchingFactor;
 };
 
 #endif

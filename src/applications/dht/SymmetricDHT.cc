@@ -37,10 +37,18 @@ using namespace std;
 void SymmetricDHT::initializeDHT()
 {
 	numReplicaTeams = par("numReplicaTeams");
-	if (numReplica % numReplicaTeams != 0)
+	if (numReplicaTeams != 0 && (numReplica % numReplicaTeams != 0))
 		throw new cRuntimeError("RepeatedHashingDHT::initializeDHT(): numReplica must be a multiple of numReplicaTeams.");
 
-	numReplica /= numReplicaTeams;
+	// Hack for ease of configuration with multiple runs
+	if (numReplicaTeams == 0) {
+		numReplicaTeams = numReplica;
+		numReplica = 1;
+	}
+	else {
+		// Divide the number of replica among teams
+		numReplica /= numReplicaTeams;
+	}
 
 	overlayKeyOffset = OverlayKey::getMax() / numReplicaTeams;
 }

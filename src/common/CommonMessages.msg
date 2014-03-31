@@ -721,6 +721,7 @@ packet BroadcastRequestCall extends BaseCallMessage
     BinaryValue query;
     int requestID;
     int TTL;
+    int branchingFactor;
 }
 
 //

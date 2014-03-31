@@ -30,6 +30,7 @@ simple BroadcastTestApp extends BaseApp
 		@class(BroadcastTestApp);
 		int ttl;
 		int itemsPerNode;
+		int branchingFactor;
 }
 
 

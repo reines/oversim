@@ -1426,12 +1426,14 @@ std::list<const BroadcastInfo*> Chord::forwardBroadcast(BroadcastRequestCall* ca
     const NodeHandle* finger;
     std::list<const BroadcastInfo*> requests;
     CoordBroadcastInfo* limitInfo;
+    int branchingFactor = call->getBranchingFactor();
 
     for (int i = fingerTable->getSize() - 1; i >= -1; i--) {
         // First check the finger table, then look at our successor
         finger = &(i < 0 ? successorList->getSuccessor(-1 - i) : fingerTable->getFinger(i));
-        if (finger == lastFinger)
+        if (finger == lastFinger) {
             continue;
+        }
 
         if (finger->getKey().isBetween(thisNode.getKey(), limit)) {
             limitInfo = new CoordBroadcastInfo("BroadcastInfo");
@@ -1444,6 +1446,10 @@ std::list<const BroadcastInfo*> Chord::forwardBroadcast(BroadcastRequestCall* ca
         }
 
         lastFinger = finger;
+
+        if (requests.size() >= (branchingFactor - 1) && i > 0) {
+            i = 0; // Skip the remaining, we have enough
+        }
     }
 
     return requests;

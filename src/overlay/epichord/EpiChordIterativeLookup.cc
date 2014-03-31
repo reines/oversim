@@ -159,8 +159,9 @@ void EpiChordIterativePathLookup::handleResponse(FindNodeResponse* msg)
 
 void EpiChordIterativePathLookup::handleTimeout(BaseCallMessage* msg, const TransportAddress& dest, int rpcId)
 {
-	if (finished)
+	if (finished) {
 		return;
+	}
 
 	IterativePathLookup::handleTimeout(msg, dest, rpcId);
 
@@ -176,15 +177,18 @@ LookupEntry* EpiChordIterativePathLookup::getPreceedingEntry(bool incDead, bool 
 	OverlayKey maxDistance = 0;
 
 	for (LookupVector::iterator it = nextHops.begin();it != nextHops.end();it++) {
-		if (!incDead && lookup->getDead(it->handle))
+		if (!incDead && lookup->getDead(it->handle)) {
 			continue;
+		}
 
-		if (!incUsed && it->alreadyUsed)
+		if (!incUsed && it->alreadyUsed) {
 			continue;
+		}
 
-		OverlayKey distance = KeyUniRingMetric().distance(lookup->getKey(), it->handle.getKey());
-		if (distance <= maxDistance)
+		OverlayKey distance = overlay->distance(lookup->getKey(), it->handle.getKey());
+		if (distance <= maxDistance) {
 			continue;
+		}
 
 		maxDistance = distance;
 		entry = &(*it);
@@ -200,15 +204,18 @@ LookupEntry* EpiChordIterativePathLookup::getSucceedingEntry(bool incDead, bool 
 	OverlayKey minDistance = OverlayKey::getMax();
 
 	for (LookupVector::iterator it = nextHops.begin();it != nextHops.end();it++) {
-		if (!incDead && lookup->getDead(it->handle))
+		if (!incDead && lookup->getDead(it->handle)) {
 			continue;
+		}
 
-		if (!incUsed && it->alreadyUsed)
+		if (!incUsed && it->alreadyUsed) {
 			continue;
+		}
 
-		OverlayKey distance = KeyUniRingMetric().distance(lookup->getKey(), it->handle.getKey());
-		if (distance >= minDistance)
+		OverlayKey distance = overlay->distance(lookup->getKey(), it->handle.getKey());
+		if (distance >= minDistance) {
 			continue;
+		}
 
 		minDistance = distance;
 		entry = &(*it);
@@ -231,15 +238,17 @@ LookupEntry* EpiChordIterativePathLookup::getNextEntry()
 		}
 		// the old best successor is still the best successor
 		//   ---- (destination) ---- (best successor) ---- (entry) ----
-		else if (!bestSuccessor.isUnspecified() && bestSuccessor.getKey().isBetweenL(lookup->getKey(), successor->handle.getKey()))
+		else if (!bestSuccessor.isUnspecified() && bestSuccessor.getKey().isBetweenL(lookup->getKey(), successor->handle.getKey())) {
 			successor = NULL;
+		}
 
 		// the new node is the best successor
 	}
 
 	// If we found a good successor
-	if (successor != NULL)
+	if (successor != NULL) {
 		return successor;
+	}
 
 	// Second look for the closest node before the key
 	LookupEntry* predecessor = getPreceedingEntry(false, false);
@@ -253,15 +262,17 @@ LookupEntry* EpiChordIterativePathLookup::getNextEntry()
 		}
 		// the old best predecessor is still the best predecessor
 		//   ---- (entry) ---- (best predecessor) ---- (destination) ----
-		else if (!bestPredecessor.isUnspecified() && bestPredecessor.getKey().isBetween(predecessor->handle.getKey(), lookup->getKey()))
+		else if (!bestPredecessor.isUnspecified() && bestPredecessor.getKey().isBetween(predecessor->handle.getKey(), lookup->getKey())) {
 			predecessor = NULL;
+		}
 
 		// the new node is the best predecessor
 	}
 
 	// If we found a good predecessor
-	if (predecessor != NULL)
+	if (predecessor != NULL) {
 		return predecessor;
+	}
 
 	return NULL;
 }

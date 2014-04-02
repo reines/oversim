@@ -51,14 +51,17 @@ void EpiChord::initializeOverlay(int stage)
 {
 	// because of IPAddressResolver, we need to wait until interfaces
 	// are registered, address auto-assignment takes place etc.
-	if (stage != MIN_STAGE_OVERLAY)
+	if (stage != MIN_STAGE_OVERLAY) {
 		return;
+	}
 
-	if (defaultRoutingType != ITERATIVE_ROUTING && defaultRoutingType != EXHAUSTIVE_ITERATIVE_ROUTING)
+	if (defaultRoutingType != ITERATIVE_ROUTING && defaultRoutingType != EXHAUSTIVE_ITERATIVE_ROUTING) {
 		throw new cRuntimeError("EpiChord::initializeOverlay(): EpiChord only works with iterative routing.");
+	}
 
-	if (iterativeLookupConfig.redundantNodes < 2)
+	if (iterativeLookupConfig.redundantNodes < 2) {
 		throw new cRuntimeError("EpiChord::initializeOverlay(): EpiChord requires lookupRedundantNodes >= 2.");
+	}
 
 	// EpiChord provides KBR services
 	kbr = true;
@@ -107,23 +110,28 @@ void EpiChord::initializeOverlay(int stage)
 void EpiChord::handleTimerEvent(cMessage* msg)
 {
 	// catch JOIN timer
-	if (msg == join_timer)
+	if (msg == join_timer) {
 		handleJoinTimerExpired(msg);
+	}
 	// catch STABILIZE timer
-	else if (msg == stabilize_timer)
+	else if (msg == stabilize_timer) {
 		handleStabilizeTimerExpired(msg);
+	}
 	// catch CACHE FLUSH timer
-	else if (msg == cache_timer)
+	else if (msg == cache_timer) {
 		handleCacheFlushTimerExpired(msg);
-	else
+	}
+	else {
 		error("EpiChord::handleTimerEvent(): received self message of unknown type!");
+	}
 }
 
 void EpiChord::recordOverlaySentStats(BaseOverlayMessage* msg)
 {
 	BaseOverlayMessage* innerMsg = msg;
-	while (innerMsg->getType() != APPDATA && innerMsg->getEncapsulatedPacket() != NULL)
+	while (innerMsg->getType() != APPDATA && innerMsg->getEncapsulatedPacket() != NULL) {
 		innerMsg = static_cast<BaseOverlayMessage*>(innerMsg->getEncapsulatedPacket());
+	}
 
 	switch (innerMsg->getType()) {
 		case OVERLAYSIGNALING: {
@@ -134,11 +142,13 @@ void EpiChord::recordOverlaySentStats(BaseOverlayMessage* msg)
 			nodeProbes++;
 
 			// It was a stabilize call/response
-			if ((dynamic_cast<EpiChordStabilizeCall*>(innerMsg) != NULL) || (dynamic_cast<EpiChordStabilizeResponse*>(innerMsg) != NULL))
+			if ((dynamic_cast<EpiChordStabilizeCall*>(innerMsg) != NULL) || (dynamic_cast<EpiChordStabilizeResponse*>(innerMsg) != NULL)) {
 				RECORD_STATS(stabilizeCount++; stabilizeBytesSent += msg->getByteLength());
+			}
 			// It was a join call/response
-			else if ((dynamic_cast<EpiChordJoinCall*>(innerMsg) != NULL) || (dynamic_cast<EpiChordJoinResponse*>(innerMsg) != NULL))
+			else if ((dynamic_cast<EpiChordJoinCall*>(innerMsg) != NULL) || (dynamic_cast<EpiChordJoinResponse*>(innerMsg) != NULL)) {
 				RECORD_STATS(joinCount++; joinBytesSent += msg->getByteLength());
+			}
 			break;
 		}
 
@@ -158,8 +168,9 @@ void EpiChord::finishOverlay()
 	bootstrapList->removeBootstrapNode(thisNode);
 
 	simtime_t time = globalStatistics->calcMeasuredLifetime(creationTime);
-	if (time < GlobalStatistics::MIN_MEASURED)
+	if (time < GlobalStatistics::MIN_MEASURED) {
 		return;
+	}
 
 	globalStatistics->addStdDev("EpiChord: Sent JOIN Messages/s", joinCount / time);
 	globalStatistics->addStdDev("EpiChord: Sent STABILIZE Messages/s", stabilizeCount / time);
@@ -173,8 +184,9 @@ void EpiChord::finishOverlay()
 	globalStatistics->addStdDev("EpiChord: Cache dead nodes (real)", fingerCache->countRealDead());
 
 	// Estimated node lifetime
-	if (stabilizeEstimation)
+	if (stabilizeEstimation) {
 		globalStatistics->addStdDev("EpiChord: Estimated node lifetime", SIMTIME_DBL(fingerCache->estimateNodeLifetime()));
+	}
 }
 
 OverlayKey EpiChord::distance(const OverlayKey& x, const OverlayKey& y, bool useAlternative) const
@@ -310,12 +322,14 @@ void EpiChord::changeState(int toState)
 void EpiChord::handleJoinTimerExpired(cMessage* msg)
 {
 	// only process timer, if node is not bootstrapped yet
-	if (state == READY)
+	if (state == READY) {
 		return;
+	}
 
 	// enter state BOOTSTRAP
-	if (state != BOOTSTRAP)
+	if (state != BOOTSTRAP) {
 		changeState(BOOTSTRAP);
+	}
 
 	// change bootstrap node from time to time
 	joinRetry--;
@@ -338,8 +352,9 @@ void EpiChord::handleJoinTimerExpired(cMessage* msg)
 
 void EpiChord::handleStabilizeTimerExpired(cMessage* msg)
 {
-	if (state != READY)
+	if (state != READY) {
 		return;
+	}
 
 	if (!predecessorList->isEmpty()) {
 		// call STABILIZE RPC
@@ -351,8 +366,9 @@ void EpiChord::handleStabilizeTimerExpired(cMessage* msg)
 		int numAdditions = successorAdditions->size();
 		call->setAdditionsArraySize(numAdditions);
 
-		for (int i = 0;i < numAdditions;i++)
+		for (int i = 0;i < numAdditions;i++) {
 			call->setAdditions(i, (*successorAdditions)[i]);
+		}
 
 		successorAdditions->clear();
 
@@ -370,8 +386,9 @@ void EpiChord::handleStabilizeTimerExpired(cMessage* msg)
 		int numAdditions = predecessorAdditions->size();
 		call->setAdditionsArraySize(numAdditions);
 
-		for (int i = 0;i < numAdditions;i++)
+		for (int i = 0;i < numAdditions;i++) {
 			call->setAdditions(i, (*predecessorAdditions)[i]);
+		}
 
 		predecessorAdditions->clear();
 
@@ -383,8 +400,9 @@ void EpiChord::handleStabilizeTimerExpired(cMessage* msg)
 	simtime_t avgLifetime = stabilizeDelay;
 	if (stabilizeEstimation) {
 		simtime_t estimate = fingerCache->estimateNodeLifetime();
-		if (estimate > 0)
+		if (estimate > 0) {
 			avgLifetime = estimate * stabilizeEstimateMuliplier;
+		}
 	}
 
 	// schedule next stabilization process
@@ -416,8 +434,9 @@ void EpiChord::handleCacheFlushTimerExpired(cMessage* msg)
 
 void EpiChord::checkCacheInvariant()
 {
-	if (state != READY || !predecessorList->isFull() || !successorList->isFull())
+	if (state != READY || !predecessorList->isFull() || !successorList->isFull()) {
 		return;
+	}
 
 	if (fibonacci) {
 		std::vector<OverlayKey> jumps;
@@ -441,8 +460,9 @@ void EpiChord::checkCacheInvariant()
 		// Until we pass halfway or run out of jumps
 		for (int i = skip;i < jumps.size();i += skip) {
 			// Only check if we have passed the end of the successor list
-			if (neighbour < jumps[i - skip])
+			if (neighbour < jumps[i - skip]) {
 				checkCacheSlice(thisNode.getKey() + jumps[i - skip], thisNode.getKey() + jumps[i]);
+			}
 		}
 
 		neighbour = thisNode.getKey() - predecessorList->getNode(predecessorList->getSize() - 1).getKey();
@@ -450,8 +470,9 @@ void EpiChord::checkCacheInvariant()
 		// Until we pass halfway
 		for (int i = skip;i < jumps.size();i += skip) {
 			// Only check if we have passed the end of the successor list
-			if (neighbour < jumps[i - skip])
+			if (neighbour < jumps[i - skip]) {
 				checkCacheSlice(thisNode.getKey() - jumps[i], thisNode.getKey() - jumps[i - skip]);
+			}
 		}
 	}
 	else {
@@ -524,8 +545,9 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 			findNodeExt = new EpiChordFindNodeExtMessage("findNodeExt");
 			msg->addObject(findNodeExt);
 		}
-		else
+		else {
 			findNodeExt = (EpiChordFindNodeExtMessage*) msg->getObject("findNodeExt");
+		}
 
 		// Reset the expires array to 0 incase we return before setting the new size
 		findNodeExt->setLastUpdatesArraySize(0);
@@ -533,8 +555,9 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 
 	NodeVector* nextHop = new NodeVector();
 
-	if (state != READY)
+	if (state != READY) {
 		return nextHop;
+	}
 
 	simtime_t now = simTime();
 	NodeHandle source = NodeHandle::UNSPECIFIED_NODE;
@@ -547,8 +570,9 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 	if (msg != NULL) {
 		// Add the origin node to the finger cache
 		source = ((FindNodeCall*) msg)->getSrcNode();
-		if (!source.isUnspecified())
+		if (!source.isUnspecified()) {
 			exclude->insert(source);
+		}
 
 		this->receiveNewNode(source, true, OBSERVED, now);
 	}
@@ -563,19 +587,23 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 		if (!predecessorList->isEmpty()) {
 			EpiChordFingerCacheEntry* entry = fingerCache->getNode(predecessorList->getNode());
 			nextHop->push_back(predecessorList->getNode());
-			if (entry != NULL)
+			if (entry != NULL) {
 				lastUpdates->push_back(entry->lastUpdate);
-			else
+			}
+			else {
 				lastUpdates->push_back(now);
+			}
 		}
 
 		if (!successorList->isEmpty()) {
 			EpiChordFingerCacheEntry* entry = fingerCache->getNode(successorList->getNode());
 			nextHop->push_back(successorList->getNode());
-			if (entry != NULL)
+			if (entry != NULL) {
 				lastUpdates->push_back(entry->lastUpdate);
-			else
+			}
+			else {
 				lastUpdates->push_back(now);
+			}
 		}
 	}
 	else {
@@ -611,15 +639,17 @@ NodeVector* EpiChord::findNode(const OverlayKey& key, int numRedundantNodes, int
 	}
 
 	// Check we managed to actually find something
-	if (nextHop->empty())
+	if (nextHop->empty()) {
 		throw new cRuntimeError("EpiChord::findNode() Failed to find node");
+	}
 
 	if (msg != NULL) {
 		int numVisited = nextHop->size();
 		findNodeExt->setLastUpdatesArraySize(numVisited);
 
-		for (int i = 0;i < numVisited;i++)
+		for (int i = 0;i < numVisited;i++) {
 			findNodeExt->setLastUpdates(i, (*lastUpdates)[i]);
+		}
 
 		findNodeExt->setBitLength(EPICHORD_FINDNODEEXTMESSAGE_L(findNodeExt));
 	}
@@ -658,8 +688,9 @@ bool EpiChord::isSiblingFor(const NodeHandle& node, const OverlayKey& key, int n
 	}
 
 	// set default number of siblings to consider
-	if (numSiblings < 0 || numSiblings > this->getMaxNumSiblings())
+	if (numSiblings < 0 || numSiblings > this->getMaxNumSiblings()) {
 		numSiblings = this->getMaxNumSiblings();
+	}
 
 	// if this is the first and only node on the ring, it is responsible
 	if (predecessorList->isEmpty() && node == thisNode) {
@@ -736,8 +767,9 @@ double EpiChord::calculateGamma()
 	double gamma = 0.0; // ratio of lookup failures
 
 	// Make sure we don't divide by 0!
-	if (nodeProbes > 0)
+	if (nodeProbes > 0) {
 		gamma = nodeTimeouts / nodeProbes;
+	}
 
 	return gamma;
 }
